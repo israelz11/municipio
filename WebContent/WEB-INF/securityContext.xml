@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:security="http://www.springframework.org/schema/security"
+xmlns:p="http://www.springframework.org/schema/p"
+xmlns:context="http://www.springframework.org/schema/context"
+xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+    http://www.springframework.org/schema/security 
+    http://www.springframework.org/schema/security/spring-security-2.0.1.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+  <context:annotation-config/>
+  
+    <security:http auto-config="true" access-denied-page="/accesoDenegado.action"   >        
+    <security:form-login login-page="/index.action" default-target-url="/menu/index.action" always-use-default-target="true" authentication-failure-url="/index.action?message=1"/>
+    <security:logout logout-success-url="/index.action" logout-url="/j_spring_security_logout" invalidate-session="true"  />            
+    <security:intercept-url pattern="/index.action*" filters="none"/>
+    <security:intercept-url pattern="/index.html*" filters="none"/>    
+    <security:intercept-url pattern="/imagenes/**" filters="none"/>
+    <security:intercept-url pattern="/images/**" filters="none"/>
+    <security:intercept-url pattern="/estilos/**" filters="none"/>
+    <security:intercept-url pattern="/js/**" filters="none"/>
+    <security:intercept-url pattern="/include/**" filters="none"/>
+    
+    <security:intercept-url pattern="/sam/webservices/**" filters="none"  access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+    
+    <security:intercept-url pattern="/dwr/**" access="ROLE_Sam,ROLE_Sap,ROLE_Almacen"  />   
+	<security:intercept-url pattern="/menu/**" access="ROLE_Sam,ROLE_Sap,ROLE_Almacen"  />
+	<security:intercept-url pattern="/sam/archivos/InternetExplorer.exe" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+	<security:intercept-url pattern="/sam/archivos/Firefox.exe" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+	<security:intercept-url pattern="/sam/archivos/GoogleChrome.exe" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+	<security:intercept-url pattern="/sam/archivos/Netscape.exe" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+	<security:intercept-url pattern="/sam/archivos/Safari.exe" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+	<security:intercept-url pattern="/sam/archivos/Opera.exe" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+	<security:intercept-url pattern="/sam/archivos/Solicitud_de_Permisos.pdf" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+	<security:intercept-url pattern="/sam/archivos/Formato_cambios.pdf" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+	<security:intercept-url pattern="/sam/archivos/**" access="ROLE_Sam" />
+	<security:intercept-url pattern="/sam/utilerias/lista_evaluacion_proyectos.*" access="ROLE_Sam_Administración_Avances_fisicos_de_proyectos,ROLE_Sam"  />
+	<security:intercept-url pattern="/sam/configuracion/configuracion_grupos_usuarios.*" access="ROLE_Sam_Administración_Asignación_de_grupos_a_usuarios"  />
+	<security:intercept-url pattern="/sam/utilerias/evaluacion_proyectos.*" access="ROLE_Sam_Administración_Avances_fisicos_de_proyectos"  />
+	<security:intercept-url pattern="/sam/utilerias/cambioPassword.*" access="ROLE_Sam_Administración_Cambio_de_contraseña"  />
+	<security:intercept-url pattern="/sam/utilerias/cambio_estatus_periodo.*" access="ROLE_Sam_Administración_Cambio_de_estatus_de_periodos"  />
+	<security:intercept-url pattern="/sam/utilerias/cambioUnidad.*" access="ROLE_Sam_Administración_Cambio_de_unidad_administrativa"  />
+	<security:intercept-url pattern="/sam/utilerias/sumenuAdmon.*" access="ROLE_Sam_Requisiciones_Listado_Requisiciones/OT/OS,ROLE_Sam_Pedidos_Listado_de_Pedidos,ROLE_Sam_Ordenes_de_Pago_Listado_de_Ordenes_de_Pago"  />
+	<security:intercept-url pattern="/sam/utilerias/cambiarFirmas.*" access="ROLE_Sam_Requisiciones_Listado_Requisiciones/OT/OS,ROLE_Sam_Pedidos_Listado_de_Pedidos,ROLE_Sam_Ordenes_de_Pago_Listado_de_Ordenes_de_Pago"  />
+	<security:intercept-url pattern="/sam/utilerias/lst_proveedores.*" access="ROLE_Sam_Administración_Padrón_de_Proveedores"  />
+	
+	<security:intercept-url pattern="/sam/configuracion/configuracion_grupo_usuario.*" access="ROLE_Sam_Administración_Asignación_de_grupos_a_usuarios"  />
+	<security:intercept-url pattern="/sam/configuracion/rolesPrivilegio.*" access="ROLE_Sam_Configuración_Asignación_de_privilegios_a_roles"  />
+	<security:intercept-url pattern="/sam/configuracion/rolesapersonas.*" access="ROLE_Sam_Configuración_Asignación_de_roles_a_usuarios"  />
+	<security:intercept-url pattern="/sam/configuracion/grupos.*" access="ROLE_Sam_Configuración_Grupos"  />
+	<security:intercept-url pattern="/sam/configuracion/configuracion_firmas_grupos.*" access="ROLE_Sam_Configuración_Grupos_de_firmas"  />
+	<security:intercept-url pattern="/sam/configuracion/configuracion_grupos_partidas.*" access="ROLE_Sam_Configuración_Grupos_de_partidas"  />
+	<security:intercept-url pattern="/sam/configuracion/configuracion_grupos_proyectos.*" access="ROLE_Sam_Configuración_Grupos_de_proyectos"  />
+	<security:intercept-url pattern="/sam/configuracion/configuracion_grupos_tipo_op.*" access="ROLE_Sam_Configuración_Grupos_de_tipo_de_orden_de_pago"  />
+	<security:intercept-url pattern="/sam/configuracion/configuracion_grupos_tipo_req.*" access="ROLE_Sam_Configuración_Grupos_de_tipo_de_requisiciones"  />	
+	<security:intercept-url pattern="/sam/configuracion/configuracion_grupos_vales.*" access="ROLE_Sam_Configuración_Grupos_de_Vales"  />
+	<security:intercept-url pattern="/sam/configuracion/modulo.*" access="ROLE_Sam_Configuración_Modulos"  />
+	<security:intercept-url pattern="/sam/configuracion/privilegio.*" access="ROLE_Sam_Configuración_Privilegios"  />
+	<security:intercept-url pattern="/sam/configuracion/roles.*" access="ROLE_Sam_Configuración_Roles"  />
+	<security:intercept-url pattern="/sam/configuracion/sistema.*" access="ROLE_Sam_Configuración_Sistemas"  />
+	<security:intercept-url pattern="/sam/configuracion/personas_usuarios.*" access="ROLE_Sam_Configuración_Usuarios, ROLE_Correspondencia_Administración_Catálogo_de_Usuarios_del_Sistema"  />
+	<security:intercept-url pattern="/sam/consultas/muestra_presupuesto.*" access="ROLE_Sam_Presupuesto_Presupuesto_al_periodo_vigente" />
+	<security:intercept-url pattern="/sam/consultas/lst_presupuesto.*" access="ROLE_Sam_Presupuesto_Presupuesto_Calendarizado" />
+	<security:intercept-url pattern="/sam/consultas/lst_presupuestoGlobal.*" access="ROLE_Sam_Presupuesto_Presupuesto_Global,ROLE_Sam_Ordenes_de_Pago_Listado_de_Ordenes_de_Pago,ROLE_Sam" />
+	<security:intercept-url pattern="/sam/consultas/lst_devolucion_presupuestal.*" access="ROLE_Sam_Presupuesto_Devolución_Presupuestal" />
+	<security:intercept-url pattern="/sam/consultas/devolucion_presupuestal.*" access="ROLE_Sam_Presupuesto_Devolución_Presupuestal" />
+	<security:intercept-url pattern="/sam/consultas/muestra_compromisos.*" access="ROLE_Sam_Presupuesto_Presupuesto_Calendarizado"  />
+	<security:intercept-url pattern="/sam/consultas/muestraBitacora.*" access="ROLE_Sam_Requisiciones_Listado_Requisiciones/OT/OS,ROLE_Sam_Pedidos_Listado_de_Pedidos,ROLE_Sam_Ordenes_de_Pago_Listado_de_Ordenes_de_Pago,ROLE_Sam_Ordenes_de_Pago_Listado_de_Ordenes_Ejercidas,ROLE_Sam_Ordenes_de_Pago_Listado_de_Ordenes_de_Pago_para_Desejercer" />
+	
+	<security:intercept-url pattern="/sam/ordenesdepago/orden_pago.*" access="ROLE_Sam_Ordenes_de_Pago_Captura_de_Orden_de_Pago"  />
+	<security:intercept-url pattern="/sam/ordenesdepago/lista_ordenPago.*" access="ROLE_Sam_Ordenes_de_Pago_Listado_de_Ordenes_de_Pago"  />
+	<security:intercept-url pattern="/sam/ordenesdepago/lista_ordenPagoEjercer.*" access="ROLE_Sam_Ordenes_de_Pago_Listado_de_Ordenes_de_Pago_para_Ejercer"  />
+	<security:intercept-url pattern="/sam/ordenesdepago/lista_ordenPagoValidacionFinanzas.*" access="ROLE_Sam_Ordenes_de_Pago_Listado_de_Ordenes_de_Pago_Ejercidas_para_Validación_Finanzas"  />
+	<security:intercept-url pattern="/sam/ordenesdepago/_subirArchivoAnexoOP.*" access="ROLE_Sam_Ordenes_de_Pago_Captura_de_Orden_de_Pago"  />
+	<security:intercept-url pattern="/sam/ordenesdepago/anexos/**" access="ROLE_Sam_Ordenes_de_Pago_Captura_de_Orden_de_Pago"  />
+	<security:intercept-url pattern="/sam/consultas/muestra_facturas.*" access="ROLE_Sam_Ordenes_de_Pago_Captura_de_Orden_de_Pago" />
+	<security:intercept-url pattern="/sam/consultas/muestra_anexosOP.*" access="ROLE_Sam_Ordenes_de_Pago_Listado_de_Ordenes_de_Pago, ROLE_Sam_Ordenes_de_Pago_Listado_de_Ordenes_de_Pago_para_Ejercer" />
+	<security:intercept-url pattern="/sam/ordenesdepago/muestra_anexosOPArchivos.*" access="ROLE_Sam_Ordenes_de_Pago_Listado_de_Ordenes_de_Pago, ROLE_Sam_Ordenes_de_Pago_Listado_de_Ordenes_de_Pago_para_Ejercer" />
+	
+	<security:intercept-url pattern="/sam/consultas/muestra_detalles_Op.*" access="ROLE_Sam_Ordenes_de_Pago_Listado_de_Ordenes_de_Pago_para_Ejercer"  />
+	<security:intercept-url pattern="/sam/consultas/rpt_relacion_globalOP.*" access="ROLE_Sam" />
+	<security:intercept-url pattern="/sam/consultas/muestra_OT_OS.*" access="ROLE_Sam_Ordenes_de_Pago_Captura_de_Orden_de_Pago" />
+	<security:intercept-url pattern="/sam/consultas/muestra_Pedidos.*" access="ROLE_Sam_Ordenes_de_Pago_Captura_de_Orden_de_Pago" />
+	<security:intercept-url pattern="/sam/consultas/muestra_vales.*" access="ROLE_Sam_Ordenes_de_Pago_Captura_de_Orden_de_Pago,ROLE_Sam_Facturas_Captura_de_factura" />
+	<security:intercept-url pattern="/sam/consultas/muestra_OrdenPago.*" access="ROLE_Sam_Presupuesto_Devolución_Presupuestal" />
+	
+	<security:intercept-url pattern="/sam/ordenesdepago/lista_ordenPagoDesejercer.*" access="ROLE_Sam_Ordenes_de_Pago_Listado_de_Ordenes_de_Pago_para_Desejercer"  />
+	<security:intercept-url pattern="/sam/ordenesdepago/beneficiario.*" access="ROLE_Sam_Administración_Padrón_de_Proveedores"  />
+	
+	<security:intercept-url pattern="/sam/contratos/cap_contratos.*" access="ROLE_Sam_Contratos_Captura_de_Contratos"  />
+	<security:intercept-url pattern="/sam/contratos/lista_contratos.*" access="ROLE_Sam_Contratos_Listado_de_Contratos"  />
+	<security:intercept-url pattern="/sam/consultas/muestra_os_contratos.*" access="ROLE_Sam_Contratos_Captura_de_Contratos"  />
+	<security:intercept-url pattern="/sam/consultas/muestra_contratos.*" access="ROLE_Sam_Requisiciones_Captura_de_Requisición, ROLE_Sam_Ordenes_de_Pago_Captura_de_Orden_de_Pago,ROLE_Sam_Pedidos_Listado_de_Requisiciones,ROLE_Sam_Pedidos_Listado_de_pedidos,ROLE_Sam_Vales_Captura_de_Vales,ROLE_Sam_Facturas_Captura_de_factura"  />
+	<security:intercept-url pattern="/sam/consultas/muestra_pedidos_contratos.*" access="ROLE_Sam_Contratos_Captura_de_Contratos" />
+	<security:intercept-url pattern="/sam/contratos/_subirArchivo.*" access="ROLE_Sam_Contratos_Captura_de_Contratos"/>
+	<security:intercept-url pattern="/sam/contratos/archivos/**" filters="none"/>
+	
+	
+	<security:intercept-url pattern="/sam/pedidos/lst_pedidos.*" access="ROLE_Sam_Pedidos_Listado_de_Pedidos"  />
+	<security:intercept-url pattern="/sam/pedidos/lst_req_captura.*" access="ROLE_Sam_Pedidos_Listado_de_Requisiciones"  />
+	<security:intercept-url pattern="/sam/pedidos/capturarPedidos.*" access="ROLE_Sam_Pedidos_Listado_de_Requisiciones,ROLE_Sam_Pedidos_Listado_de_pedidos"  />
+	<security:intercept-url pattern="/sam/requisiciones/capturarRequisicion.*" access="ROLE_Sam_Requisiciones_Captura_de_Requisición"  />
+	<security:intercept-url pattern="/sam/requisiciones/capturaAnexoConceptos.*" access="ROLE_Sam_Requisiciones_Captura_de_Requisición"  />
+	<security:intercept-url pattern="/sam/consultas/muestra_productos.*" access="ROLE_Sam_Requisiciones_Captura_de_Requisición"  />
+		
+	<security:intercept-url pattern="/sam/requisiciones/lst_req_total.*" access="ROLE_Sam_Requisiciones_Listado_Requisiciones/OT/OS"  />
+	<security:intercept-url pattern="/sam/requisiciones/cat_articulo.*"  access="ROLE_Sam_Administración_Catálogo_de_artículos"  />
+	<security:intercept-url pattern="/sam/requisiciones/productos.*"     access="ROLE_Sam_Administración_Catálogo_de_artículos_por_partida"  />
+	<security:intercept-url pattern="/sam/requisiciones/consultaRequisicion.*" access="ROLE_Sam_Requisiciones_Captura_de_Requisición"  />
+	<security:intercept-url pattern="/sam/requisiciones/muestraImportar.*" access="ROLE_Sam_Requisiciones_Captura_de_Requisición"  />
+	<security:intercept-url pattern="/sam/requisiciones/reenumerarLotes.*" access="ROLE_Sam_Requisiciones_Captura_de_Requisición"  />
+	
+	<security:intercept-url pattern="/sam/facturas/captura_factura.*" access="ROLE_Sam_Facturas_Captura_de_factura"  />
+	<security:intercept-url pattern="/sam/consultas/muestra_pedidos_facturas.*" access="ROLE_Sam_Facturas_Captura_de_factura" />
+	<security:intercept-url pattern="/sam/consultas/muestra_OT_OS_facturas.*" access="ROLE_Sam_Facturas_Captura_de_factura" />
+	
+	<security:intercept-url pattern="/sam/facturas/lst_facturas.*" access="ROLE_Sam_Facturas_Listado_de_facturas" />
+	<security:intercept-url pattern="/sam/facturas/archivos/**" filters="none"/>
+	<security:intercept-url pattern="/sam/facturas/_subirArchivo.*" access="ROLE_Sam_Facturas_Captura_de_factura"/>
+	<security:intercept-url pattern="/sam/facturas/lst_CargarNomina.*" access="ROLE_Sam_Facturas_Cargar_Nomina"/>
+	<security:intercept-url pattern="/sam/facturas/_subirArchivoNominaDeductivas.*" access="ROLE_Sam_Facturas_Cargar_Nomina"/>
+	
+	
+	<security:intercept-url pattern="/sam/consultas/muestra_archivos_proyectos.*" access="ROLE_Sam_Presupuesto_Presupuesto_Global"/>
+	<security:intercept-url pattern="/sam/consultas/_subirArchivoProyecto.*" access="ROLE_Sam_Presupuesto_Presupuesto_Global"/>
+	<security:intercept-url pattern="/sam/consultas/archivos/**" filters="none"/>
+	
+	<security:intercept-url pattern="/sam/mir/captura_mir.*" access="ROLE_Sam_M.I.R._Capturar_M.I.R."/>
+	<security:intercept-url pattern="/sam/mir/muestra_programas.*" access="ROLE_Sam_M.I.R._Capturar_M.I.R."/>
+	
+	<security:intercept-url pattern="/sam/vales/_subirArchivo.*" access="ROLE_Sam_Vales_Captura_de_Vales,ROLE_Sam_Vales_Listado_de_Vales"  />
+	<security:intercept-url pattern="/sam/vales/archivos/**" access="ROLE_Sam_Vales_Captura_de_Vales,ROLE_Sam_Vales_Listado_de_Vales"  />
+	<security:intercept-url pattern="/sam/vales/cap_vale.*" access="ROLE_Sam_Vales_Captura_de_Vales" />
+	<security:intercept-url pattern="/sam/vales/lista_vales.*" access="ROLE_Sam_Vales_Listado_de_Vales" />	
+	<security:intercept-url pattern="/sam/vales/reembolsos.*" access="ROLE_Sam_Vales_Comprobacion_Por_Reembolso_liquido" />
+	<security:intercept-url pattern="/sam/vales/lista_vales_finanzas.*" access="ROLE_Sam_Vales_Listado_Vales_Finanzas" />        
+	<security:intercept-url pattern="/sam/reportes/**" access="ROLE_Sam_Vales_Listado_vales_Finanzas,ROLE_Sam_Vales_Listado_de_vales,ROLE_Sam_Requisiciones_Listado_Requisiciones/OT/OS,ROLE_Sam_Pedidos_Listado_de_pedidos,ROLE_Sam_Pedidos_Listado_de_Requisiciones,ROLE_Sam_Ordenes_de_Pago_Listado_de_Ordenes_de_Pago,ROLE_Sam_Ordenes_de_Pago_Listado_de_Ordenes_Ejercidas" />
+	<security:intercept-url pattern="/sam/consultas/muestra_vales_reembolso.*" access="ROLE_Sam_Vales_Comprobacion_Por_Reembolso_liquido"  />
+	
+	
+	<security:intercept-url pattern="/almacen/administracion/almacen.*" access="ROLE_Almacen_Administración_Catalogo_de_Almacenes" />
+	<security:intercept-url pattern="/almacen/administracion/asignacion_partidas.*" access="ROLE_Almacen_Administración_Asignacion_de_partidas" />
+	<security:intercept-url pattern="/almacen/administracion/asignacion_usuarios_almacen.*" access="ROLE_Almacen_Administración_Asignación_de_Almacenes_a_usuarios" />
+	
+	<security:intercept-url pattern="/almacen/configuracion/cat_tipos_documentos.*" access="ROLE_Almacen_Administración_Catalogo_de_tipo_de_documentos" />
+	<security:intercept-url pattern="/almacen/configuracion/cat_subdirecciones.*" access="ROLE_Almacen_Administración_Catalogo_de_Subdirecciones" />
+	<security:intercept-url pattern="/almacen/configuracion/cat_familias_articulos.*" access="ROLE_Almacen_Administración_Catalogo_de_familias_articulos" />
+	
+	<security:intercept-url pattern="/almacen/entradas/captura_documentos.*" access="ROLE_Almacen_Entradas_A_partir_de_un_Pedido" />
+	<security:intercept-url pattern="/almacen/consultas/lst_entradas.*" access="ROLE_Almacen_Entradas_Listado_de_Entradas,ROLE_Almacen_Entradas_A_partir_de_un_Pedido" />
+	<security:intercept-url pattern="/almacen/entradas/configura_entradaArticulos.*" access="ROLE_Almacen_Consultas_Listado_de_Articulos" />
+	
+	<security:intercept-url pattern="/almacen/salidas/solicitudes.*" access="ROLE_Almacen_Salidas_Solicitudes" />
+	<security:intercept-url pattern="/almacen/salidas/lst_entradas_autorizacion.*" access="ROLE_Almacen_Salidas_Entradas_para_Solicitudes_de_Salida" />
+	<security:intercept-url pattern="/almacen/salidas/lst_salidas.*" access="ROLE_Almacen_Salidas_Listado_de_Salidas_de_Almacen" />
+	<security:intercept-url pattern="/almacen/salidas/salidas.*" access="ROLE_Almacen_Salidas_Entradas_para_Solicitudes_de_Salida" />
+	<security:intercept-url pattern="/almacen/salidas/autorizacion.*" access="ROLE_Almacen_Salidas_Autorizacion" />
+	<security:intercept-url pattern="/almacen/salidas/entrega.*" access="ROLE_Almacen_Salidas_Entrega,ROLE_Almacen_Salidas_Entradas_para_Solicitudes_de_Salida" />
+	
+	<security:intercept-url pattern="/almacen/reportes/**" access="ROLE_Almacen_Salidas_Entrega,ROLE_Almacen_Salidas_Entradas_para_Solicitudes_de_Salida" />
+
+	<security:intercept-url pattern="/almacen/consultas/entradas.*" access="ROLE_Almacen_Consultas_Listado_de_Entradas,ROLE_Almacen_Entradas_A_partir_de_un_Pedido" />
+	<security:intercept-url pattern="/almacen/consultas/muestra_pedidos.*" access="ROLE_Almacen_Entradas_A_partir_de_un_Pedido" />
+	<security:intercept-url pattern="/almacen/consultas/muestra_entradas.*" access="ROLE_Almacen_Entradas_A_partir_de_un_Pedido" />
+	<security:intercept-url pattern="/almacen/consultas/salidas.*" access="ROLE_Almacen_Consultas_Listado_de_Salidas" />
+	<security:intercept-url pattern="/almacen/consultas/lst_articulos.*" access="ROLE_Almacen_Consultas_Listado_de_Artículos_Inventario" />
+	<security:intercept-url pattern="/almacen/consultas/movimientos_articulos.*" access="ROLE_Almacen_Consultas_Movimiento,ROLE_Almacen_Consultas_Listado_de_Articulos" />
+	<security:intercept-url pattern="/almacen/consultas/rpt_libroAlmacen.*" access="ROLE_Almacen_Consultas_Reporte_Libro_de_Almacén_PDF" />
+	
+	<security:intercept-url pattern="/correspondencia/administracion/cat_unidades.*" access="ROLE_Correspondencia_Administración_Catálogo_de_Unidades_Administrativas" />
+	<security:intercept-url pattern="/correspondencia/administracion/cat_subdirecciones.*" access="ROLE_Correspondencia_Administración_Catálogo_de_Subdirecciones" />
+	<security:intercept-url pattern="/correspondencia/administracion/cat_minutarios.*" access="ROLE_Correspondencia_Administración_Catálogo_de_Minutarios" />
+	<security:intercept-url pattern="/correspondencia/administracion/cat_clasifica_minutarios.*" access="ROLE_Correspondencia_Administración_Catálogo_de_Clasificación_de_Minutarios"/>
+	
+	<security:intercept-url pattern="/correspondencia/minutarios/nuevo_minutario.*" access="ROLE_Correspondencia_Minutarios_Nuevo_número"/>
+	<security:intercept-url pattern="/correspondencia/minutarios/lst_minutarios.*" access="ROLE_Correspondencia_Minutarios_Listado_de_números"/>
+	<security:intercept-url pattern="/correspondencia/minutarios/_subirArchivo.*" access="ROLE_Correspondencia_Minutarios_Nuevo_número"/>
+	
+	<security:intercept-url pattern="/correspondencia/documental/correspondencia.*" access="ROLE_Correspondencia_Correspondencia_Nuevo"/>
+	<security:intercept-url pattern="/correspondencia/documental/_subirArchivo.*" access="ROLE_Correspondencia_Correspondencia_Nuevo"/>
+	<security:intercept-url pattern="/correspondencia/documental/lst_busquedas.*" access="ROLE_Correspondencia_Correspondencia_Búsqueda"/>
+	
+	<security:intercept-url pattern="/correspondencia/archivos/**" filters="none"/>
+	<security:intercept-url pattern="/correspondencia/archivos/minutarios/**" filters="none"/>
+	<security:intercept-url pattern="/correspondencia/archivos/correspondencia/**" filters="none"/>
+	
+    <security:intercept-url pattern="/**" access="ROLE_ANONYMOUS" />
+    
+  </security:http>
+    
+    <security:authentication-manager alias="authenticationManager" />
+    <security:authentication-provider user-service-ref="userDetailsService">
+		<security:password-encoder ref="passwordEncoder">			
+		</security:password-encoder>
+	</security:authentication-provider>
+    
+      <bean id="passwordEncoder" class="org.springframework.security.providers.encoding.Md5PasswordEncoder" />                    
+      <!--bean id="passwordEncoder" class="mx.gob.municipio.centro.view.seguridad.PasswordEncoder" /-->
+      <bean id="userDetailsService" class="mx.gob.municipio.centro.view.seguridad.UserDetailsService"/>    
+      <bean id="loggerListener" class="org.springframework.security.event.authentication.LoggerListener" />
+</beans>

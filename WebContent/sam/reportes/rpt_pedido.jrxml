@@ -1,0 +1,761 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rpt_pedido" pageWidth="612" pageHeight="792" columnWidth="532" leftMargin="40" rightMargin="40" topMargin="30" bottomMargin="20">
+	<parameter name="NUM_PED" class="java.lang.String">
+		<parameterDescription><![CDATA[Introduzca el numero de pedido]]></parameterDescription>
+	</parameter>
+	<parameter name="CONTRATO" class="java.lang.String"/>
+	<parameter name="UNIDAD" class="java.lang.String">
+		<parameterDescription><![CDATA[Introduzca el nombre de la Unidad Administrativa]]></parameterDescription>
+	</parameter>
+	<parameter name="NCOMERCIA" class="java.lang.String">
+		<parameterDescription><![CDATA[Introduzca el nombre del proveedor]]></parameterDescription>
+	</parameter>
+	<parameter name="DOMIFISCAL" class="java.lang.String">
+		<parameterDescription><![CDATA[Introduzca el domicilio fiscal]]></parameterDescription>
+	</parameter>
+	<parameter name="FECHA_PED" class="java.lang.String">
+		<parameterDescription><![CDATA[Introduzca la fecha del pedido]]></parameterDescription>
+	</parameter>
+	<parameter name="TELEFONOS" class="java.lang.String">
+		<parameterDescription><![CDATA[Introduzca el numero de telefono del proveedor]]></parameterDescription>
+	</parameter>
+	<parameter name="PARTIDA" class="java.lang.String">
+		<parameterDescription><![CDATA[Introduzca el numero y descripcion de la partida]]></parameterDescription>
+	</parameter>
+	<parameter name="PROGRAMA" class="java.lang.String">
+		<parameterDescription><![CDATA[Introduzca el numero y nombre del programa]]></parameterDescription>
+	</parameter>
+	<parameter name="FECHA_ENTREGA" class="java.lang.String"/>
+	<parameter name="PED_AUTORIZO_REPRESENTANTE" class="java.lang.String"/>
+	<parameter name="PED_ELABORO_CARGO" class="java.lang.String"/>
+	<parameter name="PED_AUTORIZO_CARGO" class="java.lang.String"/>
+	<parameter name="PED_ELABORO_REPRESENTANTE" class="java.lang.String"/>
+	<parameter name="ENTREGA" class="java.lang.String"/>
+	<parameter name="NOTAS" class="java.lang.String"/>
+	<parameter name="N_PROGRAMA" class="java.lang.String"/>
+	<parameter name="RECURSO" class="java.lang.String"/>
+	<parameter name="SUB_SECTOR" class="java.lang.String"/>
+	<parameter name="LOCALIDAD" class="java.lang.String"/>
+	<parameter name="NUM_REQ" class="java.lang.String"/>
+	<parameter name="CONDICION_PAGO" class="java.lang.String"/>
+	<parameter name="CLV_PARTID" class="java.lang.String"/>
+	<parameter name="DEPENDENCIA" class="java.lang.String"/>
+	<parameter name="IVA" class="java.math.BigDecimal"/>
+	<parameter name="CANT_LETRA" class="java.lang.String"/>
+	<parameter name="STATUS" class="java.lang.Short"/>
+	<parameter name="DESCUENTO" class="java.math.BigDecimal"/>
+	<parameter name="COLONIA" class="java.lang.String"/>
+	<parameter name="CIUDAD" class="java.lang.String"/>
+	<parameter name="ESTADO" class="java.lang.String"/>
+	<parameter name="ULTIMA_PAGINA" class="java.lang.Boolean">
+		<defaultValueExpression><![CDATA[Boolean.FALSE]]></defaultValueExpression>
+	</parameter>
+	<parameter name="CLV_ACTINST" class="java.lang.String"/>
+	<parameter name="TOTAL_T" class="java.lang.Double"/>
+	<parameter name="ACT_INST" class="java.lang.String"/>
+	<parameter name="FINALIDAD" class="java.lang.String"/>
+	<parameter name="CLV_FINALIDAD" class="java.lang.String"/>
+	<parameter name="CLV_FUNCION" class="java.lang.String"/>
+	<parameter name="FUNCION" class="java.lang.String"/>
+	<parameter name="CLV_SUBFUNCION" class="java.lang.String"/>
+	<parameter name="CLV_UNIADM" class="java.lang.String"/>
+	<parameter name="CLV_LOCALIDAD" class="java.lang.String"/>
+	<parameter name="CLV_PROGRAMA" class="java.lang.String"/>
+	<parameter name="OBJETO_GASTO" class="java.lang.String"/>
+	<parameter name="CLV_OBJETOGASTO" class="java.lang.String"/>
+	<parameter name="SUBSUBFUNCION" class="java.lang.String"/>
+	<parameter name="CLV_SUBSUBFUNCION" class="java.lang.String"/>
+	<parameter name="SUBFUNCION" class="java.lang.String"/>
+	<parameter name="DECRIPCION" class="java.lang.String"/>
+	<parameter name="PROG_PRESUP" class="java.lang.String"/>
+	<field name="PED_CONS" class="java.lang.Short"/>
+	<field name="CANTIDAD" class="java.math.BigDecimal"/>
+	<field name="UNIDMEDIDA" class="java.lang.String"/>
+	<field name="DESCRIP" class="java.lang.String"/>
+	<field name="PRECIO_UNI" class="java.math.BigDecimal"/>
+	<field name="ARTICULO" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="SUBTOTAL_1" class="java.lang.Double" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[]]></variableExpression>
+	</variable>
+	<variable name="importe" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$F{CANTIDAD}.multiply( $F{PRECIO_UNI} )]]></variableExpression>
+	</variable>
+	<variable name="SUBTOTAL" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{CANTIDAD}.multiply($F{PRECIO_UNI})]]></variableExpression>
+	</variable>
+	<variable name="TOTAL" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$V{SUBTOTAL}.add($P{IVA})]]></variableExpression>
+	</variable>
+	<variable name="TOTAL_PAGINA" class="java.lang.Number">
+		<variableExpression><![CDATA[$V{PAGE_NUMBER}]]></variableExpression>
+	</variable>
+	<variable name="PAGINA_ACTUAL" class="java.lang.Integer" resetType="Page">
+		<variableExpression><![CDATA[$V{PAGE_NUMBER}]]></variableExpression>
+	</variable>
+	<background>
+		<band height="733" splitType="Stretch">
+			<image>
+				<reportElement x="60" y="182" width="429" height="394">
+					<printWhenExpression><![CDATA[new Boolean(!($P{STATUS}.intValue()==1 || $P{STATUS}.intValue()==4 || $P{STATUS}.intValue()==5))]]></printWhenExpression>
+				</reportElement>
+				<imageExpression class="java.lang.String"><![CDATA["../../imagenes/no valido.gif"]]></imageExpression>
+			</image>
+			<line>
+				<reportElement x="0" y="465" width="532" height="1"/>
+			</line>
+			<line>
+				<reportElement x="0" y="130" width="532" height="1"/>
+			</line>
+			<line>
+				<reportElement x="404" y="130" width="1" height="335"/>
+			</line>
+			<line>
+				<reportElement x="0" y="131" width="1" height="334"/>
+			</line>
+			<line>
+				<reportElement x="466" y="131" width="1" height="334"/>
+			</line>
+			<line>
+				<reportElement x="531" y="131" width="1" height="334"/>
+			</line>
+			<line>
+				<reportElement x="1" y="149" width="531" height="1"/>
+			</line>
+			<line>
+				<reportElement x="109" y="130" width="1" height="335"/>
+			</line>
+			<line>
+				<reportElement x="40" y="130" width="1" height="335"/>
+			</line>
+			<image scaleImage="RealSize">
+				<reportElement x="2" y="1" width="130" height="61" isPrintWhenDetailOverflows="true"/>
+				<imageExpression class="java.lang.String"><![CDATA["../../imagenes/logotipo_horizontal_rgb.jpg"]]></imageExpression>
+			</image>
+			<line>
+				<reportElement x="184" y="130" width="1" height="335"/>
+			</line>
+		</band>
+	</background>
+	<title>
+		<band/>
+	</title>
+	<pageHeader>
+		<band height="55" splitType="Stretch">
+			<textField>
+				<reportElement x="132" y="23" width="400" height="32"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="15" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{UNIDAD}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="132" y="1" width="400" height="37"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif" size="19" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[H. Ayuntamiento Constitucional de Centro]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="94" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="3" width="531" height="72"/>
+			</rectangle>
+			<line>
+				<reportElement x="0" y="56" width="531" height="1"/>
+			</line>
+			<line>
+				<reportElement x="217" y="39" width="1" height="36"/>
+			</line>
+			<line>
+				<reportElement x="0" y="20" width="446" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="448" y="4" width="83" height="17"/>
+				<textElement textAlignment="Center">
+					<font fontName="Tahoma" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PEDIDO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="106" y="77" width="78" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Unidad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="59" width="92" height="15"/>
+				<textElement>
+					<font fontName="Tahoma" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha de entrega:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="220" y="59" width="108" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Condiciones de Pago:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="403" y="77" width="63" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Precio U.]]></text>
+			</staticText>
+			<line>
+				<reportElement x="144" y="39" width="1" height="17"/>
+			</line>
+			<staticText>
+				<reportElement x="4" y="6" width="66" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Proveedor:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="185" y="77" width="220" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Concepto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="396" y="41" width="50" height="16"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Contrato:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="69" y="3" width="1" height="54"/>
+			</line>
+			<staticText>
+				<reportElement x="4" y="42" width="66" height="14"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="73" y="3" width="373" height="17"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{NCOMERCIA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="4" y="23" width="66" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dirección:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="220" y="41" width="172" height="16"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{TELEFONOS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="73" y="21" width="373" height="17"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma" size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{DOMIFISCAL} + " "+$P{COLONIA}+" "+$P{CIUDAD}+" "+$P{ESTADO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="41" y="77" width="65" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Cantidad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="77" width="40" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Lotes]]></text>
+			</staticText>
+			<line>
+				<reportElement x="392" y="39" width="1" height="18"/>
+			</line>
+			<line>
+				<reportElement x="328" y="56" width="1" height="19"/>
+			</line>
+			<staticText>
+				<reportElement x="466" y="77" width="64" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="145" y="42" width="72" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Teléfono:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="96" y="59" width="121" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{FECHA_ENTREGA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="448" y="20" width="83" height="18" forecolor="#000000"/>
+				<textElement textAlignment="Center">
+					<font fontName="Tahoma" size="14" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{NUM_PED}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="446" y="3" width="1" height="53"/>
+			</line>
+			<line>
+				<reportElement x="0" y="38" width="531" height="1"/>
+			</line>
+			<textField>
+				<reportElement x="448" y="38" width="83" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CONTRATO}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="97" y="57" width="1" height="18"/>
+			</line>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="69" y="42" width="75" height="14"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{FECHA_PED}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="331" y="59" width="199" height="16"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CONDICION_PAGO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="17" splitType="Stretch">
+			<textField pattern="###0.00">
+				<reportElement x="41" y="0" width="65" height="16"/>
+				<box leftPadding="0" rightPadding="0">
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+					<topPen lineWidth="0.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{CANTIDAD}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="403" y="0" width="62" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{PRECIO_UNI}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0;(###0)">
+				<reportElement x="1" y="0" width="40" height="16"/>
+				<box leftPadding="0" rightPadding="0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Short"><![CDATA[$F{PED_CONS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="106" y="0" width="78" height="16"/>
+				<box leftPadding="1" rightPadding="1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{UNIDMEDIDA}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="466" y="0" width="64" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{importe}.setScale(2,BigDecimal.ROUND_HALF_UP)]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="185" y="0" width="218" height="16"/>
+				<box leftPadding="1"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[(!$F{DESCRIP}.equals("")) ?  $F{ARTICULO} +" ("+$F{DESCRIP}+")":$F{ARTICULO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="321" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="2" width="531" height="44"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="268" width="532" height="37"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="384" y="35" width="59" height="11"/>
+				<textElement>
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<line>
+				<reportElement x="466" y="2" width="1" height="44"/>
+			</line>
+			<staticText>
+				<reportElement x="384" y="2" width="59" height="11"/>
+				<textElement>
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<text><![CDATA[Subtotal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="167" width="95" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[LOCALIDAD:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="119" width="95" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[SUBFUNCION:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="59" width="95" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[PROGRAMA:]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="99" y="59" width="432" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="Tahoma" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{N_PROGRAMA}+" "+$P{PROG_PRESUP}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="99" y="119" width="432" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma" size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CLV_SUBFUNCION}+" "+$P{SUBFUNCION}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="95" width="95" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[TIPO DE GASTO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="71" width="95" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[ACTIVIDAD INST:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="83" width="95" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[FINALIDAD:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="107" width="95" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[FUNCION:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="180" width="95" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[REQUISICION:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="48" width="95" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[PARTIDA:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="12" y="241" width="241" height="11"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{PED_AUTORIZO_REPRESENTANTE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="12" y="252" width="241" height="13"/>
+				<textElement textAlignment="Center">
+					<font fontName="Tahoma" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{PED_AUTORIZO_CARGO}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="11" y="240" width="242" height="1"/>
+				<graphicElement>
+					<pen lineWidth="2.0"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="289" y="240" width="230" height="1"/>
+				<graphicElement>
+					<pen lineWidth="2.0"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="12" y="208" width="241" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Autorizó]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="278" y="208" width="241" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Aceptó]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="292" width="85" height="14"/>
+				<textElement>
+					<font fontName="Tahoma" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Entregar en:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="89" y="294" width="442" height="11"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{ENTREGA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="3" y="268" width="86" height="24"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Observaciones:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="293" width="532" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="384" y="24" width="59" height="11"/>
+				<textElement>
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<text><![CDATA[I.V.A.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="89" y="268" width="443" height="25"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{NOTAS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="99" y="71" width="432" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="Tahoma" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CLV_ACTINST}+" "+$P{ACT_INST}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="99" y="95" width="432" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="Tahoma" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{RECURSO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="99" y="107" width="432" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="Tahoma" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CLV_FUNCION}+" "+$P{FUNCION}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="99" y="48" width="432" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="Tahoma" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CLV_PARTID}+" "+$P{PARTIDA}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="99" y="167" width="432" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="Tahoma" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CLV_LOCALIDAD}+" "+$P{LOCALIDAD}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="99" y="179" width="432" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="Tahoma" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{NUM_REQ}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="194" width="95" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[UNIDAD SOLICIT.:]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="99" y="193" width="432" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="Tahoma" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CLV_UNIADM}+" "+$P{DEPENDENCIA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="2" width="374" height="44"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["CANTIDAD CON LETRA: " + $P{CANT_LETRA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="384" y="13" width="59" height="11"/>
+				<textElement>
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<text><![CDATA[Descuento]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement x="263" y="307" width="121" height="13"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="102" y="307" width="161" height="13"/>
+				<textElement textAlignment="Right">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Hoja "+$V{PAGE_NUMBER}+" /"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Auto" pattern="¤ #,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="465" y="24" width="64" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="sansserif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{PAGINA_ACTUAL}.equals($V{PAGE_NUMBER})? $P{IVA}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Auto" pattern="¤ #,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="465" y="2" width="64" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="sansserif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{PAGINA_ACTUAL}.equals($V{PAGE_NUMBER})? $V{SUBTOTAL}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Auto" pattern="¤ #,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="466" y="35" width="63" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="sansserif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$V{PAGINA_ACTUAL}.equals($V{PAGE_NUMBER})? $P{TOTAL_T}: (new Double(0.0))]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" evaluationTime="Auto" pattern="¤ #,##0.00">
+				<reportElement x="466" y="13" width="63" height="11"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{PAGINA_ACTUAL}.equals($V{PAGE_NUMBER})? $P{DESCUENTO}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="99" y="83" width="432" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CLV_FINALIDAD}+" "+$P{FINALIDAD}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="131" width="95" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[SUBSUBFUNCION:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="143" width="95" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[PROG. PRESUPUEST.:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="99" y="143" width="432" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma" size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[($P{CLV_PROGRAMA}!=null&&$P{CLV_PROGRAMA}!=null)? $P{CLV_PROGRAMA}+" "+$P{PROGRAMA} :""]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="155" width="95" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[OBJETO DEL GASTO:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="99" y="155" width="432" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma" size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CLV_OBJETOGASTO}+" "+$P{OBJETO_GASTO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="99" y="131" width="431" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CLV_SUBSUBFUNCION}+" "+$P{SUBSUBFUNCION}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="289" y="241" width="230" height="11"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{NCOMERCIA}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+</jasperReport>

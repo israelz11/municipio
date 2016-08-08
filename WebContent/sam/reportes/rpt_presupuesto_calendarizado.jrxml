@@ -1,0 +1,1084 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="listado" pageWidth="792" pageHeight="612" whenNoDataType="AllSectionsNoDetail" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<parameter name="FECHA_IMPRESION" class="java.lang.String"/>
+	<parameter name="UNIDAD_SOLICITANTE" class="java.lang.String"/>
+	<parameter name="TIPO_GASTO" class="java.lang.String"/>
+	<field name="CLV_PARTID" class="java.lang.String"/>
+	<field name="IMPORTE" class="java.math.BigDecimal"/>
+	<field name="N_PROGRAMA" class="java.lang.String"/>
+	<field name="DECRIPCION" class="java.lang.String"/>
+	<field name="PARTIDA" class="java.lang.String"/>
+	<field name="ENEPREINI" class="java.math.BigDecimal"/>
+	<field name="ENEPREAMP" class="java.math.BigDecimal"/>
+	<field name="ENEPRERED" class="java.math.BigDecimal"/>
+	<field name="ENEPREREQ" class="java.math.BigDecimal"/>
+	<field name="ENEPRECOM" class="java.math.BigDecimal"/>
+	<field name="ENEPREEJE" class="java.math.BigDecimal"/>
+	<field name="FEBPREINI" class="java.math.BigDecimal"/>
+	<field name="FEBPREAMP" class="java.math.BigDecimal"/>
+	<field name="FEBPRERED" class="java.math.BigDecimal"/>
+	<field name="FEBPREREQ" class="java.math.BigDecimal"/>
+	<field name="FEBPRECOM" class="java.math.BigDecimal"/>
+	<field name="FEBPREEJE" class="java.math.BigDecimal"/>
+	<field name="MARPREINI" class="java.math.BigDecimal"/>
+	<field name="MARPREAMP" class="java.math.BigDecimal"/>
+	<field name="MARPRERED" class="java.math.BigDecimal"/>
+	<field name="MARPREREQ" class="java.math.BigDecimal"/>
+	<field name="MARPRECOM" class="java.math.BigDecimal"/>
+	<field name="MARPREEJE" class="java.math.BigDecimal"/>
+	<field name="ABRPREINI" class="java.math.BigDecimal"/>
+	<field name="ABRPREAMP" class="java.math.BigDecimal"/>
+	<field name="ABRPRERED" class="java.math.BigDecimal"/>
+	<field name="ABRPREREQ" class="java.math.BigDecimal"/>
+	<field name="ABRPRECOM" class="java.math.BigDecimal"/>
+	<field name="ABRPREEJE" class="java.math.BigDecimal"/>
+	<field name="MAYPREINI" class="java.math.BigDecimal"/>
+	<field name="MAYPREAMP" class="java.math.BigDecimal"/>
+	<field name="MAYPRERED" class="java.math.BigDecimal"/>
+	<field name="MAYPREREQ" class="java.math.BigDecimal"/>
+	<field name="MAYPRECOM" class="java.math.BigDecimal"/>
+	<field name="MAYPREEJE" class="java.math.BigDecimal"/>
+	<field name="JUNPREINI" class="java.math.BigDecimal"/>
+	<field name="JUNPREREQ" class="java.math.BigDecimal"/>
+	<field name="JUNPRECOM" class="java.math.BigDecimal"/>
+	<field name="JUNPREEJE" class="java.math.BigDecimal"/>
+	<field name="JUNPREAMP" class="java.math.BigDecimal"/>
+	<field name="JUNPRERED" class="java.math.BigDecimal"/>
+	<field name="JULPREINI" class="java.math.BigDecimal"/>
+	<field name="JULPREAMP" class="java.math.BigDecimal"/>
+	<field name="JULPRERED" class="java.math.BigDecimal"/>
+	<field name="JULPREREQ" class="java.math.BigDecimal"/>
+	<field name="JULPRECOM" class="java.math.BigDecimal"/>
+	<field name="JULPREEJE" class="java.math.BigDecimal"/>
+	<field name="AGOPREINI" class="java.math.BigDecimal"/>
+	<field name="AGOPREAMP" class="java.math.BigDecimal"/>
+	<field name="AGOPRERED" class="java.math.BigDecimal"/>
+	<field name="AGOPREREQ" class="java.math.BigDecimal"/>
+	<field name="AGOPRECOM" class="java.math.BigDecimal"/>
+	<field name="AGOPREEJE" class="java.math.BigDecimal"/>
+	<field name="SEPPREINI" class="java.math.BigDecimal"/>
+	<field name="SEPPREAMP" class="java.math.BigDecimal"/>
+	<field name="SEPPRERED" class="java.math.BigDecimal"/>
+	<field name="SEPPREREQ" class="java.math.BigDecimal"/>
+	<field name="SEPPRECOM" class="java.math.BigDecimal"/>
+	<field name="SEPPREEJE" class="java.math.BigDecimal"/>
+	<field name="OCTPREINI" class="java.math.BigDecimal"/>
+	<field name="OCTPREREQ" class="java.math.BigDecimal"/>
+	<field name="OCTPRECOM" class="java.math.BigDecimal"/>
+	<field name="OCTPREEJE" class="java.math.BigDecimal"/>
+	<field name="OCTPREAMP" class="java.math.BigDecimal"/>
+	<field name="OCTPRERED" class="java.math.BigDecimal"/>
+	<field name="NOVPREINI" class="java.math.BigDecimal"/>
+	<field name="NOVPREAMP" class="java.math.BigDecimal"/>
+	<field name="NOVPRERED" class="java.math.BigDecimal"/>
+	<field name="NOVPREREQ" class="java.math.BigDecimal"/>
+	<field name="NOVPRECOM" class="java.math.BigDecimal"/>
+	<field name="NOVPREEJE" class="java.math.BigDecimal"/>
+	<field name="DICPREINI" class="java.math.BigDecimal"/>
+	<field name="DICPREAMP" class="java.math.BigDecimal"/>
+	<field name="DICPRERED" class="java.math.BigDecimal"/>
+	<field name="DICPREREQ" class="java.math.BigDecimal"/>
+	<field name="DICPRECOM" class="java.math.BigDecimal"/>
+	<field name="DICPREEJE" class="java.math.BigDecimal"/>
+	<field name="ID_PROYECTO" class="java.lang.Integer"/>
+	<background>
+		<band height="101" splitType="Stretch">
+			<image scaleImage="FillFrame">
+				<reportElement x="1" y="1" width="133" height="66"/>
+				<imageExpression class="java.lang.String"><![CDATA["../../imagenes/logotipo_horizontal_rgb.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</background>
+	<pageHeader>
+		<band height="125" splitType="Stretch">
+			<staticText>
+				<reportElement x="110" y="4" width="640" height="34"/>
+				<textElement textAlignment="Center">
+					<font size="19" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[H. Ayuntamiento Constitucional de Centro]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="110" y="30" width="640" height="27"/>
+				<textElement textAlignment="Center">
+					<font size="17" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Consulta al presupuesto calendarizado]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement x="727" y="87" width="20" height="13"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="749" y="70" width="1" height="47"/>
+			</line>
+			<textField>
+				<reportElement mode="Transparent" x="362" y="68" width="4" height="1"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{PAGE_COUNT}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="1" y="116" width="749" height="1"/>
+			</line>
+			<textField>
+				<reportElement x="139" y="86" width="508" height="14"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{TIPO_GASTO}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="1" y="69" width="749" height="1"/>
+			</line>
+			<textField>
+				<reportElement x="139" y="100" width="119" height="15"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{FECHA_IMPRESION}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="647" y="87" width="80" height="13"/>
+				<textElement textAlignment="Right">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Hoja "+$V{PAGE_NUMBER}+" /"]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="1" y="69" width="1" height="47"/>
+			</line>
+			<staticText>
+				<reportElement x="15" y="84" width="119" height="16"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Tipo de gasto:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="15" y="99" width="119" height="16"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Fecha de impresión:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="139" y="70" width="608" height="16"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{UNIDAD_SOLICITANTE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="70" width="132" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Unidad solicitante :]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="22" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="1" y="6" width="374" height="15" forecolor="#FFFFFF" backcolor="#000000"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Programa]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="376" y="6" width="374" height="15" forecolor="#FFFFFF" backcolor="#000000"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Partida]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="136" splitType="Stretch">
+			<textField>
+				<reportElement mode="Opaque" x="1" y="0" width="374" height="15" backcolor="#E8E8E8"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["["+$F{ID_PROYECTO}.toString()+"] "+ $F{N_PROGRAMA}+" - "+$F{DECRIPCION}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="376" y="0" width="374" height="15" backcolor="#E8E8E8"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{CLV_PARTID}+" - "+$F{PARTIDA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="1" y="16" width="42" height="15" forecolor="#FFFFFF" backcolor="#000000"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Mes]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1" y="32" width="42" height="15" forecolor="#FFFFFF" backcolor="#666666"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Enero]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="376" y="32" width="42" height="15" forecolor="#FFFFFF" backcolor="#666666"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Febrero]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1" y="48" width="42" height="15" forecolor="#FFFFFF" backcolor="#666666"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Marzo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="376" y="48" width="42" height="15" forecolor="#FFFFFF" backcolor="#666666"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Abril]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1" y="64" width="42" height="15" forecolor="#FFFFFF" backcolor="#666666"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Mayo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="376" y="64" width="42" height="15" forecolor="#FFFFFF" backcolor="#666666"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Junio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1" y="80" width="42" height="15" forecolor="#FFFFFF" backcolor="#666666"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Julio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="376" y="80" width="42" height="15" forecolor="#FFFFFF" backcolor="#666666"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Agosto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1" y="96" width="42" height="15" forecolor="#FFFFFF" backcolor="#666666"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Septiembre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="376" y="96" width="42" height="15" forecolor="#FFFFFF" backcolor="#666666"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Octubre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="376" y="16" width="42" height="15" forecolor="#FFFFFF" backcolor="#000000"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Mes]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1" y="112" width="42" height="15" forecolor="#FFFFFF" backcolor="#666666"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Noviembre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="376" y="112" width="42" height="15" forecolor="#FFFFFF" backcolor="#666666"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Diciembre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="44" y="16" width="65" height="15" forecolor="#FFFFFF" backcolor="#000000"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Autorizado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="110" y="16" width="65" height="15" forecolor="#FFFFFF" backcolor="#000000"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Precomprometido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="176" y="16" width="65" height="15" forecolor="#FFFFFF" backcolor="#000000"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Comprometido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="242" y="16" width="65" height="15" forecolor="#FFFFFF" backcolor="#000000"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Ejercido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="308" y="16" width="67" height="15" forecolor="#FFFFFF" backcolor="#000000"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Disponible]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="617" y="16" width="65" height="15" forecolor="#FFFFFF" backcolor="#000000"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Ejercido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="419" y="16" width="65" height="15" forecolor="#FFFFFF" backcolor="#000000"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Autorizado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="485" y="16" width="65" height="15" forecolor="#FFFFFF" backcolor="#000000"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Precomprometido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="683" y="16" width="67" height="15" forecolor="#FFFFFF" backcolor="#000000"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Disponible]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="551" y="16" width="65" height="15" forecolor="#FFFFFF" backcolor="#000000"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Comprometido]]></text>
+			</staticText>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="44" y="32" width="65" height="15" backcolor="#E8E8E8"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{ENEPREINI}.add($F{ENEPREAMP}).subtract($F{ENEPRERED})]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="110" y="32" width="65" height="15" backcolor="#E8E8E8"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{ENEPREREQ}!=null)? $F{ENEPREREQ}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="176" y="32" width="65" height="15" backcolor="#E8E8E8"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{ENEPRECOM}!=null)? $F{ENEPRECOM}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="242" y="32" width="65" height="15" backcolor="#E8E8E8"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{ENEPREEJE}!=null)? $F{ENEPREEJE}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Opaque" x="308" y="32" width="67" height="15" backcolor="#E8E8E8"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{ENEPREREQ}!=null&&$F{ENEPRECOM}!=null&&$F{ENEPREEJE}!=null) ? $F{ENEPREINI}.add($F{ENEPREAMP}).subtract($F{ENEPRERED}).subtract($F{ENEPRECOM}).subtract($F{ENEPREREQ}).subtract($F{ENEPREEJE}): new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="683" y="32" width="67" height="15" backcolor="#E8E8E8"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{FEBPREREQ}!=null&&$F{FEBPRECOM}!=null&&$F{FEBPREEJE}!=null) ? $F{FEBPREINI}.add($F{FEBPREAMP}).subtract($F{FEBPRERED}).subtract($F{FEBPRECOM}).subtract($F{FEBPREREQ}).subtract($F{FEBPREEJE}): new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="485" y="32" width="65" height="15" backcolor="#E8E8E8"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{FEBPREREQ}!=null)? $F{FEBPREREQ}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="419" y="32" width="65" height="15" backcolor="#E8E8E8"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{FEBPREINI}.add($F{FEBPREAMP}).subtract($F{FEBPRERED})]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="551" y="32" width="65" height="15" backcolor="#E8E8E8"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{FEBPRECOM}!=null)? $F{FEBPRECOM}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="617" y="32" width="65" height="15" backcolor="#E8E8E8"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{FEBPREEJE}!=null)? $F{FEBPREEJE}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="308" y="48" width="67" height="15" backcolor="#CCCCCC"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{MARPREREQ}!=null&&$F{MARPRECOM}!=null&&$F{MARPREEJE}!=null) ? $F{MARPREINI}.add($F{MARPREAMP}).subtract($F{MARPRERED}).subtract($F{MARPRECOM}).subtract($F{MARPREREQ}).subtract($F{MARPREEJE}): new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="110" y="48" width="65" height="15" backcolor="#CCCCCC"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{MARPREREQ}!=null)? $F{MARPREREQ}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="44" y="48" width="65" height="15" backcolor="#CCCCCC"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{MARPREINI}.add($F{MARPREAMP}).subtract($F{MARPRERED})]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="176" y="48" width="65" height="15" backcolor="#CCCCCC"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{MARPRECOM}!=null)? $F{MARPRECOM}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="242" y="48" width="65" height="15" backcolor="#CCCCCC"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{MARPREEJE}!=null)? $F{MARPREEJE}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="485" y="48" width="65" height="15" backcolor="#CCCCCC"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{ABRPREREQ}!=null)? $F{ABRPREREQ}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="683" y="48" width="67" height="15" backcolor="#CCCCCC"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{ABRPREREQ}!=null&&$F{ABRPRECOM}!=null&&$F{ABRPREEJE}!=null) ? $F{ABRPREINI}.add($F{ABRPREAMP}).subtract($F{ABRPRERED}).subtract($F{ABRPRECOM}).subtract($F{ABRPREREQ}).subtract($F{ABRPREEJE}): new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="551" y="48" width="65" height="15" backcolor="#CCCCCC"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{ABRPRECOM}!=null)? $F{ABRPRECOM}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="419" y="48" width="65" height="15" backcolor="#CCCCCC"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{ABRPREINI}.add($F{ABRPREAMP}).subtract($F{ABRPRERED})]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="617" y="48" width="65" height="15" backcolor="#CCCCCC"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{ABRPREEJE}!=null)? $F{ABRPREEJE}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="308" y="64" width="67" height="15" backcolor="#E8E8E8"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{MAYPREREQ}!=null&&$F{MAYPRECOM}!=null&&$F{MAYPREEJE}!=null) ? $F{MAYPREINI}.add($F{MAYPREAMP}).subtract($F{MAYPRERED}).subtract($F{MAYPRECOM}).subtract($F{MAYPREREQ}).subtract($F{MAYPREEJE}): new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="110" y="64" width="65" height="15" backcolor="#E8E8E8"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{MAYPREREQ}!=null)? $F{MAYPREREQ}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="44" y="64" width="65" height="15" backcolor="#E8E8E8"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{MAYPREINI}.add($F{MAYPREAMP}).subtract($F{MAYPRERED})]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="176" y="64" width="65" height="15" backcolor="#E8E8E8"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{MAYPRECOM}!=null)? $F{MAYPRECOM}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="242" y="64" width="65" height="15" backcolor="#E8E8E8"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{MAYPREEJE}!=null)? $F{MAYPREEJE}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="485" y="64" width="65" height="15" backcolor="#E8E8E8"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{JUNPREREQ}!=null)? $F{JUNPREREQ}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="683" y="64" width="67" height="15" backcolor="#E8E8E8"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{JUNPREREQ}!=null&&$F{JUNPRECOM}!=null&&$F{JUNPREEJE}!=null) ? $F{JUNPREINI}.add($F{JUNPREAMP}).subtract($F{JUNPRERED}).subtract($F{JUNPRECOM}).subtract($F{JUNPREREQ}).subtract($F{JUNPREEJE}): new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="551" y="64" width="65" height="15" backcolor="#E8E8E8"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{JUNPRECOM}!=null)? $F{JUNPRECOM}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="419" y="64" width="65" height="15" backcolor="#E8E8E8"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{JUNPREINI}.add($F{JUNPREAMP}).subtract($F{JUNPRERED})]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="617" y="64" width="65" height="15" backcolor="#E8E8E8"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{JUNPREEJE}!=null)? $F{JUNPREEJE}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="308" y="80" width="67" height="15" backcolor="#CCCCCC"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{JULPREREQ}!=null&&$F{JULPRECOM}!=null&&$F{JULPREEJE}!=null) ? $F{JULPREINI}.add($F{JULPREAMP}).subtract($F{JULPRERED}).subtract($F{JULPRECOM}).subtract($F{JULPREREQ}).subtract($F{JULPREEJE}): new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="242" y="80" width="65" height="15" backcolor="#CCCCCC"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{JULPREEJE}!=null)? $F{JULPREEJE}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="44" y="80" width="65" height="15" backcolor="#CCCCCC"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{JULPREINI}.add($F{JULPREAMP}).subtract($F{JULPRERED})]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="110" y="80" width="65" height="15" backcolor="#CCCCCC"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{JULPREREQ}!=null)? $F{JULPREREQ}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="176" y="80" width="65" height="15" backcolor="#CCCCCC"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{JULPRECOM}!=null)? $F{JULPRECOM}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="419" y="80" width="65" height="15" backcolor="#CCCCCC"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{AGOPREINI}.add($F{AGOPREAMP}).subtract($F{AGOPRERED})]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="617" y="80" width="65" height="15" backcolor="#CCCCCC"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{AGOPREEJE}!=null)? $F{AGOPREEJE}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="485" y="80" width="65" height="15" backcolor="#CCCCCC"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{AGOPREREQ}!=null)? $F{AGOPREREQ}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="683" y="80" width="67" height="15" backcolor="#CCCCCC"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{AGOPREREQ}!=null&&$F{AGOPRECOM}!=null&&$F{AGOPREEJE}!=null) ? $F{AGOPREINI}.add($F{AGOPREAMP}).subtract($F{AGOPRERED}).subtract($F{AGOPRECOM}).subtract($F{AGOPREREQ}).subtract($F{AGOPREEJE}): new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="551" y="80" width="65" height="15" backcolor="#CCCCCC"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{AGOPRECOM}!=null)? $F{AGOPRECOM}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="44" y="96" width="65" height="15" backcolor="#E8E8E8"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{SEPPREINI}.add($F{SEPPREAMP}).subtract($F{SEPPRERED})]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="44" y="112" width="65" height="15" backcolor="#CCCCCC"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{NOVPREINI}.add($F{NOVPREAMP}).subtract($F{NOVPRERED})]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="110" y="112" width="65" height="15" backcolor="#CCCCCC"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{NOVPREREQ}!=null)? $F{NOVPREREQ}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="308" y="96" width="67" height="15" backcolor="#E8E8E8"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{SEPPREREQ}!=null&&$F{SEPPRECOM}!=null&&$F{SEPPREEJE}!=null) ? $F{SEPPREINI}.add($F{SEPPREAMP}).subtract($F{SEPPRERED}).subtract($F{SEPPRECOM}).subtract($F{SEPPREREQ}).subtract($F{SEPPREEJE}): new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="242" y="96" width="65" height="15" backcolor="#E8E8E8"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{SEPPREEJE}!=null)? $F{SEPPREEJE}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="110" y="96" width="65" height="15" backcolor="#E8E8E8"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{SEPPREREQ}!=null)? $F{SEPPREREQ}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="176" y="112" width="65" height="15" backcolor="#CCCCCC"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{NOVPRECOM}!=null)? $F{NOVPRECOM}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="176" y="96" width="65" height="15" backcolor="#E8E8E8"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{SEPPRECOM}!=null)? $F{SEPPRECOM}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="242" y="112" width="65" height="15" backcolor="#CCCCCC"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{NOVPREEJE}!=null)? $F{NOVPREEJE}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="308" y="112" width="67" height="15" backcolor="#CCCCCC"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{NOVPREREQ}!=null&&$F{NOVPRECOM}!=null&&$F{NOVPREEJE}!=null) ? $F{NOVPREINI}.add($F{NOVPREAMP}).subtract($F{NOVPRERED}).subtract($F{NOVPRECOM}).subtract($F{NOVPREREQ}).subtract($F{NOVPREEJE}): new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="485" y="96" width="65" height="15" backcolor="#E8E8E8"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{OCTPREREQ}!=null)? $F{OCTPREREQ}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="617" y="112" width="65" height="15" backcolor="#CCCCCC"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{DICPREEJE}!=null)? $F{DICPREEJE}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="419" y="96" width="65" height="15" backcolor="#E8E8E8"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{OCTPREINI}.add($F{OCTPREAMP}).subtract($F{OCTPRERED})]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="617" y="96" width="65" height="15" backcolor="#E8E8E8"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{OCTPREEJE}!=null)? $F{OCTPREEJE}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="551" y="96" width="65" height="15" backcolor="#E8E8E8"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{OCTPRECOM}!=null)? $F{OCTPRECOM}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="485" y="112" width="65" height="15" backcolor="#CCCCCC"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{DICPREREQ}!=null)? $F{DICPREREQ}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="419" y="112" width="65" height="15" backcolor="#CCCCCC"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{DICPREINI}.add($F{DICPREAMP}).subtract($F{DICPRERED})]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="683" y="112" width="67" height="15" backcolor="#CCCCCC"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{DICPREREQ}!=null&&$F{DICPRECOM}!=null&&$F{DICPREEJE}!=null) ? $F{DICPREINI}.add($F{DICPREAMP}).subtract($F{DICPRERED}).subtract($F{DICPRECOM}).subtract($F{DICPREREQ}).subtract($F{DICPREEJE}): new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="683" y="96" width="67" height="15" backcolor="#E8E8E8"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{OCTPREREQ}!=null&&$F{OCTPRECOM}!=null&&$F{OCTPREEJE}!=null) ? $F{OCTPREINI}.add($F{OCTPREAMP}).subtract($F{OCTPRERED}).subtract($F{OCTPRECOM}).subtract($F{OCTPREREQ}).subtract($F{OCTPREEJE}): new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="551" y="112" width="65" height="15" backcolor="#CCCCCC"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{DICPRECOM}!=null)? $F{DICPRECOM}: new BigDecimal("0.00")]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

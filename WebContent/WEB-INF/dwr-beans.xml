@@ -1,0 +1,867 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  
+        http://www.springframework.org/schema/beans/spring-beans-2.5.xsd  
+        http://www.directwebremoting.org/schema/spring-dwr  
+        http://www.directwebremoting.org/schema/spring-dwr-2.0.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+	default-lazy-init="true" default-autowire="byName">
+
+	<context:annotation-config />
+	<dwr:controller id="dwrController" debug="true" />
+
+	<dwr:configuration>
+		<dwr:convert class="java.lang.Exception" type="exception" />
+		<dwr:convert class="java.lang.StackTraceElement" type="bean" />
+		<dwr:convert class="java.util.Collection" type="collection" />
+		<dwr:convert class="java.util.Map" type="map" />
+	</dwr:configuration>
+
+	<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="mappings">
+			<props>
+				<prop key="/engine.js">dwrController</prop>
+				<prop key="/util.js">dwrController</prop>
+				<prop key="/interface/**">dwrController</prop>
+				<prop key="/call/**">dwrController</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="autocompleteDiversos"
+		class="mx.gob.municipio.centro.view.sam.componentes.autocomplete.AutocompleteDiversos">
+		<dwr:remote javascript="autocompleteDiversosRemoto">
+			<dwr:include method="getBeneficiariosTodos" />
+			<!-- dwr:include method = "getPartidasPorProyecto"/-->
+			<!-- dwr:include method = "getProyectosPorUnidad"/-->
+			<dwr:include method="getUnidadMedidasTodas" />
+			<dwr:include method="getBancosTodos" />
+			<dwr:include method="getPersonas" />
+			<dwr:include method="getProyectosEval" />
+			
+			
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorIndex"
+		class="mx.gob.municipio.centro.view.controller.acceso.ControladorIndex">
+		<dwr:remote javascript="controladorIndexRemoto">
+			<dwr:include method="cargarDatosSesion" />
+			<dwr:include method="validarUsuario" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorOrdenPago"
+		class="mx.gob.municipio.centro.view.controller.sam.ordenesPagos.ControladorOrdenPago">
+		<dwr:remote javascript="controladorOrdenPagoRemoto">
+			<dwr:include method="guardarOrden" />
+			<dwr:include method="getOrden" />
+			<dwr:include method="getOrdenesTipo" />
+			<dwr:include method="getDetallesOrdenes" />
+			<dwr:include method="cerrarOrden" />
+			<dwr:include method="guardarRetencion" />
+			<dwr:include method="eliminarRetenciones" />
+			<dwr:include method="getTodasRetencionesOrdenes" />
+			<dwr:include method="getDocumentosOrdenes" />
+			<dwr:include method="guardarDocumento" />
+			<dwr:include method="eliminarDocumentos" />
+			<dwr:include method="getValesOrdenes" />
+			<dwr:include method="guardarVale" />
+			<dwr:include method="eliminarVales" />
+			<dwr:include method="getValesDisponibles" />
+			<dwr:include method="guardarDetalles" />
+			<dwr:include method="eliminarDetalle" />
+			<dwr:include method="getPedidosPorUnidad" />
+			<dwr:include method="getOTPorUnidad" />
+			<dwr:include method="generarDetallesOT" />
+			<dwr:include method="generarDetallesPedidos" />
+			<dwr:include method="aperturarOrdenes" />
+			<dwr:include method="cancelarOrden" />
+			<dwr:include method="getListUsuarios" />
+			<dwr:include method="moverOrdenesPago" />
+			<dwr:include method="validarTipoGasto" />
+			<dwr:include method="getImporteDisponiblePedido" />
+			<dwr:include method="generarDetallesPedidosParcial" />
+			<dwr:include method="getImporteDisponibleRequisicion" />
+			<dwr:include method="generarDetallesRequisicionParcial" />
+			<dwr:include method="getNombreProveedor" />
+			<dwr:include method="getFechaPeriodoOp" />
+			<dwr:include method="cambiarFechaPeriodo" />
+			<dwr:include method="getBeneficiario" />
+			<dwr:include method="cambiarBeneficiario" />
+			<dwr:include method="getListaAnexosArchivosOP" />
+			<dwr:include method="guardarFacturasEnOrdenPago" />
+			<dwr:include method="generarDetallesContrato" />
+			<dwr:include method="obtenerIvaOrdenPago" />
+			
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorCambioUnidad"
+		class="mx.gob.municipio.centro.view.controller.sam.utilerias.ControladorCambioUnidad">
+		<dwr:remote javascript="controladorCambioUnidad">
+			<dwr:include method="cambioDeEntidad" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorProyectoPartida"
+		class="mx.gob.municipio.centro.view.controller.sam.utilerias.ControladorProyectoPartida">
+		<dwr:remote javascript="controladorProyectoPartida">
+			<dwr:include method="getPresupuesto" />
+			<dwr:include method="getListaValesPresupuesto" />
+			<dwr:include method="eliminarArchivo" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorCambioPassword"
+		class="mx.gob.municipio.centro.view.seguridad.ControladorCambioPassword">
+		<dwr:remote javascript="controladorCambioPassword">
+			<dwr:include method="guardarPassword" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorConsultaBitacoraMovimientos"
+		class="mx.gob.municipio.centro.view.controller.sam.utilerias.ControladorConsultaBitacoraMovimientos">
+		<dwr:remote javascript="controladorConsultaBitacoraMovimientosRemoto">
+			<dwr:include method="getBitacora" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorProductos"
+		class="mx.gob.municipio.centro.view.controller.sam.utilerias.ControladorProductos">
+		<dwr:remote javascript="controladorProductos">
+			<dwr:include method="getProductos" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorRequisicion"
+		class="mx.gob.municipio.centro.view.controller.sam.requisiciones.ControladorRequisicion">
+		<dwr:remote javascript="controladorRequisicion">
+			<dwr:include method="getUnidades" />
+			<dwr:include method="getMesActivo" />
+			<dwr:include method="getPresupuesto" />
+			<dwr:include method="getRequisicion" />
+			<dwr:include method="guardarConcepto" />
+			<dwr:include method="getTipoRequisicion" />
+			<dwr:include method="guardarRequisicion" />
+			<dwr:include method="cerrarRequisicion" />
+			<dwr:include method="comprobarExistencia" />
+			<dwr:include method="guardarOrdenTrabajo" />
+			<dwr:include method="getLightRequisicion" />
+			<dwr:include method="getConceptoRequisicion" />
+			<dwr:include method="getConceptosRequisicion" />
+			<dwr:include method="getAnexoConceptoRequisicion" />
+			<dwr:include method="eliminarMovimientoRequisicion" />
+			<dwr:include method="guardarAnexoConceptoRequisicion" />
+			<dwr:include method="getPresupuestoReq" />
+			<dwr:include method="comprobarCerradoBitacora" />
+			<dwr:include method="enviarLotesPedido" />
+			<dwr:include method="getBeneficiario" />
+			<dwr:include method="importarNuevosLotes" />
+			<dwr:include method="reenumerarLotes" />
+			<dwr:include method="getInformacionPedido" />
+			<dwr:include method="getListaValesPresupuesto" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorEvaluacionProyectos"
+		class="mx.gob.municipio.centro.view.controller.sam.utilerias.ControladorEvaluacionProyectos">
+		<dwr:remote javascript="controladorEvaluacionProyectosRemoto">
+			<dwr:include method="getProyecto" />
+			<dwr:include method="guardarEvaluacion" />
+			<dwr:include method="guardarEvalucionDetalle" />
+			<dwr:include method="getDetallesEvaluacionTipo" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorListadoRequisiciones"
+		class="mx.gob.municipio.centro.view.controller.sam.requisiciones.ControladorListadoRequisiciones">
+		<dwr:remote javascript="controladorListadoRequisicionesRemoto">
+			<dwr:include method="getRequisicionesUnidadPorEjemplo" />
+			<dwr:include method="aperturarRequisiciones" />
+			<dwr:include method="cancelarRequisiciones" />
+			<dwr:include method="getFechaPeriodoRequisicion" />
+			<dwr:include method="cambiarFechaPeriodo" />
+			<dwr:include method="getListUsuarios" />
+			<dwr:include method="moverRequisiciones" />
+			<dwr:include method="getBeneficiario" />
+			<dwr:include method="cambiarBeneficiario" />
+			<dwr:include method="reenumerarLotesDesde" />
+			<dwr:include method="getFechaIngreso" />
+			<dwr:include method="cambiarFechaIngreso" />
+			<dwr:include method="getReembolsoRequisiciones" />
+			<dwr:include method="guardarReembolsoRequisicion" />
+			<dwr:include method="quitarReembolso" />
+			
+		</dwr:remote>
+	</bean>
+	
+	<bean id="controladorGrupos"
+		class="mx.gob.municipio.centro.view.controller.configuracion.ControladorGrupos">
+		<dwr:remote javascript="controladorGruposRemoto">
+			<dwr:include method="guardarGrupo" />
+			<dwr:include method="eliminarGrupo" />
+			<dwr:include method="getGruposEstatus" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorFirmasGrupos"
+		class="mx.gob.municipio.centro.view.controller.configuracion.ControladorFirmasGrupos">
+		<dwr:remote javascript="controladorFirmasGruposRemoto">
+			<dwr:include method="guardarFirmaGrupo" />
+			<dwr:include method="eliminarFirmaGrupo" />
+			<dwr:include method="getFirmasPorGrupo" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorAsignacionGruposUsuarios"
+		class="mx.gob.municipio.centro.view.controller.configuracion.ControladorAsignacionGruposUsuarios">
+		<dwr:remote javascript="controladorAsignacionGruposUsuariosRemoto">
+			<dwr:include method="getGruposEstatus" />
+			<dwr:include method="guardarUsuariosGrupo" />
+			<dwr:include method="getUsuariosPorUnidad" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorAsignacionGrupoUsuario"
+		class="mx.gob.municipio.centro.view.controller.configuracion.ControladorAsignacionGrupoUsuario">
+		<dwr:remote javascript="controladorAsignacionGrupoUsuarioRemoto">
+			<dwr:include method="guardarUsuarioGrupo" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorListadoRequisicionesPedidos"
+		class="mx.gob.municipio.centro.view.controller.sam.pedidos.ControladorListadoRequisicionesPedidos">
+		<dwr:remote javascript="controladorListadoRequisicionesPedidos">
+			<dwr:include method="getRequisiciones" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorUsuarios"
+		class="mx.gob.municipio.centro.view.controller.configuracion.ControladorUsuarios">
+		<dwr:remote javascript="controladorUsuariosRemoto">
+			<dwr:include method="guardarUsuario" />
+			<dwr:include method="getUsuariosPorEjemplo" />
+			<dwr:include method="getAreasUnidad" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorSistemaRemoto"
+		class="mx.gob.municipio.centro.view.controller.configuracion.ControladorSistema">
+		<dwr:remote javascript="controladorSistemaRemoto">
+			<dwr:include method="buscarSistema" />
+			<dwr:include method="eliminarSistema" />
+			<dwr:include method="guardarSistema" />
+			<dwr:include method="buscarSistemas" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorPrivilegio"
+		class="mx.gob.municipio.centro.view.controller.configuracion.ControladorPrivilegio">
+		<dwr:remote javascript="controladorPrivilegioRemoto">
+			<dwr:include method="buscarPrivilegio" />
+			<dwr:include method="guardarPrivilegio" />
+			<dwr:include method="eliminarPrivilegio" />
+			<dwr:include method="buscarPrivilegios" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorModulo"
+		class="mx.gob.municipio.centro.view.controller.configuracion.ControladorModulo">
+		<dwr:remote javascript="controladorModuloRemoto">
+			<dwr:include method="buscarModulo" />
+			<dwr:include method="eliminarModulo" />
+			<dwr:include method="guardarModulo" />
+			<dwr:include method="buscarModulos" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorRol"
+		class="mx.gob.municipio.centro.view.controller.configuracion.ControladorRol">
+		<dwr:remote javascript="controladorRolRemoto">
+			<dwr:include method="buscarTipoRol" />
+			<dwr:include method="eliminarTipoRol" />
+			<dwr:include method="guardarTipoRol" />
+			<dwr:include method="buscarTiposRoles" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorRolesPrivilegios"
+		class="mx.gob.municipio.centro.view.controller.configuracion.ControladorRolesPrivilegios">
+		<dwr:remote javascript="controladorRolesPrivilegiosRemoto">
+			<dwr:include method="buscarPrivilegiosRoles" />
+			<dwr:include method="guardarPrivilegios" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorPedidos"
+		class="mx.gob.municipio.centro.view.controller.sam.pedidos.ControladorPedidos">
+		<dwr:remote javascript="controladorPedidos">
+			<dwr:include method="moverLotes" />
+			<dwr:include method="cerrarPedido" />
+			<dwr:include method="guardarPedido" />
+			<dwr:include method="eliminarLotesPedido" />
+			<dwr:include method="getConceptos" />
+			<dwr:include method="aperturarPedidos" />
+			<dwr:include method="cancelarPedido" />
+			<dwr:include method="getComboPedidosRequisicion" />
+			<dwr:include method="reactivarPedido" />
+			<dwr:include method="getFechaPeriodoPedido" />
+			<dwr:include method="cambiarFechaPeriodo" />
+			<dwr:include method="getListUsuarios" />
+			<dwr:include method="moverPedidos" />
+			<dwr:include method="getBeneficiario" />
+			<dwr:include method="cambiarBeneficiario" />
+			<dwr:include method="getReembolsoPedido" />
+			<dwr:include method="guardarReembolsoPedido" />
+			<dwr:include method="quitarReembolso" />
+			<dwr:include method="getMovimientosAjustadosPedidos" />
+			<dwr:include method="getProyectoPartidaPedido" />
+			<dwr:include method="guardarAjustePedidoPeredo" />
+			<dwr:include method="eliminarConceptoAjustePedido" />
+			
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorRolesAPersonas"
+		class="mx.gob.municipio.centro.view.controller.configuracion.ControladorRolesAPersonas">
+		<dwr:remote javascript="controladorRolesAPersonasRemoto">
+			<dwr:include method="getUsuariosUnidad" />
+			<dwr:include method="buscarRolesUsuarios" />
+			<dwr:include method="guardarRolUsuario" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorGruposProyectos"
+		class="mx.gob.municipio.centro.view.controller.configuracion.ControladorGruposProyectos">
+		<dwr:remote javascript="controladorGruposProyectosRemoto">
+			<dwr:include method="guardarProyectoGrupo" />
+			<dwr:include method="getGrupoProyectos" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorGruposPartidas"
+		class="mx.gob.municipio.centro.view.controller.configuracion.ControladorGruposPartidas">
+		<dwr:remote javascript="controladorGruposPartidasRemoto">
+			<dwr:include method="guardarPartidaGrupo" />
+			<dwr:include method="getGrupoPartidas" />
+			<dwr:include method="getGruposProyectos" />
+			<dwr:include method="guardarGrupoProyectoEnPartidas" />
+			
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorGruposVales"
+		class="mx.gob.municipio.centro.view.controller.configuracion.ControladorGruposVales">
+		<dwr:remote javascript="controladorGruposValesRemoto">
+			<dwr:include method="guardarValeGrupo" />
+			<dwr:include method="getGrupoVales" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorGruposTipoOp"
+		class="mx.gob.municipio.centro.view.controller.configuracion.ControladorGruposTipoOp">
+		<dwr:remote javascript="controladorGruposTipoOpRemoto">
+			<dwr:include method="guardarTipoOpGrupo" />
+			<dwr:include method="getGrupoTipoOp" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorGruposTipoReq"
+		class="mx.gob.municipio.centro.view.controller.configuracion.ControladorGruposTipoReq">
+		<dwr:remote javascript="controladorGruposTipoReqRemoto">
+			<dwr:include method="guardarTipoReqGrupo" />
+			<dwr:include method="getGrupoTipoReq" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorVales"
+		class="mx.gob.municipio.centro.view.controller.sam.vales.ControladorVales">
+		<dwr:remote javascript="controladorValesRemoto">
+			<dwr:include method="guardarVale" />
+			<dwr:include method="agregarConcepto" />
+			<dwr:include method="getDetallesVales" />
+			<dwr:include method="eliminarDetalles" />
+			<dwr:include method="getArchivosVale" />
+			<dwr:include method="eliminarArchivoVale" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorListadoVales"
+		class="mx.gob.municipio.centro.view.controller.sam.vales.ControladorListadoVales">
+		<dwr:remote javascript="controladorListadoValesRemoto">
+			<dwr:include method="cerrarVale" />
+			<dwr:include method="cancelarVale" />
+			<dwr:include method="rechazarVale" />
+			<dwr:include method="aplicarVale" />
+			<dwr:include method="desAplicarVale" />
+			<dwr:include method="aperturarVales" />
+			<dwr:include method="getFechaPeriodoVale" />
+			<dwr:include method="cambiarFechaPeriodo" />
+			<dwr:include method="getListUsuarios" />
+			<dwr:include method="moverVales" />
+			<dwr:include method="getBeneficiarioVale" />
+			<dwr:include method="cambiarBeneficiario" />
+			<dwr:include method="getArchivoAnexoVale" />
+			
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorReembolsosLiquidosVales"
+		class="mx.gob.municipio.centro.view.controller.sam.vales.ControladorReembolsosLiquidosVales">
+		<dwr:remote javascript="controladorReembolsosLiquidosValesRemoto">
+			<dwr:include method="getValesPagadosNoComprobados" />
+			<dwr:include method="guardarComprobacion" />
+			<dwr:include method="getComprobacionesVales" />
+			<dwr:include method="eliminarReembolso" />
+			<dwr:include method="getMovimientoVales" />
+			<dwr:include method="getDatosVale" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorListadoOrdenPagoEjercido"
+		class="mx.gob.municipio.centro.view.controller.sam.ordenesPagos.ControladorListadoOrdenPagoEjercido">
+		<dwr:remote javascript="controladorListadoOrdenPagoEjercidoRemoto">
+			<dwr:include method="ejercerOrdenPago" />
+			<dwr:include method="cambiarFechaOrdenPago" />
+			<dwr:include method="cargarRelaciones"/>
+			<dwr:include method="cargarRelacionesDocumentos"/>
+			<dwr:include method="abrirRelacion"/>
+			<dwr:include method="agregarOpRelacion"/>
+			<dwr:include method="eliminarOpRelacion"/>
+			<dwr:include method="cargarDetalle"/>
+			<dwr:include method="guardarOpDetalle"/>
+			<dwr:include method="nuevaRelacion"/>
+			<dwr:include method="cambiarFechaRelacion"/>
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorListadoOrdenPagoDesejercer"
+		class="mx.gob.municipio.centro.view.controller.sam.ordenesPagos.ControladorListadoOrdenPagoDesejercer">
+		<dwr:remote javascript="controladorListadoOrdenPagoDesejercerRemoto">
+			<dwr:include method="desejercerOrdenPago" />
+			<dwr:include method="cancelarEjercidoOrdenPago" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorArticulos"
+		class="mx.gob.municipio.centro.view.controller.sam.requisiciones.ControladorArticulos">
+		<dwr:remote javascript="controladorArticulosRemoto">
+			<dwr:include method="guardarArticulo" />
+			<dwr:include method="eliminarArticulo" />
+			<dwr:include method="getArticulo" />
+			<dwr:include method="getArticulosTodos" />
+			<dwr:include method="getExistenciaDocumentos" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorArticulosPartida"
+		class="mx.gob.municipio.centro.view.controller.sam.requisiciones.ControladorArticulosPartida">
+		<dwr:remote javascript="controladorArticulosPartidaRemoto">
+			<dwr:include method="getGrupos" />
+			<dwr:include method="getArticulosPartidaGrupo" />
+			<dwr:include method="getArticulosPartidaGrupo2" />
+			<dwr:include method="guardarArticulos" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorBeneficiario"
+		class="mx.gob.municipio.centro.view.controller.sam.ordenesPagos.ControladorBeneficiario">
+		<dwr:remote javascript="controladorBeneficiarioRemoto">
+			<dwr:include method="guardarBeneficiario" />
+			<dwr:include method="getBeneficiarios" />
+			<dwr:include method="getBeneficiariosHijos" />
+			<dwr:include method="getBeneficiario" />
+			<dwr:include method="eliminarBenificiario" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorFacturas"
+		class="mx.gob.municipio.centro.view.controller.sam.facturas.ControladorFacturas">
+		<dwr:remote javascript="controladorFacturasRemoto">
+			<dwr:include method="getBeneficiarioFactura" />
+			<dwr:include method="getPresupuestoDocumento" />
+			<dwr:include method="guardarFactura" />
+			<dwr:include method="cerrarFactura" />
+			<dwr:include method="getArchivosFactura" />
+			<dwr:include method="eliminarArchivoFactura" />
+			<dwr:include method="guardarRetencion" />
+			<dwr:include method="eliminarRetenciones" />
+			<dwr:include method="getRetenciones" />
+			<dwr:include method="guardarComprobacionVale" />
+			<dwr:include method="guardarComprobacionVale" />
+			<dwr:include method="getListaVales" />
+			<dwr:include method="getValesDisponibles" />
+			<dwr:include method="eliminarVales" />
+			<dwr:include method="getMesActivo" />
+			<dwr:include method="agregarMovimiento" />
+			<dwr:include method="getDetallesFactura" />
+			<dwr:include method="eliminarDetalles" />
+			<dwr:include method="cargarDetallePresupuestal" />
+		</dwr:remote>
+	</bean>
+	
+	<bean id="controladorCargarNominaDeductivas"
+		class="mx.gob.municipio.centro.view.controller.sam.facturas.ControladorCargarNominaDeductivas">
+		<dwr:remote javascript="controladorCargarNominaDeductivasRemoto">
+			<dwr:include method="borrarDatosNomina" />
+			<dwr:include method="crearFacturaOrdenPago" />
+		</dwr:remote>
+	</bean>
+	
+	<bean id="controladorListadoFacturas"
+		class="mx.gob.municipio.centro.view.controller.sam.facturas.ControladorListadoFacturas">
+		<dwr:remote javascript="controladorListadoFacturasRemoto">
+			<dwr:include method="aperturarFacturas" />
+			<dwr:include method="cancelarFacturas" />
+			<dwr:include method="getListaAnexosArchivosFactura" />
+			<dwr:include method="getMovimientosAjustadosFactura" />
+			<dwr:include method="getConceptosFactura" />
+			<dwr:include method="guardarAjusteFacturaPeredo" />
+			<dwr:include method="eliminarConceptoAjusteFactura" />
+		</dwr:remote>
+	</bean>
+
+	<!-- Beans dwr de almacen  -->
+	<bean id="controladorTiposDocumentos"
+		class="mx.gob.municipio.centro.view.controller.almacen.configuracion.ControladorTiposDocumentos">
+		<dwr:remote javascript="controladorTiposDocumentosRemoto">
+			<dwr:include method="getListaTiposDocumentos" />
+			<dwr:include method="guardarTipoDocumento" />
+			<dwr:include method="getTipoDocumento" />
+			<dwr:include method="eliminarTiposDocumentos" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorAlmacen"
+		class="mx.gob.municipio.centro.view.controller.almacen.configuracion.ControladorAlmacen">
+		<dwr:remote javascript="controladorAlmacenRemoto">
+			<dwr:include method="guardarAlmacen" />
+			<dwr:include method="eliminarAlmacen" />
+			<dwr:include method="getResponsables" />
+			<dwr:include method="getAlmacenes" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorSubdirecciones"
+		class="mx.gob.municipio.centro.view.controller.almacen.configuracion.ControladorSubdirecciones">
+		<dwr:remote javascript="controladorSubdireccionesRemoto">
+			<dwr:include method="getListaSubdirecciones" />
+			<dwr:include method="guardarSubdireccion" />
+			<dwr:include method="getSubdireccion" />
+			<dwr:include method="eliminarSubdirecciones" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorFamiliasArticulos"
+		class="mx.gob.municipio.centro.view.controller.almacen.configuracion.ControladorFamiliasArticulos">
+		<dwr:remote javascript="controladorFamiliasArticulosRemoto">
+			<dwr:include method="guardarFamiliasArticulos" />
+			<dwr:include method="getListaFamiliasArticulos" />
+			<dwr:include method="getFamilia" />
+			<dwr:include method="eliminarFamiliasArticulos" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorEntradasDocumentos"
+		class="mx.gob.municipio.centro.view.controller.almacen.entradas.ControladorEntradasDocumentos">
+		<dwr:remote javascript="controladorEntradasDocumentosRemoto">
+			<dwr:include method="guardarEntradaDocumento" />
+			<dwr:include method="getConceptos" />
+			<dwr:include method="getConcepto" />
+			<dwr:include method="getAlmacenes" />
+			<dwr:include method="guardarDetallesEntradaDocumentos" />
+			<dwr:include method="eliminarConceptos" />
+			<dwr:include method="cerrarEntradaDocumento" />
+			<dwr:include method="guardarCantidadDetalles" />
+			<dwr:include method="getFolioEntrada" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorListadoEntradasDocumentos"
+		class="mx.gob.municipio.centro.view.controller.almacen.consultas.ControladorListadoEntradasDocumentos">
+		<dwr:remote javascript="controladorListadoEntradasDocumentosRemoto">
+			<dwr:include method="cancelarDocumento" />
+			<dwr:include method="getAlmacenes" />
+			<dwr:include method="aperturarEntrada"/>
+			<dwr:include method="cancelarEntrada"/>
+			<dwr:include method="validarEntrada"/>
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorConfiguracionArticulosAlmacen"
+		class="mx.gob.municipio.centro.view.controller.almacen.entradas.ControladorConfiguracionArticulosAlmacen">
+		<dwr:remote javascript="controladorConfiguracionArticulosAlmacenRemoto">
+			<dwr:include method="guardarArticuloAlmacen" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorListadoArticulosInventario"
+		class="mx.gob.municipio.centro.view.controller.almacen.consultas.ControladorListadoArticulosInventario">
+		<dwr:remote javascript="controladorListadoArticulosInventarioRemoto">
+			<dwr:include method="cancelarArticulosInventario" />
+			<dwr:include method="getAlmacenes" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorAsignacionAlmacen"
+		class="mx.gob.municipio.centro.view.controller.almacen.configuracion.ControladorAsignacionAlmacen">
+		<dwr:remote javascript="controladorAsignacionAlmacenRemoto">
+			<dwr:include method="guardarUsuarioAlmacen" />
+			<dwr:include method="eliminarUsuarioAlmacen" />
+			<dwr:include method="getUsuarioAlmacenes" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorSolicitudes"
+		class="mx.gob.municipio.centro.view.controller.almacen.salidas.ControladorSolicitudes">
+		<dwr:remote javascript="controladorSolicitudesRemoto">
+			<dwr:include method="getSolicitudesPendientes" />
+			<dwr:include method="getArticulosPartida" />
+			<dwr:include method="guardarSolicitud" />
+			<dwr:include method="cancelarSolicitud" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorAutorizacion"
+		class="mx.gob.municipio.centro.view.controller.almacen.salidas.ControladorAutorizacion">
+		<dwr:remote javascript="controladorAutorizacionRemoto">
+			<dwr:include method="getSolicitudesPorEstatus" />
+			<dwr:include method="getArticulosSalida" />
+			<dwr:include method="guardarSolicitudAutoricion" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="controladorEntrega"
+		class="mx.gob.municipio.centro.view.controller.almacen.salidas.ControladorEntrega">
+		<dwr:remote javascript="controladorEntregaRemoto">
+			<dwr:include method="getSolicitudesPorEstatus" />
+			<dwr:include method="getArticulosEntrega" />
+			<dwr:include method="guardarSolicitudEntregada" />
+		</dwr:remote>
+	</bean>
+
+	<bean id="ControladorListadoSalidasAutorizacion"
+		class="mx.gob.municipio.centro.view.controller.almacen.salidas.ControladorListadoSalidasAutorizacion">
+		<dwr:remote javascript="ControladorListadoSalidasAutorizacionRemoto">
+			<dwr:include method="getAlmacenes" />
+		</dwr:remote>
+	</bean>
+	
+	<bean id="controladorConsultasSalidas"
+		class="mx.gob.municipio.centro.view.controller.almacen.consultas.ControladorConsultasSalidas">
+		<dwr:remote javascript="controladorConsultasSalidasRemoto">
+			
+			<dwr:include method="getSalidasPorEjemplo" />
+			<dwr:include method="cancelarSolicitud" />
+		</dwr:remote>
+	</bean>
+	
+	<bean id="controladorSalidas"
+		class="mx.gob.municipio.centro.view.controller.almacen.salidas.ControladorSalidas">
+		<dwr:remote javascript="controladorSalidasRemoto">
+			<dwr:include method="guardarSalida" />
+			<dwr:include method="getConceptos" />
+			<dwr:include method="guardarCantidadDetalles" />
+			<dwr:include method="cerrarSalida" />
+			<dwr:include method="eliminarConceptos" />
+			
+		</dwr:remote>
+	</bean>
+	
+	<bean id="ControladorListadoSalidas"
+		class="mx.gob.municipio.centro.view.controller.almacen.salidas.ControladorListadoSalidas">
+		<dwr:remote javascript="ControladorListadoSalidasRemoto">
+			<dwr:include method="autorizarSalidas" />
+			<dwr:include method="invalidarSalidas" />
+			<dwr:include method="getAlmacenes" />
+			<dwr:include method="cancelarDocumento" />
+		</dwr:remote>
+	</bean>
+	
+
+	<bean id="controladorCambioEstatusPeriodos"
+		class="mx.gob.municipio.centro.view.controller.sam.utilerias.ControladorCambioEstatusPeriodos">
+		<dwr:remote javascript="controladorCambioEstatusPeriodosRemoto">
+			<dwr:include method="cerrarPeriodo" />
+			<dwr:include method="cerrarEval" />
+		</dwr:remote>
+	</bean>
+	<bean id="ControladorMuestraListadoAvancesFisicos"
+		class="mx.gob.municipio.centro.view.controller.sam.utilerias.ControladorMuestraListadoAvancesFisicos">
+		<dwr:remote javascript="ControladorMuestraListadoAvancesFisicosRemoto">
+			<dwr:include method="actualizarProyectos" />
+		</dwr:remote>
+	</bean>
+	
+	<bean id="controladorListadoOrdenPagoEjercidoValidaFinanzas"
+		class="mx.gob.municipio.centro.view.controller.sam.ordenesPagos.ControladorListadoOrdenPagoEjercidoValidaFinanzas">
+		<dwr:remote javascript="controladorListadoOrdenPagoEjercidoValidaFinanzasRemoto">
+			<dwr:include method="fechaValidacionOrdenPago" />
+		</dwr:remote>
+	</bean>
+	
+	<bean id="ControladorCambiarGrupoFirma"
+		class="mx.gob.municipio.centro.view.controller.sam.utilerias.ControladorCambiarGrupoFirma">
+		<dwr:remote javascript="controladorCambiarGrupoFirmaRemoto">
+			<dwr:include method="cambiarGrupo" />
+		</dwr:remote>
+	</bean>
+	
+	<bean id="ControladorAdministrarUnidades"
+		class="mx.gob.municipio.centro.view.controller.correspondencia.administracion.ControladorAdministrarUnidades">
+		<dwr:remote javascript="controladorAdministrarUnidadesRemoto">
+			<dwr:include method="guardarUnidadAdm" />
+			<dwr:include method="getUnidadAdm" />
+			<dwr:include method="eliminarUnidadAdm" />
+		</dwr:remote>
+	</bean>
+	
+	<bean id="ControladorAdministrarSubdirecciones"
+		class="mx.gob.municipio.centro.view.controller.correspondencia.administracion.ControladorAdministrarSubdirecciones">
+		<dwr:remote javascript="controladorAdministrarSubdireccionesRemoto">
+				<dwr:include method="guardarSubdireccion" />
+				<dwr:include method="getSubdirecionDetalle" />
+				<dwr:include method="eliminarSubdireccion" />
+		</dwr:remote>
+	</bean>
+	
+	<bean id="ControladorAdministrarMinutarios"
+		class="mx.gob.municipio.centro.view.controller.correspondencia.administracion.ControladorAdministrarMinutarios">
+		<dwr:remote javascript="controladorAdministrarMinutariosRemoto">
+				<dwr:include method="getListaSubdirecciones" />
+				<dwr:include method="guardarMinutario" />
+				<dwr:include method="eliminarMinutarios" />
+		</dwr:remote>
+	</bean>
+	
+	<bean id="ControladorAdministrarClasificaMinutarios"
+		class="mx.gob.municipio.centro.view.controller.correspondencia.administracion.ControladorAdministrarClasificaMinutarios">
+		<dwr:remote javascript="controladorAdministrarClasificaMinutariosRemoto">
+				<dwr:include method="getListaSubdirecciones" />
+				<dwr:include method="guardarClasificaMinutario" />
+				<dwr:include method="eliminarClasificaMinutarios" />
+				
+		</dwr:remote>
+	</bean>
+	
+	<bean id="ControladorNuevoMinutario"
+		class="mx.gob.municipio.centro.view.controller.correspondencia.minutarios.ControladorNuevoMinutario">
+		<dwr:remote javascript="ControladorNuevoMinutarioRemoto">
+				<dwr:include method="getCargarMinutario" />
+				<dwr:include method="getMinutariosCombo" />
+				<dwr:include method="getMinutariosDestinoCombo" />
+				<dwr:include method="getPersonasSubdireccion" />
+				<dwr:include method="getAutocompleteDocumentos" />
+				<dwr:include method="getListaPersonas" />
+				<dwr:include method="guardarMinutario" />
+				<dwr:include method="agregarCCP" />
+				<dwr:include method="eliminarCCP" />
+				<dwr:include method="getClavesPersonasCCP" />
+				<dwr:include method="getArchivosMinutario" />
+				<dwr:include method="eliminarArchivoMinutario" />
+				<dwr:include method="cerrarMinutario" />
+		</dwr:remote>
+	</bean>
+	
+	<bean id="ControladorListadoMinutarios"
+		class="mx.gob.municipio.centro.view.controller.correspondencia.minutarios.ControladorListadoMinutarios">
+		<dwr:remote javascript="ControladorListadoMinutariosRemoto">
+				<dwr:include method="getPersonasSubdireccion" />
+				<dwr:include method="getMinutariosCombo" />
+				<dwr:include method="cancelarMinutario"/>
+				<dwr:include method="aperturarMinutario"/>
+				<dwr:include method="reactivarMinutario"/>
+		</dwr:remote>
+	</bean>
+	
+	<bean id="ControladorCorrespondencia"
+		class="mx.gob.municipio.centro.view.controller.correspondencia.documental.ControladorCorrespondencia">
+		<dwr:remote javascript="ControladorCorrespondenciaRemoto">
+				<dwr:include method="gePersonasUnidadCombo" />
+				<dwr:include method="getPersonasSubdireccion" />
+				<dwr:include method="getListaPersonas" />
+				<dwr:include method="agregarDestinatario" />
+				<dwr:include method="guardarCorrespondencia" />
+				<dwr:include method="getArchivosCorrespondencia" />
+				<dwr:include method="eliminarArchivoCorrespondencia" />
+				<dwr:include method="eliminarDestinatario" />
+				<dwr:include method="enviarCorrespondencia" />
+				
+		</dwr:remote>
+	</bean>
+	
+	<bean id="ControladorContratos"
+		class="mx.gob.municipio.centro.view.controller.sam.contratos.ControladorContratos">
+		<dwr:remote javascript="ControladorContratosRemoto">
+			<dwr:include method="getOrdenServicio" />
+			<dwr:include method="guardarContrato" />
+			<dwr:include method="cerrarContrato" />
+			<dwr:include method="getConceptosContrato" />
+			<dwr:include method="eliminarConceptos" />
+			<dwr:include method="guardarConcepto" />
+			<dwr:include method="getBeneficiarioContrato" />
+			<dwr:include method="guardarConceptoMovPeredo" />
+			<dwr:include method="eliminarConceptosMovPeredo" />
+			<dwr:include method="guardarAjusteContratoPeredo" />
+			<dwr:include method="eliminarConceptoAjusteContrato" />
+			<dwr:include method="getArchivosContrato" />
+			<dwr:include method="eliminarArchivoContrato" />
+			
+		</dwr:remote>
+	</bean>
+	
+	<bean id="ControladorListadoContratos"
+		class="mx.gob.municipio.centro.view.controller.sam.contratos.ControladorListadoContratos">
+		<dwr:remote javascript="controladorListadoContratosRemoto">
+			<dwr:include method="aperturarContratos" />
+			<dwr:include method="cancelarContrato" />
+			<dwr:include method="getConceptosContrato" />
+			<dwr:include method="getMovimientosAjustadosContrato" />
+			
+			
+		</dwr:remote>
+	</bean>
+	
+	<bean id="controladorListadoBeneficiarios"
+		class="mx.gob.municipio.centro.view.controller.sam.utilerias.ControladorListadoBeneficiarios">
+		<dwr:remote javascript="ControladorListadoBeneficiariosRemoto">
+			<dwr:include method="deshabilitarBeneficiario"/>
+			<dwr:include method="habilitarBeneficiario"/>
+		</dwr:remote>
+	</bean>
+	
+	<bean id="controladorDevolucionPresupuestal"
+		class="mx.gob.municipio.centro.view.controller.sam.utilerias.ControladorDevolucionPresupuestal">
+		<dwr:remote javascript="ControladorDevolucionPresupuestalRemoto">
+			<dwr:include method="guardarDevolucionPresupuestal"/>
+			<dwr:include method="agregarConcepto"/>
+			<dwr:include method="getDetallesDevolucion"/>
+			<dwr:include method="eliminarDetallesDevolucion"/>
+			<dwr:include method="cerrarDevolucion"/>
+			<dwr:include method="cargarMovimientosOrdenPago"/>
+			
+		</dwr:remote>
+	</bean>
+	
+	<bean id="controladorListadoDevolucionPresupuestal"
+		class="mx.gob.municipio.centro.view.controller.sam.utilerias.ControladorListadoDevolucionPresupuestal">
+		<dwr:remote javascript="ControladorListadoDevolucionPresupuestalRemoto">
+			<dwr:include method="cancelarDevolucion"/>
+			<dwr:include method="aplicarDevolucion"/>
+			<dwr:include method="aperturarDevolucion"/>
+			<dwr:include method="desaplicarDevolucion"/>
+		</dwr:remote>
+	</bean>
+	
+	<bean id="controladorMIR"
+		class="mx.gob.municipio.centro.view.controller.sam.mir.ControladorMatrizIndicadoresResultados">
+		<dwr:remote javascript="controladorMIRRemoto">
+			<dwr:include method="guardarMIR"/>
+		</dwr:remote>
+	</bean>
+	
+</beans>

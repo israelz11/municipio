@@ -1,0 +1,282 @@
+html,body{ margin:0; padding:0; border:0; }	
+body{
+	font: 62.5% "Trebuchet MS", sans-serif;
+	background-color: #ffffff;
+	color: #565656;
+	/*text-align: center; Aqui cambio*/
+	padding: 15px;
+}
+
+textarea{
+	border: solid 1px #444444;
+}
+
+
+table.formulario
+{	
+	font-size: 11px;
+	color: #000;
+	font-family: Tahoma;
+}
+
+
+/* Estilos Especificos para el Header el TH, Encabezados */
+.formulario th
+{
+    padding:0px 0px 0px 0px;
+    vertical-align:middle;
+    cursor:default;	
+	/*border-bottom:solid 1px #D7D7D7;*/
+	/*background-color:#DBE1EE;*/
+	background-color:#D9D9D9;
+	bordercolor:#E5E5E5;
+	font-weight:lighter;
+	text-align: right;
+	font-weight:bold;
+	padding-right:5px;
+}
+
+.formulario td
+{
+    padding:0px 0px 0px 0px;
+    vertical-align:middle;
+    cursor:default;	
+	/*border-bottom:solid 1px #D7D7D7;*/
+	/*background-color:#DBE1EE;*/
+	background-color:#D9D9D9;
+	bordercolor:#FFFFFF;
+/*	text-align:left;*/
+}
+
+
+h1 {
+	background-position: left center;    
+	padding-left: 30px;     
+	/*padding-right: -30px;*/
+	background-image: url(../../imagenes/dictamen.png);    
+	background-repeat: no-repeat;   
+	font-size:200%;
+	/*color:#006;*/
+	color:#333;
+	font-weight:normal;
+	text-align: left;
+	
+	font-family:Tahoma;
+	border-bottom:solid;
+	border-bottom-width: 1px;
+	border-bottom-color:#CA0000;
+	
+}
+
+table.listas
+{
+	font-size: 11px;
+	color: #4F4F4F;
+	font-family:Tahoma;
+}
+
+
+/* Estilos Especificos para el Header el TH, Encabezados */
+.listas th
+{
+	padding:0px 0px 0px 0px;    
+	/*background:#3B5998;*/
+	background:#333;
+	color:#FFF;
+	text-align:center;
+    text-decoration:none;
+	border-bottom:solid 1px #FFF/*#D7D7D7*/;
+	border-left:solid 1px #FFF;
+	border-right:solid 1px #FFF;
+	border-top:solid 1px #FFF;
+	font-weight:lighter;
+}
+
+/*Estilos Especificos del TD */
+.listas td
+{
+    padding:0px 0px 0px 0px;
+    vertical-align:middle;
+    cursor:default;	
+	border-bottom:solid 1px #FFF /*#D7D7D7*/;
+    border-width:solid 1px #FFF;
+	border-left:solid 1px #FFF;
+	border-right:solid 1px #FFF;
+	/*background-color:#DBE1EE;*/
+	bordercolor:#FFFFFF;
+}
+.listas tr
+{
+	/*background-color:#DBE1EE;*/
+	background-color:#D5D5D5;
+}
+.listas td.td
+{
+    padding:3px 5px 3px 5px;
+    vertical-align:middle;
+    cursor:default;
+	background-color:#CDDCE0;
+	border-bottom:solid 1px #FFF;
+	bordercolor:#FFFFFF;
+}
+
+.botones {
+	padding: 2px 15px 3px 15px;
+	border-style: solid;
+	border-top-width: 1px;
+	border-left-width: 1px;
+	border-bottom-width: 1px;
+	border-right-width: 1px;
+	border-top-color: #D9DFEA;
+	border-left-color: #D9DFEA;
+	border-bottom-color: #0e1f5b;
+	border-right-color: #0e1f5b;
+	background-color:#900;
+	/*background-color: #3b5998;*/
+	color: #FFFFFF;
+	font-size: 11px;
+	height:22px;
+	font-family: "lucida grande", tahoma, verdana, arial, sans-serif;
+	text-align: center;
+	
+}
+
+.textEdit{
+	font-family: Tahoma;
+	font-size: 11px;
+	color:#003;	
+	border: 1px solid #336699;
+	background-color: #FFFFFF;
+	/*font-weight:bold;		*/
+}
+
+.combList{
+	font-family: Tahoma;
+	font-size: 11px;
+	color:#003;	
+	border: 1px solid #336699;
+	background-color: #FFFFFF;
+	/*font-weight:bold;		*/
+}
+.anchoComponentes {
+	width:100%;	
+}
+
+.TituloFormulario{   
+	font-family:Tahoma;
+	font-size:12px;
+	font-weight:bold;
+	color:#333;
+	height:30px;
+	border-width:2px;
+	border-color:#000
+}
+.TextoNegritaTahomaGris
+{
+	font-family:Tahoma;
+	font-size:11px;
+	font-weight:bold;
+	color:#666;
+	height:18px;
+}
+.TextoNormalGris
+{
+	font-family:Tahoma;
+	font-size:11px;
+	font-weight:normal;
+	color:#666;
+}
+.TrGris
+{
+	background-color:#EBEBEB;
+	
+}
+/*ESTILOS PARA LOS CUADROS DE TEXTO Y BOTONES*/
+.input
+{
+	font-family:Tahoma, Geneva, sans-serif; 
+	font-size:11px;
+	color:#000;
+	background:#FFF;
+	border:#CCC;
+	border-style:solid;
+	border-top-width:1px;
+	border-right-width:1px;
+	border-bottom-width:1px;
+	border-left-width:1px;
+	height:20px;
+}
+
+.inputNumero
+{
+	font-family:Tahoma, Geneva, sans-serif; 
+	font-size:11px;
+	color:#000;
+	background:#FFF;
+	border:#CCC;
+	border-style:solid;
+	border-top-width:1px;
+	border-right-width:1px;
+	border-bottom-width:1px;
+	border-left-width:1px;
+	height:20px;
+	text-align:right;
+}
+
+.textarea{
+	border:#C0C0C0;
+	font-family:Tahoma, Geneva, sans-serif;
+	font-size:11px;
+	color:#000;
+	background:#FFF;
+	border:#CCC;
+	border-style:solid;
+	border-top-width:1px;
+	border-right-width:1px;
+	border-bottom-width:1px;
+	border-left-width:1px;
+}
+.comboBox{
+	text-align:left;
+	padding-bottom:2px;
+	height:23px;
+	background:#FFF;
+	border:#CCC;
+	border-style:solid;
+	border-top-width:1px;
+	border-right-width:1px;
+	border-bottom-width:1px;
+	border-left-width:1px;
+	font-weight:normal;
+	font-family:"Tahoma";
+	
+}
+
+/*estilos para las mensajes notificaciones*/
+.notify{
+    background-color:#333;
+    color: #FFF;
+    width: 250px;
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    border-radius:10px;
+	font-family:"Tahoma";
+	font-size:12px;
+	text-align:center;
+}
+.notify p{
+    padding: 10px;
+    margin: 0;
+}
+.notify.error{
+    background-color: #F00;
+}
+.styled-select select {
+  /* background: transparent;*/
+   width: 268px;
+   padding: 4px;
+   font-size: 12px;
+   border: 1px solid #ccc;
+   height: 26px;
+}
+

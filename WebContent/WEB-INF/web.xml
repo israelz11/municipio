@@ -1,0 +1,111 @@
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns="http://java.sun.com/xml/ns/javaee" 
+  xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" 
+  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+  id="WebApp_ID" version="3.0">
+  
+  <!--    <?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/j2ee"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee   http://java.sun.com/xml/ns/j2ee/web-app_2_5.xsd">
+ 
+ -->
+ 
+  <description>Municipio de centro</description>  
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>/WEB-INF/dwr-beans.xml, /WEB-INF/securityContext.xml, classpath:/META-INF/applicationContext.xml</param-value>
+  </context-param>
+
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  <listener>
+    <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+  </listener>
+ 
+   <servlet>
+    <servlet-name>pageactions</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <filter>
+   <filter-name>springSecurityFilterChain</filter-name>
+   <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+  </filter>
+  <filter-mapping>
+   <filter-name>springSecurityFilterChain</filter-name>
+   <url-pattern>/*</url-pattern>
+  </filter-mapping> 
+  <servlet>
+    <servlet-name>dwr</servlet-name>
+    <servlet-class>org.directwebremoting.spring.DwrSpringServlet</servlet-class>
+    <init-param>
+      <param-name>debug</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <load-on-startup>2</load-on-startup>
+  </servlet>
+  <servlet>
+    <servlet-name>image</servlet-name>
+    <servlet-class>net.sf.jasperreports.j2ee.servlets.ImageServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>dwr</servlet-name>
+    <url-pattern>/dwr/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>pageactions</servlet-name>
+    <url-pattern>*.action</url-pattern>
+  </servlet-mapping>
+  
+ <servlet-mapping>
+    <servlet-name>pageactions</servlet-name>
+    <url-pattern>*.xls</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>image</servlet-name>
+    <url-pattern>/image/*</url-pattern>
+  </servlet-mapping>
+  <session-config>
+    <session-timeout>35</session-timeout>
+  </session-config>
+  <mime-mapping>
+    <extension>html</extension>
+    <mime-type>text/html</mime-type>
+  </mime-mapping>
+  <mime-mapping>
+    <extension>txt</extension>
+    <mime-type>text/plain</mime-type>
+  </mime-mapping>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>   
+  </welcome-file-list>
+  
+  <resource-ref>        
+	  <description>Connection siam</description>        
+	  <res-ref-name>jdbc/siam</res-ref-name>        
+	  <res-type>javax.sql.DataSource</res-type>        
+	  <res-auth>Container</res-auth>    
+  </resource-ref>
+  
+  <resource-ref>        
+	  <description>Connection almacen</description>        
+	  <res-ref-name>jdbc/almacen</res-ref-name>        
+	  <res-type>javax.sql.DataSource</res-type>        
+	  <res-auth>Container</res-auth>    
+  </resource-ref>
+  
+  <resource-ref>        
+	  <description>Connection correspondencia</description>        
+	  <res-ref-name>jdbc/correspondencia</res-ref-name>        
+	  <res-type>javax.sql.DataSource</res-type>        
+	  <res-auth>Container</res-auth>    
+  </resource-ref>
+  
+  
+
+
+</web-app>

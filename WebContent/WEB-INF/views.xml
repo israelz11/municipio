@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd" >
+       
+ <bean id="requisicion" class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView">
+  <property name="url">
+   <value>/sam/reportes/requisicion.jrxml</value>
+  </property>    
+ </bean>
+ 
+  <bean id="rpt_InformeRequisicion" class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView">
+  <property name="url">
+   <value>/sam/reportes/rpt_InformeRequisicion.jrxml</value>
+  </property>    
+ </bean>
+ 
+ <bean id="rpt_listado_requisiciones" class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView">
+  <property name="url">
+   <value>/sam/reportes/rpt_listado_requisiciones.jrxml</value>
+  </property>    
+ </bean>
+ 
+  <bean id="rpt_listado_requisiciones_conOP" class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView">
+  <property name="url">
+   <value>/sam/reportes/rpt_listado_requisiciones_conOP.jrxml</value>
+  </property>    
+ </bean>
+ 
+ <bean id="rpt_listado_requisicionesExcel" class="org.springframework.web.servlet.view.jasperreports.JasperReportsXlsView">
+  <property name="url">
+   <value>/sam/reportes/rpt_listado_requisicionesExcel.jrxml</value>
+  </property>    
+ </bean>
+ 
+ 
+ <bean id="rpt_listado_pedidos" class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView">
+  <property name="url">
+   <value>/sam/reportes/rpt_listado_pedidos.jrxml</value>
+  </property>    
+ </bean>
+ 
+ <bean id="rpt_listado_pedidos_conOP" class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView">
+  <property name="url">
+   <value>/sam/reportes/rpt_listado_pedidos_conOP.jrxml</value>
+  </property>    
+ </bean>
+ 
+ <bean id="rpt_listado_op" class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView">
+  <property name="url">
+   <value>/sam/reportes/rpt_listado_op.jrxml</value>
+  </property>    
+ </bean>
+ 
+ <bean id="rpt_listado_vales" class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView">
+  <property name="url">
+   <value>/sam/reportes/rpt_listado_vales.jrxml</value>
+  </property>    
+ </bean>
+ 
+ <bean id="rpt_presupuesto_mensual" class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView">
+  <property name="url">
+   <value>/sam/reportes/rpt_presupuesto_mensual.jrxml</value>
+  </property>    
+ </bean>
+ 
+ <bean id="rpt_presupuesto_calendarizado" class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView">
+  <property name="url">
+   <value>/sam/reportes/rpt_presupuesto_calendarizado.jrxml</value>
+  </property>    
+ </bean>
+ 
+ <bean id="rpt_devolucion_presupuestal" class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView">
+  <property name="url">
+   <value>/sam/reportes/rpt_devolucion_presupuestal.jrxml</value>
+  </property>    
+ </bean>
+ 
+  <bean id="ordenServicio" class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView">
+  <property name="url">
+   <value>/sam/reportes/ordenServicio.jrxml</value>
+  </property>    
+ </bean>
+ 
+ <bean id="ordenServicio2" class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView">
+  <property name="url">
+   <value>/sam/reportes/ordenServicio2.jrxml</value>
+  </property>    
+ </bean>
+ 
+ <bean id="ordenTrabajo" class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView">
+  <property name="url">
+   <value>/sam/reportes/ordenTrabajo.jrxml</value>
+  </property>    
+ </bean>
+ 
+  <bean id="ordenTrabajo2" class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView">
+  <property name="url">
+   <value>/sam/reportes/ordenTrabajo2.jrxml</value>
+  </property>    
+ </bean>
+ 
+  <bean id="rpt_pedido" class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView">
+  <property name="url">
+   <value>/sam/reportes/rpt_pedido.jrxml</value>
+  </property>    
+ </bean>
+ 
+  <bean id="rpt_contrato" class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView">
+	  <property name="url">
+	   <value>/sam/reportes/rpt_contrato.jrxml</value>
+	  </property>    
+ </bean>
+ 
+ 
+  <bean id="formato_vale" class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView">
+  <property name="url">
+   <value>/sam/reportes/rpt_vales_multiples.jrxml</value>
+  </property>    
+ </bean>
+ 
+ <bean id="rpt_relacion_vales" class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView">
+  <property name="url">
+   <value>/sam/reportes/rpt_relacion_vales.jrxml</value>
+  </property>    
+ </bean>
+ 
+ <bean id="rpt_relacion_envio" class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView">
+  <property name="url">
+   <value>/sam/reportes/rpt_relacion_envio.jrxml</value>
+  </property>    
+ </bean>
+ 
+ <bean id="rpt_relacion_devolucion" class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView">
+  <property name="url">
+   <value>/sam/reportes/rpt_relacion_devolucion.jrxml</value>
+  </property>    
+ </bean>
+
+ <bean id="rpt_relacion_devolucion_vales" class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView">
+  <property name="url">
+   <value>/sam/reportes/rpt_relacion_devolucion_vales.jrxml</value>
+  </property>    
+ </bean>
+  
+  <bean id="formato_orden_pago" class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView">
+	  <property name="url">
+	   <value>/sam/reportes/ordendepago.jrxml</value>
+	  </property>
+	  <property name="subReportUrls">
+	   <map>
+	    	<entry key="SR1" value="/sam/reportes/ordendepago_anexo_anexos.jrxml"/>
+	    	<entry key="SR2" value="/sam/reportes/ordendepago_anexo_vales.jrxml"/>
+	    	<entry key="SR3" value="/sam/reportes/ordendepago_detalles_nomina.jrxml"/>
+	   </map>
+	   
+	  </property>    
+ </bean>
+ 
+    <bean id="formato_orden_pago_CFE" class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView">
+	  <property name="url">
+	   <value>/sam/reportes/ordendepago_CFE.jrxml</value>
+	  </property>
+	  <property name="subReportUrls">
+	   <map>
+	    	<entry key="SR1" value="/sam/reportes/ordendepago_anexo_anexos.jrxml"/>
+	    	<entry key="SR2" value="/sam/reportes/ordendepago_anexo_vales.jrxml"/>
+	    	<entry key="SR3" value="/sam/reportes/ordendepago_detalles_nomina.jrxml"/>
+	   </map>
+	   
+	  </property>    
+ </bean>
+ 
+ <bean id="rpt_avances_fisicos" class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView">
+  <property name="url">
+   <value>/sam/reportes/rpt_avances_fisicos.jrxml</value>
+  </property>    
+ </bean>
+ 
+ <!-- Compras -->
+ 
+  <bean id="comprobante" class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView">
+  <property name="url">
+   <value>/almacen/reportes/comprobante_solicitud.jrxml</value>
+  </property>    
+ </bean>
+ 
+ <bean id="entradas" class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView">
+  <property name="url">
+   <value>/almacen/reportes/entradas.jrxml</value>
+  </property>    
+ </bean>
+ 
+ <bean id="entradas_3Digitos" class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView">
+  <property name="url">
+   <value>/almacen/reportes/entradas_3Digitos.jrxml</value>
+  </property>    
+ </bean>
+ 
+ <bean id="almacen" class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView">
+  <property name="url">
+   <value>/almacen/reportes/almacen.jrxml</value>
+  </property>    
+ </bean>
+ 
+  <bean id="salidas" class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView">
+  <property name="url">
+   <value>/almacen/reportes/salidas.jrxml</value>
+  </property>    
+ </bean>
+ 
+ <bean id="salidas_3Digitos" class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView">
+  <property name="url">
+   <value>/almacen/reportes/salidas_3Digitos.jrxml</value>
+  </property>    
+ </bean>
+ 
+ <bean id="rpt_libroAlmacen" class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView">
+  <property name="url">
+   <value>/almacen/reportes/rpt_libroAlmacen.jrxml</value>
+  </property>    
+ </bean>
+ 
+ <bean id="rpt_listado_entradas" class="org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView">
+  <property name="url">
+   <value>/almacen/reportes/rpt_listado_entradas.jrxml</value>
+  </property>    
+ </bean>
+
+</beans>

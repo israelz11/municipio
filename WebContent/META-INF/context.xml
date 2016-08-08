@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context path="/sam">
+	<Resource name="jdbc/siam" auth="Container" type="javax.sql.DataSource"
+		maxActive="100" maxIdle="30" maxWait="10000" username="S14mP*"
+		password="514M@*4" driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
+		url="jdbc:sqlserver://WINDOS10:1433;databaseName=siam2016">
+	</Resource>
+	<Resource name="jdbc/almacen" auth="Container" type="javax.sql.DataSource"
+		maxActive="100" maxIdle="30" maxWait="10000" username="S14mP*"
+		password="514M@*4" driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
+		url="jdbc:sqlserver://WINDOS10:1433;databaseName=almacen2016">
+	</Resource>
+	<Resource name="jdbc/correspondencia" auth="Container" type="javax.sql.DataSource"
+		maxActive="100" maxIdle="30" maxWait="10000" username="siam13"
+		password="siam13" driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
+		url="jdbc:sqlserver://ISRAEL-VAIO:1433;databaseName=correspondencia">
+	</Resource>
+</Context>

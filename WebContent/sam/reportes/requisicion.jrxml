@@ -1,0 +1,672 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="requisicion" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<parameter name="NUM_REQ" class="java.lang.String"/>
+	<parameter name="CALENDARIO" class="java.lang.String"/>
+	<parameter name="FECHA" class="java.lang.String"/>
+	<parameter name="UNIDAD_SOLICITANTE" class="java.lang.String"/>
+	<parameter name="TIPO_GASTO" class="java.lang.String"/>
+	<parameter name="CLV_PARTID" class="java.lang.String"/>
+	<parameter name="PARTIDAAUXILIAR" class="java.lang.String"/>
+	<parameter name="FINALIDAD" class="java.lang.String"/>
+	<parameter name="N_PROGRAMA" class="java.lang.String"/>
+	<parameter name="LOCALIDAD" class="java.lang.String"/>
+	<parameter name="OBSERVA" class="java.lang.String"/>
+	<parameter name="REQ_VOBO_REPRESENTANTE" class="java.lang.String"/>
+	<parameter name="REQ_VOBO_CARGO" class="java.lang.String"/>
+	<parameter name="REQ_SOLICITO_REPRESENTANTE" class="java.lang.String"/>
+	<parameter name="REQ_SOLICITO_CARGO" class="java.lang.String"/>
+	<parameter name="REQ_VOBOADMIVO_REPRESENTANTE" class="java.lang.String"/>
+	<parameter name="REQ_VOBOADMIVO_CARGO" class="java.lang.String"/>
+	<parameter name="REQ_AUTORIZO_REPRESENTANTE" class="java.lang.String"/>
+	<parameter name="REQ_AUTORIZO_CARGO" class="java.lang.String"/>
+	<parameter name="SUBSECTOR" class="java.lang.String"/>
+	<parameter name="TIPO" class="java.lang.Integer"/>
+	<parameter name="PARTIDA" class="java.lang.String"/>
+	<parameter name="DECRIPCION" class="java.lang.String"/>
+	<parameter name="CLV_LOCALIDAD" class="java.lang.String"/>
+	<parameter name="CLV_SUBSEC" class="java.lang.String"/>
+	<parameter name="CLV_FINALIDAD" class="java.lang.String"/>
+	<parameter name="CLV_SUBPRO" class="java.lang.String"/>
+	<parameter name="CLV_UNIADM" class="java.lang.String"/>
+	<parameter name="STATUS" class="java.lang.Short"/>
+	<parameter name="UNIADM" class="java.lang.String"/>
+	<parameter name="ACT_INST" class="java.lang.String"/>
+	<parameter name="CLV_ACTINST" class="java.lang.String"/>
+	<parameter name="CLV_FUNCION" class="java.lang.String"/>
+	<parameter name="FUNCION" class="java.lang.String"/>
+	<parameter name="CLV_SUBFUNCION" class="java.lang.String"/>
+	<parameter name="SUBFUNCION" class="java.lang.String"/>
+	<parameter name="CLV_SUBSUBFUNCION" class="java.lang.String"/>
+	<parameter name="SUBSUBFUNCION" class="java.lang.String"/>
+	<parameter name="CLV_PROGRAMA" class="java.lang.String"/>
+	<parameter name="PROGRAMA" class="java.lang.String"/>
+	<parameter name="CLV_OBJETOGASTO" class="java.lang.String"/>
+	<parameter name="OBJETO_GASTO" class="java.lang.String"/>
+	<parameter name="PROG_PRESUP" class="java.lang.String"/>
+	<parameter name="N_PROYECTO" class="java.lang.String"/>
+	<parameter name="TOTAL_REQ" class="java.math.BigDecimal"/>
+	<field name="REQ_CONS" class="java.lang.Short"/>
+	<field name="CANTIDAD" class="java.math.BigDecimal"/>
+	<field name="UNIDAD" class="java.lang.String"/>
+	<field name="NOTAS" class="java.lang.String"/>
+	<field name="DESCRIPCION" class="java.lang.String"/>
+	<field name="TEXTO" class="java.lang.String"/>
+	<field name="CANTIDAD_TEMP" class="java.math.BigDecimal"/>
+	<background>
+		<band height="752" splitType="Stretch">
+			<image>
+				<reportElement x="64" y="181" width="429" height="394">
+					<printWhenExpression><![CDATA[new Boolean(!($P{STATUS}.intValue()==1 || $P{STATUS}.intValue()==2 || $P{STATUS}.intValue()==5 ))]]></printWhenExpression>
+				</reportElement>
+				<imageExpression class="java.lang.String"><![CDATA["../../imagenes/no valido.gif"]]></imageExpression>
+			</image>
+			<line>
+				<reportElement x="572" y="148" width="1" height="389"/>
+			</line>
+			<line>
+				<reportElement x="0" y="537" width="573" height="1"/>
+			</line>
+			<line>
+				<reportElement x="26" y="147" width="1" height="391"/>
+			</line>
+			<line>
+				<reportElement x="109" y="147" width="1" height="390"/>
+			</line>
+			<line>
+				<reportElement x="200" y="147" width="1" height="390"/>
+			</line>
+			<line>
+				<reportElement x="1" y="164" width="571" height="1"/>
+			</line>
+			<image scaleImage="FillFrame">
+				<reportElement x="0" y="0" width="100" height="70"/>
+				<imageExpression class="java.lang.String"><![CDATA["../../imagenes/logotipo_horizontal_rgb_2.jpg"]]></imageExpression>
+			</image>
+			<line>
+				<reportElement x="0" y="147" width="1" height="391"/>
+			</line>
+		</band>
+	</background>
+	<pageHeader>
+		<band height="62" splitType="Stretch">
+			<staticText>
+				<reportElement x="133" y="4" width="439" height="34"/>
+				<textElement textAlignment="Center">
+					<font size="19" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[H. Ayuntamiento Constitucional de Centro]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="133" y="30" width="439" height="27"/>
+				<textElement textAlignment="Center">
+					<font size="16" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Dirección de Administración]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="108" splitType="Stretch">
+			<staticText>
+				<reportElement x="381" y="5" width="97" height="20">
+					<printWhenExpression><![CDATA[new Boolean($P{TIPO}.intValue()!=7)]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Req. No.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="478" y="5" width="93" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Fecha]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="282" y="25" width="99" height="20">
+					<printWhenExpression><![CDATA[new Boolean($P{TIPO}.intValue()==7)]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{NUM_REQ}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="381" y="25" width="97" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{TIPO}.intValue()==7 ? $P{CALENDARIO}:$P{NUM_REQ}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="478" y="25" width="93" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{FECHA}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="478" y="50" width="1" height="34"/>
+			</line>
+			<staticText>
+				<reportElement x="282" y="5" width="99" height="20">
+					<printWhenExpression><![CDATA[new Boolean($P{TIPO}.intValue()==7)]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Req. No.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="478" y="50" width="94" height="16"/>
+				<textElement textAlignment="Center">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Pedido No.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="51" width="132" height="16"/>
+				<textElement textAlignment="Right">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Dirección solicitante :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="66" width="132" height="16"/>
+				<textElement textAlignment="Right">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Modalidad :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="138" y="50" width="340" height="16"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CLV_UNIADM}+" "+$P{UNIDAD_SOLICITANTE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="138" y="65" width="340" height="16"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{TIPO_GASTO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="87" width="26" height="20"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Lote]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="26" y="87" width="83" height="20"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Cantidad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="109" y="87" width="91" height="20"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Unidad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="87" width="372" height="20"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Descripción]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="50" width="572" height="1"/>
+			</line>
+			<line>
+				<reportElement x="0" y="84" width="572" height="1"/>
+			</line>
+			<line>
+				<reportElement x="572" y="50" width="1" height="35"/>
+			</line>
+			<line>
+				<reportElement x="0" y="50" width="1" height="35"/>
+			</line>
+			<staticText>
+				<reportElement x="381" y="5" width="97" height="20">
+					<printWhenExpression><![CDATA[new Boolean($P{TIPO}.intValue()==7)]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Calendario]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="5" width="281" height="45"/>
+				<textElement textAlignment="Center">
+					<font size="16" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[REQUISICION DE MATERIALES Y SUMINISTROS]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="22" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="2" width="26" height="20"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Short"><![CDATA[$F{REQ_CONS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="110" y="2" width="91" height="20"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{UNIDAD}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="202" y="2" width="370" height="20" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[!$F{NOTAS}.equals("")? $F{DESCRIPCION}+"("+$F{NOTAS}+") "+$F{TEXTO}:$F{DESCRIPCION}+" "+$F{TEXTO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00">
+				<reportElement x="27" y="2" width="83" height="20"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[(($F{CANTIDAD}!=$F{CANTIDAD_TEMP})&&$F{CANTIDAD_TEMP}!=null) ? $F{CANTIDAD_TEMP}:$F{CANTIDAD}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="209">
+			<line>
+				<reportElement x="1" y="12" width="428" height="1"/>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="69" y="179" width="142" height="15" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{REQ_SOLICITO_REPRESENTANTE}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="143" width="1" height="62"/>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="69" y="191" width="142" height="15" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{REQ_SOLICITO_CARGO}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="1" y="204" width="572" height="1"/>
+			</line>
+			<line>
+				<reportElement x="0" y="125" width="430" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="429" y="3" width="144" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Observaciones]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="52" width="80" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Función:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="13" width="80" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Partida:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="26" width="80" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Actividad Inst.:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="39" width="80" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Finalidad:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="429" y="0" width="1" height="137"/>
+			</line>
+			<staticText>
+				<reportElement x="2" y="114" width="80" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Localidad:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="362" y="142" width="142" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Autorizó]]></text>
+			</staticText>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="431" y="28" width="142" height="70"/>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{OBSERVA}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="1" y="63" width="428" height="1"/>
+			</line>
+			<line>
+				<reportElement x="1" y="24" width="428" height="1"/>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="362" y="191" width="142" height="15" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{REQ_AUTORIZO_CARGO}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="142" width="573" height="1"/>
+			</line>
+			<line>
+				<reportElement x="287" y="142" width="1" height="63"/>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="362" y="179" width="142" height="15" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{REQ_AUTORIZO_REPRESENTANTE}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="82" y="13" width="346" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CLV_PARTID}+" "+$P{PARTIDA}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="82" y="114" width="347" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CLV_LOCALIDAD}+" "+$P{LOCALIDAD}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="82" y="63" width="348" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CLV_SUBFUNCION}+" "+$P{SUBFUNCION}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="1" y="113" width="428" height="1"/>
+			</line>
+			<line>
+				<reportElement x="1" y="50" width="428" height="1"/>
+			</line>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="82" y="39" width="348" height="14"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CLV_FINALIDAD}+" "+$P{FINALIDAD}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="64" width="80" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Subfunción:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="1" y="37" width="428" height="1"/>
+			</line>
+			<line>
+				<reportElement x="572" y="127" width="1" height="78"/>
+			</line>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="82" y="51" width="347" height="14"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CLV_FUNCION}+" "+$P{FUNCION}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="69" y="142" width="142" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Solicitó]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="82" y="0" width="347" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{N_PROGRAMA}+" ["+$P{N_PROYECTO}+"] "+$P{PROG_PRESUP}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="0" width="80" height="12"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Programa:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="82" y="26" width="346" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CLV_ACTINST}+" "+$P{ACT_INST}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="1" y="-1" width="572" height="1"/>
+			</line>
+			<line>
+				<reportElement x="1" y="101" width="428" height="1"/>
+			</line>
+			<line>
+				<reportElement x="0" y="76" width="429" height="1"/>
+			</line>
+			<line>
+				<reportElement x="1" y="89" width="428" height="1"/>
+			</line>
+			<line>
+				<reportElement x="572" y="0" width="1" height="127"/>
+			</line>
+			<staticText>
+				<reportElement x="2" y="77" width="80" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Subsubfunción:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="89" width="80" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Prog. Presupuest.:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="102" width="80" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Objeto del Gasto:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="82" y="77" width="349" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CLV_SUBSUBFUNCION}+" "+$P{SUBSUBFUNCION}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="82" y="89" width="349" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[($P{CLV_PROGRAMA}!=null&&$P{CLV_PROGRAMA}!=null)? $P{CLV_PROGRAMA}+" "+$P{PROGRAMA} :""]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="82" y="101" width="349" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CLV_OBJETOGASTO}+" "+$P{OBJETO_GASTO}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="137" width="572" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="2" y="126" width="92" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Presupuesto reservado:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="-1" width="1" height="138"/>
+			</line>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="97" y="125" width="106" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$P{TOTAL_REQ}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="69" y="185" width="142" height="1"/>
+			</line>
+			<line>
+				<reportElement x="362" y="185" width="142" height="1"/>
+			</line>
+		</band>
+	</columnFooter>
+</jasperReport>

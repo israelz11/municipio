@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jasperPrint PUBLIC "-//JasperReports//DTD JasperPrint//EN" "http://jasperreports.sourceforge.net/dtds/jasperprint.dtd">
+
+<jasperPrint name="ordendepago_anexo_anexos" pageWidth="752" pageHeight="572" orientation="Landscape" locale="en_US" timezone="America/Mexico_City">
+	<property name="net.sf.jasperreports.export.xml.start.page.index" value="0"/>
+	<property name="net.sf.jasperreports.export.xml.end.page.index" value="0"/>
+	<property name="net.sf.jasperreports.export.xml.page.count" value="1"/>
+	<origin band="background"/>
+	<origin band="pageHeader"/>
+	<origin band="columnHeader"/>
+	<origin band="detail"/>
+	<page>
+		<text textHeight="12.578125" lineSpacingFactor="1.2578125" leadingOffset="-2.1972656">
+			<reportElement mode="Opaque" x="0" y="0" width="752" height="20" backcolor="#E8E6E6" origin="1"/>
+			<box leftPadding="2">
+				<pen lineWidth="1.0"/>
+				<topPen lineWidth="1.0"/>
+				<leftPen lineWidth="1.0"/>
+				<bottomPen lineWidth="1.0"/>
+				<rightPen lineWidth="1.0"/>
+			</box>
+			<font isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
+			<textContent><![CDATA[Documentos Anexos]]></textContent>
+		</text>
+		<text textHeight="12.578125" lineSpacingFactor="1.2578125" leadingOffset="-2.1972656">
+			<reportElement x="0" y="20" width="118" height="20" origin="2"/>
+			<box leftPadding="2">
+				<pen lineWidth="1.0"/>
+				<topPen lineWidth="1.0"/>
+				<leftPen lineWidth="1.0"/>
+				<bottomPen lineWidth="1.0"/>
+				<rightPen lineWidth="1.0"/>
+			</box>
+			<font isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
+			<textContent><![CDATA[Tipo de documento]]></textContent>
+		</text>
+		<text textHeight="12.578125" lineSpacingFactor="1.2578125" leadingOffset="-2.1972656">
+			<reportElement x="118" y="20" width="134" height="20" origin="2"/>
+			<box leftPadding="2">
+				<pen lineWidth="1.0"/>
+				<topPen lineWidth="1.0"/>
+				<leftPen lineWidth="1.0"/>
+				<bottomPen lineWidth="1.0"/>
+				<rightPen lineWidth="1.0"/>
+			</box>
+			<font isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
+			<textContent><![CDATA[Numero de documento]]></textContent>
+		</text>
+		<text textHeight="12.578125" lineSpacingFactor="1.2578125" leadingOffset="-2.1972656">
+			<reportElement x="252" y="20" width="500" height="20" origin="2"/>
+			<box leftPadding="2">
+				<pen lineWidth="1.0"/>
+				<topPen lineWidth="1.0"/>
+				<leftPen lineWidth="1.0"/>
+				<bottomPen lineWidth="1.0"/>
+				<rightPen lineWidth="1.0"/>
+			</box>
+			<font isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
+			<textContent><![CDATA[Nota]]></textContent>
+		</text>
+		<text textHeight="0.0" lineSpacingFactor="0.0" leadingOffset="0.0">
+			<reportElement x="0" y="40" width="118" height="21" origin="3"/>
+			<box leftPadding="2">
+				<pen lineWidth="1.0"/>
+				<topPen lineWidth="1.0"/>
+				<leftPen lineWidth="1.0"/>
+				<bottomPen lineWidth="1.0"/>
+				<rightPen lineWidth="1.0"/>
+			</box>
+			<textContent><![CDATA[]]></textContent>
+		</text>
+		<text textHeight="0.0" lineSpacingFactor="0.0" leadingOffset="0.0">
+			<reportElement x="252" y="40" width="500" height="21" origin="3"/>
+			<box leftPadding="2">
+				<pen lineWidth="1.0"/>
+				<topPen lineWidth="1.0"/>
+				<leftPen lineWidth="1.0"/>
+				<bottomPen lineWidth="1.0"/>
+				<rightPen lineWidth="1.0"/>
+			</box>
+			<textContent><![CDATA[]]></textContent>
+		</text>
+		<text textHeight="0.0" lineSpacingFactor="0.0" leadingOffset="0.0">
+			<reportElement x="118" y="40" width="134" height="21" origin="3"/>
+			<box leftPadding="2">
+				<pen lineWidth="1.0"/>
+				<topPen lineWidth="1.0"/>
+				<leftPen lineWidth="1.0"/>
+				<bottomPen lineWidth="1.0"/>
+				<rightPen lineWidth="1.0"/>
+			</box>
+			<textContent><![CDATA[]]></textContent>
+		</text>
+	</page>
+</jasperPrint>

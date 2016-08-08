@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="requisicion" pageWidth="792" pageHeight="612" whenNoDataType="AllSectionsNoDetail" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<parameter name="FECHA" class="java.lang.String"/>
+	<parameter name="UNIDAD_SOLICITANTE" class="java.lang.String"/>
+	<parameter name="MES_DESCRIPCION" class="java.lang.String"/>
+	<parameter name="PROYECTO" class="java.lang.String"/>
+	<parameter name="REQ_VOBOADMIVO_REPRESENTANTE" class="java.lang.String"/>
+	<parameter name="REQ_VOBOADMIVO_CARGO" class="java.lang.String"/>
+	<parameter name="REQ_AUTORIZO_REPRESENTANTE" class="java.lang.String"/>
+	<parameter name="DECRIPCION" class="java.lang.String"/>
+	<parameter name="CLV_UNIADM" class="java.lang.String"/>
+	<parameter name="UNIADM" class="java.lang.String"/>
+	<parameter name="OP_TITULAR_REPRESENTANTE" class="java.lang.String"/>
+	<field name="CANTIDAD" class="java.math.BigDecimal"/>
+	<field name="N_PROGRAMA" class="java.lang.String"/>
+	<field name="DECRIPCION" class="java.lang.String"/>
+	<field name="FECHA_INICIO" class="java.lang.String"/>
+	<field name="FECHA_TERMINO" class="java.lang.String"/>
+	<field name="FECHA_ACTA" class="java.lang.String"/>
+	<field name="FEINIPER" class="java.lang.String"/>
+	<field name="FETERPER" class="java.lang.String"/>
+	<field name="AVANCE_FISICO" class="java.lang.Integer"/>
+	<field name="AVANCE_CONTRALORIA" class="java.lang.Integer"/>
+	<field name="PROG_PRESUP" class="java.lang.String"/>
+	<field name="K_PROYECTO_T" class="java.lang.String"/>
+	<field name="ID_PROYECTO" class="java.lang.Integer"/>
+	<background>
+		<band height="572" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="112" width="1" height="372"/>
+			</line>
+			<line>
+				<reportElement x="750" y="111" width="1" height="373"/>
+			</line>
+			<line>
+				<reportElement x="0" y="111" width="750" height="1"/>
+			</line>
+			<line>
+				<reportElement x="0" y="482" width="750" height="1"/>
+			</line>
+			<line>
+				<reportElement x="45" y="112" width="1" height="372"/>
+			</line>
+			<line>
+				<reportElement x="379" y="111" width="1" height="373"/>
+			</line>
+			<line>
+				<reportElement x="319" y="111" width="1" height="372"/>
+			</line>
+			<line>
+				<reportElement x="1" y="139" width="749" height="1"/>
+			</line>
+			<image scaleImage="FillFrame">
+				<reportElement x="1" y="1" width="140" height="71"/>
+				<imageExpression class="java.lang.String"><![CDATA["../../imagenes/logotipo_horizontal_rgb.jpg"]]></imageExpression>
+			</image>
+			<line>
+				<reportElement x="439" y="112" width="1" height="372"/>
+			</line>
+			<line>
+				<reportElement x="500" y="111" width="1" height="372"/>
+			</line>
+			<line>
+				<reportElement x="561" y="111" width="1" height="372"/>
+			</line>
+			<line>
+				<reportElement x="628" y="111" width="1" height="372"/>
+			</line>
+			<line>
+				<reportElement x="689" y="111" width="1" height="372"/>
+			</line>
+		</band>
+	</background>
+	<pageHeader>
+		<band height="69" splitType="Stretch">
+			<staticText>
+				<reportElement x="110" y="4" width="640" height="34"/>
+				<textElement textAlignment="Center">
+					<font size="19" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[H. Ayuntamiento Constitucional de Centro]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="110" y="30" width="640" height="27"/>
+				<textElement textAlignment="Center">
+					<font size="17" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Evaluación de Proyectos]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="69" splitType="Stretch">
+			<staticText>
+				<reportElement x="630" y="2" width="120" height="16"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Fecha Impresión]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="630" y="17" width="120" height="18"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{FECHA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="2" width="132" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Unidad solicitante :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="17" width="132" height="18"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Mes:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="138" y="18" width="490" height="16"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{MES_DESCRIPCION}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="138" y="2" width="490" height="16"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{UNIDAD_SOLICITANTE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="43" width="45" height="25"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Programa]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="45" y="43" width="275" height="25"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Descripción]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="320" y="43" width="60" height="25"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Fecha 
+Inicio Real]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="1" width="750" height="1"/>
+			</line>
+			<line>
+				<reportElement x="0" y="35" width="750" height="1"/>
+			</line>
+			<line>
+				<reportElement x="0" y="1" width="1" height="35"/>
+			</line>
+			<line>
+				<reportElement x="750" y="1" width="1" height="35"/>
+			</line>
+			<line>
+				<reportElement x="629" y="2" width="1" height="34"/>
+			</line>
+			<staticText>
+				<reportElement x="380" y="43" width="60" height="25"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Fecha Termino Real]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="441" y="43" width="60" height="25"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Fecha 
+Entrega]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="502" y="43" width="60" height="25"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Fecha Inicio
+Programada]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="563" y="43" width="66" height="25"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Fecha Termino
+Programada]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="630" y="43" width="60" height="25"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Avance Físico]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="690" y="43" width="60" height="25"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Avance Contraloría]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="18" splitType="Stretch">
+			<rectangle>
+				<reportElement x="1" y="1" width="749" height="16" backcolor="#E8E8E8">
+					<printWhenExpression><![CDATA[new Boolean(($V{COLUMN_COUNT}.doubleValue()%2)==0)]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<textField>
+				<reportElement stretchType="RelativeToBandHeight" x="45" y="1" width="274" height="16"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{PROG_PRESUP}+"\n"+$F{K_PROYECTO_T}+" "+$F{DECRIPCION}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="320" y="1" width="60" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{FECHA_INICIO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="380" y="1" width="61" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{FECHA_TERMINO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="441" y="1" width="60" height="16" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="sansserif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{FECHA_ACTA}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="502" y="1" width="60" height="16" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="sansserif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{FEINIPER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="563" y="1" width="66" height="16" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="sansserif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{FETERPER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="630" y="1" width="60" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{AVANCE_FISICO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="690" y="1" width="60" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{AVANCE_CONTRALORIA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="21" y="1" width="25" height="16"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{N_PROGRAMA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="137" y="7" width="1" height="0"/>
+				<textElement>
+					<font size="4"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{PAGE_COUNT}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="45" y="0" width="1" height="18"/>
+			</line>
+			<line>
+				<reportElement x="319" y="0" width="1" height="18"/>
+			</line>
+			<line>
+				<reportElement x="379" y="0" width="1" height="18"/>
+			</line>
+			<line>
+				<reportElement x="439" y="0" width="1" height="18"/>
+			</line>
+			<line>
+				<reportElement x="500" y="0" width="1" height="18"/>
+			</line>
+			<line>
+				<reportElement x="561" y="0" width="1" height="18"/>
+			</line>
+			<line>
+				<reportElement x="628" y="0" width="1" height="18"/>
+			</line>
+			<line>
+				<reportElement x="689" y="0" width="1" height="18"/>
+			</line>
+			<textField>
+				<reportElement x="0" y="1" width="21" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["["+$F{ID_PROYECTO}.toString()+"]"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="92">
+			<textField isBlankWhenNull="true">
+				<reportElement x="294" y="77" width="181" height="15" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{REQ_VOBOADMIVO_CARGO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="294" y="63" width="181" height="15" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{OP_TITULAR_REPRESENTANTE}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="294" y="66" width="181" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="294" y="23" width="181" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Vo. Bo. Administrativo]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="641" y="79" width="80" height="13"/>
+				<textElement textAlignment="Right">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Hoja "+$V{PAGE_NUMBER}+" /"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="721" y="79" width="20" height="13"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>
