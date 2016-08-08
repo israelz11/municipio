@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:p="http://www.springframework.org/schema/p"
+xmlns:aop="http://www.springframework.org/schema/aop"
+xmlns:context="http://www.springframework.org/schema/context"
+xsi:schemaLocation="
+http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-2.5.xsd
+http://www.springframework.org/schema/aop
+http://www.springframework.org/schema/aop/spring-aop-2.5.xsd"
+default-lazy-init="true" >  
+
+<context:annotation-config/>
+ 
+  <bean id="sesion" class="mx.gob.municipio.centro.view.seguridad.Sesion" scope="session" >
+  <aop:scoped-proxy/>  
+  </bean>
+  
+  <bean id="rmCantidadEnLetras" class="mx.gob.municipio.centro.view.componentes.RMCantidadEnLetras" scope="prototype">    
+    <property name="prefijoInicio" value="( "/>
+    <property name="sufijoFinal" value="M.N. )"/>
+    <property name="cantidadDecimales" value="2"/>
+    <property name="generoUnidad" value="2"/>
+    <property name="caracterProteccion" value=" "/>
+    <property name="sufijoDecimales" value="|/100"/>
+    <property name="sufijoEnteros" value="PE|SO|S"/>
+  </bean>
+ 
+ <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+<property name="jndiName">
+<value>java:comp/env/jdbc/siam</value>
+</property>
+</bean>
+
+<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+	<constructor-arg ref="dataSource"/>
+</bean>
+
+<bean id="namedJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+	<constructor-arg ref="dataSource"/>
+</bean>
+
+  <bean id="transactionTemplate"
+        class="org.springframework.transaction.support.TransactionTemplate">
+    <property name="transactionManager" ref="transactionManager"/>
+  </bean>
+  <bean id="transactionManager"
+        class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <property name="dataSource" ref="dataSource"/>
+  </bean>
+            
+  <!--                 Secci�n para los Beans para los Gateway's GCI              -->    
+    
+ <bean id="gatewayTipoOrdenDePagos" class="mx.gob.municipio.centro.model.gateways.sam.GatewayTipoOrdenDePagos"></bean>
+ <bean id="gatewayUnidadAdm" class="mx.gob.municipio.centro.model.gateways.sam.GatewayUnidadAdm"></bean>
+ <bean id="gatewayBeneficiario" class="mx.gob.municipio.centro.model.gateways.sam.GatewayBeneficiario"></bean>
+ <bean id="gatewayOrdenDePagos" class="mx.gob.municipio.centro.model.gateways.sam.GatewayOrdenDePagos"></bean>
+ <bean id="gatewayComprobacionesVales" class="mx.gob.municipio.centro.model.gateways.sam.GatewayComprobacionesVales"></bean> 
+ <bean id="gatewayPlanArbit" class="mx.gob.municipio.centro.model.gateways.sam.GatewayPlanArbit"></bean>
+ <bean id="gatewayCatalogoPartidas" class="mx.gob.municipio.centro.model.gateways.sam.GatewayCatalogoPartidas"></bean>
+ <bean id="gatewayDetallesOrdenDePagos" class="mx.gob.municipio.centro.model.gateways.sam.GatewayDetallesOrdenDePagos"></bean>
+ <bean id="gatewayMeses" class="mx.gob.municipio.centro.model.gateways.sam.catalogos.GatewayMeses"></bean>
+ <bean id="gatewayRequisicion" class="mx.gob.municipio.centro.model.gateways.sam.GatewayRequisicion"></bean>
+ <bean id="gatewayCedulasTecnicas" class="mx.gob.municipio.centro.model.gateways.sam.GatewayCedulasTecnicas"></bean>
+ <bean id="gatewayProyectoPartidas" class="mx.gob.municipio.centro.model.gateways.sam.GatewayProyectoPartidas"></bean>
+ <bean id="gatewayEvaluacionProyecto" class="mx.gob.municipio.centro.model.gateways.sam.GatewayEvaluacionProyecto"></bean>
+ <bean id="gatewayBitacora" class="mx.gob.municipio.centro.model.gateways.sam.GatewayBitacora"></bean>
+ <bean id="gatewayFirmasDocumentos" class="mx.gob.municipio.centro.model.gateways.sam.GatewayFirmasDocumentos"></bean> 
+ <bean id="gatewayUnidadMedidas" class="mx.gob.municipio.centro.model.gateways.sam.GatewayUnidadMedidas"></bean>
+ <bean id="gatewayAnexoConceptosRequisiciones" class="mx.gob.municipio.centro.model.gateways.sam.GatewayAnexoConceptosRequisiciones"></bean>
+ <bean id="gatewayMovimientosRequisicion" class="mx.gob.municipio.centro.model.gateways.sam.GatewayMovimientosRequisicion"></bean>
+ <bean id="gatewayGrupos" class="mx.gob.municipio.centro.model.gateways.sam.catalogos.GatewayGrupos"></bean>
+ <bean id="gatewayFirmasGrupos" class="mx.gob.municipio.centro.model.gateways.sam.catalogos.GatewayFirmasGrupos"></bean>
+ <bean id="GatewayUsuarios" class="mx.gob.municipio.centro.model.gateways.sam.GatewayUsuarios"></bean>
+ <bean id="moduloGateway" class="mx.gob.municipio.centro.model.gateways.sam.catalogos.ModuloGateway"></bean>
+ <bean id="privilegioGateway" class="mx.gob.municipio.centro.model.gateways.sam.catalogos.PrivilegioGateway"></bean>
+ <bean id="rolGateway" class="mx.gob.municipio.centro.model.gateways.sam.catalogos.RolGateway"></bean>
+ <bean id="rolPrivilegioGateway" class="mx.gob.municipio.centro.model.gateways.sam.catalogos.RolPrivilegioGateway"></bean>
+ <bean id="sistemaGateway" class="mx.gob.municipio.centro.model.gateways.sam.catalogos.SistemaGateway"></bean>
+ <bean id="gatewayPedidos" class="mx.gob.municipio.centro.model.gateways.sam.GatewayPedidos"></bean>
+ <bean id="gatewayGruposProyectos" class="mx.gob.municipio.centro.model.gateways.sam.catalogos.GatewayGruposProyectos"></bean>
+ <!--  bean id="partidasGateway" class="mx.gob.municipio.centro.model.gateways.sam.catalogos.PartidasGateway"></bean-->
+ <bean id="gatewayGruposPartidas" class="mx.gob.municipio.centro.model.gateways.sam.catalogos.GatewayGruposPartidas"></bean>
+ <bean id="gatewayVales" class="mx.gob.municipio.centro.model.gateways.sam.GatewayVales"></bean>
+ <bean id="gruposValesGateway" class="mx.gob.municipio.centro.model.gateways.sam.catalogos.GruposValesGateway"></bean>
+ <bean id="gruposTipoOpGateway" class="mx.gob.municipio.centro.model.gateways.sam.catalogos.GruposTipoOpGateway"></bean>
+ <bean id="cruposTipoReqGateway" class="mx.gob.municipio.centro.model.gateways.sam.catalogos.GruposTipoReqGateway"></bean>
+ <bean id="gatewayProductos" class="mx.gob.municipio.centro.model.gateways.sam.GatewayProductos"></bean>
+ <bean id="gatewayBancos" class="mx.gob.municipio.centro.model.gateways.sam.GatewayBancos"></bean>
+ <bean id="gatewayContratos" class="mx.gob.municipio.centro.model.gateways.sam.GatewayContratos"></bean>
+ <bean id="gatewayDevolucionesPresupuestales" class="mx.gob.municipio.centro.model.gateways.sam.GatewayDevolucionesPresupuestales"></bean>
+ <bean id="gatewayWebServiceUsuarios" class="mx.gob.municipio.centro.model.gateways.sam.webservices.GatewayWebServiceUsuarios"></bean>
+ <bean id="gatewayWebServicePresupuesto" class="mx.gob.municipio.centro.model.gateways.sam.webservices.GatewayWebServicePresupuesto"></bean>
+ <bean id="gatewayWebServicePeriodos" class="mx.gob.municipio.centro.model.gateways.sam.webservices.GatewayWebServicePeriodos"></bean>
+ <bean id="gatewayFacturas" class="mx.gob.municipio.centro.model.gateways.sam.GatewayFacturas"></bean>
+  
+  <bean id="dataSourceAlmacen" class="org.springframework.jndi.JndiObjectFactoryBean">
+   <property name="jndiName">
+    <value>java:comp/env/jdbc/almacen</value>
+    </property>
+   </bean>
+
+  <bean id="jdbcTemplateAlmacen" class="org.springframework.jdbc.core.JdbcTemplate">
+	<constructor-arg ref="dataSourceAlmacen"/>
+</bean>
+
+<bean id="namedJdbcTemplateAlmacen" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+	<constructor-arg ref="dataSourceAlmacen"/>
+</bean>
+  
+  <bean id="transactionTemplateAlmacen"
+        class="org.springframework.transaction.support.TransactionTemplate">
+    <property name="transactionManager" ref="transactionManager"/>
+  </bean>
+  <bean id="transactionManagerAlmacen"
+        class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <property name="dataSource" ref="dataSourceAlmacen"/>
+  </bean> 
+  
+ <bean id="gatewayTiposDocumentos" class="mx.gob.municipio.centro.model.gateways.almacen.GatewayTiposDocumentos"></bean>
+ <bean id="gatewayAlmacen" class="mx.gob.municipio.centro.model.gateways.almacen.GatewayAlmacen"></bean>
+ <bean id="gatewaySubdirecciones" class="mx.gob.municipio.centro.model.gateways.almacen.GatewaySubdirecciones"></bean>
+ <bean id="gatewayFamiliasArticulos" class="mx.gob.municipio.centro.model.gateways.almacen.GatewayFamiliasArticulos"></bean>
+ <bean id="gatewayPartidasAgregadas" class="mx.gob.municipio.centro.model.gateways.almacen.GatewayPartidasAgregadas"></bean>
+ <bean id="gatewayEntradasDocumentos" class="mx.gob.municipio.centro.model.gateways.almacen.GatewayEntradasDocumentos"></bean>
+ <bean id="gatewayUsuariosAlmacen" class="mx.gob.municipio.centro.model.gateways.almacen.GatewayUsuariosAlmacen"></bean>
+ <bean id="gatewaySalidas" class="mx.gob.municipio.centro.model.gateways.almacen.GatewaySalidas"></bean>
+ <bean id="gatewayInventario" class="mx.gob.municipio.centro.model.gateways.almacen.GatewayInventario"></bean>
+ 
+ 
+ <bean id="dataSourceCorrespondencia" class="org.springframework.jndi.JndiObjectFactoryBean">
+   <property name="jndiName">
+    	<value>java:comp/env/jdbc/correspondencia</value>
+    </property>
+ </bean>
+ 
+ <bean id="jdbcTemplateCorrespondencia" class="org.springframework.jdbc.core.JdbcTemplate">
+	<constructor-arg ref="dataSourceCorrespondencia"/>
+ </bean>
+ 
+ <bean id="namedJdbcTemplateCorrespondencia" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+	<constructor-arg ref="dataSourceCorrespondencia"/>
+ </bean>
+ 
+ <bean id="transactionTemplateCorrespondencia"
+        class="org.springframework.transaction.support.TransactionTemplate">
+    <property name="transactionManager" ref="transactionManager"/>
+  </bean>
+  <bean id="transactionManagerCorrespondencia"
+        class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <property name="dataSource" ref="dataSourceCorrespondencia"/>
+  </bean>
+ 
+ <bean id="gatewayUnidadesAdministrativas" class="mx.gob.municipio.centro.model.gateways.correspondencia.GatewayUnidadesAdministrativas"></bean>
+ <bean id="gatewaySubdireccion" class="mx.gob.municipio.centro.model.gateways.correspondencia.GatewaySubdirecciones"></bean>
+ <bean id="gatewayMinutarios" class="mx.gob.municipio.centro.model.gateways.correspondencia.GatewayMinutarios"></bean>
+ <bean id="gatewayClasificaMinutarios" class="mx.gob.municipio.centro.model.gateways.correspondencia.GatewayClasificaMinutarios"></bean>
+ <bean id="gatewayCorrespondencia" class="mx.gob.municipio.centro.model.gateways.correspondencia.GatewayCorrespondencia"></bean>
+ 
+ <bean id="gatewayMir" class="mx.gob.municipio.centro.model.gateways.sam.GatewayMir"></bean>
+</beans>
+
+
