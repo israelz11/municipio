@@ -49,6 +49,5 @@
   <logger name="org.directwebremoting" level="debug"/>    
   <logger name="org.directwebremoting" level="debug"/>  
   -->
-  
    
 </log4j:configuration>
