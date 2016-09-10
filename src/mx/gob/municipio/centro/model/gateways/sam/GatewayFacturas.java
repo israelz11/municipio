@@ -315,6 +315,7 @@ public class GatewayFacturas extends BaseGateway {
 	    			for(Map movimiento : movimientos)
 	    			{
 	            		/*buscar el compometido a devengar*/
+	    				BigDecimal disponibleMes = (BigDecimal) getJdbcTemplate().queryForObject("SELECT dbo.getDisponible(?, ?, ?)", new Object[]{factura.get("PERIODO"), movimiento.get("ID_PROYECTO"), movimiento.get("CLV_PARTID")}, BigDecimal.class);
 	            		BigDecimal comprometidoMes = (BigDecimal) getJdbcTemplate().queryForObject("SELECT dbo.getComprometido(?, ?, ?)", new Object[]{factura.get("PERIODO"), movimiento.get("ID_PROYECTO"), movimiento.get("CLV_PARTID")}, BigDecimal.class);
 	            		BigDecimal presupuestoDisponible = new BigDecimal(0);
 
@@ -326,6 +327,10 @@ public class GatewayFacturas extends BaseGateway {
 	            			//Buscar el disponible del mes para sacar el presupuesto
 	            			presupuestoDisponible = (BigDecimal)getJdbcTemplate().queryForObject("SELECT dbo.getDisponible(?,?,?)", new Object[]{factura.get("PERIODO"), movimiento.get("ID_PROYECTO"), movimiento.get("CLV_PARTID")}, BigDecimal.class);
 	            		}
+	            		
+	            		//Agregado por Israel de la Cruz, 10/09/2016: Impide que se cierre la factrura si el pedido supera el disponible sobregirado del mes
+	            		if(tipoDocto.equals("CVE_PED") && disponibleMes.doubleValue() < 0)
+	            			throw new RuntimeException("No se puede cerrar la factura, el disponible del mes se encuentra en sobregiro y no es válido para realizar este proceso, se le recomienda crear un controtaro a travez de pedido para distribuir el saldo en sobregiro del pedido");
 	            		
 	            		presupuestoDisponible = presupuestoDisponible.setScale(2,BigDecimal.ROUND_HALF_UP);
 	            		
@@ -385,7 +390,7 @@ public class GatewayFacturas extends BaseGateway {
 	            			/*Guardar en la bitacora*/
 	            		}
 	            		else
-	            			throw new RuntimeException("No se puede cerrar la factura, el importe de a devengar es mayor al compromiso");
+	            			throw new RuntimeException("No se puede cerrar la factura, el importe a devengar es mayor al compromiso");
             		
 	            	}
 	    			//Validar equi si se finiquita el contrato

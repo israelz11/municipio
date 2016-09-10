@@ -718,6 +718,7 @@ public class GatewayPedidos extends BaseGateway {
 	}
 			
  public boolean tienePrecompromisoDisponible(Long proyecto, String partida, int mes, Long idReq, double importe, long cve_contrato, long cve_vale ){
+	  Map Requisic = gatewayRequisicion.getRequisicion(idReq);
 	  boolean tienePresupuesto = false;
 	  double preCompromiso=gatewayProyectoPartidas.getPreComprometidoMes(proyecto, partida, mes);
 	  double preCompromisoReq=gatewayRequisicion.getCompromisoHastaMes(idReq,mes);
@@ -729,6 +730,9 @@ public class GatewayPedidos extends BaseGateway {
 	  
 	  //verificar si el monto en requisicion alcanza por el importe del pedido
 	  if (redondea(preCompromiso,2) >= redondea(preCompromisoReq,2) && importe<=apartadoReq)
+		  tienePresupuesto=true;
+	  
+	  if(importe<=apartadoReq && Requisic.get("TIPO").toString().equals("7"))
 		  tienePresupuesto=true;
 	  
 	  if(cve_contrato!=0){

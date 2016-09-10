@@ -532,6 +532,8 @@ public class GatewayRequisicion  extends BaseGateway {
 					presupuest = verificarPresupuestoReq(idproyecto, proyecto, partida, periodo, idUsuario, importe,calendario,tipo, cve_contrato, cve_vale); 
 					
 					if(presupuest){
+						//Agregado Israel de la Cruz, 10/09/2015
+						getJdbcTemplate().update("DELETE FROM SAM_COMP_REQUISIC WHERE CVE_REQ=?",new Object []{cve_req});
 						
 						if(tipo_req == 5 || tipo_req == 8)
 						{
@@ -1003,8 +1005,9 @@ public class GatewayRequisicion  extends BaseGateway {
 	
 	public double getCompromisoHastaMes (Long idRequisicion, int mes ){
 		Map Req = this.getRequisicion(idRequisicion);
+		//se agrego el filtro de periodo al tipo de requisicion 7: Israel de la Cruz, 10/09/2016
 		if(Req.get("TIPO").toString().equals("7"))
-			return (Double)this.getJdbcTemplate().queryForObject("SELECT SUM(MONTO) FROM VT_COMPROMISOS WHERE TIPO_DOC = 'REQ' AND CVE_DOC = ? AND CONSULTA ='PRECOMPROMETIDO'",new Object[]{idRequisicion},Double.class);
+			return (Double)this.getJdbcTemplate().queryForObject("SELECT SUM(MONTO) FROM VT_COMPROMISOS WHERE TIPO_DOC = 'REQ' AND CVE_DOC = ? AND CONSULTA ='PRECOMPROMETIDO' AND PERIODO =?",new Object[]{idRequisicion, mes},Double.class);
 		else 
 			return (Double)this.getJdbcTemplate().queryForObject("select sum(  CASE TIPO  WHEN 'COMPROMISO' THEN importe else (importe*-1)  END )  from  SAM_COMP_REQUISIC WHERE CVE_REQ=? AND PERIODO<=? ",new Object[]{idRequisicion,mes},Double.class);
 	}

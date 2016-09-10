@@ -748,6 +748,25 @@ public void ejercerOrdenPagoFinal(Long cve_op, Date fecha_ejerce, int ejercicio,
 		List<Map> vales = new ArrayList();
 		vales = this.getValesOrdenes(cve_op);
 		
+		//Seccion movida aqui el 10/09/2016 por Israel, por instrucciones de Peredo
+		String clv_part_vale = null;
+		for(Map row: vales){
+			if(row.get("CLV_PARTID")!=null) clv_part_vale = row.get("CLV_PARTID").toString();
+			if(!this.comprobarValeSIAM(row)){
+				log.info("Numero de vale existe en SIAM: " + row.get("NUM_VALE").toString());
+				if(row.get("CLV_PARTID")!=null) clv_part_vale = row.get("CLV_PARTID").toString();
+				//Inserta consecutivo de vales de la OP
+				SQL = "insert into conc_vale(vale, nconc_vale, ID_PROYECTO, clv_partid, mes, importe, descontado) values(?,?,?,?,?,?,?)";
+				this.getJdbcTemplate().update(SQL, new Object[]{row.get("NUM_VALE").toString(), this.rellenarCeros(row.get("CONS_VALE").toString(), 3), row.get("ID_PROYECTO"), clv_part_vale, months[Integer.parseInt(row.get("MES").toString())-1].toString().substring(0,3).toUpperCase(), row.get("IMPORTE").toString(), 0});
+			} else 
+				throw new RuntimeException("El numero de Vale: " + row.get("NUM_VALE").toString()+". No existe en SIAM, o la operacion ha fallado al tratar de guardar movimientos duplicados. Consulte a su administrador");
+			
+			//Inserta vales de Orden de pago
+			SQL = "insert into op_vale(vale, nconc_vale, id_op, importe) values(?,?,?,?)";
+			this.getJdbcTemplate().update(SQL, new Object[]{row.get("NUM_VALE").toString(), this.rellenarCeros(row.get("CONS_VALE").toString(), 3), OrdenPago.get("CVE_OP"), row.get("IMPORTE").toString()});
+		}
+		
+		
 		//Obtener el total del monto vales
 		for(Map row: vales){
 			total_vales += Double.parseDouble(row.get("IMPORTE").toString());
@@ -756,7 +775,7 @@ public void ejercerOrdenPagoFinal(Long cve_op, Date fecha_ejerce, int ejercicio,
 		String notas = OrdenPago.get("NOTA").toString();
 		if(notas.length()>299) notas = notas.substring(0, 299);
 		
-		/*SEGUN NUEVA BASE 2012 AQUI LAS SECCIONES COMENTADAS DEJA DE FUNCIONAR PARA PEREDO 13/DIC/11 
+		/*SEGUN NUEVA BASE 2012 AQUI LAS SECCIONES COMENTADAS DEJARON DE FUNCIONAR PARA PEREDO 13/DIC/11 
 		//insertar en la tabla de reqisicion el registro del ejercido de la OP
 		this.getJdbcTemplate().update("Insert into reqisicion (reqisicion, tipo, fecha, notas, finiquitado) values(?, ?, ?, ?, ?)", new Object[]{OrdenPago.get("num_op").toString(), 1, fecha_ejerce, notas, "S"});
 		
@@ -812,22 +831,8 @@ public void ejercerOrdenPagoFinal(Long cve_op, Date fecha_ejerce, int ejercicio,
 			this.getJdbcTemplate().update(SQL, new Object[]{OrdenPago.get("num_op").toString(), row.get("ANX_CONS").toString(), this.getTipoDocumentoOP(row.get("T_DOCTO").toString())+" "+row.get("NUMERO").toString(), row.get("NOTAS").toString()});
 		}
 		*/
-		String clv_part_vale = null;
-		for(Map row: vales){
-			if(row.get("CLV_PARTID")!=null) clv_part_vale = row.get("CLV_PARTID").toString();
-			if(!this.comprobarValeSIAM(row)){
-				log.info("Numero de vale existe en SIAM: " + row.get("NUM_VALE").toString());
-				if(row.get("CLV_PARTID")!=null) clv_part_vale = row.get("CLV_PARTID").toString();
-				//Inserta consecutivo de vales de la OP
-				SQL = "insert into conc_vale(vale, nconc_vale, ID_PROYECTO, clv_partid, mes, importe, descontado) values(?,?,?,?,?,?,?)";
-				this.getJdbcTemplate().update(SQL, new Object[]{row.get("NUM_VALE").toString(), this.rellenarCeros(row.get("CONS_VALE").toString(), 3), row.get("ID_PROYECTO"), clv_part_vale, months[Integer.parseInt(row.get("MES").toString())-1].toString().substring(0,3).toUpperCase(), row.get("IMPORTE").toString(), 0});
-			} else 
-				throw new RuntimeException("El numero de Vale: " + row.get("NUM_VALE").toString()+". No existe en SIAM, o la operacion ha fallado al tratar de guardar movimientos duplicados. Consulte a su administrador");
-			
-			//Inserta vales de Orden de pago
-			SQL = "insert into op_vale(vale, nconc_vale, id_op, importe) values(?,?,?,?)";
-			this.getJdbcTemplate().update(SQL, new Object[]{row.get("NUM_VALE").toString(), this.rellenarCeros(row.get("CONS_VALE").toString(), 3), OrdenPago.get("CVE_OP"), row.get("IMPORTE").toString()});
-		}
+		
+		//Antes aqui estaba la seccion para escribir  vales en op_vale
 		
 		//Cambia el estatus de la orden de pago
 		SQL = "update SAM_ORD_PAGO set status = ? where cve_op = ?";
