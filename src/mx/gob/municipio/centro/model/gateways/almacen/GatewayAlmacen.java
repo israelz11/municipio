@@ -5,9 +5,11 @@
  */
 package mx.gob.municipio.centro.model.gateways.almacen;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
 import mx.gob.municipio.centro.model.bases.BaseGatewayAlmacen;
 
 public class GatewayAlmacen extends BaseGatewayAlmacen {
@@ -51,8 +53,21 @@ public class GatewayAlmacen extends BaseGatewayAlmacen {
 			   return this.getJdbcTemplate().queryForList(" select ID_ALMACEN ,ID_UNIADM,ID_RESPONSABLE,FECHA,DESCRIPCION,EMAIL,ALARMAS,ESTATUS  from ALMACEN where ESTATUS='ACTIVO' ORDER BY DESCRIPCION ASC");
 		}
 		
-		public List getAlmacenesUnidad(Long  idDependencia ) {	   
-			   return this.getJdbcTemplate().queryForList(" select ID_ALMACEN ,ID_UNIADM,ID_RESPONSABLE,FECHA,DESCRIPCION,EMAIL,ALARMAS,ESTATUS  from ALMACEN where ESTATUS='ACTIVO' AND ID_UNIADM =? ORDER BY DESCRIPCION ASC", new Object[]{idDependencia});
+		public List getAlmacenesUnidad(Long  idDependencia ) {
+			String Dependencias = idDependencia.toString();
+			List<Integer> CGSM = new ArrayList<Integer>();
+			CGSM.add(15);//Coordinación de Alumbrado Público
+			CGSM.add(16);//Coordinación de Parques, Fuentes y Jardines
+			CGSM.add(23);//Coordinación de Mercados
+			CGSM.add(33);//Coordinación de Panteones
+			CGSM.add(40);//Coordinación de Limpia
+			CGSM.add(65);//Unidad de Atención a Espacios Transferidos
+
+			//Alumbrado Publico
+			if(CGSM.indexOf(Integer.parseInt(idDependencia.toString()))!=-1)
+				Dependencias = idDependencia + ",13";
+			
+			   return this.getJdbcTemplate().queryForList(" select ID_ALMACEN ,ID_UNIADM,ID_RESPONSABLE,FECHA,DESCRIPCION,EMAIL,ALARMAS,ESTATUS  from ALMACEN where ESTATUS='ACTIVO' AND ID_UNIADM IN("+Dependencias+") ORDER BY DESCRIPCION ASC", new Object[]{});
 		}
 
 		public void eliminar(Integer clave  ){

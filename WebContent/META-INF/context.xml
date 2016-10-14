@@ -3,12 +3,12 @@
 	<Resource name="jdbc/siam" auth="Container" type="javax.sql.DataSource"
 		maxActive="100" maxIdle="30" maxWait="10000" username="S14mP*"
 		password="514M@*4" driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
-		url="jdbc:sqlserver://WINDOS10:1433;databaseName=siam2016">
+		url="jdbc:sqlserver://p74:1433;databaseName=siam2016">
 	</Resource>
 	<Resource name="jdbc/almacen" auth="Container" type="javax.sql.DataSource"
 		maxActive="100" maxIdle="30" maxWait="10000" username="S14mP*"
 		password="514M@*4" driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
-		url="jdbc:sqlserver://WINDOS10:1433;databaseName=almacen2016">
+		url="jdbc:sqlserver://p74:1433;databaseName=almacen2016">
 	</Resource>
 	<Resource name="jdbc/correspondencia" auth="Container" type="javax.sql.DataSource"
 		maxActive="100" maxIdle="30" maxWait="10000" username="siam13"

@@ -54,7 +54,7 @@ public class ControladorRolesPrivilegios extends ControladorBase  {
                       "SAM_PRIVILEGIO ON SAM_MODULO.ID_MODULO = SAM_PRIVILEGIO.ID_MODULO AND "+ 
                       "SAM_MODULO.ID_SISTEMA = ? LEFT OUTER JOIN "+
                       "SAM_ROL_PRIVILEGIO ON SAM_PRIVILEGIO.ID_PRIVILEGIO = SAM_ROL_PRIVILEGIO.ID_PRIVILEGIO AND "+
-                      "SAM_ROL_PRIVILEGIO.ID_ROL = ? order by SAM_MODULO.MOD_DESCRIPCION ", new Object[]{ idSistema,idRol});	        
+                      "SAM_ROL_PRIVILEGIO.ID_ROL = ? order by SAM_MODULO.MOD_DESCRIPCION, PRI_DESCRIPCION ASC ", new Object[]{ idSistema,idRol});	        
 	  }
 		  
 	   public void guardarPrivilegios(final List<Map<String,String>> idPrivilegios,final Integer idRol ){		   	  				

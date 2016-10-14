@@ -731,9 +731,6 @@ public class GatewayRequisicion  extends BaseGateway {
                 protected void   doInTransactionWithoutResult(TransactionStatus status) {
                 	/*comprobar que no esta agarrada de una Orden de pago*/
             
-                	if(existeFactura(cve_req)){
-                		throw new RuntimeException("No se puede aperturar, el documento ya tiene una factura");      
-                	}
                 	
                 	/*Valida aqui si el documento esta en el periodo actual*/
                 	Map requisicion = getJdbcTemplate().queryForMap("SELECT NUM_REQ, FECHA_CIERRE, CVE_CONTRATO, ID_PROYECTO, CLV_PARTID, PERIODO, FECHA, TIPO, STATUS, EJERCICIO, ISNULL((SELECT SUM(CANTIDAD*PRECIO_EST) FROM SAM_REQ_MOVTOS WHERE SAM_REQ_MOVTOS.CVE_REQ = SAM_REQUISIC.CVE_REQ ),0) AS IMPORTE FROM SAM_REQUISIC WHERE CVE_REQ = ? ", new Object []{cve_req});
@@ -746,7 +743,30 @@ public class GatewayRequisicion  extends BaseGateway {
             			throw new RuntimeException("No se puede aperturar la requisicion "+requisicion.get("NUM_REQ").toString()+" por que el periodo es diferente");
             		}
             		
+            		//Impide o Fuerza la Aperura de OS, OT, agregado por Israel a solicitud de abraham, 08/10/2016 
+            		/* --------------------------------------
+            		 * Id_TipoRequisicion	Descripcion
+            		 * --------------------------------------
+							2				Orden de Servicio
+							3				O.T. a Vehiculos
+							4				O.T. Maq. Pesada
+							5				O.S. Bombas
+							6				O.S. Paquetes 
+            		 */
+            		boolean ForzarAperturaOSOT = getPrivilegioEn(cve_pers, 153);
+            		if((requisicion.get("TIPO").toString().equals("2") || requisicion.get("TIPO").toString().equals("3") || requisicion.get("TIPO").toString().equals("4") || requisicion.get("TIPO").toString().equals("5") || requisicion.get("TIPO").toString().equals("6")) && !ForzarAperturaOSOT)
+            		{
+            			throw new RuntimeException("Actualmente ya no se permite aperturar Ordenes de Servicio y Ordenes de Trabajo cerradas, consulte con su administrador del sistema.");
+            		}
             		
+            		if(existeFactura(cve_req)){
+                		throw new RuntimeException("No se puede aperturar, el documento ya tiene una factura asociada");      
+                	}
+                	
+                	if(existeContrato(cve_req)){
+                		throw new RuntimeException("No se puede aperturar, el documento ya tiene un contrato asociado");      
+                	}
+                	
 		    	    Integer op = getJdbcTemplate().queryForInt("SELECT COUNT(*) AS N FROM  SAM_ORD_PAGO WHERE CVE_REQ = ? AND STATUS IN (0,1,6) ", new Object[]{cve_req});
 		    	    Integer ped = getJdbcTemplate().queryForInt("SELECT COUNT(*) AS N FROM  SAM_PEDIDOS_EX WHERE CVE_REQ = ? AND STATUS IN (1, 4, 5) ", new Object[]{cve_req});
 		    	    boolean abrirReq = getPrivilegioEn(cve_pers, 23);
@@ -794,6 +814,10 @@ public class GatewayRequisicion  extends BaseGateway {
 	
 	public boolean existeFactura(Long cve_req){
 		return this.getJdbcTemplate().queryForInt("SELECT COUNT(*) FROM SAM_FACTURAS WHERE CVE_REQ =? AND STATUS IN (1,3)", new Object[]{cve_req})>0;
+	}
+	
+	public boolean existeContrato(Long cve_req){
+		return this.getJdbcTemplate().queryForInt("SELECT COUNT(*) FROM SAM_CONTRATOS WHERE CVE_DOC =? AND ID_TIPO IN(1,2,3,6) AND STATUS IN (1,3)", new Object[]{cve_req})>0;
 	}
 	
 	/*Metodo privado que cancela la requisicion*/
