@@ -300,8 +300,13 @@ public class GatewayContratos extends BaseGateway {
                 			
                 			getJdbcTemplate().update("UPDATE SAM_CONTRATOS SET STATUS = ?, FECHA_CERRADO =? WHERE CVE_CONTRATO = ?", new Object[]{CON_STATUS_CERRADO, fecha, cve_contrato});
                 			getJdbcTemplate().update("UPDATE SAM_REQUISIC SET STATUS = ?, FECHA_FINIQUITADO =?, MES_FINALIZADO = ?, DIA_FINALIZADO = ? WHERE CVE_REQ = ?",new Object[]{gatewayRequisicion.REQ_STATUS_FINIQUITADA, fecha, fecha.getMonth()+1, fecha.getDay(), contrato.get("CVE_DOC")});
-                		
-                			//guardar en bitacora
+                			
+                			if(contrato.get("ID_TIPO").toString().equals("7")) //CONTRAO A TRAVEZ DE PEDIDO
+                			{
+                				getJdbcTemplate().update("UPDATE SAM_PEDIDOS_EX SET STATUS = 5, FECHA_FINIQUITADO =?, MES_FINALIZADO = ?, DIA_FINALIZADO = ? WHERE CVE_PED = ?",new Object[]{fecha, fecha.getMonth()+1, fecha.getDay(), contrato.get("CVE_DOC")});
+                			}
+                				
+                		    //guardar en bitacora
                 			//Date fecha = new Date();
                 			//String num = rellenarCeros(cve_contrato.toString(), 6);
                 			//gatewayBitacora.guardarBitacora(gatewayBitacora.CON_CERRO, ejercicio, cve_pers, cve_contrato, num, "CON", fecha, proyecto, clv_partid, null, timporte);
