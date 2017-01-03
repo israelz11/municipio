@@ -432,6 +432,7 @@ public class GatewayFacturas extends BaseGateway {
 						      ",R.NUM_REQ" +
 						      ",P.NUM_PED" +
 						      ",F.ID_DEPENDENCIA" +
+						      ",DEP.DEPENDENCIA" + 
 						      ",F.NOTAS" +
 						      ",F.EJERCICIO" +
 						      ",F.PERIODO" +
@@ -445,6 +446,7 @@ public class GatewayFacturas extends BaseGateway {
 						      ",F.STATUS" +
 						      ",(CASE F.STATUS WHEN 0 THEN 'Edición' WHEN 1 THEN 'Cerrado' WHEN 2 THEN 'Cancelado' WHEN 3 THEN 'Finiquitado' END) AS STATUS_DESC " +
 						  "FROM SAM_FACTURAS AS F " +
+						       "LEFT JOIN CAT_DEPENDENCIAS AS DEP ON (DEP.ID = F.ID_DEPENDENCIA) " +
 								"LEFT JOIN SAM_REQUISIC AS R ON (R.CVE_REQ = F.CVE_REQ) " +
 								"LEFT JOIN SAM_PEDIDOS_EX AS P ON (P.CVE_PED = F.CVE_PED) " +
 								"LEFT JOIN SAM_VALES_EX AS V ON (V.CVE_VALE = F.CVE_VALE) "+
@@ -452,7 +454,8 @@ public class GatewayFacturas extends BaseGateway {
 								" WHERE F.STATUS IN("+m.get("estatus").toString()+") ";
 		
 		if(m.get("cbodependencia")!=null)
-			sql += " AND F.ID_DEPENDENCIA =:cbodependencia";
+			if(!m.get("cbodependencia").toString().equals("0"))
+				sql += " AND F.ID_DEPENDENCIA =:cbodependencia";
 		
 		if(m.get("clv_benefi")!=null)
 			if(!m.get("clv_benefi").equals("0"))
