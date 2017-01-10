@@ -881,11 +881,11 @@ public void ejercerOrdenPagoFinal(Long cve_op, Date fecha_ejerce, int ejercicio,
 	            @Override
 	            protected void   doInTransactionWithoutResult(TransactionStatus status) {
 	            	Date fecha_cancelado = new Date();
-	            	Map OrdenPago = getJdbcTemplate().queryForMap("SELECT * FROM SAM_ORD_PAGO where CVE_OP = ?", new Object []{cve_op});
+	            	Map OrdenPago = getJdbcTemplate().queryForMap("SELECT * FROM SAM_ORD_PAGO WHERE CVE_OP = ?", new Object []{cve_op});
 	            	//Poner fecha de cancelado a la Orden de Pago del lado de Peredo
 	    			getJdbcTemplate().update("UPDATE ORDENDPAGO SET FE_CANCELA_EJER =? WHERE ID_OP = ?", new Object []{fecha_cancelado, cve_op});
 	    			//Poner en Status CANCELADA la Orden de Pago
-	    			getJdbcTemplate().update("UPDATE SAM_ORD_PAGO SET STATUS=?, FECHA_CANCELADO =?, MOTIVO_CANCELADO=? WHERE CVE_OP = ?", new Object []{4, fecha_cancelado, texto, cve_op});
+	    			getJdbcTemplate().update("UPDATE SAM_ORD_PAGO SET STATUS=?, MOTIVO_CANCELADO=? WHERE CVE_OP = ?", new Object []{7, texto, cve_op});
 	    			//Poner las facturas nuevamente en devengado
 	    			//Obtener lo movimientos de la OP
 	    			List<Map> mov = getMovimientosOP(cve_op);
@@ -901,7 +901,7 @@ public void ejercerOrdenPagoFinal(Long cve_op, Date fecha_ejerce, int ejercicio,
 	    				}
 	    			}
 	    			//Guardar en bitacora
-	    			gatewayBitacora.guardarBitacora(gatewayBitacora.OP_CANCELA, ejercicio, cve_pers, cve_op,OrdenPago.get("NUM_OP").toString(), "OP", (Date) OrdenPago.get("FECHA"), null, null, null, Double.parseDouble(OrdenPago.get("IMPORTE").toString()));
+	    			gatewayBitacora.guardarBitacora(gatewayBitacora.OP_DESEJERCER, ejercicio, cve_pers, cve_op,OrdenPago.get("NUM_OP").toString(), "OP", (Date) OrdenPago.get("FECHA"), null, null, null, Double.parseDouble(OrdenPago.get("IMPORTE").toString()));
 	            } 
 	         });
 			return true;

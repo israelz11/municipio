@@ -8,13 +8,14 @@ $(document).ready(function() {
 function cancelarEjercido(cve_op)
 {
 	var now = new Date();
-	
 	var bfecha = $('#chkfecha').attr('checked');
 	var fecha_ejerce = $('#txtfecha').attr('value');
 	
 	//recuperar las claves a ejercer
-     	
-	 if (cve_op!="0"){
+     	var cve_op = 0;
+		$('input[id=chkOP]:checked').each(function() { cve_op = $(this).val();});	
+		
+	 if (cve_op!=0){
 		 jWindow('¿Confirma que desea cancelar el ejercido de la orden de pago seleccionada?<br><br><strong>*Escriba el motivo de cancelación del ejercido: </strong><br><textarea id="txtmotivo" style="width:500px; height:100px"></textarea><br><br><div align="center"><input style="width:100px" class="botones" value="Aceptar" id="cmdaceptarBoton" type="button">&nbsp;<input style="width:100px" class="botones" value="cancelar" id="popup_cancel" type="button"></div>','Desejercer Orden(es) de Pago' ,"Aceptar", "Cancelar", 0);
 		 $('#cmdaceptarBoton').click(function(event){_cancelarEjercido(cve_op);});
 	 }

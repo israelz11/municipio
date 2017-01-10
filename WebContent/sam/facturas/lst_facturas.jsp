@@ -65,7 +65,7 @@ a:active {
       <sec:authorize ifAllGranted="ROLE_Sam_PRIVILEGIOS_VER_TODAS_LAS_UNIDADES">
         <div class="styled-select">
           <select name="cbodependencia" id="cbodependencia" style="width:445px">
-            <option value="0">[Seleccione]</option>
+            <option value="0">[Todas las Dependencias]</option>
             <c:forEach items="${unidadesAdmiva}" var="item" varStatus="status"> 
               <option value='<c:out value="${item.ID}"/>' 
                             <c:if test='${item.ID==cbodependencia}'> selected </c:if>>
@@ -123,11 +123,12 @@ a:active {
     <th width="3%" height="20">&nbsp;</th>
     <th width="9%">Num. Factura</th>
     <th width="7%">Pedido</th>
-    <th width="9%">Requisicóon</th>
+    <th width="7%">Requisicóon</th>
+    <th width="15%">Unidad Adm.</th>
     <th width="9%">Fecha documento</th>
-    <th width="35%">Descripción</th>
-    <th width="11%">Importe</th>
-    <th width="7%">Status</th>
+    <th width="28%">Descripción</th>
+    <th width="7%">Importe</th>
+    <th width="5%">Status</th>
     <th width="5%">Opciones</th>
   </tr>
    </thead>   
@@ -139,6 +140,7 @@ a:active {
     <td align="center"><sec:authorize ifAllGranted="ROLE_Sam_PRIVILEGIOS_SUBMENU_ESPECIAL_EN_LISTADO_REQUISICIONES"><a href="javascript:subOpAdm('fac', <c:out value='${item.CVE_FACTURA}'/>, <c:out value='${item.CVE_PERS}'/>)"></sec:authorize><c:out value='${item.NUM_FACTURA}'/><sec:authorize ifAllGranted="ROLE_Sam_PRIVILEGIOS_SUBMENU_ESPECIAL_EN_LISTADO_REQUISICIONES"></a></sec:authorize></td>
     <td align="center"><c:out value='${item.NUM_PED}'/></td>
     <td align="center"><c:out value='${item.NUM_REQ}'/></td>
+    <td align="left"><c:out value='${item.DEPENDENCIA}'/></td>
     <td align="center"><c:out value='${item.FECHA_DOCUMENTO}'/></td>
     <td><c:out value='${item.NOTAS}'/></td>
     <td align="right">$<fmt:formatNumber value="${item.TOTAL}"  pattern="#,###,###,##0.00" /></td>
