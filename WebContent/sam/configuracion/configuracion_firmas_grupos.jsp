@@ -4,8 +4,10 @@
 <html>
 <head>
 <title>Configuración de Firmas</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
 <link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css">
+<link rel="stylesheet" href="../../include/css/bootstrap.css" type="text/css">
 <link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css">
 <link type="text/css" href="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.css" rel="stylesheet" />	
 <script type="text/javascript" src="../../include/js/jquery-1.3.2.min.js"></script>
@@ -30,70 +32,67 @@
 <link rel="stylesheet" href="../../include/js/jquery.tabs/jquery.tabs-ie.css" type="text/css" media="projection, screen">
 <![endif]-->
 <body >
-<form name="forma" method="get" action="" onSubmit=" return false" >
+<form name="forma" method="get" action="" onSubmit=" return false" class="form-horizontal">
 <br />
-  <table width="90%" align="center"><tr><td><h1>Configuración - Grupos de Firmas</h1></td></tr></table>
-  <table width="90%" border="0" align="center" cellpadding="0" cellspacing="0" class="formulario">
-    <tr>
-      <th height="13">&nbsp;</th>
-      <td>&nbsp;</td>
-    </tr>
-    <tr>
-      <th height="30">Grupo:</th>
-      <td><label>
-        <select name="grupo" size="1" class="comboBox" id="grupo" onChange="pintarTablaDetalles()" style="width:445px;">
-          <option value="">[Seleccione]</option>
-          <c:forEach items="${grupos}" var="item" varStatus="status">
-              <option value="<c:out value='${item.ID_GRUPO_CONFIG}'/>" >
-                <c:out value="${item.GRUPO_CONFIG}"/>
+  <div style="width:1200px; margin-left:auto; margin-right:auto" class="container"> 
+  	<div class="row">
+        <h1 class="h1"> Configuración - Grupos de Firmas</h1>
+    </div>
+    <div class="form-group" id="combos">
+	    <label for="inputName" class="control-label col-xs-2">Grupo:</label>
+        <div class="col-xs-5">
+       		 <select name="grupo" size="1" id="grupo" class="form-control" onChange="pintarTablaDetalles()" border="0" style="width:400px;">
+                <option value="">[Seleccione]</option>
+                    <c:forEach items="${grupos}" var="item" varStatus="status">
+                <option value="<c:out value='${item.ID_GRUPO_CONFIG}'/>" >
+                    <c:out value="${item.GRUPO_CONFIG}"/>
                 </option>
-            </c:forEach>
-        </select>
-        <input type="hidden" name="clave" id="clave" />
-      </label></td>
-    </tr>
-    <tr>
-      <th height="30"><p>Tipo de firma:</p></th>
-      <td><select name="tipoFirma" size="1" class="comboBox" id="tipoFirma" style="width:445px;">      
-        <option value="">[Seleccione]</option>
-        <c:forEach items="${tipoFirmas}" var="item" varStatus="status">
-              <option value="<c:out value='${item.TIPO}'/>" >
-                <c:out value="${item.TIPO}"/>
-                </option>
-            </c:forEach>
-      </select></td>
-    </tr>
-    <tr>
-      <th height="30">Representante:</th>
-      <td><input name="representante" type="text" class="input" id="representante" value="" maxlength="150"  style="width:445px;"/></td>
-    </tr>
-    <tr>
-      <th width="14%" height="30">Cargo:</th>
-      <td width="86%"><input name="cargo" type="text" class="input" id="cargo" value="" maxlength="150"  style="width:445px;"/></td>
-    </tr>
-    <tr>
-      <td height="30">&nbsp;</td>
-      <td><input type="button"  class="botones"  name="btnGrabar" value="Guardar"  onClick="guardar()" style="width:100px"/>
-      <input type="button"  class="botones"  name="btnlimpiar" value="Nuevo"  onClick="limpiar()" style="width:100px"/></td>
-    </tr>
-    <tr>
-      <td colspan="2" align="center">&nbsp;</td>
-    </tr>
+                    </c:forEach>
+            </select>
+            <input type="hidden" name="clave" id="clave" />
+        </div>
+    </div>
+    <div class="form-group">
+    	<label for="inputName" class="control-label col-xs-2">Tipo de frma:</label>
+	    <div class="col-xs-5">
+    		<select name="tipoFirma" size="1" class="form-control"  id="tipoFirma" style="width:400px;">      
+        	    <option value="">[Seleccione]</option>
+            	<c:forEach items="${tipoFirmas}" var="item" varStatus="status">
+	            <option value="<c:out value='${item.TIPO}'/>" >	
+    	        <c:out value="${item.TIPO}"/>
+        	    </option>
+            	</c:forEach>
+    	   </select>
+       </div>	
+    </div>
+    <div class="form-group">
+    	 <label for="inputName" class="control-label col-xs-2">Representante:</label>
+         <div class="col-xs-5">
+             <input type="text" name="representante" id="representante" value="" class="form-control" placeholder="Nombre del representante" style="width:400px;">
+         </div>
+	</div>
+    <div class="form-group">
+         <label for="inputName" class="control-label col-xs-2">Cargo:</label>
+         <div class="col-xs-5">
+             <input type="text" name="cargo" id="cargo" value="" class="form-control" placeholder="Cargo del representante" style="width:400px;"><br>
+             <input type="button"  class="btn btn-success btn-sm"  name="btnGrabar" value="Guardar"  onClick="guardar()" style="width:100px"/>
+    	     <input type="button"  class="btn btn-info btn-sm"  name="btnlimpiar" value="Nuevo"  onClick="limpiar()" style="width:100px"/>
+         </div>
+	
+	<table class="table table-hover table table-condensed" cellpadding="0" cellspacing="0" id="detallesTabla" >
+    	<thead>
+	      <tr>
+    	    <th width="3%" height="20" class="col-sm-1"><img src="../../imagenes/cross.png" width="16" height="16" onClick="eliminar()" style='cursor: pointer;'></th>
+	        <th width="24%"  align="center" class="col-sm-4" style="text-align: left;">Tipo de firma</th>
+    	    <th width="40%" class="col-sm-3" style="text-align: left;">Representante</th>
+        	<th width="28%" class="col-sm-3" style="text-align: left;" >Cargo</th>
+	        <th width="5%" class="col-sm-1">&nbsp;</th>
+    	  </tr>
+	    </thead>
+    	<tbody>
+	    </tbody>
   </table>
-  <br />
-  <table width="90%"  border="0" align="center"  cellpadding="0" cellspacing="0" class="listas"  id="detallesTabla" >
-    <thead>
-      <tr >
-        <th width="3%" height="20"><img src="../../imagenes/cross.png" width="16" height="16" onClick="eliminar()" style='cursor: pointer;'></th>
-        <th width="24%"  align="center" >Tipo de firma</th>
-        <th width="40%"  >Representante</th>
-        <th width="28%"  >Cargo</th>
-        <th width="5%" >&nbsp;</th>
-      </tr>
-    </thead>
-    <tbody>
-    </tbody>
-  </table>
+ </div>
 </form>
 </body>
 </html>

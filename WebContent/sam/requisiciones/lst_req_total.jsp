@@ -3,17 +3,25 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <title>Listado de Requisiciones</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
 <link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css">
-<link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css">
+
 <link type="text/css" href="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.css" rel="stylesheet" />	
+<%-- <link rel="stylesheet" href="../../include/css/tiptip.css" type="text/css"  media="screen">
+	 <link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css">
+--%>
+
+<link rel="stylesheet" href="../../include/css/bootstrap.css" type="text/css">
+<link rel="stylesheet" href="../../include/css/bootstrap.min.css" type="text/css">
+
 <script type="text/javascript" src="../../include/js/jquery-1.3.2.min.js"></script>
-<link rel="stylesheet" href="../../include/css/css/css3-buttons.css" type="text/css" media="screen">
-<link rel="stylesheet" href="../../include/css/tiptip.css" type="text/css"  media="screen">
 <script src="../../include/css/jquery.tiptip.js"></script>
 <script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>
 <script type="text/javascript" src="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.min.js"></script>
@@ -24,10 +32,31 @@
 <script type="text/javascript" src="../../dwr/interface/autocompleteDiversosRemoto.js"> </script>
 <script type="text/javascript" src="../../include/js/toolSam.js"></script>
 <script type="text/javascript" src="lst_req_total.js"> </script>
+
 <link rel="stylesheet" href="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.css" type="text/css" />
 <link rel="stylesheet" href="../../include/js/autocomplete/jquery.autocomplete.css" type="text/css" />
 
+
+<script type="text/javascript" src="../../include/js/bootstrap.min.js"></script>
+<%--PRUEBA DE JS PARA EL SELECT MULTIPLE 
+--%>
+<link rel="stylesheet" href="../../include/css/bootstrap-select.css" type="text/css">
+<script type="text/javascript" src="../../include/js/bootstrap-select.js"></script>
+
+<link rel="stylesheet" href="../../include/css/bootstrap-multiselect.css" type="text/css">
+<script type="text/javascript" src="../../include/js/bootstrap-multiselect.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.7.5/css/bootstrap-select.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.7.5/js/bootstrap-select.min.js"></script>
+
+
 <style type="text/css">
+
+
 a:link {
 	text-decoration: none;
 }
@@ -40,48 +69,83 @@ a:hover {
 a:active {
 	text-decoration: none;
 }
+
+.selcls { 
+    padding: 9px; 
+    border: solid 1px #517B97; 
+    outline: 0; 
+    background: -webkit-gradient(linear, left top, left 25, from(#FFFFFF), color-stop(4%, #CAD9E3), to(#FFFFFF)); 
+    background: -moz-linear-gradient(top, #FFFFFF, #CAD9E3 1px, #FFFFFF 25px); 
+    box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px; 
+    -moz-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px; 
+    -webkit-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px; 
+
 </style>
+   <!-- Initialize the plugin: -->
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#cbostatus').multiselect();
+        });
+       
+        $(document).ready(function() {
+            $('#example-nSelectedText').multiselect({
+                nSelectedText: ' - Too many options selected!'
+            });
+        });
+       
+    </script>
 </head>
-<body  >
-<form  action="lst_req_total.action" method="post" id="forma" name="forma">
-<input type="hidden" name="ejercicio" id="ejercicio" value="<c:out value='${ejercicio}'/>">
-<input type="hidden" name="claveRequisicion" id="claveRequisicion" >
-<table width="95%" align="center"><tr><td><h1>Requisiciones - Listado de Requisiciones, Ordenes de Trabajo y Ordenes de Servicio</h1></td></tr></table>
+<body>
+
+
+<form  action="lst_req_total.action" method="post" id="forma" name="forma" class="form-inline">
+	<input type="hidden" name="ejercicio" id="ejercicio" value="<c:out value='${ejercicio}'/>">
+	<input type="hidden" name="claveRequisicion" id="claveRequisicion" >
+	<table width="95%" align="center"><tr><td><h1>Requisiciones - Listado de Requisiciones, Ordenes de Trabajo y Ordenes de Servicio</h1></td></tr></table>
+	
+		<sec:authorize ifNotGranted="ROLE_Sam_PRIVILEGIOS_VER_TODAS_LAS_UNIDADES">
+      		<c:out value="${nombreUnidad}"/>
+      			<input type="hidden" name="dependencia" id="dependencia" value="<c:out value='${idUnidad}'/>">
+      			<input type="hidden" name="todo" id="todo" value="0">
+		</sec:authorize>
+		<sec:authorize ifAllGranted="ROLE_Sam_PRIVILEGIOS_VER_TODAS_LAS_UNIDADES">
+			<input type="hidden" name="todo" id="todo" value="1">
+			<div class="container">
+				<div class="form-group">
+     				<label for="dependencia" class="control-label">Unidad:</label>
+     					<select class="form-control input-sm" name="dependencia" id="dependencia" style="width:455px;">
+               				<option value="0" <c:if test='${item.ID==0}'> selected </c:if>>[Todas las Unidades Administrativas]</option>
+    							<c:forEach items="${unidadesAdmiva}" var="item" varStatus="status"> 
+                      			<option value='<c:out value="${item.ID}"/>' 
+                        		<c:if test='${item.ID==idUnidad}'> selected </c:if>>
+                        		<c:out value='${item.DEPENDENCIA}'/>
+                			</option>
+   								</c:forEach>
+		   				</select>
+				<div class="form-group">
+		<div class="checkbox">
+       		<label><input type="checkbox" name="status" id="status"  value="0" <c:if test="${fn:contains(status,'0')}" >checked</c:if>> &nbsp;Edición</label>
+    	</div>
+	</div>
+	<div class="form-group">
+		<div class="checkbox">
+       		<label><input type="checkbox" name="status" id="status"  value="1" <c:if test="${fn:contains(status,'1')}" >checked</c:if>> &nbsp;Cerrado</label>
+    	</div>
+	</div>
+	<div class="form-group">
+		<div class="checkbox">
+       		<label><input type="checkbox" name="status" id="status" class="checkbox-inline" value="2" <c:if test="${fn:contains(status,'2')}" >checked</c:if>> &nbsp;En Proceso</label>
+    	</div>
+	</div>
+	
+</div>
+ </div>  
+</sec:authorize>
+     
+    
+
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0" class="formulario">
-  <tr>
-    <th height="16">&nbsp;</th>
-    <td colspan="4">&nbsp;</td>
-    </tr>
-  <tr >
-    <th  width="11%" height="25">Unidad:</th>
-<td>
-<sec:authorize ifNotGranted="ROLE_Sam_PRIVILEGIOS_VER_TODAS_LAS_UNIDADES">
-      <c:out value="${nombreUnidad}"/>
-      <input type="hidden" name="dependencia" id="dependencia" value="<c:out value='${idUnidad}'/>">
-      <input type="hidden" name="todo" id="todo" value="0">
-</sec:authorize>
-<sec:authorize ifAllGranted="ROLE_Sam_PRIVILEGIOS_VER_TODAS_LAS_UNIDADES">
-<input type="hidden" name="todo" id="todo" value="1">
-<div class="styled-select">
-    <select name="dependencia" id="dependencia" style="width:455px;">
-               <option value="0" <c:if test='${item.ID==0}'> selected </c:if>>[Todas las Unidades Administrativas]</option>
-    <c:forEach items="${unidadesAdmiva}" var="item" varStatus="status"> 
-                      <option value='<c:out value="${item.ID}"/>' 
-                        <c:if test='${item.ID==idUnidad}'> selected </c:if>>
-                       <c:out value='${item.DEPENDENCIA}'/>
-                </option>
-   </c:forEach>
-   </select>
- </div>
-</sec:authorize>
-  </td>
-    <td width="15%"><input type="checkbox" name="status" id="status"  value="0" <c:if test="${fn:contains(status,'0')}" >checked</c:if>
-    >&nbsp;Edición</td>
-    <td width="15%"><input type="checkbox" name="status" id="status"  value="1" <c:if test="${fn:contains(status,'1')}" >checked</c:if>
-    >&nbsp;Cerrado</td>
-    <td width="15%"><input type="checkbox" name="status" id="status"  value="2" <c:if test="${fn:contains(status,'2')}" >checked</c:if>>&nbsp;En Proceso</td>
-  </tr>
-  <tr >
+    <tr >
     <th height="36" >Tipo de gasto:    
     <td>
     <div class="styled-select">
@@ -100,7 +164,7 @@ a:active {
     </strong>
     </div></td>
     <td ><input name="status" type="checkbox" id="status"  value="4" <c:if test="${fn:contains(status,'4')}" >checked</c:if>>&nbsp;Canceladas</td>
-    <td ><input name="status" type="checkbox" id="status"  value="5" <c:if test="${fn:contains(status,'5')}" >checked</c:if>>&nbsp;Finiquitadas</td>
+    <td ><input name="status" type="checkbox" id="status"  value="5" <c:if test="${fn:contains(descripcion_estatus,'finiquitado')}">checked</c:if>>&nbsp;Finiquitadas</td>
     <td >&nbsp;</td>
   </tr>
   <tr >
@@ -111,7 +175,7 @@ a:active {
     <td rowspan="4" ><table width="140" border="0" cellspacing="0" cellpadding="0">
       <tr>
         <td height="40">
-        <button name="btnBuscar" id="btnBuscar" onClick="getListaReq()" type="button" class="button blue middle"><span class="label" style="width:100px">Buscar</span></button>
+        <button name="btnBuscar" id="btnBuscar" onClick="getListaReq()" type="button" class="button primary"><span class="label" style="width:100px">Buscar</span></button>
         </td>
       </tr>
       <tr>
@@ -178,15 +242,56 @@ a:active {
         <td width="86"><input name="txtproyecto" type="text" id="txtproyecto" maxlength="4" style="width:70px" value="<c:out value='${txtproyecto}'/>"></td>
         <td width="56"><strong>Partida:</strong></td>
         <td width="248"><input name="txtpartida" type="text" id="txtpartida" maxlength="4" style="width:70px" onKeyPress="return keyNumbero(event);" value="<c:out value='${txtpartida}'/>"></td>
+        <td height="25" colspan="3" ><table width="458" border="0" cellspacing="0" cellpadding="0">
+      	<tr>
+     		<%-- pruebas del select multiple --%>
+     		 <label for="estatusr" class="col-md-6 control-label">Estatus</label>
+     		  <div class="styled-select col-md-offset-8">
+	
+				<select class="selectpicker" data-style="btn-primary" multiple data-max-options="5" id="estatusr" name="cbostatus">
+    				<option value="0">Todos</option>
+    				<option value="Edicion">Edicion</option>
+    				<option value="Cerrado">Cerrado</option>
+    				<option value="Proceso">Proceso</option>
+    				<option value="Cancelado">Cancelado</option>
+    				<option value="Finiquitado">Finiquitado</option>
+				</select>
+				
+ 			</div>
+      	</tr>	
+      </table></td>
         </tr>
     </table></td>
     </tr>
    <sec:authorize ifAllGranted="ROLE_Sam_PRIVILEGIOS_LISTAR_LOTES_DE_REQUISICIONES_EN_EXCEL_ADMON"> 
    <input type="hidden" value="1" id="REPORTE_ESPECIAL_2">
   <tr >
-    <th height="25" >Requisiciones en lista:</th>
-    <td height="25" colspan="3" ><textarea name="txtlistado" rows="5" wrap="virtual" class="textarea" id="txtlistado" style="width:445px"><c:out value='${txtlistado}'/></textarea></td>
-    <td height="25" >&nbsp;</td> 
+	<th height="25" >Requisiciones en lista:</th>
+    <td height="25" colspan="5" ><textarea name="txtlistado" rows="5" wrap="virtual" class="textarea" id="txtlistado" style="width:455px"><c:out value='${txtlistado}'/></textarea></td>
+    <td height="25" colspan="3" ><table width="458" border="0" cellspacing="0" cellpadding="0">
+    	<tr>
+    		  <%---Requisiciones en lista.......Prueba combo multiple --%>
+  		<label for=cbostatus class="col-md-6 control-label">Estatu</label>
+  		<div class="style-select col-md-offset-8">
+  			
+				<h3>Multiple Select</h3>
+  				<select id="dataCombo" class="selectpicker" multiple="multiple" style="width:400px;">
+    				<option value="one">One</option>
+    				<option value="two">Two</option>
+    				<option value="three">Three</option>
+    				<option value="four">Four</option>
+    				<option value="five">Five</option>
+    			</select>
+			  
+ 		 	
+ 		 </div>
+    	</tr>
+    </table></td>
+  
+  </tr>
+  <tr>
+  	  
+  	<td height="25" colspan="5"></td>
   </tr>
   </sec:authorize>
   <tr >
@@ -194,28 +299,29 @@ a:active {
     <td height="25" colspan="3" ></td>
     <td height="25" >&nbsp;</td>
   </tr>
-   </sec:authorize>      
+   </sec:authorize>  
 </table>
 <br />
-
-<table width="95%" class="listas" align="center" id="listaRequisiciones" cellpadding="0" cellspacing="0">
+<div class="container-fluid">
+<table width="95%" class="table table-hover table table-condensed table-striped" align="center" id="listaRequisiciones" cellpadding="0" cellspacing="0">
  <thead>
   <tr>
-    <th width="3%">&nbsp;</th>
-    <th width="10%" height="20">Número</th>
-    <th width="7%">Fecha</th>
-    <th width="6%">Estado</th>
-    <th width="8%">Tipo</th>
-    <th width="41%">Notas</th>
-    <th width="8%">Programa / Partida</th>
-    <th width="6%">Importe</th>
-    <th width="6%">Opciones</th>
+    <th width="4%"><input type="checkbox" name="todos" id="todos"></th>
+    <th width="9%" height="20">Número</th>
+    <th width="9%"> Fecha</th>
+    <th width="7%">Estado</th>
+    <th width="9%">Tipo</th>
+    <th width="50%">Notas</th>
+    <th width="10%">Programa / Partida</th>
+    <th width="7%">Importe</th>
+    <th width="7%">Opciones</th>
   </tr>
    </thead>   
 <tbody>  
 <c:set var="cont" value="${0}" />
 <c:forEach items="${requisicionesUnidad}" var="item" varStatus="status"> 
-  <tr id='f<c:out value="${cont}"/>' onMouseOver="color_over('f<c:out value="${cont}"/>')" onMouseOut="color_out('f<c:out value="${cont}"/>')">
+  <tr id='f<c:out value="${cont}"/>'>
+  	
     <td align="center" style="border-right:none">
     <sec:authorize ifNotGranted="ROLE_Sam_PRIVILEGIOS_APERTURAR_REQUISICIONES">
         <c:if test='${item.STATUS==1&&(item.TIPO==2||item.TIPO==3||item.TIPO==4||item.TIPO==5)}'>
@@ -235,7 +341,8 @@ a:active {
         <c:if test='${item.STATUS==2&&(item.TIPO==1||item.TIPO==7||item.TIPO==8)}'><input alt="<c:out value='${item.NUM_REQ}'/>" type="checkbox" id="chkrequisiciones" name="chkrequisiciones" value="<c:out value='${item.CVE_REQ}'/>"/></c:if>
     </sec:authorize>
     </td>
-    <td align="center" style="border-right:none"><sec:authorize ifAllGranted="ROLE_Sam_PRIVILEGIOS_SUBMENU_ESPECIAL_EN_LISTADO_REQUISICIONES"><a href="javascript:subOpAdm('req', <c:out value='${item.CVE_REQ}'/>, <c:out value='${item.CVE_PERS}'/>)"></sec:authorize><input type="hidden" id="NUM_REQ<c:out value='${item.CVE_REQ}'/>" value="<c:out value='${item.NUM_REQ}'/>"> <c:out value='${item.NUM_REQ}'/><sec:authorize ifAllGranted="ROLE_Sam_PRIVILEGIOS_SUBMENU_ESPECIAL_EN_LISTADO_REQUISICIONES"></a></sec:authorize></td>
+    <!--border="right" -->
+    <td style="border-right:none" align="center"><sec:authorize ifAllGranted="ROLE_Sam_PRIVILEGIOS_SUBMENU_ESPECIAL_EN_LISTADO_REQUISICIONES"><a href="javascript:subOpAdm('req', <c:out value='${item.CVE_REQ}'/>, <c:out value='${item.CVE_PERS}'/>)"></sec:authorize><input type="hidden" id="NUM_REQ<c:out value='${item.CVE_REQ}'/>" value="<c:out value='${item.NUM_REQ}'/>"> <c:out value='${item.NUM_REQ}'/><sec:authorize ifAllGranted="ROLE_Sam_PRIVILEGIOS_SUBMENU_ESPECIAL_EN_LISTADO_REQUISICIONES"></a></sec:authorize></td>
     <td align="center" style="border-right:none"><c:out value='${item.FECHA}'/></td>
     <td align="center" style="border-right:none"><c:out value='${item.DESCRIPCION_ESTATUS}'/></td>
     <td align="center" style="border-right:none"><c:out value='${item.TIPO_REQ}'/></td>
@@ -280,38 +387,46 @@ a:active {
  <c:if test="${fn:length(requisicionesUnidad) > 0}"> 
   <tr>
     <td height="40" colspan="9" align="left"  style="background-color:#FFF">
+    <div class="container col-xs-1">
         <table width="389" border="0" cellspacing="0" cellpadding="0">
           <tr>
            <c:if test="${fn:contains(status,'1')||fn:contains(status,'2')}">
             <td width="129" bgcolor="#FFFFFF">
-            	<div class="buttons tiptip">
-					<button name="cmdaperturar" id="cmdaperturar" onClick="aperturarRequisiciones()" title="Apertura para edicion los documentos seleccionados" type="button" class="button red middle"><span class="label" style="width:100px">Aperturar</span></button>
-                </div>
+            	<input type="button"  class="btn btn-sm btn-warning" value="Aperturar" name="cmdaperturar" id="cmdaperturar" onClick="aperturarRequisiciones()" title="Apertura para edicion los documentos seleccionados" style="width:100px"/>
+				<!--	<button name="cmdaperturar" id="cmdaperturar" onClick="aperturarRequisiciones()" title="Apertura para edicion los documentos seleccionados" type="button" class="btn btn-sm btn-warning" style="width:100px">Aperturar</button>-->
+               
             </td>
             </c:if>
             <sec:authorize ifAllGranted="ROLE_Sam_PRIVILEGIOS_CANCELAR_REQUISICIONES">
             <td width="135" bgcolor="#FFFFFF">
-            	<div class="buttons tiptip">
-					<button name="cmdcancelarm" id="cmdcancelarm" onClick="cancelacionMultiple()"  title="Cancela o elimina los documentos seleccionados" type="button" class="button red middle" ><span class="label" style="width:100px">Cancelar</span></button>
-               	</div>
+            	
+                	<input type="button" class="btn btn-sm btn-danger" value="Cancelar" name="cmdcancelarm" id="cmdcancelarm" onClick="cancelacionMultiple()" title="Cancela o elimina los documentos seleccionados" style="width:100px"/>
+					<!--<button name="cmdcancelarm" id="cmdcancelarm" onClick="cancelacionMultiple()"  title="Cancela o elimina los documentos seleccionados" type="button" class="btn-sm btn-danger" style="150px">Cancelar</button>-->
+               	
            </td>
            </sec:authorize>
             <sec:authorize ifAllGranted="ROLE_Sam_PRIVILEGIOS_LISTAR_LOTES_DE_REQUISICIONES_EN_EXCEL_ADMON">
             <td width="125" bgcolor="#FFFFFF">
             	<div class="buttons tiptip">
-					<button name="cmdAgregarLista" id="cmdAgregarLista" onClick="agregarReqLista()"  title="Agrega las Requisicones seleccionadas al listado especial" type="button" class="button red middle" ><span class="label" style="width:100px">Agregar a lista</span></button>
+            		<input type="button" class="btn btn-sm btn-primary" value="Agregar a Lista" name="cmdAgregarLista" id="cmdAgregarLista" onclick="agregarReglista()" title="Agrega las Requisicones seleccionadas al listado especial" style="width: 100px"/>
+					<!--<button name="cmdAgregarLista" id="cmdAgregarLista" onClick="agregarReqLista()"  title="Agrega las Requisicones seleccionadas al listado especial" type="button" class="btn-info" ><span class="label" style="width:100px">Agregar a lista</span></button>  -->
                	</div>
            </td>
            </sec:authorize>
           </tr>
-        </table></td>
+        </table>
+    </div>
+     </td>
     </tr>
    </c:if>
   </tbody> 
-  <tr>
-    <td width="3%" style="background-color:#FFF" height="25" colspan="9"><strong>Total de registros encontrados: <c:out value='${CONTADOR}'/></strong></td>
-  </tr> 
 </table>
+
+</div>
+	<div class="alert alert-info">
+		<strong>Total de registros encontrados: <c:out value='${CONTADOR}'/></strong>
+	</div>
+
+
 </form>
 </body>
-</html>

@@ -847,7 +847,7 @@ public class GatewayFacturas extends BaseGateway {
 			  this.getTransactionTemplate().execute(new TransactionCallbackWithoutResult(){
 	                @Override
 	                	protected void   doInTransactionWithoutResult(TransactionStatus status) {	
-	                	int idGrupoFirma=401; //(19) Grupo de firmas Direccion de Administracion
+	                	int idGrupoFirma=436; //(19) Grupo de firmas Direccion de Administracion
 	                		System.out.println("Leemos los datos de la nomina para procesarlos");
 	                		List<Map> nomina = getJdbcTemplate().queryForList("SELECT  N.TIPO_NOMINA, "+
 																						"VP.ID_RECURSO, "+
