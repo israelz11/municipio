@@ -89,10 +89,7 @@ public class ControladorCargarNominaDeductivas extends ControladorBase {
 	}
 	
 	public void crearFacturaOrdenPago(){
-		gatewayFacturas.crearFacturaOrdenPago(this.getSesion().getIdUsuario(), this.getSesion().getEjercicio(), Integer.parseInt(this.getSesion().getIdUnidad()), getSesion().getIdGrupo());
+		gatewayFacturas.CreatePayRollSAM(this.getSesion().getIdUsuario(), this.getSesion().getEjercicio(), Integer.parseInt(this.getSesion().getIdUnidad()), getSesion().getIdGrupo());
+		//gatewayFacturas.crearFacturaOrdenPago(this.getSesion().getIdUsuario(), this.getSesion().getEjercicio(), Integer.parseInt(this.getSesion().getIdUnidad()), getSesion().getIdGrupo());
 	}
-	
-	
-	
-	
 }

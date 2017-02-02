@@ -842,6 +842,259 @@ public class GatewayFacturas extends BaseGateway {
 		return false;
 	}
 
+	private List<Map> GetPayRollByGroup()
+	{
+		try
+		{
+			List<Map> nomina = getJdbcTemplate().queryForList(
+                	"SELECT  N.TIPO_NOMINA, "+
+							"VP.ID_RECURSO, "+
+							"VP.CLV_UNIADM, "+
+							"VP.UNIDADADM, "+
+							"N.ID_PROYECTO,  "+
+							"VP.N_PROGRAMA,  "+
+							"VP.ACT_INST,  "+
+							"N.CLV_PARTID, "+
+							"CP.PARTIDA, "+
+							"SUM(N.IMPORTE) AS IMPORTE, "+
+							"N.MES, "+
+							"N.NOTA, "+
+							"CONVERT(varchar(10), N.FECHA_NOMINA, 103) AS FECHA_NOMINA "+
+					"FROM SAM_NOMINA AS N "+
+							"INNER JOIN VPROYECTO AS VP ON (VP.ID_PROYECTO = N.ID_PROYECTO)  "+
+							"INNER JOIN CAT_PARTID AS CP ON (CP.CLV_PARTID = N.CLV_PARTID)  "+
+					"GROUP BY N.TIPO_NOMINA, VP.ID_RECURSO, VP.CLV_UNIADM, VP.UNIDADADM, N.ID_PROYECTO, VP.N_PROGRAMA, VP.ACT_INST, N.CLV_PARTID, CP.PARTIDA, N.MES, N.NOTA, FECHA_NOMINA  "+
+					"ORDER BY N.TIPO_NOMINA, VP.ID_RECURSO, VP.UNIDADADM, N.ID_PROYECTO, N.CLV_PARTID ASC");
+			
+			this.getPresupuestoInicializa();
+			
+			return nomina;
+		}
+		catch (DataAccessException e) {                     
+		      throw new RuntimeException(e.getMessage(),e);
+	}
+	}
+	
+	private List<Map> GetDeductives(String TipoNomina, int IdRecurso, String Clv_UniAdm)
+	{
+		try
+		{
+			return getJdbcTemplate().queryForList("SELECT  A.TIPO_NOM, A.ID_RECURSO, A.RECINTO, CU.UNIDADADM, A.CLV_RETENC, SUM (A.TOTAL) AS IMPORTE FROM SAM_NOMINA_DEDUCCIONES AS A "+
+					"INNER JOIN CAT_UNIADM AS CU ON (CU.CLV_UNIADM = A.RECINTO) " +
+				"WHERE A.TIPO_NOM =? AND A.ID_RECURSO =? AND A.RECINTO =? "+
+				"GROUP BY A.TIPO_NOM, A.ID_RECURSO, A.RECINTO, CU.UNIDADADM, A.CLV_RETENC "+
+				"ORDER BY A.TIPO_NOM, A.ID_RECURSO, CU.UNIDADADM, A.CLV_RETENC ASC", new Object[]{TipoNomina, IdRecurso, Clv_UniAdm});
+		}
+		catch (DataAccessException e) {                     
+		      throw new RuntimeException(e.getMessage(),e);
+		}
+	}
+	
+	private Long GetAndCreateInvoice(Map row, int idDependencia, int ejercicio, int cve_pers)
+	{
+		try
+		{
+			Long cve_factura =0L;
+			getJdbcTemplate().update("INSERT INTO SAM_FACTURAS(NUM_FACTURA, ID_TIPO, ID_ENTRADA, CLV_BENEFI, CVE_PERS, ID_DEPENDENCIA, NOTAS, EJERCICIO, PERIODO, FECHA, FECHA_DOCUMENTO, FECHA_CIERRE, SUBTOTAL, IVA, TOTAL, STATUS) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", new Object[]{
+					"NOM "+row.get("MES").toString()+" "+row.get("TIPO_NOMINA").toString()+row.get("ID_RECURSO").toString()+row.get("CLV_UNIADM").toString()+row.get("ID_PROYECTO").toString()+row.get("CLV_PARTID").toString()+row.get("N_PROGRAMA").toString(),
+					1,
+					0,
+					"8000",
+					/*row.get("ID_PROYECTO"),
+					row.get("CLV_PARTID"),*/
+					cve_pers,
+					idDependencia,
+					row.get("NOTA"),
+					ejercicio,
+					row.get("MES"),
+					new Date(),
+					new Date(),
+					null,
+					0,
+					0,
+					0,
+					0 /*Validar aqui el finiquitado si tiene suficiencia*/
+			});
+			
+			//Recupera la factura 
+			cve_factura = getJdbcTemplate().queryForLong("SELECT MAX(CVE_FACTURA) FROM SAM_FACTURAS");
+			
+			return cve_factura;
+		}
+		catch(DataAccessException e)
+		{
+			throw new RuntimeException(e.getMessage(),e);
+		}
+	}
+	
+	private Double SaveDeductivesAndRetention(List<Map> Deductives, Long cve_factura)
+	{
+		try
+		{
+			int c = 0;
+			Double retencAnt = 0.00;
+			
+			for(Map rw:Deductives){
+				c++;
+				retencAnt += Double.parseDouble(rw.get("IMPORTE").toString());
+				getJdbcTemplate().update("INSERT INTO SAM_FACTURA_MOV_RETENC(CVE_FACTURA, CONS, CLV_RETENC, IMPORTE) VALUES (?,?,?,?)", new Object[]{
+						cve_factura,
+						c,
+						rw.get("CLV_RETENC"),
+						rw.get("IMPORTE")
+				});
+			}
+			
+			return retencAnt;
+		}
+		catch(DataAccessException e)
+		{
+			throw new RuntimeException(e.getMessage(),e);
+		}
+	}
+
+	private void CloseInvoice(Long cve_factura, boolean InvoicePresupuest, Double Amount)
+	{
+		try
+		{
+			//Guardar el Importe total
+			getJdbcTemplate().update("UPDATE SAM_FACTURAS SET FECHA_CIERRE = ?, STATUS = ?, TOTAL = ? WHERE CVE_FACTURA =?", new Object[]{(InvoicePresupuest ? new Date():null), (InvoicePresupuest ? 1:0), Amount, cve_factura});
+		}
+		catch(DataAccessException e)
+		{
+			throw new RuntimeException(e.getMessage(),e);
+		}
+	}
+	
+	private void CreatePayOrder(Long cve_factura, int idDependencia, int idRecursoAnt, int idGrupoFirma, int periodoAnt, String fecha_nomina, Double retencAnt, String Nota, int ejercicio, int cve_pers)
+	{
+		try
+		{
+			Double importe = (Double) getJdbcTemplate().queryForObject("SELECT SUM(TOTAL) FROM SAM_FACTURAS WHERE CVE_FACTURA IN ("+ cve_factura +") ", Double.class);
+			Double importeRetenc = (Double) getJdbcTemplate().queryForObject("SELECT SUM(IMPORTE) FROM SAM_FACTURA_MOV_RETENC WHERE CVE_FACTURA IN (" + cve_factura + ") ", Double.class);
+			getJdbcTemplate().update("INSERT INTO SAM_ORD_PAGO (ID_DEPENDENCIA, ID_RECURSO, ID_GRUPO, EJERCICIO, PERIODO, FECHA, FECHA_CIERRE, TIPO, CLV_BENEFI, CVE_PERS, REEMBOLSOF, CONCURSO, IMPORTE, RETENCION, IMP_NETO, NOTA, STATUS, IVA, IMPORTE_IVA) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", new Object[]{
+					idDependencia,
+					idRecursoAnt,
+					idGrupoFirma,
+					ejercicio,
+					periodoAnt,
+					fecha_nomina,
+					(getJdbcTemplate().queryForInt("SELECT COUNT(*) FROM SAM_FACTURAS WHERE STATUS=0 AND CVE_FACTURA IN ("+ cve_factura +")") ==0 ? new Date(): null),
+					9,
+					"8000",
+					cve_pers,
+					"N",
+					"",
+					importe,
+					retencAnt,
+					(importe-retencAnt),
+					Nota,
+					(getJdbcTemplate().queryForInt("SELECT COUNT(*) FROM SAM_FACTURAS WHERE STATUS=0 AND CVE_FACTURA IN ("+ cve_factura +")") ==0 ? 0: -1) /*Estatus de la OP*/,
+					0,
+					0
+			});
+			
+			Long cve_op = getJdbcTemplate().queryForLong("SELECT MAX(CVE_OP) FROM SAM_ORD_PAGO");
+			Long cve_facturaTemp =0L;
+			
+			//Guarda los movimientos de la orden de Pago
+			List<Map> facturas = getJdbcTemplate().queryForList("SELECT F.*, FAC.NUM_FACTURA FROM SAM_FACTURA_DETALLE AS F INNER JOIN SAM_FACTURAS AS FAC ON (FAC.CVE_FACTURA = F.CVE_FACTURA) WHERE F.CVE_FACTURA IN ("+cve_factura+") ORDER BY F.CVE_FACTURA ASC");
+			for(Map rw : facturas)
+			{
+				getJdbcTemplate().update("INSERT INTO SAM_MOV_OP(CVE_OP, CVE_FACTURA, ID_PROYECTO, CLV_PARTID, NOTA, TIPO, MONTO) VALUES(?,?,?,?,?,?,?)", new Object[]{
+						cve_op,
+						rw.get("CVE_FACTURA"),
+						rw.get("ID_PROYECTO"),
+						rw.get("CLV_PARTID"),
+						"Soporta la Factura: "+rw.get("NUM_FACTURA").toString(),
+						"LIBRE",
+						rw.get("IMPORTE")
+				});
+				
+				cve_facturaTemp = Long.parseLong(rw.get("CVE_FACTURA").toString());
+				
+				//Actualizamos la OP en facturas
+				getJdbcTemplate().update("UPDATE SAM_FACTURAS SET CVE_OP = ? WHERE CVE_FACTURA =?", new Object[]{cve_op, rw.get("CVE_FACTURA")});
+			}
+		}
+		catch (DataAccessException e) {                     
+		      throw new RuntimeException(e.getMessage(),e);
+		}
+	}
+	
+	public void CreatePayRollSAM(final int cve_pers, final int ejercicio, final int idDependencia, final int idGrupo)
+	{
+		try
+		{
+			this.getTransactionTemplate().execute(new TransactionCallbackWithoutResult(){
+                @Override 
+                protected void doInTransactionWithoutResult(TransactionStatus status) {
+                	String tipoNomina = ""; int idRecurso = 0; String clv_uniadm = ""; String fecha_nomina = "";
+            		Double GlobalRetenc = 0.00; int valor = 0; Vector ListInvoice = new Vector(); String Month = "";
+            		Long cve_factura = 0L; boolean InvoicePresupuest = true; Double Amount = 0d;
+            		String Note = "";
+                	int idGrupoFirma = 436; //(19) Grupo de firmas Direccion de Administracion
+                	
+                	//Agrupado de Nomina por TIPO_NOMINA, CLV_UNIADM Y ID_RECURSO
+                	List<Map> nomina = GetPayRollByGroup();
+                	for(Map row: nomina)
+                	{
+                		valor++;
+                		
+                		if(!tipoNomina.equals(row.get("TIPO_NOMINA").toString()) && idRecurso != ((Integer) row.get("ID_RECURSO")) && !clv_uniadm.equals(row.get("CLV_UNIADM").toString())){
+                			//Si ya existe una factura y regresa a una diferente cerrar la anterior
+                			if(cve_factura!=0)
+                			{
+                				CloseInvoice(cve_factura, InvoicePresupuest, Amount);
+                				CreatePayOrder(cve_factura, idDependencia, idRecurso, idGrupoFirma, Integer.parseInt(Month), fecha_nomina, GlobalRetenc, Note, ejercicio, cve_pers);
+                			}
+
+            				//Crear la factura 
+            				cve_factura = GetAndCreateInvoice(row, idDependencia, ejercicio, cve_pers);
+            				//ListInvoice.add(cve_factura);
+            				fecha_nomina = row.get("FECHA_NOMINA").toString();
+            				//Obtener las deductivas y retenciones para guardar
+            				List<Map> Deductives = GetDeductives(row.get("TIPO_NOMINA").toString(), (Integer)row.get("ID_RECURSO"), row.get("CLV_UNIADM").toString());
+            				GlobalRetenc = SaveDeductivesAndRetention(Deductives, cve_factura);
+            				
+            				tipoNomina = row.get("TIPO_NOMINA").toString();
+            				clv_uniadm = row.get("CLV_UNIADM").toString();
+            				idRecurso = (Integer) row.get("ID_RECURSO");
+            				Amount = 0d;
+            				Month = row.get("MES").toString();
+            				Note = row.get("NOTA").toString();
+            				InvoicePresupuest = true;
+            				//fecha_nomina = "";
+            			}
+                		
+                		//Valida aqui el preupuesto del proyecto y partida para cerrar las facturas
+                		boolean disponible = getDisponiblePresupuesto((Integer) row.get("ID_PROYECTO"), row.get("CLV_PARTID").toString(), Double.parseDouble(row.get("IMPORTE").toString()));
+                		if(!disponible)
+                			InvoicePresupuest = false;
+                		
+                		if(tipoNomina.equals(row.get("TIPO_NOMINA").toString()) && idRecurso ==((Integer) row.get("ID_RECURSO")) && clv_uniadm.equals(row.get("CLV_UNIADM").toString()))
+                		{
+                			Amount += Double.parseDouble(row.get("IMPORTE").toString());
+                			//Guardar cada movimiento en la factura creada anteriormente
+            				getJdbcTemplate().update("INSERT INTO SAM_FACTURA_DETALLE(CVE_FACTURA, ID_PROYECTO, CLV_PARTID, IMPORTE) VALUES(?,?,?,?)", new Object[]{cve_factura, row.get("ID_PROYECTO"), row.get("CLV_PARTID"), row.get("IMPORTE")});
+                		}
+                		
+                		if(valor == nomina.size())
+                		{
+            				CloseInvoice(cve_factura, InvoicePresupuest, Amount);
+            				CreatePayOrder(cve_factura, idDependencia, idRecurso, idGrupoFirma, Integer.parseInt(row.get("MES").toString()), fecha_nomina, GlobalRetenc, row.get("NOTA").toString(), ejercicio, cve_pers);
+            			}
+                	}
+                	
+                	presupuesto = null;
+                }
+			});
+		}
+		catch (DataAccessException e) {                     
+	      throw new RuntimeException(e.getMessage(),e);
+	    }
+	}
+	
 	public void crearFacturaOrdenPago(final int cve_pers, final int ejercicio, final int idDependencia, final int idGrupo){
 		try {                
 			  this.getTransactionTemplate().execute(new TransactionCallbackWithoutResult(){
@@ -886,7 +1139,8 @@ public class GatewayFacturas extends BaseGateway {
 	                		int valor = 0;
 	                		int total_req = nomina.size();
 	                		
-	                		for(Map row: nomina){
+	                		for(Map row: nomina)
+	                		{
 	                			//Valida aqui el preupuesto del proyecto y partida para cerrar las facturas
 	                			boolean disponible = getDisponiblePresupuesto((Integer) row.get("ID_PROYECTO"), row.get("CLV_PARTID").toString(), Double.parseDouble(row.get("IMPORTE").toString()));
 	                			
