@@ -39,7 +39,7 @@ public class GatewayUsuarios extends BaseGateway {
 	
 	public List<Map> getUsuariosUnidad(String idUnidad){		
 		  return this.getJdbcTemplate().queryForList("SELECT     b.CVE_PERS , '('+b.LOGIN + ') ' + a.NOMBRE+' '+a.APE_PAT +' '+a.APE_MAT  NOMBRE_COMPLETO "+
-		  		" FROM PERSONAS  a INNER JOIN  USUARIOS_EX b ON a.CVE_PERS = b.CVE_PERS INNER JOIN  TRABAJADOR c ON  a.CVE_PERS = c.CVE_PERS  where c.ID_DEPENDENCIA=? ORDER BY NOMBRE_COMPLETO ", new Object []{idUnidad});		
+		  		" FROM PERSONAS  a INNER JOIN  USUARIOS_EX b ON a.CVE_PERS = b.CVE_PERS INNER JOIN  TRABAJADOR c ON  a.CVE_PERS = c.CVE_PERS  where c.ID_DEPENDENCIA=? AND b.ACTIVO='S' ORDER BY NOMBRE_COMPLETO ", new Object []{idUnidad});		
 		}
 	public Map getUsuarioLogin(String usuario){
 		  return this.getJdbcTemplate().queryForMap("SELECT     dbo.TRABAJADOR.ID_DEPENDENCIA, dbo.CAT_DEPENDENCIAS.DEPENDENCIA, dbo.CAT_DEPENDENCIAS.CLV_UNIADM, dbo.USUARIOS_EX.CVE_PERS, " +
