@@ -2343,7 +2343,7 @@ th {
   background-color: #f9f9f9;
 }
 .table-hover > tbody > tr:hover {
-  background-color: #f5f5f5;
+  background-color: #f5f5f5;/*#f5f5f5;*/
 }
 table col[class*="col-"] {
   position: static;
@@ -3196,26 +3196,26 @@ fieldset[disabled] .btn-primary.focus {
 }
 .btn-success {
   color: #fff;
-  background-color: #5cb85c;
-  border-color: #4cae4c;
+  background-color: #5cb85c; /*background-color 5cb85c*/
+  border-color: #4cae4c; /*border-color 4cae4c*/
 }
 .btn-success:focus,
 .btn-success.focus {
   color: #fff;
-  background-color: #449d44;
-  border-color: #255625;
+  background-color: #449d44;  /*background-color 449d44*/
+  border-color: #255625; /*border-color 255625*/
 }
 .btn-success:hover {
   color: #fff;
-  background-color: #449d44;
-  border-color: #398439;
+  background-color: #449d44; /*background-color 449d44*/
+  border-color: #398439; /*background-color 398439*/
 }
 .btn-success:active,
 .btn-success.active,
 .open > .dropdown-toggle.btn-success {
   color: #fff;
-  background-color: #449d44;
-  border-color: #398439;
+  background-color: #449d44; /*background-color 449d44*/
+  border-color: #398439; /*background-color 398439*/
 }
 .btn-success:active:hover,
 .btn-success.active:hover,
@@ -3227,8 +3227,8 @@ fieldset[disabled] .btn-primary.focus {
 .btn-success.active.focus,
 .open > .dropdown-toggle.btn-success.focus {
   color: #fff;
-  background-color: #398439;
-  border-color: #255625;
+  background-color: #398439; /*background-color 398439*/
+  border-color: #255625;  /*border-color 255625*/
 }
 .btn-success:active,
 .btn-success.active,
@@ -3244,12 +3244,12 @@ fieldset[disabled] .btn-success:focus,
 .btn-success.disabled.focus,
 .btn-success[disabled].focus,
 fieldset[disabled] .btn-success.focus {
-  background-color: #5cb85c;
-  border-color: #4cae4c;
+  background-color: #5cb85c; /*background-color 5cb85c*/
+  border-color: #4cae4c;  /*border-color 4cae4c*/
 }
 .btn-success .badge {
-  color: #5cb85c;
-  background-color: #fff;
+  color: #5cb85c;  /*background-color 5cb85c*/
+  background-color: #fff; /*blanco*/
 }
 .btn-info {
   color: #fff;

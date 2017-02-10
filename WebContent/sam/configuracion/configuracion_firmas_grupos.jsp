@@ -6,8 +6,9 @@
 <title>Configuración de Firmas</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
-<link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css">
+<!--<link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css">-->
 <link rel="stylesheet" href="../../include/css/bootstrap.css" type="text/css">
+<link rel="stylesheet" href="../../include/css/bootstrap2.css" type="text/css">
 <link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css">
 <link type="text/css" href="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.css" rel="stylesheet" />	
 <script type="text/javascript" src="../../include/js/jquery-1.3.2.min.js"></script>
@@ -35,51 +36,56 @@
 <form name="forma" method="get" action="" onSubmit=" return false" class="form-horizontal">
 <br />
   <div style="width:1200px; margin-left:auto; margin-right:auto" class="container"> 
-  	<div class="row">
-        <h1 class="h1"> Configuración - Grupos de Firmas</h1>
-    </div>
-    <div class="form-group" id="combos">
-	    <label for="inputName" class="control-label col-xs-2">Grupo:</label>
-        <div class="col-xs-5">
-       		 <select name="grupo" size="1" id="grupo" class="form-control" onChange="pintarTablaDetalles()" border="0" style="width:400px;">
-                <option value="">[Seleccione]</option>
-                    <c:forEach items="${grupos}" var="item" varStatus="status">
-                <option value="<c:out value='${item.ID_GRUPO_CONFIG}'/>" >
+  	
+  		<div class="row col-md-offset-2">
+        	<h1 class="h1-encabezado"> Configuración - Grupos de Firmas</h1>
+	    </div>
+        <div class="well">
+    	<div class="form-group" id="combos">
+	    	<label for="inputName" class="control-label col-xs-2">Grupo:</label>
+	        <div class="col-xs-5">
+    	   		 <select name="grupo" size="1" id="grupo" class="form-control" onChange="pintarTablaDetalles()" border="0" style="width:400px;">
+        	        <option value="">[Seleccione]</option>
+           	        <c:forEach items="${grupos}" var="item" varStatus="status">
+                	<option value="<c:out value='${item.ID_GRUPO_CONFIG}'/>" >
                     <c:out value="${item.GRUPO_CONFIG}"/>
-                </option>
-                    </c:forEach>
-            </select>
-            <input type="hidden" name="clave" id="clave" />
-        </div>
-    </div>
-    <div class="form-group">
-    	<label for="inputName" class="control-label col-xs-2">Tipo de frma:</label>
-	    <div class="col-xs-5">
-    		<select name="tipoFirma" size="1" class="form-control"  id="tipoFirma" style="width:400px;">      
-        	    <option value="">[Seleccione]</option>
-            	<c:forEach items="${tipoFirmas}" var="item" varStatus="status">
-	            <option value="<c:out value='${item.TIPO}'/>" >	
-    	        <c:out value="${item.TIPO}"/>
-        	    </option>
-            	</c:forEach>
-    	   </select>
-       </div>	
-    </div>
-    <div class="form-group">
-    	 <label for="inputName" class="control-label col-xs-2">Representante:</label>
-         <div class="col-xs-5">
-             <input type="text" name="representante" id="representante" value="" class="form-control" placeholder="Nombre del representante" style="width:400px;">
-         </div>
-	</div>
-    <div class="form-group">
-         <label for="inputName" class="control-label col-xs-2">Cargo:</label>
-         <div class="col-xs-5">
-             <input type="text" name="cargo" id="cargo" value="" class="form-control" placeholder="Cargo del representante" style="width:400px;"><br>
-             <input type="button"  class="btn btn-success btn-sm"  name="btnGrabar" value="Guardar"  onClick="guardar()" style="width:100px"/>
-    	     <input type="button"  class="btn btn-info btn-sm"  name="btnlimpiar" value="Nuevo"  onClick="limpiar()" style="width:100px"/>
-         </div>
-	
-	<table class="table table-hover table table-condensed" cellpadding="0" cellspacing="0" id="detallesTabla" >
+	                </option>
+    	            </c:forEach>
+        	    </select>
+            	<input type="hidden" name="clave" id="clave" />
+	        </div>
+    	</div>
+	    <div class="form-group">
+    		<label for="inputName" class="control-label col-xs-2">Tipo de frma:</label>
+	    	<div class="col-xs-5">
+    			<select name="tipoFirma" size="1" class="form-control"  id="tipoFirma" style="width:400px;">      
+	        	    <option value="">[Seleccione]</option>
+    	        	<c:forEach items="${tipoFirmas}" var="item" varStatus="status">
+	    	        <option value="<c:out value='${item.TIPO}'/>" >	
+    	    	    <c:out value="${item.TIPO}"/>
+        	    	</option>
+	            	</c:forEach>
+    		   </select>
+       		</div>	
+	    </div>
+    	<div class="form-group">
+    		 <label for="inputName" class="control-label col-xs-2">Representante:</label>
+	         <div class="col-xs-5">
+    	         <input type="text" name="representante" id="representante" value="" class="form-control" placeholder="Nombre del representante" style="width:400px;">
+        	 </div>
+		</div>
+    	<div class="form-group">
+        	 <label for="inputName" class="control-label col-xs-2">Cargo:</label>
+	         <div class="col-xs-5">
+    	         <input type="text" name="cargo" id="cargo" value="" class="form-control" placeholder="Cargo del representante" style="width:400px;"><br>
+        	     <input type="button"  class="btn btn-success btn-sm"  name="btnGrabar" value="Guardar"  onClick="guardar()" style="width:100px"/>
+    	    	 <input type="button"  class="btn btn-info btn-sm"  name="btnlimpiar" value="Nuevo"  onClick="limpiar()" style="width:100px"/>
+	         </div>
+		</div>	
+       
+	</div>  
+	 
+  	<table class="table table-hover table table-condensed" cellpadding="0" cellspacing="0" id="detallesTabla" >
     	<thead>
 	      <tr>
     	    <th width="3%" height="20" class="col-sm-1"><img src="../../imagenes/cross.png" width="16" height="16" onClick="eliminar()" style='cursor: pointer;'></th>
@@ -92,7 +98,7 @@
     	<tbody>
 	    </tbody>
   </table>
- </div>
+</div>
 </form>
 </body>
 </html>
