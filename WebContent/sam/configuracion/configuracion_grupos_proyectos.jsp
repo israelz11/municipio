@@ -33,7 +33,6 @@
 <![endif]-->
 <body >
 <form class="form-horizontal" role="form" name="forma" method="get" action="" onSubmit=" return false" >
-
   <div style="width:1200px; margin-left:auto; margin-right:auto" class="container"> 
         <div class="row">
           <h1 class="h1"> Configuración - Grupos de proyectos</h1>

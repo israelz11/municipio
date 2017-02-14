@@ -17,7 +17,6 @@
 
 <script type="text/javascript" src="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.min.js"></script>
 <script type="text/javascript" src="../../include/js/toolSam.js"></script>
-  
 <script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>
 <script type="text/javascript" src="configuracion_grupos_partidas.js"></script>
 <body >
