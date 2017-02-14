@@ -6,9 +6,8 @@
 <title>Configuración de Firmas</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
-<!--<link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css">-->
+<link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css">
 <link rel="stylesheet" href="../../include/css/bootstrap.css" type="text/css">
-<link rel="stylesheet" href="../../include/css/bootstrap2.css" type="text/css">
 <link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css">
 <link type="text/css" href="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.css" rel="stylesheet" />	
 <script type="text/javascript" src="../../include/js/jquery-1.3.2.min.js"></script>
@@ -22,7 +21,6 @@
 <script type="text/javascript" src="../../include/js/toolSam.js"></script>
 <script type="text/javascript" src="../../include/js/presupuesto/presupuesto.js"></script>
 <script type="text/javascript" src="../../include/js/otros/productos.js"></script>
-<script type="text/javascript" src="../../include/js/bootstrap-3.3.6.js"></script>
 <link rel="stylesheet" href="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.css" type="text/css" />
 <link rel="stylesheet" href="../../include/js/autocomplete/jquery.autocomplete.css" type="text/css" />
 <!--<script type="text/javascript" src="../../include/js/jquery.tabs/jquery-1.1.3.1.pack.js"></script>
@@ -35,18 +33,16 @@
 <![endif]-->
 <body >
 <form class="form-horizontal" role="form" name="forma" method="get" action="" onSubmit=" return false" >
-<br/>
+
   <div style="width:1200px; margin-left:auto; margin-right:auto" class="container"> 
-  
-        <div class="row col-md-offset-2">
-          <h1 class="h1-encabezado"> Configuración - Grupos de proyectos</h1>
+        <div class="row">
+          <h1 class="h1"> Configuración - Grupos de proyectos</h1>
         </div>  
-       
-        <div class="well">
+        <br>
         <div class="form-group">
-          <label for="unidad" class="col-md-2 control-label">Unidad:</label>
-          <div class="col-md-5">
-            <select name="unidad" size="1" class="comboBox form-control small"  id="unidad" onChange="pintarTablaDetalles()"  style="width:445px;">
+          <label for="unidad" class="col-lg-2 control-label">Unidad:</label>
+          <div class="col-lg-10">
+            <select name="unidad" size="1" class="comboBox form-control"  id="unidad" onChange="pintarTablaDetalles()"  style="width:445px;">
               <option value="">[Seleccione]</option>
               <c:forEach items="${unidadesAdmiva}" var="item" varStatus="status">
               <option value="<c:out value='${item.ID}'/>">
@@ -57,8 +53,8 @@
           </div>
         </div> 
         <div class="form-group">
-           <label for="grupo" class="col-md-2 control-label">Grupo:</label>
-           <div class="col-md-5">
+           <label for="grupo" class="col-lg-2 control-label">Grupo:</label>
+           <div class="col-lg-10">
                <select name="grupo" size="1" class="comboBox form-control" id="grupo" onChange="pintarTablaDetalles()" style="width:445px;">
                 <option value="">[Seleccione]</option>
                   <c:forEach items="${grupos}" var="item" varStatus="status">
@@ -70,13 +66,7 @@
               <input type="hidden" name="clave" id="clave" />
            </div>
         </div>
-         <div class="form-group">
-          <div class="col-md-2 col-md-offset-2">
-             <input type="button"  class="btn btn-success btn-sm" name="btnGrabar" value="Guardar"  onClick="guardarProyectosGrupos()" style="width:100px"/>
-          </div>
-    </div>  
-     </div>
-       
+        
     <table class="table table-hover table table-condensed" cellpadding="0" cellspacing="0" id="detallesTabla" >
       <thead>
         <tr>
@@ -103,6 +93,11 @@
           </c:forEach>
         </tbody>
     </table>  
+    <div class="form-group">
+          <div class="col-lg-10">
+             <input type="button"  class="btn btn-success btn-sm" name="btnGrabar" value="Guardar"  onClick="guardarProyectosGrupos()" style="width:100px"/>
+          </div>
+    </div>  
   </div>
   
 </form>
