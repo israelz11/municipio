@@ -5,15 +5,9 @@
 <head>
 <title>Configuración de Firmas</title>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
-
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="../../include/css/bootstrap.css" type="text/css">
-<link rel="stylesheet" href="../../include/css/bootstrap2.css" type="text/css">
-<!--<link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css">-->
+<link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css">
 <link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css">
 <link type="text/css" href="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.css" rel="stylesheet" />	
-
-
 <script type="text/javascript" src="../../include/js/jquery-1.3.2.min.js"></script>
 <script type="text/javascript" src="../../include/js/jquery-impromptu.2.3.js"></script>
 <script type="text/javascript" src="../../include/js/componentes/componentes.js"></script>
@@ -36,41 +30,32 @@
 <link rel="stylesheet" href="../../include/js/jquery.tabs/jquery.tabs-ie.css" type="text/css" media="projection, screen">
 <![endif]-->
 <body >
-<form class="form-horizontal" name="forma" method="get" action="" onSubmit=" return false" >
+<form name="forma" method="get" action="" onSubmit=" return false" >
 <br />
-<div style="width:1200px; margin-left:auto; margin-right:auto" class="container">
-	<div class="row col-md-offset-2">
-          <h1 class="h1-encabezado">Configuración - Grupos de tipos de Requisiciones</h1>
-    </div>  
-    <div class="well">
-    <br>
-    <div class="form-group">
-          <label for="grupo" class="col-md-2 control-label">Grupo:</label>
-          <div class="col-md-5">
-   			<select name="grupo" size="1" class="comboBox form-control" id="grupo" onChange="pintarTablaDetalles()" style="width:450px;">
-        	  	<option value="">[Seleccione]</option>
-	          		<c:forEach items="${grupos}" var="item" varStatus="status">
-            		<option value="<c:out value='${item.ID_GRUPO_CONFIG}'/>" >
-	                <c:out value="${item.GRUPO_CONFIG}"/>
-            	</option>
-            		</c:forEach>
-    	    </select>
-          </div>
-	</div> 
-    <div class="form-group">
-    	<div class="col-md-2 col-md-offset-2">
- 			 <input type="button"  class="btn btn-success btn-sm"  name="btnGrabar" value="Guardar"  onClick="guardarValesGrupos()" style="width:100px"/>
-        </div>
-   	</div>  
-	</div>
-
-  
-  <table width="90%" border="0" align="center" cellpadding="0" cellspacing="0" class="table">
+  <table width="90%" align="center"><tr><td><h1>Configuración - Grupos de tipos de Requisiciones</h1></td></tr></table>
+  <table width="90%" border="0" align="center" cellpadding="0" cellspacing="0" class="formulario">
     <tr>
-      <th width="15%" height="30">Tipos de Requisiciones</th>
-      <td width="85%"><table width="100%"  border="0" align="center"  cellpadding="0" cellspacing="0" class="table table-hover table table-condensed"  id="detallesTabla" >
-        <thead class="thead-inverse">
-          <tr>
+      <th height="17">&nbsp;</th>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <th height="30">Grupo:</th>
+      <td><label>
+        <select name="grupo" size="1" class="comboBox" id="grupo" onChange="pintarTablaDetalles()" style="width:450px;">
+          <option value="">[Seleccione]</option>
+          <c:forEach items="${grupos}" var="item" varStatus="status">
+              <option value="<c:out value='${item.ID_GRUPO_CONFIG}'/>" >
+                <c:out value="${item.GRUPO_CONFIG}"/>
+                </option>
+            </c:forEach>
+        </select>
+      </label></td>
+    </tr>
+    <tr>
+      <th width="15%" height="30">Tipo Req:</th>
+      <td width="85%"><table width="100%"  border="0" align="center"  cellpadding="0" cellspacing="0" class="listas"  id="detallesTabla" >
+        <thead>
+          <tr >
             <th width="6%" height="20"><input type="checkbox" name="todos" id="todos" ></th>
             <th width="94%"  >Descripción</th>
             </tr>
@@ -79,10 +64,15 @@
         </tbody>
       </table></td>
     </tr>
-    
+    <tr>
+      <td height="30">&nbsp;</td>
+      <td><input type="button"  class="botones"  name="btnGrabar" value="Guardar"  onClick="guardarValesGrupos()" style="width:100px"/></td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center">&nbsp;</td>
+    </tr>
   </table>
   <br />
-  </div>
 </form>
 </body>
 </html>

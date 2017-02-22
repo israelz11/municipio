@@ -5,13 +5,9 @@
 <head>
 <title>Configuración de Firmas</title>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="../../include/css/bootstrap.css" type="text/css">
-<link rel="stylesheet" href="../../include/css/bootstrap2.css" type="text/css">
-<!--<link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css">-->
+<link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css">
 <link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css">
 <link type="text/css" href="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.css" rel="stylesheet" />	
-<script type="text/javascript" src="../../include/js/bootstrap-3.3.6.js"></script>
 <script type="text/javascript" src="../../include/js/jquery-1.3.2.min.js"></script>
 <script type="text/javascript" src="../../include/js/jquery-impromptu.2.3.js"></script>
 <script type="text/javascript" src="../../include/js/componentes/componentes.js"></script>
@@ -32,40 +28,31 @@
 <link rel="stylesheet" href="../../include/js/jquery.tabs/jquery.tabs-ie.css" type="text/css" media="projection, screen">
 <![endif]-->
 <body >
-<form class="form-horizontal" name="forma" method="get" action="" onSubmit=" return false" >
+<form name="forma" method="get" action="" onSubmit=" return false" >
 <br />
- <div style="width:1200px; margin-left:auto; margin-right:auto" class="container"> 
-  
-        <div class="row col-md-offset-2">
-          <h1 class="h1-encabezado"> Configuración - Grupos de Vales</h1>
-        </div>  
-        <div class="well">
-        <br>
-        <div class="form-group">
-          <label for="grupo" class="col-md-2 control-label">Grupo:</label>
-          <div class="col-md-5">
-   			 <select name="grupo" size="1" class="comboBox form-control small" id="grupo" onChange="pintarTablaDetalles()" style="width:445px;">
-		          <option value="">[Seleccione]</option>
-        			  <c:forEach items="${grupos}" var="item" varStatus="status">
-	        	      <option value="<c:out value='${item.ID_GRUPO_CONFIG}'/>" >
-    	        	  <c:out value="${item.GRUPO_CONFIG}"/>
+  <table width="90%" align="center"><tr><td><h1>Configuración - Grupos de vales</h1></td></tr></table>
+  <table width="90%" border="0" align="center" cellpadding="0" cellspacing="0" class="formulario">
+    <tr>
+      <th height="14">&nbsp;</th>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <th height="30">Grupo:</th>
+      <td><label>
+        <select name="grupo" size="1" class="comboBox" id="grupo" onChange="pintarTablaDetalles()" style="width:445px;">
+          <option value="">[Seleccione]</option>
+          <c:forEach items="${grupos}" var="item" varStatus="status">
+              <option value="<c:out value='${item.ID_GRUPO_CONFIG}'/>" >
+                <c:out value="${item.GRUPO_CONFIG}"/>
                 </option>
-		            </c:forEach>
-        	</select>
-          </div>
-        </div> 
-        <div class="form-group">
-        	<div class="col-md-2 col-md-offset-2">
- 			 <input type="button"  class="btn btn-success btn-sm"  name="btnGrabar" value="Guardar"  onClick="guardarValesGrupos()" style="width:100px"/>
-          	</div>
-   		</div>  
-	</div>
-    <div class="form-group">
-    	<table width="100%"  cellpadding="0" cellspacing="0" class="table">
-        	 <tr>
+            </c:forEach>
+        </select>
+      </label></td>
+    </tr>
+    <tr>
       <th width="14%" height="30">Tipo Vale:</th>
-      <td width="86%"><table width="100%"  border="0" align="center"  cellpadding="0" cellspacing="0" class="table table-hover table table-condensed"  id="detallesTabla" >
-        <thead class="thead-inverse">
+      <td width="86%"><table width="100%"  border="0" align="center"  cellpadding="0" cellspacing="0" class="listas"  id="detallesTabla" >
+        <thead>
           <tr >
             <th width="4%" height="20"><input type="checkbox" name="todos" id="todos" ></th>
             <th width="14%"  align="center" >Clave</th>
@@ -76,25 +63,16 @@
         </tbody>
       </table></td>
     </tr>
-        </table>
-    </div>
-  <!--
-	<div class="form-group">
-    <div class="col-md-offset-1">   
-		<table width="100%"  cellpadding="0" cellspacing="0" class="table table-hover table table-condensed"  id="detallesTabla" >
-	   		<thead class="thead-inverse">
-	        <tr>
-    	      <th width="3%" height="10" class="col-sm-1"><input type="checkbox" name="todos" id="todos" ></th>
-        	  <th width="24%"  align="center" class="col-sm-2">Clave</th>
-	          <th width="40%" class="col-sm-5" style="text-center: left;">Descripción</th>
-    	    </tr>
-        	<tbody>
-	        </tbody>
-      </table>
-   </div>
-   </div>
-   -->
-  </div>
+    <tr>
+      <th height="30">&nbsp;</th>
+      <td><input type="button"  class="botones"  name="btnGrabar" value="Guardar"  onClick="guardarValesGrupos()" style="width:100px"/></td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center">&nbsp;</td>
+    </tr>
+  </table>
+  <br />
 </form>
 </body>
+
 </html>

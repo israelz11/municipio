@@ -47,8 +47,8 @@ function limpiar(){
     var htmlCheck = "<input type='checkbox' name='claves' id='claves' value='"+id_proyecto+"' "+selected+" >";
 	row.appendChild( Td("",centro,"",htmlCheck) );
 	row.appendChild( Td("("+id_proyecto+")["+k_proyecto_t+"] "+proyecto,centro,"","") );	  
-	row.appendChild( Td(descripcion,izquierda,"","") );/*a linear a la izquierda las filas de la columna 2 */
-	row.appendChild( Td(unidad_adm,izquierda,"","") );/*a linear a la izquierda las filas de la columna 3 */
+	row.appendChild( Td(descripcion,izquierda,"","") );
+	row.appendChild( Td(unidad_adm,izquierda,"","") );
 	tabla.appendChild( row );
  }
  
