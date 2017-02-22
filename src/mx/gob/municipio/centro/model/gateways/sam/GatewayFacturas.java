@@ -1016,6 +1016,21 @@ public class GatewayFacturas extends BaseGateway {
 				//Actualizamos la OP en facturas
 				getJdbcTemplate().update("UPDATE SAM_FACTURAS SET CVE_OP = ? WHERE CVE_FACTURA =?", new Object[]{cve_op, rw.get("CVE_FACTURA")});
 			}
+			
+			//Guardamos las deductivas de la OP
+			int i =0;
+			List<Map> retenciones = getJdbcTemplate().queryForList("SELECT *FROM SAM_FACTURA_MOV_RETENC WHERE CVE_FACTURA =?", new Object[]{cve_facturaTemp});
+			for(Map retenc : retenciones)
+			{
+				i++;
+				getJdbcTemplate().update("INSERT INTO MOV_RETENC(CVE_OP, RET_CONS, CLV_RETENC, IMPORTE, PAGADO) VALUES(?,?,?,?,?)", new Object[]{
+						cve_op,
+						i,
+						retenc.get("CLV_RETENC"),
+						retenc.get("IMPORTE"),
+						0
+				});
+			}
 		}
 		catch (DataAccessException e) {                     
 		      throw new RuntimeException(e.getMessage(),e);
@@ -1075,6 +1090,34 @@ public class GatewayFacturas extends BaseGateway {
                 		if(tipoNomina.equals(row.get("TIPO_NOMINA").toString()) && idRecurso ==((Integer) row.get("ID_RECURSO")) && clv_uniadm.equals(row.get("CLV_UNIADM").toString()))
                 		{
                 			Amount += Double.parseDouble(row.get("IMPORTE").toString());
+                			//Guardar cada movimiento en la factura creada anteriormente
+            				getJdbcTemplate().update("INSERT INTO SAM_FACTURA_DETALLE(CVE_FACTURA, ID_PROYECTO, CLV_PARTID, IMPORTE) VALUES(?,?,?,?)", new Object[]{cve_factura, row.get("ID_PROYECTO"), row.get("CLV_PARTID"), row.get("IMPORTE")});
+                		}
+                		else
+                		{
+                			//REVISAR AQUI, cerrar factura anterior y generar la orden de pago
+                			if(cve_factura!=0)
+                			{
+                				CloseInvoice(cve_factura, InvoicePresupuest, Amount);
+                				CreatePayOrder(cve_factura, idDependencia, idRecurso, idGrupoFirma, Integer.parseInt(Month), fecha_nomina, GlobalRetenc, Note, ejercicio, cve_pers);
+                			}
+                			
+                			//Luego crear la nueva factura con la informacion necesaria
+                			cve_factura = GetAndCreateInvoice(row, idDependencia, ejercicio, cve_pers);
+                			fecha_nomina = row.get("FECHA_NOMINA").toString();
+                			//Obtener las deductivas y retenciones para guardar
+            				List<Map> Deductives = GetDeductives(row.get("TIPO_NOMINA").toString(), (Integer)row.get("ID_RECURSO"), row.get("CLV_UNIADM").toString());
+            				GlobalRetenc = SaveDeductivesAndRetention(Deductives, cve_factura);
+            				
+            				tipoNomina = row.get("TIPO_NOMINA").toString();
+            				clv_uniadm = row.get("CLV_UNIADM").toString();
+            				idRecurso = (Integer) row.get("ID_RECURSO");
+            				Amount = 0d;
+            				Month = row.get("MES").toString();
+            				Note = row.get("NOTA").toString();
+            				InvoicePresupuest = true;
+            				
+            				Amount += Double.parseDouble(row.get("IMPORTE").toString());
                 			//Guardar cada movimiento en la factura creada anteriormente
             				getJdbcTemplate().update("INSERT INTO SAM_FACTURA_DETALLE(CVE_FACTURA, ID_PROYECTO, CLV_PARTID, IMPORTE) VALUES(?,?,?,?)", new Object[]{cve_factura, row.get("ID_PROYECTO"), row.get("CLV_PARTID"), row.get("IMPORTE")});
                 		}
