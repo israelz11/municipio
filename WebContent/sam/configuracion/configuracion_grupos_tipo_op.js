@@ -44,7 +44,7 @@ function limpiar(){
 	if (idclaveGrupo!="")
 	    selected="checked";
     var htmlCheck = "<input type='checkbox' name='claves' id='claves' value='"+idTipoOp+"' "+selected+" >";
-	row.appendChild( Td("",centro,"",htmlCheck) );
+	row.appendChild( Td("",derecha,"",htmlCheck) );
 	row.appendChild( Td(descripcion,"","","") );
 	tabla.appendChild( row );
  }
