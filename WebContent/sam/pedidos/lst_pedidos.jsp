@@ -242,11 +242,12 @@ a:active {
   <tr id='f<c:out value="${cont}"/>' onMouseOver="color_over('f<c:out value="${cont}"/>')" onMouseOut="color_out('f<c:out value="${cont}"/>')">
     <tr>
       <td align="center">
-     <sec:authorize ifAllGranted="ROLE_Sam_PRIVILEGIOS_APERTURAR_PEDIDOS">&nbsp;
+  
+        <%--Privilegio para poder cancelar pedidos mostrando el check pedido Abraham Gonzalez 30/12/2016 --%>
+     <sec:authorize ifAllGranted="ROLE_Sam_PRIVILEGIOS_CANCELAR_PEDIDOS">&nbsp;
     <c:if test='${item.STATUS==1||item.STATUS==0}'>
     	<input type="checkbox" alt="<c:out value='${item.NUM_PED}'/>" id="chkpedidos" name="chkpedidos" value="<c:out value='${item.CVE_PED}'/>"/>
     </c:if>
-    
     </sec:authorize>
     </td>
     <td align="center"><sec:authorize ifAllGranted="ROLE_Sam_PRIVILEGIOS_SUBMENU_ESPECIAL_EN_LISTADO_PEDIDOS"><a href="javascript:subOpAdm('ped', <c:out value='${item.CVE_PED}'/>, <c:out value='${item.CVE_PERS}'/>)"></sec:authorize><c:out value='${item.NUM_PED}'/><sec:authorize ifAllGranted="ROLE_Sam_PRIVILEGIOS_SUBMENU_ESPECIAL_EN_LISTADO_PEDIDOS"></a></sec:authorize></td>
@@ -296,31 +297,37 @@ a:active {
     <c:set var="cont" value="${cont+1}"/> 
   </tr>
   </c:forEach>
-   <c:if test="${fn:length(listadoPedidos) > 0}"> 
-      <sec:authorize ifAllGranted="ROLE_Sam_PRIVILEGIOS_APERTURAR_PEDIDOS">
-        <tr>
-        <td colspan="9" align="left" height="40" style="background-color:#FFF">
-        <table width="269" border="0" cellspacing="0" cellpadding="0">
-          <tr>
-            <c:if test="${fn:contains(status,'1')||fn:contains(status,'2')}">
-              <td width="130" bgcolor="#FFFFFF"><div class="buttons tiptip">
-                <button name="cmdaperturar" id="cmdaperturar2" onClick="aperturarPedidos()" title="Apertura para edicion los documentos seleccionados" type="button" class="button red middle"><span class="label" style="width:100px">Aperturar</span></button>
-              </div></td>
-            </c:if>
-            <sec:authorize ifAllGranted="ROLE_Sam_PRIVILEGIOS_CANCELAR_REQUISICIONES">
-              <td width="139" bgcolor="#FFFFFF"><div class="buttons tiptip">
-                <button name="cmdcancelarm" id="cmdcancelarm2" onClick="cancelarPedidoMultiples()"  title="Cancela o elimina los documentos seleccionados" type="button" class="button red middle" ><span class="label" style="width:100px">Cancelar</span></button>
-              </div></td>
-            </sec:authorize>
-          </tr>
+  <c:if test="${fn:length(listadoPedidos) > 0}"> <!--Viene de el arraylist -->
+  <tr>
+  	<td colspan="9" align="left" height="40" style="background-color:#FFF">
+    	<table width="269" border="0" cellspacing="0" cellpadding="0">
+        	<tr>
+            	<c:if test="${fn:contains(status,'1')||fn:contains(status,'2')}">
+                	<sec:authorize ifAllGranted="ROLE_Sam_PRIVILEGIOS_APERTURAR_PEDIDOS">
+                    	<td width="130" bgcolor="#FFFFFF"><div class="buttons tiptip">
+                        	<button name="cmdaperturar" id="cmdaperturar2" onClick="aperturarPedidos()" title="Apertura para edicion los documentos seleccionados" type="button" class="button red middle"><span class="label" style="width:100px" >Aperturar</span></button>
+                     		</div>
+                     	</td>
+                 	</sec:authorize>
+            	</c:if>
+  </c:if>
+  <c:if test="${empty fecha_finiquitado}">
+  	<sec:authorize ifAllGranted="ROLE_Sam_PRIVILEGIOS_CANCELAR_REQUISICIONES">
+    	<td width="139" bgcolor="#FFFFFF"><div class="buttons tiptip">
+        	<button name="cmdcancelarm" id="cmdcancelarm2" onClick="cancelarPedidoMultiples()"  title="Cancela o elimina los documentos seleccionados" type="button" class="button red middle" ><span class="label" style="width:100px">Cancelar</span></button>
+            </div>
+        </td>
+    </sec:authorize>
+ </c:if>
+ </tr>
         </table></td>
         </tr> 
-        </sec:authorize> 
+         
         <tr>
           <td colspan="9" height="25" style="background-color:#FFF" align="left"><strong>Total de registros encontrados: <c:out value='${CONTADOR}'/></strong></td>
         </tr> 
      
-   </c:if>
+  
   </tbody>  
 </table>
 </form>
