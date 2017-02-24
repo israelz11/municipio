@@ -1,4 +1,5 @@
 var subtotal =0;
+
 var total =0;
 var indices = [];
 $(document).ready(function() {
