@@ -881,7 +881,11 @@ public void ejercerOrdenPagoFinal(Long cve_op, Date fecha_ejerce, int ejercicio,
 	            @Override
 	            protected void   doInTransactionWithoutResult(TransactionStatus status) {
 	            	Date fecha_cancelado = new Date();
-	            	Map OrdenPago = getJdbcTemplate().queryForMap("SELECT * FROM SAM_ORD_PAGO WHERE CVE_OP = ?", new Object []{cve_op});
+	            	Map OrdenPago = getJdbcTemplate().queryForMap("SELECT *, (SELECT COUNT(*) FROM CONTROL_PAGOS WHERE TIPO_DOC = 53 AND DOCUMENTO = ?)AS PAID FROM SAM_ORD_PAGO WHERE CVE_OP = ?", new Object []{cve_op, cve_op});
+	            	//Comprobar que la Orden de pago no contenga ningun pago en CONTROL_PAGOS del Sr.Peredo de lado de Finanzas
+	            	if(!OrdenPago.get("PAID").toString().equals("0"))
+	            		throw new RuntimeException("No se puede Cancelar el Ejercido de la Orden de Pago: " + OrdenPago.get("NUM_OP").toString() + ", por que ya existen pagos realizados por Finanzas");
+	            	
 	            	//Poner fecha de cancelado a la Orden de Pago del lado de Peredo
 	    			getJdbcTemplate().update("UPDATE ORDENDPAGO SET FE_CANCELA_EJER =? WHERE ID_OP = ?", new Object []{fecha_cancelado, cve_op});
 	    			//Poner en Status CANCELADA la Orden de Pago

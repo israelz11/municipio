@@ -122,7 +122,7 @@ a:active {
   </c:forEach>
   <tr>
     <td colspan="7" align="left" height="30" style="background:#FFF">
-    <input type="button" value="Desejercer OP" id="cmdejercer" class="botones"/>&nbsp;
+    <input type="button" value="Desejercer OP" id="cmdejercer" class="botones" disabled/>&nbsp;
     <input type="button" value="Cancelar Ejercido OP" id="cmdCancelarEjercido" class="botones"/>
     </td>
     </tr>

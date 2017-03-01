@@ -66,6 +66,8 @@ function desejercerOP()
 
 function _desejercer(LstCveOrdenPago)
 {
+	jAlert('Ya no se permiten desejercer Ordenes de Pago, consulte con su administrador del SAM','Advertencia');
+	return false;
 	var motivo = $('#txtmotivo').attr('value');
 					if(motivo=='')
 					{
