@@ -62,11 +62,11 @@ function guardar(){
  	var tabla = document.getElementById( table ).tBodies[0];
  	var row =   document.createElement( "TR" );
     var htmlCheck = "<input type='checkbox' name='claves' id='claves' value='"+id+"' >";
-    var htmlEdit = "<img src=\"../../imagenes/page_white_edit.png\" style='cursor: pointer;' alt=\"Editar registro\" width=\"16\" height=\"16\" border=\"0\" onClick=\"editar("+id+",'"+tipo+"','"+cargo+"','"+representante+"',"+grupo+")\" >"; 		
+    var htmlEdit = "<img src=\"../../imagenes/page_white_edit.png\" style='cursor: pointer;text-align: left;' alt=\"Editar registro\" width=\"16\" height=\"16\" border=\"0\" onClick=\"editar("+id+",'"+tipo+"','"+cargo+"','"+representante+"',"+grupo+")\" >"; 		
 	row.appendChild( Td("",centro,"",htmlCheck) );
-	row.appendChild( Td(tipo,"","","") );	  
-	row.appendChild( Td(representante,"","","") );
-	row.appendChild( Td(cargo,"","","") );
+	row.appendChild( Td(tipo,"text-align:left;","","") );	  
+	row.appendChild( Td(representante,"text-align:left;","","") );
+	row.appendChild( Td(cargo,"text-align:left;","","") );
     row.appendChild( Td("",centro,"",htmlEdit) );	
 	tabla.appendChild( row );
  }

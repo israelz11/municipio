@@ -89,7 +89,7 @@
     	<thead>
 	      <tr>
     	    <th width="3%" height="20" class="col-sm-1"><img src="../../imagenes/cross.png" width="16" height="16" onClick="eliminar()" style='cursor: pointer;'></th>
-	        <th width="24%"  align="center" class="col-sm-4" style="text-align: left;">Tipo de firma</th>
+	        <th width="24%" class="col-sm-4" style="text-align: left;">Tipo de firmas</th>
     	    <th width="40%" class="col-sm-3" style="text-align: left;">Representante</th>
         	<th width="28%" class="col-sm-3" style="text-align: left;" >Cargo</th>
 	        <th width="5%" class="col-sm-1">&nbsp;</th>
