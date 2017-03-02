@@ -117,7 +117,7 @@ public class ControladorListadoRequisiciones extends ControladorBase {
     public List<Map> getUnidades(){
     	return gatewayUnidadAdm.getUnidadAdmTodos();	
     }
-		
+	//Genera el ArrayList del listado de Requisiciones	
     public List<Map> getRequisicionesUnidadPorEjemplo(String unidad , String  estatus,String fechaInicial,String fechaFinal,Integer ejercicio, Integer tipo, String  verUnidad, String numreq, String proyecto, String clv_partid, String tipogto, String beneficiario, boolean privilegio, String cboconOP, String listadoReq){
     	return  gatewayRequisicion.getListaDeRequisicionesPorEjemplo(unidad, estatus, this.formatoFecha(fechaInicial), this.formatoFecha(fechaFinal), ejercicio, tipo, verUnidad, numreq, this.getSesion().getIdUsuario(), this.getSesion().getClaveUnidad(), proyecto, clv_partid, tipogto, beneficiario, privilegio, cboconOP, listadoReq);	
     }

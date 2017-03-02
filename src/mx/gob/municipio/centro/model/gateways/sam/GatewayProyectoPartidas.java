@@ -453,13 +453,13 @@ public class GatewayProyectoPartidas extends BaseGateway {
 	
 	public double getPreComprometidoMes(Long proyecto, String partida, int mes) {
 		try{
-			int reg= this.getJdbcTemplate().queryForInt("select count(*) from PART_EXT2  where PROYECTO=? and CLV_PARTID=?  ", new Object []{proyecto,partida});
+			int reg= this.getJdbcTemplate().queryForInt("select count(*) from PART_EXT2  where ID_PROYECTO=? and CLV_PARTID=?  ", new Object []{proyecto,partida});
 			Double comprometido=new Double(0);
-			Map dt = this.getJdbcTemplate().queryForMap("SELECT ("+Meses[mes-1]+"PREREQ) AS DISP FROM PART_EXT2 WHERE  PROYECTO=? and CLV_PARTID=? ",new Object[]{proyecto,partida});
+			Map dt = this.getJdbcTemplate().queryForMap("SELECT ("+Meses[mes-1]+"PREREQ) AS DISP FROM PART_EXT2 WHERE  ID_PROYECTO=? and CLV_PARTID=? ",new Object[]{proyecto,partida});
 			//if (reg ==0 )
 			//	reg=0;
 				//Modificado aqui Israel 16/Nov/2010
-				//this.getJdbcTemplate().update("insert into PART_EXT2  (PROYECTO,CLV_PARTID,ENEPREREQ,FEBPREREQ,MARPREREQ,ABRPREREQ,MAYPREREQ,JUNPREREQ,JULPREREQ,AGOPREREQ,SEPPREREQ,OCTPREREQ,NOVPREREQ,DICPREREQ,ENEPREPED,FEBPREPED,MARPREPED,ABRPREPED,MAYPREPED,JUNPREPED,JULPREPED,AGOPREPED,SEPPREPED,OCTPREPED,NOVPREPED,DICPREPED,clv_uniant ) values (?,?,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)  ", new Object []{proyecto,partida} );
+				//this.getJdbcTemplate().update("insert into PART_EXT2  (PROYECTO,CLV_PARTID,ENEPREREQ,FEBPREREQ,MARPREREQ,ABRPREREQ,MAYPREREQ,JUNPREREQ,JULPREREQ,AGOPREREQ,SEPPREREQ,OCTPREREQ,NOVPREREQ,DICPREREQ,ENEPREPED,FEBPREPED,MARPREPED,ABRPREPED,MAYPREPED,JUNPREPED,JULPREPED,AGOPREPED,SEPPREPED,OCTPREPED,NOVPREPED,DICPREPED,clv_uniant ) values (?,?,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)  ", new Object []{ID_proyecto,CLV_partida} );
 			//  else				
 			     comprometido = (dt.get("DISP")!=null)? Double.parseDouble(dt.get("DISP").toString()): 0.0D;
 			     return comprometido.doubleValue();
