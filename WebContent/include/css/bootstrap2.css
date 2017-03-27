@@ -1,0 +1,544 @@
+*{
+	margin:0px;
+	padding: 0px;
+}
+body-login{
+	background-color: #f0f0f0;
+	color: #4C4C4C;
+	font-family: 'Asap', sans-serif;
+	font-size: 13px;
+	margin-top: 2px;
+}
+body{
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	line-height: 1.42857143;
+	color: #333; /*AZUL REY 0F48EC*/
+	background-color: #fff;
+}
+.centrar{
+  background-color: #ff9;
+  overflow: hidden;
+  position: absolute;
+  height: 400px;
+  width: 600px;
+  left: 50%;
+  top: 50%
+  margin-top:-200px;
+  margin-left: -300px;
+}
+label,input[type="submit"]{ 
+	margin-top: 3px;/*Espacio entre los label y las cajas de texto*/
+	font-size: 12px; /*Cambiar el tamaño del texto*/
+}
+
+.div_lst_req {
+  width: 300px;
+  padding-left:  50px;
+  padding-right: 50px;
+  margin-left:   30px;
+  margin-right:  30px;
+  border: 10px solid black;
+}
+.sr-only2 {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  border: 0;
+}
+.well{
+    background-color:#D1D3D3; /*34AFD4*/
+}
+.table caption 
+	{ caption-side: left;
+}
+.table-hover > tbody > tr:hover {
+  background-color: #8FF0F9;
+}
+.h1-encabezado{
+	color:#0F48EC;
+}
+.h2-encabezado{
+	color:#0F48EC;
+}
+
+input[name="gpoestatus"]{
+	  margin: 14px 0 0;
+	  margin-top: 1px \13;
+	  line-height: normal;
+}
+.table td {
+   text-align: center;   
+}
+.thead-inverse th {
+  color: #fff;
+  background-color: #66D8F7; /* #66D8F7 azul - #BE5AFC morado*/
+}
+table.formulario
+{	
+	font-size: 11px;
+	color: #000;
+	font-family: Tahoma;
+}
+.td-lista {
+  padding: 8px;
+  line-height: 1.42857143;
+  vertical-align: top;
+  /*border-top: 1px solid #ddd;*/
+}
+
+/* Estilos Especificos para el Header el TH, Encabezados */
+.formulario th
+{
+    padding:0px 0px 0px 0px;
+    vertical-align:middle;
+    cursor:default;	
+	/*border-bottom:solid 1px #D7D7D7;*/
+	/*background-color:#DBE1EE;*/
+	background-color:#D9D9D9;
+	bordercolor:#E5E5E5;
+	font-weight:lighter;
+	text-align: right;
+	font-weight:bold;
+	padding-right:5px;
+}
+
+.formulario td
+{
+    padding:0px 0px 0px 0px;
+    vertical-align:middle;
+    cursor:default;	
+	/*border-bottom:solid 1px #D7D7D7;*/
+	/*background-color:#DBE1EE;*/
+	background-color:#D9D9D9;
+	bordercolor:#FFFFFF;
+/*	text-align:left;*/
+}
+/*.btn-asignar {
+  color: #33e9ff; #4c32a8
+  background-color: #25aebe;
+  border-color: #DE4A83;
+  
+  input[type="checkbox"] {
+  margin: 10px 0 0;
+  margin-top: 2px \8;
+  line-height: normal;
+}
+}*/
+.btn-asignar {
+  color: #fff;/* Color de la letra en blanco*/
+  background-color: #2acccc;
+  border-color: #21D2E6;
+}
+.btn-asignar:focus,
+.btn-asignar.focus {
+  color: #fff;
+  background-color: #07bebe; /*#449d44;*/
+  border-color: #20A5B3;
+}
+.btn-asignar:hover {
+  color: #fff;
+  background-color: #07bebe; /*#449d44;*/
+  border-color: #398439; /*398439*/
+}
+.btn-asignar:active,
+.btn-asignar.active,
+.open > .dropdown-toggle.btn-asignar {
+  color: #fff;
+  background-color: #07bebe; /*#449d44;*/
+  border-color: #398439; /*398439*/
+}
+.btn-asignar:active:hover,
+.btn-asignar.active:hover,
+.open > .dropdown-toggle.btn-asignar:hover,
+.btn-asignar:active:focus,
+.btn-asignar.active:focus,
+.open > .dropdown-toggle.btn-asignar:focus,
+.btn-asignar:active.focus,
+.btn-asignar.active.focus,
+.open > .dropdown-toggle.btn-asignar.focus {
+  color: #fff;
+  background-color: #398439;/*398439*/
+  border-color: #255625;
+}
+.btn-asignar:active,
+.btn-asignar.active,
+.open > .dropdown-toggle.btn-asignar {
+  background-image: none;
+}
+.btn-asignar.disabled:hover,
+.btn-asignar[disabled]:hover,
+fieldset[disabled] .btn-asignar:hover,
+.btn-asignar.disabled:focus,
+.btn-asignar[disabled]:focus,
+fieldset[disabled] .btn-asignar:focus,
+.btn-asignar.disabled.focus,
+.btn-asignar[disabled].focus,
+fieldset[disabled] .btn-asignar.focus {
+  background-color: #5cb85c;
+  border-color: #4cae4c;
+}
+.btn-asignar .badge {
+  color: #5cb85c;
+  background-color: #fff;
+}
+/* BotÃ³n propio
+-------------------------------------------------- */
+ 
+/* Redefine los estilos de .btn */
+/* Modificar el texto y el color de fondo en los tres estados
+   principales del botÃ³n: default, hover y active. */
+/*
+.btn-buscar,
+.btn-buscar:hover,
+.btn-buscar:active {
+  color: white;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  background-color: #51509a;
+}
+ 
+/* Aplicar gradientes de colores  #007da7 color azul*/
+/* Nota: no se muestran aquÃ­ todos los gradientes que tendrÃ¡s que
+   definir para los diferentes navegadores. */
+/*.btn-buscar {
+  background-repeat: repeat-x;
+  background-image: linear-gradient(top, #009ED2 0%, #007DA7 100%);
+  ...
+}
+ 
+/* Estilos del estado :hover del botÃ³n */
+/* Uno de los estilos mÃ¡s sencillos y eficaces para el estado :hover
+   consiste en subir hacia arriba ligeramente la imagen de fondo del
+   botÃ³n, pero puedes definir otros estilos adicionales si quieres. */
+/*.btn-buscar:hover {
+  background-position: 0 -15px;
+}
+
+/*.btn-imprimir,
+.btn-imprimir:hover,
+.btn-imprimir:active {
+  color: white;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  background-color: #D3006E;
+}*/
+.btn-imprimir {
+  color: #fff;
+  background-color: #D3006E;
+  border-color: #DE4A83;
+}
+.btn-imprimir:focus,
+.btn-imprimir.focus {
+  color: #fff; /*BLANCO*/
+  background-color: #b11365;/*AZUL OSCURO*/
+  border-color: #122b40;/*PHANTON AZUL*/
+}
+.btn-imprimir:hover {
+  color: #fff;
+  background-color: #b11365;/**/
+  border-color: #c3327e;/*PHANTON AZUL*/
+}
+.btn-imprimir:active,
+.btn-imprimir.active,
+.open > .dropdown-toggle.btn-imprimir {
+  color: #fff;
+  background-color: #b11365;
+  border-color: #c3327e;
+}
+.btn-imprimir:active:hover,
+.btn-imprimir.active:hover,
+.open > .dropdown-toggle.btn-imprimir:hover,
+.btn-imprimir:active:focus,
+.btn-imprimir.active:focus,
+.open > .dropdown-toggle.btn-imprimir:focus,
+.btn-imprimir:active.focus,
+.btn-imprimir.active.focus,
+.open > .dropdown-toggle.btn-imprimir.focus {
+  color: #fff;
+  background-color: #c3327e;
+  border-color: #122b40;
+}
+.btn-imprimir:active,
+.btn-imprimir.active,
+.open > .dropdown-toggle.btn-imprimir {
+  background-image: none;
+}
+.btn-imprimir.disabled:hover,
+.btn-imprimir[disabled]:hover,
+fieldset[disabled] .btn-imprimir:hover,
+.btn-imprimir.disabled:focus,
+.btn-imprimir[disabled]:focus,
+fieldset[disabled] .btn-imprimir:focus,
+.btn-imprimir.disabled.focus,
+.btn-imprimir[disabled].focus,
+fieldset[disabled] .btn-imprimir.focus {
+  background-color: #337ab7;
+  border-color: #2e6da4;
+}
+/**************************************************************************************/
+.btn-buscar {
+  color: #fff;
+  background-color: #51509A;
+  border-color: #8281B7;
+}
+.btn-buscar:focus,
+.btn-buscar.focus {
+  color: #fff; /*BLANCO*/
+  background-color: #403f74;/*AZUL OSCURO*/
+  border-color: #8281B7;/*PHANTON AZUL*/
+}
+.btn-buscar:hover {
+  color: #fff;
+  background-color: #403f74;/**/
+  border-color: #8281B7;/*PHANTON AZUL*/
+}
+.btn-buscar:active,
+.btn-buscar.active,
+.open > .dropdown-toggle.btn-buscar {
+  color: #fff;
+  background-color: #403f74;
+  border-color: #8281B7;
+}
+.btn-buscar:active:hover,
+.btn-buscar.active:hover,
+.open > .dropdown-toggle.btn-buscar:hover,
+.btn-buscar:active:focus,
+.btn-buscar.active:focus,
+.open > .dropdown-toggle.btn-buscar:focus,
+.btn-buscar:active.focus,
+.btn-buscar.active.focus,
+.open > .dropdown-toggle.btn-buscar.focus {
+  color: #fff;
+  background-color: #c3327e;
+  border-color: #8281B7;
+}
+.btn-buscar:active,
+.btn-buscar.active,
+.open > .dropdown-toggle.btn-buscar {
+  background-image: none;
+}
+.btn-buscar.disabled:hover,
+.btn-buscar[disabled]:hover,
+fieldset[disabled] .btn-buscar:hover,
+.btn-buscar.disabled:focus,
+.btn-buscar[disabled]:focus,
+fieldset[disabled] .btn-buscar:focus,
+.btn-buscar.disabled.focus,
+.btn-buscar[disabled].focus,
+fieldset[disabled] .btn-buscar.focus {
+  background-color: #337ab7;
+  border-color: #2e6da4;
+}
+/**************************************************************************************/
+/*
+  font-size : Para aplicar el tamaño de fuente del botón.
+  font-family : Para aplicar el tipo de fuente del botón.
+  padding : Para establecer unos márgenes entre el texto y el borde del botón.
+  border-radius : Para redondear las esquinas del botón. 
+  background: -moz-linear-gradient(top, #87CEEB 0%, #4682B4 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#87CEEB), color-stop(100%,#4682B4));
+  display: block;
+  text-shadow: 0px 1px 2px #62C2F9;
+  text-align: center;
+  text-transform: uppercase;
+  text-decoration: none;
+  box-shadow: inset 0px 0px 6px #fff;
+  -webkit-box-shadow: inset 0px 0px 6px #fff;
+  border: 1px solid #62C2F9;
+  border-radius: 10px;
+  link (cuando el vínculo no ha sido visitado)
+  hover (cuando el puntero pasa por encima)
+  active (cuando el puntero hace clic sobre él)
+  focus (cuando el tabulador está activo en él)
+  visited (cuando el vínculo ya ha sido visitado) 
+  **********************************************************************************************/
+.btn-cerrar {
+  color: #fff; /*Para establecer el color del texto del botón. */
+  background-color: #663300; /*Para establecer el color de fondo del botón. */
+  border-color: #663403;	/*Para aplicar color al borde del botón. 4D2701*/
+}
+.btn-cerrar:focus,
+.btn-cerrar.focus {
+  color: #fff; /*BLANCO*/
+  background-color: #4D2701; /*#9999FF;*/
+  border-color: #8D4702;/*PHANTON AZUL*/
+  
+}
+.btn-cerrar:hover {
+  color: #fff;
+  background-color: #4D2701;
+  border-color: #804408;
+}
+.btn-cerrar:active,
+.btn-cerrar.active,
+.open > .dropdown-toggle.btn-cerrar {
+  color: #fff;
+  background-color: #4D2701;
+  border-color: #804408;
+}
+.btn-cerrar:active:hover,
+.btn-cerrar.active:hover,
+.open > .dropdown-toggle.btn-cerrar:hover,
+.btn-cerrar:active:focus,
+.btn-cerrar.active:focus,
+.open > .dropdown-toggle.btn-cerrar:focus,
+.btn-cerrar:active.focus,
+.btn-cerrar.active.focus,
+.open > .dropdown-toggle.btn-cerrar.focus {
+  color: #fff;
+  background-color: #804408;
+  border-color: #8D4702;
+}
+.btn-cerrar:active,
+.btn-cerrar.active,
+.open > .dropdown-toggle.btn-cerrar {
+  background-image: none;
+}
+.btn-cerrar.disabled:hover,
+.btn-cerrar[disabled]:hover,
+fieldset[disabled] .btn-cerrar:hover,
+.btn-cerrar.disabled:focus,
+.btn-cerrar[disabled]:focus,
+fieldset[disabled] .btn-cerrar:focus,
+.btn-cerrar.disabled.focus,
+.btn-cerrar[disabled].focus,
+fieldset[disabled] .btn-cerrar.focus {
+  background-color: #804408;
+  border-color: #663403;
+}
+.btn-success .badge {
+  color: #663300;				
+  background-color: #fff;
+}
+************************************************************************************************************************
+.btn-success {
+  color: #fff;  					 /*Para establecer el color del texto del botón. */
+  background-color: #5cb85c;	/*#1*/ /*Para establecer el color de fondo del botón. */
+  border-color: #4cae4c;			 /*Para aplicar color al borde del botón. */
+}
+.btn-success:focus,					 /*cuando el tabulador está activo en él*/
+.btn-success.focus {
+  color: #fff;
+  background-color: #449d44;
+  border-color: #255625;
+}
+.btn-success:hover {
+  color: #fff;				/*cuando el puntero pasa por encima*/
+  background-color: #449d44;
+  border-color: #398439;
+}
+.btn-success:active,		/*cuando el puntero hace clic sobre él*/
+.btn-success.active,
+.open > .dropdown-toggle.btn-success {
+  color: #fff;
+  background-color: #449d44;
+  border-color: #398439;
+}
+.btn-success:active:hover,
+.btn-success.active:hover,
+.open > .dropdown-toggle.btn-success:hover,
+.btn-success:active:focus,
+.btn-success.active:focus,
+.open > .dropdown-toggle.btn-success:focus,
+.btn-success:active.focus,
+.btn-success.active.focus,
+.open > .dropdown-toggle.btn-success.focus {
+  color: #fff;
+  background-color: #398439;
+  border-color: #255625;
+}
+.btn-success:active,
+.btn-success.active,
+.open > .dropdown-toggle.btn-success {
+  background-image: none;
+}
+.btn-success.disabled:hover,
+.btn-success[disabled]:hover,
+fieldset[disabled] .btn-success:hover,
+.btn-success.disabled:focus,
+.btn-success[disabled]:focus,
+fieldset[disabled] .btn-success:focus,
+.btn-success.disabled.focus,
+.btn-success[disabled].focus,
+fieldset[disabled] .btn-success.focus {
+  background-color: #5cb85c;	/*#1*/
+  border-color: #4cae4c;		
+}
+.btn-success .badge {
+  color: #5cb85c;				/*#1*/
+  background-color: #fff;
+}
+/*
+.jumbotron{
+	background-color: #bfd8eb; 
+	border-radius: 8px;
+	margin-bottom: 5px;
+	padding: 16px
+	-webkit-border-radius:8px 8px 0px 0px;     /*Para que tome las propiedades en cualquier navegador
+	-moz-border-radius:8px;   Para que tome las propiedades en cualquier navegador
+}
+.jumbotron h1{
+	color: #fff; /*Color de las letras del jumbrotron
+	font-size: 36px;
+	text-align: center;
+	text-shadow: 0px 2px #77a5c7; Sombreado de las letras
+}
+*/
+
+/*
+.form-control  form-group.select {
+	font-size: 16px;
+	background: #eee url(arrow.png);
+	background-position: 280px center;
+    background-repeat: no-repeat;
+   	padding: 10px;
+   	height: 40px;
+   	font-size: 12px;
+   	border: 0;
+   	border-radius: 3px;
+   -webkit-appearance: none;
+   -webkit-transition: all 0.4s;
+   -moz-transition: all 0.4s;
+   transition: all 0.4s;
+   -webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+select:hover{
+	background-color: #ddd;
+}
+}
+
+/*
+/*
+.form-group-xs select.form-control {
+	height: 20px;
+  line-height: 30px;}
+  
+}
+*/
+
+}
+
+		/*
+	background: #eee url(arrow.png);
+	background-position: 280px center;
+    background-repeat: no-repeat;
+   	padding: 10px;
+   	height: 3px;
+   	font-size: 12px;
+   	border: 0;
+   	border-radius: 3px;
+   -webkit-appearance: none;
+   -webkit-transition: all 0.4s;
+   -moz-transition: all 0.4s;
+   transition: all 0.4s;
+   -webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+*/
+/*
+.select {
+		height: 40px;
+
+}/*

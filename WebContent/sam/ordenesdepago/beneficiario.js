@@ -92,13 +92,16 @@ function guardar(){
 	
 	var vigencia='1';
 	if (!$('#vigencia').attr('checked'))	
-	   vigencia='0';	
+	   vigencia='0';
+	
 	ShowDelay('Guardando Beneficiario','');
     controladorBeneficiarioRemoto.guardarBeneficiario(clave,razonSocial,responsable,responsable2,rfc,curp,telefono,tipo,calle,colonia,ciudad,estado,cp,idBanco,noCuenta,tipoCuenta,idBeneficiarioPadre,vigencia,{
 			 callback:function(items) {
 				 $('#idProveedor').attr('value', items);
-				 window.parent.cambiarVariable(razonSocial);				 
+				 window.parent.cambiarVariable(razonSocial);
+				 swal("Good job!", "Beneficiario Guardado con éxito!", "success");
 				 CloseDelay("Beneficiario guardado con éxito", 2000, function(){
+					 
 					 buscarBeneficiario();
 				});
  		     }	
@@ -226,11 +229,13 @@ function guardar(){
 }
 
  
+ 
   function eliminar(){
 	  var checkBeneficiarios = [];
      $('input[name=claves]:checked').each(function() {checkBeneficiarios.push($(this).val());	 });	 
 	 if (checkBeneficiarios.length > 0 ) {
 	 ShowDelay('Eliminando movimientos de beneficiario','');
+	 
      controladorBeneficiarioRemoto.eliminarBenificiario(checkBeneficiarios, {
         callback:function(items) {
 		   CloseDelay("Se eliminaron satisfactoriamente los movimientos", 2000, function(){
@@ -245,4 +250,4 @@ function guardar(){
     }); } else 
 	    jInformation("Es necesario que seleccione un elemento de la lista");
 
-	 }
+ }

@@ -1,57 +1,22 @@
 // JavaScript Document
+var banstatus= false;
+
 $(document).ready(function() {
+	
 	// Launch TipTip tooltip
   $('.tiptip a.button, .tiptip button').tipTip();
-  $('#todos').click( function (event){ $('input[name=chkrequisiciones]').attr('checked', this.checked); });//Para seleccionar todos los checkbox Abraham Gonzalez 12/07/2016
   var imagen="../../imagenes/cal.gif";	
   var formatFecha="dd/mm/yy";	
   $("#fechaInicial").datepicker({showOn: 'button', buttonImage:imagen , buttonImageOnly: true,dateFormat: formatFecha});  
   $("#fechaFinal").datepicker({showOn: 'button', buttonImage: imagen, buttonImageOnly: true,dateFormat: formatFecha}); 
   $('#cmdpdf').click(function (event){mostrarOpcionPDF();});   
   getBeneficiarios('txtprestadorservicio','CVE_BENEFI','');
-  $('#ui-datepicker-div').hide();
-  
-  $('.selectpicker').selectpicker('selectAll');
-  $('.selectpicker').selectpicker({
-	  style: 'btn-info',
-	  size: 4
-	});
-
-
-      $(document).ready(function() {
-          $('#example-getting-started').multiselect();
-      });
- // prueba del combo de seleccion multiple
-      
-    //Render selected item to the screen
-
-      $('#dataCombo').change(function(){
-      $('#dataOutput').html('');
-      var values = $('#dataCombo').val();
-      for(var i = 0; i < values.length; i += 1) {
-      $('#dataOutput').append("<p class='removeable'><span class='reel'>" + values[i] + "</span> x </p>")
-      }});
-
-      //When the 'X' is clicked, remove that item
-
-      $("#dataOutput").on('click','.removeable',function(){
-      $(this).remove(); //this removes the item from the screen
-      //Next i need to unselect it from dataCombo selectpicker
-      var foo = $(this);
-      $('#dataCombo').find('[value='+foo.find('.reel').html()+']').prop('selected', false);
-       //  $('#dataCombo').val(  );
-      $values = $('#dataCombo').val();
-      $('#dataCombo').selectpicker('deselectAll');
-      $('#dataCombo').selectpicker('val', $values );
-      $('#dataCombo').selectpicker('refresh');
-      });
-        
-        $("#dataCombo").selectpicker({
-          multiple:true
-        });
-
-
+  //$('#ui-datepicker-div').hide();
+  alert('prueba de acceso 2');
+ 
 });
+
+
 
 
 function reembolsos(cve_req, modulo){
@@ -213,16 +178,6 @@ function getListadoReqConOp(){
 	$('#forma').attr('action',"lst_req_total.action");
 }
 
-//Checkbox para seleccionar toda la lista.... Abraham Gonzalez 12/07/2016
-	$("input[name=todos]").change(function(){
-		$('input[type=chkrequisiciones]').each( function() {			
-			if($("input[name=todos]:checked").length == 1){
-				this.checked = true;
-			} else {
-				this.checked = false;
-			}
-		});
-	});
 function agregarReqLista(){
 	var checkClaves = [];
     $('input[name=chkrequisiciones]:checked').each(function() { checkClaves.push($(this).val());});	
@@ -323,27 +278,25 @@ function aperturarRequisiciones(){
 	    jAlert('Es necesario seleccionar por lo menos una Requisicion del listado', 'Advertencia');
 }
 
-//Checa el status seleccionado
-function getListaReq(){
-	 var checkStatus = [];//declaramos un array vacio...
-     $('input[name=status]:checked').each(function() {checkStatus.push($(this).val());});	 
+
+function getListaReq2(){
+	 var checkStatus = [];
+	 	$('input[name=status]:checked').each(function() {checkStatus.push($(this).val());});	
+	 	   //<input name="status" type="checkbox" id="status" value="4" <c:if test="${fn:contains(status,'4')}" >checked</c:if>>
+	 	//$("input:checkbox[name=type]:checked").each(function(){ checkStatus.push($(this).val()); }); 
+	 	 //<option value="0" <c:if test='${0==cboconOP}'> selected </c:if>>[Todas las opciones]</option>
 	 var error="";
 	 var titulo ="Error de validacion";
-	 if (checkStatus.length==0 )   error="Debe de seleccionar un Estatus<br>";//si el array viene vacio manda error....
-	 if($('#txtprestadorservicio').attr('value')=='') $('#CVE_BENEFI').attr('value', '0');
-	 if ($('#fechaInicial').attr('value')=="" && $('#fechaFinal').attr('value')!="" || $('#fechaInicial').attr('value')!="" && $('#fechaFinal').attr('value')=="")  error+="El rango de fechas no es valido<br>";
-	 //	var s = 'lst_pedidos.action?idUnidad='+$('#cbodependencia').attr('value')+"&fechaInicial="+$('#fechaInicial').attr('value')+"&fechaFinal="+$('#fechaFinal').attr('value')+"&status="+checkStatus+"&tipo_gto="+$('#cbotipogasto').attr('value');
-	 //	document.location = s;
-if (error=="")
-	$("#forma").submit();
-else
-  jAlert(error,titulo);
+	 	if (checkStatus.length==0 )   error="Debe de seleccionar un Estatus<br>";
+	 	if($('#txtprestadorservicio').attr('value')=='') $('#CVE_BENEFI').attr('value', '0');
+	 	if ($('#fechaInicial').attr('value')=="" && $('#fechaFinal').attr('value')!="" || $('#fechaInicial').attr('value')!="" && $('#fechaFinal').attr('value')=="")  error+="El rango de fechas no es valido<br>";
+	 	//	var s = 'lst_pedidos.action?idUnidad='+$('#cbodependencia').attr('value')+"&fechaInicial="+$('#fechaInicial').attr('value')+"&fechaFinal="+$('#fechaFinal').attr('value')+"&status="+checkStatus+"&tipo_gto="+$('#cbotipogasto').attr('value');
+	 	//document.location = s;
+	 	if (error=="")
+	 		$("#forma").submit();
+	 	else
+	 		jAlert(error,titulo);
 }
-
-
-
-
-
 
 function getRequisicion(claveReq)   {
 	$('#claveRequisicion').attr('value',claveReq);

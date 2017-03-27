@@ -34,27 +34,53 @@ function nuevoEditarBeneficiario(idBeneficiario){
 	var titulo = (idBeneficiario==0) ? "Nuevo beneficiario": "Editar beneficiario";
 	jWindow('<iframe width="800" height="400" name="BENEFI" id="BENEFI" frameborder="0" src="../../sam/ordenesdepago/beneficiario.action?id='+idBeneficiario+'"></iframe>', titulo, '','',0, function(){compruebaVariable();});
 }
-
+/*
 function deshabilitarBeneficiario(id_beneficiario){
 	jConfirm('¿Confirma que desea deshabilitar al beneficiario?','Confirmar', function(r){
 		if(r){
 			ShowDelay('Deshabilitando beneficiario','');
-			ControladorListadoBeneficiariosRemoto.deshabilitarBeneficiario(id_beneficiario,{
-					  callback:function(items){
-							 CloseDelay('Beneficiario deshabilitado con exito', function(){
-										buscarBeneficiarios();
-								 });
-								
-				} 					   				
-				,
-				errorHandler:function(errorString, exception) { 
-					jError('Fallo la operacion:<br>Error::'+errorString+'-message::'+exception.message+'-JavaClass::'+exception.javaClassName+'.<br><strong>Consulte a su administrador</strong>', 'Error al guardar Pedido');   
-					return false;
-				}
+			ControladorListadoBeneficiariosRemoto.deshabilitarBeneficiario(id_beneficiario,{callback:function(items){
+							 CloseDelay('Beneficiario deshabilitado con exito', function(){buscarBeneficiarios();});
+			},
+			errorHandler:function(errorString, exception) { 
+				jError('Fallo la operacion:<br>Error::'+errorString+'-message::'+exception.message+'-JavaClass::'+exception.javaClassName+'.<br><strong>Consulte a su administrador</strong>', 'Error al guardar Pedido');   
+				return false;
+			}
 			});	
 		}
 	});
+}*/
+
+function deshabilitarBeneficiario(id_beneficiario){
+	
+	
+	swal({
+		  title: "Estas seguro?",
+		  text: "You will not be able to recover this imaginary file!",
+		  type: "warning",
+		  showCancelButton: true,
+		  confirmButtonColor: "#DD6B55",
+		  confirmButtonText: "Si, Deshabilitar!",
+		  cancelButtonText: "No, Cancelar!",
+		  closeOnConfirm: false,
+		  closeOnCancel: false
+		  
+		},
+		function(isConfirm){
+		  if (isConfirm) {
+		    swal("Deshabilitar!", "Deshabilitando beneficiario.", "success");
+		    ControladorListadoBeneficiariosRemoto.deshabilitarBeneficiario(id_beneficiario),
+		    function(items){buscarBeneficiarios();},
+		    function(){buscarBeneficiarios();};
+		    //callback:function(items)
+		    
+		  } else {
+			    swal("Cancelled", "Your imaginary file is safe :)", "error");
+		  }
+		});
 }
+
+
 
 function habilitarBeneficiario(id_beneficiario){
 	jConfirm('¿Confirma que desea volver a habilitar el beneficiario?','Confirmar', function(r){

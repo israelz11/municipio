@@ -255,9 +255,13 @@ public class GatewayPedidos extends BaseGateway {
 				sql+= " and C.CVE_PED NOT IN (SELECT CVE_PED FROM SAM_OP_COMPROBACIONES WHERE CVE_PED = C.CVE_PED) ";
 		}
 		
+		//Comentado por pruebas del listado de pedidos
+		/*if (verUnidad==null&&!privilegio)
+			sql+= " AND C.CVE_PERS=:cve_pers ";*/
 		
 		if (verUnidad==null&&!privilegio)
-			sql+= " AND C.CVE_PERS=:cve_pers ";
+			sql+= " AND (C.CVE_PERS=:cve_pers OR E.ID=:unidad) ";
+		
 		if(verUnidad!=null&&!privilegio)
 			sql+= " AND (C.CVE_PERS=:cve_pers OR E.ID=:unidad) ";
 		

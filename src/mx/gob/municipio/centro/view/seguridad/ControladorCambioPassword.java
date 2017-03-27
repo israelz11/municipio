@@ -26,6 +26,8 @@ public class ControladorCambioPassword  extends ControladorBase {
 	
 	/*Metodo para activar el depurador*/
 	private static Logger log = Logger.getLogger(ControladorCambioPassword.class.getName());
+	/*Declarado en WEB-INF/modules*/
+	
 	
 	public 	ControladorCambioPassword () {	
 	}
@@ -35,6 +37,7 @@ public class ControladorCambioPassword  extends ControladorBase {
 	@RequestMapping(method = RequestMethod.GET)    
 	public String  requestGetControlador( Map modelo ) {	
 	    return "sam/utilerias/cambioPassword.jsp";
+	    /*Vista o nombre de la Pagina JSP*/
 	}
 	
 	public boolean guardarPassword(String passwordAnterior ,String  passwordNuevo ){

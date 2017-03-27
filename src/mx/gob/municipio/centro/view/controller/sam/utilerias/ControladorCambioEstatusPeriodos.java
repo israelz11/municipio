@@ -87,6 +87,10 @@ public class ControladorCambioEstatusPeriodos extends ControladorBase {
 	                		//Migrar el saldo de las Requisiciones y Orden de Trabajo
 		                	migrarRequisiciones(mes, mesAct);
 		                	
+		                	//Migrar periodo del vale
+		                	
+		                	migrarVale(mes, mesAct);
+		                	
 	            	}
                 	//Cambiamos el periodo al siguiente mes
                 	gatewayMeses.actializarEstatusDoc(idMes, estatus);
@@ -97,6 +101,19 @@ public class ControladorCambioEstatusPeriodos extends ControladorBase {
             } catch (DataAccessException e) {	            	
                  throw new RuntimeException(e.getMessage(),e);
             }
+		
+	}
+	public void migrarVale (int mes, int mesAct){
+		
+		if(mes<=12)
+		{
+    		List<Map> vales = getJdbcTemplate().queryForList("SELECT cve_vale FROM SAM_VALES_EX WHERE CVE_VALE IN (SELECT CVE_DOC FROM VT_COMPROMISOS WHERE TIPO_DOC ='VAL' AND PERIODO = ?)", new Object[]{mesAct});
+    		for(Map row: vales)
+    		{
+    			getJdbcTemplate().update("UPDATE SAM_VALES_EX SET MES =? WHERE CVE_VALE =?", new Object[]{mes, row.get("CVE_VALE")});
+    		}
+		}
+		
 		
 	}
 	
@@ -138,7 +155,7 @@ public class ControladorCambioEstatusPeriodos extends ControladorBase {
 	{
 
     	List<Map> Contratos = getJdbcTemplate().queryForList("SELECT SUM(IMPORTE) AS COMPROMETIDO_MES, PERIODO, ID_PROYECTO, CLV_PARTID, CVE_CONTRATO FROM SAM_COMP_CONTRATO "+
-															 " WHERE PERIODO = ? AND CVE_CONTRATO = 2421 " +
+															 " WHERE PERIODO = ?  " +
 															 " GROUP BY CVE_CONTRATO, PERIODO, ID_PROYECTO, CLV_PARTID ", new Object[]{mesAct});
     	for(Map c: Contratos)
     	{
@@ -191,7 +208,7 @@ public class ControladorCambioEstatusPeriodos extends ControladorBase {
     		}
 		}
 	}
-	
+	//ejecuta actualizar estatus eva....para el proceso de cierre
 	public String cerrarEval(final Integer idMes, final String estatus){
 		try {    
             this.getTransactionTemplate().execute(new TransactionCallbackWithoutResult(){

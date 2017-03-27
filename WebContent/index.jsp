@@ -33,7 +33,7 @@
 		body {
 			background-color: #f1f3f6 !important;
 		}
-	</style
+	</style>
 </head>
 
 <body>
