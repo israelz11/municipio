@@ -10,21 +10,28 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<script type="text/javascript" src="lst_req_total.js"> </script>
+
+
+
+<link rel="stylesheet" href="../../include/css/bootstrap2.css" type="text/css"> 
+<link rel="stylesheet" href="../../include/css/bootstrap-3.3.4/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="../../include/css/boostrap-select/dist/css/bootstrap-select.css">
+<link rel="stylesheet" href="../../include/css/bootstrap-datetimepicker-master/build/css/bootstrap-datetimepicker.css">
+
+
+<!--   <script src="../../include/js/jquery-1.11.3.min.js"></script>
+ -->
+<!--<link rel="stylesheet" href="../../include/css/sweetalert/lib/sweet-alert.css"> 
+<script src="../../include/css/sweetalert/lib/sweet-alert.min.js"></script>-->
+
+
 <script type="text/javascript" src="../../include/js/jquery-2.2.1.js"></script>
-<script type="text/javascript" src="../../include/js/datetimepicker/moment-with-locales.js"></script>
 
-
-
-<link rel="stylesheet" href="../../include/css/bootstrap-3.3.6.css" type="text/css">
-<link rel="stylesheet" href="../../include/css/bootstrap2.css" type="text/css">
-
-<link rel="stylesheet" href="../../include/js/datetimepicker/bootstrap-datetimepicker.css" type="text/css"> 
-<script type="text/javascript" src="../../include/js/datetimepicker/bootstrap-datetimepicker.min.js"></script>
-
-<script type="text/javascript" src="../../include/js/Multiselect/bootstrap-select.js"></script>
-<link rel="stylesheet" href="../../include/css/Multiselect/bootstrap-select.css" type="text/css">
-
+<script src="../../include/css/bootstrap-3.3.4/dist/js/bootstrap.min.js"></script>
+<script src="../../include/css/boostrap-select/dist/js/bootstrap-select.js"></script>
+<script src="../../include/css/bootstrap-datetimepicker-master/build/js/moment-with-locales.js"></script>
+<script src="../../include/css/bootstrap-datetimepicker-master/build/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="lst_req_total.js"></script>
 
 
 <style type="text/css">
@@ -48,8 +55,7 @@ a:active {
 <body  >
 
 <form class="form-horizontal" rol="form" action="lst_req_total.action" method="post" id="forma" name="forma">
-	
-	<div class="row col-md-offset-2">
+<div class="row col-md-offset-2">
         	<h1 class="h1-encabezado">Requisiciones - Listado de Requisiciones, Ordenes de Trabajo y Ordenes de Servicio</h1>
 	</div>
 	<div style="width:1600px; margin-left:auto; margin-right:auto" class="container">
@@ -79,13 +85,14 @@ a:active {
                     </sec:authorize>
             </div>   
             <div class="col-md-4"><!-- Revisar como llamar la funcion desde el jsp -->
-         			
+         		<!--  	
                 <input type="checkbox" name="status" id="status" value="0" <c:if test="${fn:contains(status,'0')}" ></c:if>>
                 <label style="width:100px;" for="status">&nbsp; Edición</label>
                 <input name="status" id="status" value="1" type="checkbox" <c:if test="${fn:contains(status,'1')}" >checked</c:if>>
                 <label style="width:100px;" for="status">&nbsp; Cerrado</label>
                 <input name="status" id="status" value="2" type="checkbox" <c:if test="${fn:contains(status,'2')}" ></c:if>>
-                <label style="width:100px;" for="status">&nbsp; En proceso</label>
+                <label style="width:100px;" for="status">&nbsp; En proceso</label>-->
+                <input type="hidden" value="" name="status" id="status"> 
             </div>
     </div>
     <!--bloque form-group 2 -->   
@@ -103,11 +110,10 @@ a:active {
             </select>
         </div>
         <div class="col-md-4">
-             
-              <input name="status" type="checkbox" id="status" value="4" <c:if test="${fn:contains(status,'4')}" >checked</c:if>>
+			 <!--   <input name="status" type="checkbox" id="status" value="4" <c:if test="${fn:contains(status,'4')}" >checked</c:if>>
               <label style="width:100px;" for="status">&nbsp; Canceladas</label>
               <input name="status" type="checkbox" id="status" value="5" <c:if test="${fn:contains(descripcion_estatus,'finiquitado')}">checked</c:if>>
-              <label style="width:100px;" for="status">&nbsp; Finiquitadas</label>
+              <label style="width:100px;" for="status">&nbsp; Finiquitadas</label>-->
         </div>
     </div>  
     <!--bloque form-group 3 -->           
@@ -214,38 +220,32 @@ a:active {
               <div class="col-md-5">
                   <textarea class="form-control" name="txtlistado" rows="3" wrap="virtual" rows="5"  id="txtlistado" style="width:455px"> <c:out value='${txtlistado}'/> </textarea>
               </div>
-              <div class="form-group">
-      		 	 	<label for="estatusr" class="col-md-2 control-label">Estatus</label>
-     		  		<div class="styled-select col-md-offset-2">
-						
-					</div>
-					<div class="form-group">
-							<div class= "well">
-								<select class="selectpicker" multiple id="cbostatusok">
-								<optgroup><option value=0>Todos los estatus</option></optgroup >
-								  <option>Edicion</option>
-								  <option>Cerrado</option>
-								  <option>Proceso</option>
-								  <option>Cancelado</option>
-								  <option>Finiquitado</option>
-								</select>
-								
-							</div>
-						
-						
-   					</div>
-			 </div>
-			 
-		</div><!-- Termina Bloque 7 -->
+              <div class="col-md-5">
+              			<div class="form-group">
+				        <label for="basic" class="control-label">Seleccione un Estatus</label>
+				          <select class="selectpicker form-control m-b" id="cboFilterStatus" data-live-search="true" multiple data-style="btn-primary">
+				              <optgroup label="">
+				                  <option value="9" selected="selected">[Todas los Estatus]</option>
+				              </optgroup>
+				              <optgroup label="">
+				                      <option value="0">EDICION</option>
+				                      <option value="1">CERRADO</option>
+				                      <option value="2">PROCESO</option>
+				                      <option value="4">CANCELADO</option>
+				                      <option value="5">FINIQUITADO</option>
+				              </optgroup>
+				          </select>
+      </div>
+              </div>
+       </div><!-- Termina Bloque 7 -->
 		
-		 <sec:authorize ifAllGranted="ROLE_Sam_PRIVILEGIOS_VER_TODOS_LOS_DOCUMENTOS_DE_LA_UNIDAD">
+	   <sec:authorize ifAllGranted="ROLE_Sam_PRIVILEGIOS_VER_TODOS_LOS_DOCUMENTOS_DE_LA_UNIDAD">
    			 <input type="hidden" value="1" id="REPORTE_ESPECIAL_2">
-         </sec:authorize>
+       </sec:authorize>
     	 
  	</div> <!-- Cierra Well -->
  
- 
-  
+ 	    		
  
  <!-- pruebas de entradas y salidas -->
  
@@ -374,6 +374,8 @@ a:active {
     
 </div>
 </div><!--Termina Container  -->
+
+ 
 </form>
 
 </body>

@@ -1,9 +1,64 @@
 // JavaScript Document
-var banstatus= false;
+var banStatus = false;
 
 $(document).ready(function() {
 	
-	// Launch TipTip tooltip
+
+	  $('#cboFilterStatus').on('changed.bs.select', function (e) {
+			              
+	                    
+	                  var selected = $(this).find("option:selected").val();
+	                  var StatusArray = ($(this).selectpicker('val') != null ? $(this).selectpicker('val').toString().split(',') : []);
+
+	                  if (StatusArray.indexOf("9") != -1) {
+	                      if (!banStatus) {
+	                          $(this).find('option[value=9]').prop('selected', false).removeAttr('selected');
+	                          $(this).selectpicker('refresh');
+	                          banStatus = true;
+	                      }
+	                      else {
+	                          $(this).selectpicker('deselectAll');
+	                          $(this).find('option[value=9]').prop('selected', true);
+	                          $(this).selectpicker('refresh');
+	                          banStatus = false;
+	                      }
+	                  }
+	                  else {
+	                      if (StatusArray.indexOf("9") == -1) //No se encontro 0
+	                      {
+	                          $(this).find('option[value=9]').prop('selected', false).removeAttr('selected');
+	                          $(this).selectpicker('refresh');
+	                      }
+	                      else //0 Encontrado
+	                      {
+	                          $(this).selectpicker('deselectAll');
+	                          $(this).find('option[value=9]').prop('selected', true);
+	                          $(this).selectpicker('refresh');
+	                      }
+	                  }
+	    });
+
+	    $('#cmdSeleccion').on('click', function (e) {;
+	          if($('#cboFilterStatus').selectpicker('val')== null)
+	          {
+	              alert('No se ha seleccionado ningun Estatus');
+	              return false;
+	          }
+	              
+	          alert('Los Estatus seleccionados son: ' + $('#cboFilterStatus').selectpicker('val').toString().split(','));
+	     });    
+		
+		
+	    $('#cmdClean').on('click', function(e){
+		  $('#cboFilterStatus').selectpicker('deselectAll');
+		  $('#cboFilterStatus').selectpicker('refresh');
+			 
+		  
+		 
+	   });
+	    
+			  
+	    $('#datetimepicker1').datetimepicker();
   $('.tiptip a.button, .tiptip button').tipTip();
   var imagen="../../imagenes/cal.gif";	
   var formatFecha="dd/mm/yy";	
@@ -11,13 +66,30 @@ $(document).ready(function() {
   $("#fechaFinal").datepicker({showOn: 'button', buttonImage: imagen, buttonImageOnly: true,dateFormat: formatFecha}); 
   $('#cmdpdf').click(function (event){mostrarOpcionPDF();});   
   getBeneficiarios('txtprestadorservicio','CVE_BENEFI','');
-  //$('#ui-datepicker-div').hide();
-  alert('prueba de acceso 2');
  
+ 
+
 });
 
+function getListaReq2(){
+	
+	if($('#cboFilterStatus').selectpicker('val')== null)
+    {
+        alert('No se ha seleccionado ningun Estatus');
+        return false;
+    }
+ 	
+ 	$('#status').val($('#cboFilterStatus').selectpicker('val').toString());
+ 	$('#forma').submit();
+    alert('Los Estatus seleccionados son: ' + $('#cboFilterStatus').selectpicker('val').toString().split(','));	
+    
+}
 
 
+$('#cboSearch').selectpicker({
+      style: 'btn-info',
+      size: 4
+});
 
 function reembolsos(cve_req, modulo){
 	controladorListadoRequisicionesRemoto.getReembolsoRequisiciones(cve_req, {
@@ -279,24 +351,7 @@ function aperturarRequisiciones(){
 }
 
 
-function getListaReq2(){
-	 var checkStatus = [];
-	 	$('input[name=status]:checked').each(function() {checkStatus.push($(this).val());});	
-	 	   //<input name="status" type="checkbox" id="status" value="4" <c:if test="${fn:contains(status,'4')}" >checked</c:if>>
-	 	//$("input:checkbox[name=type]:checked").each(function(){ checkStatus.push($(this).val()); }); 
-	 	 //<option value="0" <c:if test='${0==cboconOP}'> selected </c:if>>[Todas las opciones]</option>
-	 var error="";
-	 var titulo ="Error de validacion";
-	 	if (checkStatus.length==0 )   error="Debe de seleccionar un Estatus<br>";
-	 	if($('#txtprestadorservicio').attr('value')=='') $('#CVE_BENEFI').attr('value', '0');
-	 	if ($('#fechaInicial').attr('value')=="" && $('#fechaFinal').attr('value')!="" || $('#fechaInicial').attr('value')!="" && $('#fechaFinal').attr('value')=="")  error+="El rango de fechas no es valido<br>";
-	 	//	var s = 'lst_pedidos.action?idUnidad='+$('#cbodependencia').attr('value')+"&fechaInicial="+$('#fechaInicial').attr('value')+"&fechaFinal="+$('#fechaFinal').attr('value')+"&status="+checkStatus+"&tipo_gto="+$('#cbotipogasto').attr('value');
-	 	//document.location = s;
-	 	if (error=="")
-	 		$("#forma").submit();
-	 	else
-	 		jAlert(error,titulo);
-}
+
 
 function getRequisicion(claveReq)   {
 	$('#claveRequisicion').attr('value',claveReq);

@@ -56,10 +56,10 @@
     		<div class="alert alert-warning">
   				<strong class="col-md-offset-1">Warning!</strong> 
                 <div class="col-md-offset-2">
-                    <img src="../../imagenes/topic.PNG" width="8" height="7">&nbsp;&nbsp; Tu nueva contraseña debe tener como minimo 6 caracteres.</br>
-                    <img src="../../imagenes/topic.PNG" width="8" height="7">&nbsp;&nbsp; No utilices como contraseña tu login de usuario.</br>
-                    <img src="../../imagenes/topic.PNG" width="8" height="7">&nbsp;&nbsp; Utiliza una combinación de letras y números.</br>
-                    <img src="../../imagenes/topic.PNG" width="8" height="7">&nbsp;&nbsp; Las contraseñas se distinguen entre masyúsculas y minúsculas. Recuerda comprobar la tecla que bloquea las mayusculas.
+                    <img src="../../imagenes/topic.PNG" width="8" height="7">&nbsp;&nbsp; Tu nueva contraseña debe tener como minimo 6 caracteres.</img></br>
+                    <img src="../../imagenes/topic.PNG" width="8" height="7">&nbsp;&nbsp; No utilices como contraseña tu login de usuario.</br></img>
+                    <img src="../../imagenes/topic.PNG" width="8" height="7">&nbsp;&nbsp; Utiliza una combinación de letras y números.</br></img>
+                    <img src="../../imagenes/topic.PNG" width="8" height="7">&nbsp;&nbsp; Las contraseñas se distinguen entre masyúsculas y minúsculas. Recuerda comprobar la tecla que bloquea las mayusculas.</img>
                 </div>
                 
 			</div>		

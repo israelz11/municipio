@@ -279,12 +279,16 @@ public class GatewayRequisicion  extends BaseGateway {
 		if(beneficiario!=null&&!beneficiario.equals(""))
 			if(!beneficiario.equals("0")&&!beneficiario.equals(""))
 				sql+= " AND B.CLV_BENEFI =:beneficiario";
+		if (estatus.contains("1") && estatus.contains("5")) //STATUS =1 Y 5 CON FECHA DE FINIQUITADO...
+				sql+=" AND R.FECHA_FINIQUITADO IS NOT NULL ";
+		if (estatus.contains("1")) //STATUS = CERRADO
+			sql+=" AND R.FECHA_CIERRE IS NOT NULL ";
 		
 		return this.getNamedJdbcTemplate().queryForList("SELECT R.CVE_REQ, R.NUM_REQ, R.CVE_PERS, C.ID_PROYECTO, C.N_PROGRAMA, R.CLV_PARTID, R.ID_DEPENDENCIA, R.OBSERVA, R.TIPO, "+
 																"TIPO_REQ = (CASE r.TIPO WHEN 1 THEN 'REQ.' WHEN 2 THEN 'O.S.' WHEN 3 THEN 'O.T.' WHEN 4 THEN 'O.T.M.P.' WHEN 5 THEN 'O.S.BOMBAS' WHEN 6 THEN 'PAQUETE' WHEN 7 THEN 'REQ. CALEN' WHEN 8 THEN 'OS. CALEN' END), "+
 																"R.PERIODO, (SELECT TOP 1 MES FROM MESES WHERE ESTATUS='ACTIVO') AS PERIODO_ACTUAL,  R.STATUS , convert(varchar(10), R.FECHA ,103) AS FECHA, "+
 																"ISNULL((SELECT SUM(CANTIDAD *PRECIO_EST) FROM SAM_REQ_MOVTOS WHERE CVE_REQ = R.CVE_REQ),0) AS IMPORTE, "+
-																"ISNULL((SELECT SUM(cantidad_temp * precio_est ) FROM SAM_REQ_MOVTOS WHERE CVE_REQ = R.CVE_REQ),0) AS IMPORTE2,  S.DESCRIPCION_ESTATUS "+
+																"ISNULL((SELECT SUM(cantidad_temp * precio_est ) FROM SAM_REQ_MOVTOS WHERE CVE_REQ = R.CVE_REQ),0) AS IMPORTE2,  S.DESCRIPCION_ESTATUS,R.FECHA_FINIQUITADO "+
 														"FROM SAM_REQUISIC AS R "+
 																"INNER JOIN SAM_ESTATUS_REQ AS S ON (S.ID_ESTATUS = R.STATUS) "+
 																"LEFT JOIN CEDULA_TEC AS C ON (C.ID_PROYECTO = R.ID_PROYECTO) "+

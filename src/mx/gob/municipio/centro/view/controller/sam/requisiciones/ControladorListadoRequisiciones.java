@@ -49,7 +49,7 @@ public class ControladorListadoRequisiciones extends ControladorBase {
 	public final static  int VER_TODAS_LAS_UNIDADES = 25;
 	
 	@SuppressWarnings("unchecked")	
-	@RequestMapping(method = {RequestMethod.GET,RequestMethod.POST})  
+	@RequestMapping(method = {RequestMethod.GET,RequestMethod.POST})  // Cacha por el envio del formulario o envio de parametros
 	
 	public String  requestGetControlador( Map modelo, HttpServletRequest request ) {
 		boolean privilegio = this.getPrivilegioEn(this.getSesion().getIdUsuario(), VER_TODAS_LAS_UNIDADES);
@@ -76,7 +76,7 @@ public class ControladorListadoRequisiciones extends ControladorBase {
 				unidad = request.getParameter("dependencia");
 		}
 		
-		String estatus=request.getParameter("status")==null ? Integer.toString(gatewayRequisicion.REQ_STATUS_NUEVO): this.arrayToString(request.getParameterValues("status"),",");
+		String estatus=request.getParameter("status")==null ? Integer.toString(gatewayRequisicion.REQ_STATUS_NUEVO): this.arrayToString(request.getParameterValues("status"),",");//Componente status
 		String fechaIni=request.getParameter("fechaInicial");
 		String fechaFin=request.getParameter("fechaFinal");
 		String verUnidad=request.getParameter("verUnidad");
