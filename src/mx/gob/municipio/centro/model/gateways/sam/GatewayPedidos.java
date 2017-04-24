@@ -96,10 +96,10 @@ public class GatewayPedidos extends BaseGateway {
 		//Aplicar el descuento
 		if(descuento>0) subtotal = subtotal - descuento;
 		
-		subtotal = redondea(subtotal,2);
+		subtotal = redondea(String.valueOf(subtotal),2);
 		
 		//calculo del iva
-		if(iva!=0) total = redondea((subtotal +iva),2); else total = redondea(subtotal,2);
+		if(iva!=0) total = redondea(String.valueOf((subtotal +iva)),2); else total = redondea(String.valueOf(subtotal),2);
 		
 		//cve_ped = getNumeroPedido(ejercicio)+1;
 		String num_ped = this.rellenarCeros(cve_ped.toString(), 6);
@@ -128,10 +128,10 @@ public class GatewayPedidos extends BaseGateway {
 		//Aplicar el descuento
 		if(descuento>0) subtotal = subtotal - descuento;
 		
-		subtotal = redondea(subtotal,2);
+		subtotal = redondea(String.valueOf(subtotal) ,2);
 		
 		//calculo del iva
-		if(iva!=0) total = redondea((subtotal +iva),2); else total = redondea(subtotal,2);
+		if(iva!=0) total = redondea(String.valueOf((subtotal +iva)),2); else total = redondea(String.valueOf(subtotal),2);
 		
 		/*guarda los datos*/
 		String SQL = "INSERT INTO SAM_PEDIDOS_EX (EJERCICIO, CLV_BENEFI, CVE_PERS, SUBTOTAL, IVA, TIPO_IVA, DESCUENTO, TOTAL, CONTRATO, ENTREGA, NOTAS, FECHA_CRE, FECHA_PED, STATUS, COMPROMETE, EJERCE, CVE_CONCURSO, FECHA_ENTREGA, CONDICION_PAGO, ID_GRUPO, CVE_REQ ) " +
@@ -728,31 +728,31 @@ public class GatewayPedidos extends BaseGateway {
 	  double preCompromisoReq=gatewayRequisicion.getCompromisoHastaMes(idReq,mes);
 	  //Obtener lo que queda disponible desl mes para luego verificar si hace falta dinero en requisicion
 	  double disponiblemes = gatewayProyectoPartidas.getDisponibleMes(mes, proyecto, partida).doubleValue();
-	  double apartadoReq = redondea(preCompromisoReq,2);
+	  double apartadoReq = redondea(String.valueOf(preCompromisoReq),2);
 	  BigDecimal dispcontrato = (cve_contrato==0) ? new BigDecimal("0.00"): (BigDecimal) getJdbcTemplate().queryForObject("SELECT ISNULL(MONTO,0) FROM VT_COMPROMISOS WHERE TIPO_DOC = ? AND CVE_DOC = ? AND PERIODO = ?", new Object[]{"CON",cve_contrato, mes}, BigDecimal.class);
 	  BigDecimal dispvale = (cve_vale==0) ? new BigDecimal("0.00"): (BigDecimal) getJdbcTemplate().queryForObject("SELECT ISNULL(MONTO,0) FROM VT_COMPROMISOS WHERE TIPO_DOC = ? AND CVE_DOC = ? AND PERIODO = ? AND ID_PROYECTO = ? AND CLV_PARTID = ?", new Object[]{"REQ",idReq, mes, proyecto, partida}, BigDecimal.class);
 	  
 	  //verificar si el monto en requisicion alcanza por el importe del pedido
-	  if (redondea(preCompromiso,2) >= redondea(preCompromisoReq,2) && importe<=apartadoReq)
+	  if (redondea(String.valueOf(preCompromiso),2) >= redondea(String.valueOf(preCompromisoReq),2) && importe<=apartadoReq)
 		  tienePresupuesto=true;
 	  
 	  if(importe<=apartadoReq && Requisic.get("TIPO").toString().equals("7"))
 		  tienePresupuesto=true;
 	  
 	  if(cve_contrato!=0){
-		  if(tienePresupuesto==false&&(redondea((apartadoReq+dispcontrato.doubleValue()),2) >= redondea(importe,2)))
+		  if(tienePresupuesto==false&&(redondea(String.valueOf((apartadoReq+dispcontrato.doubleValue())),2) >= redondea(String.valueOf(importe),2)))
 			  tienePresupuesto=true;
 	  }
 	  else if(cve_vale!=0){
 		  //Recupera el disponible del mes
 		  BigDecimal disponible_presupuesto = (BigDecimal) this.getJdbcTemplate().queryForObject("SELECT ISNULL(dbo.getDisponible(?,?,?),0) AS DISPONIBLE FROM CEDULA_TEC AS CT WHERE CT.ID_PROYECTO = ? ", new Object[]{mes, proyecto, partida, proyecto}, BigDecimal.class);
 		  //valida aqui que tiene dinero en el vale
-		  if(redondea((dispvale.doubleValue()+disponible_presupuesto.doubleValue()),2) >= redondea(importe,2))
+		  if(redondea(String.valueOf((dispvale.doubleValue()+disponible_presupuesto.doubleValue())),2) >= redondea(String.valueOf(importe),2))
 			  tienePresupuesto=true;
 	  }
 	  else{
 		  //Si no hay dinero en requisicion completar con el disponible del mes para ver si alacanza
-		  if(tienePresupuesto==false&&(redondea((apartadoReq+disponiblemes),2) >= redondea(importe,2)))
+		  if(tienePresupuesto==false&&(redondea(String.valueOf((apartadoReq+disponiblemes)),2) >= redondea(String.valueOf(importe),2)))
 			  tienePresupuesto=true;
 	  }
 	 

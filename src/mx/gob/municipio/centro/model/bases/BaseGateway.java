@@ -85,7 +85,7 @@ public class BaseGateway {
         return transactionTemplate;
     }
     
-	public double redondea(double numero, int decimales) 
+	public double redondea(String numero, int decimales) 
 	{ 
 	  double resultado;
 	  BigDecimal res;
