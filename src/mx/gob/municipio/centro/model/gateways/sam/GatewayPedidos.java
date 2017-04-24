@@ -775,7 +775,7 @@ public class GatewayPedidos extends BaseGateway {
 	   //gatewayProyectoPartidas.comprometerPresupuesto(proyecto, partida, mes,importe,"COMPROMETER");
  }
  
-
+//Controlador para cerrar el pedido--------------------------------------------------------------------------------------------
 	public void cerrarPedido(final Long cve_ped, final int tipo, final Double iva, final int cve_pers, final int ejercicio){
 		try
 		{

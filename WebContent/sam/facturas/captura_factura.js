@@ -40,11 +40,10 @@ $(document).ready(function(){
 	 getBeneficiarios('txtprestadorservicio','CLV_BENEFI',$('#tipoBeneficiario').attr('value'));
 	 
 	 $("#txtfecha").datepicker({showOn: 'button', buttonImage:"../../imagenes/cal.gif" , buttonImageOnly: true,dateFormat: "dd/mm/yy"});
-	 
 	 /*Configura los tabuladores*/
 	 $('#tabuladores').tabs();
-	 $('#tabuladores').tabs('option', 'selected', [0]);//
-	 $('#tabuladores').tabs('option', 'disabled', [1,2,3]);//
+	 $('#tabuladores').tabs('option', 'selected', 0);;
+	 $('#tabuladores').tabs('option', 'disabled', [1,2,3]);
 	 $('#tr_file').hide();
 	 
 	 if($('#CVE_FACTURA').val()!=null||$('#CVE_FACTURA').val()!=0){
@@ -57,23 +56,19 @@ $(document).ready(function(){
 		 {
 		 	cargarBeneficiarioyPresupuestoOSOT($('#CLV_BENEFI').val(), $('#CVE_DOC').val());
 			cargarDetallePresupuestalDoc($('#CVE_FACTURA').val());
-			llenarTablaDeRetenciones();
 		 }
 		 if($('#cbotipodocumento').val()=='2')
 		 {
 			cargarBeneficiarioyPresupuestoPedidos($('#CLV_BENEFI').val(), $('#CVE_DOC').val());
 			cargarDetallePresupuestalDoc($('#CVE_FACTURA').val());
-			llenarTablaDeRetenciones();
 		 }
 		 if($('#cbotipodocumento').val()=='3')
 			cargarBeneficiarioyPresupuestoVale();
-		 	llenarTablaDeRetenciones();
-		 
-		 if($('#cbotipodocumento').val()=='4')
-		 {
+		if($('#cbotipodocumento').val()=='4')
+		{
 			PresupuestoBeneficiarioContrato($('#CLV_BENEFI').val(), $('#CVE_DOC').val());
 			cargarDetallePresupuestalDoc($('#CVE_FACTURA').val());
-		 }
+		}
 
 		mostrarDetallesArchivos();
 		llenarTablaDeRetenciones();
@@ -417,7 +412,7 @@ function PresupuestoBeneficiarioContrato(clv_benefi,cve_contrato)
 
 function tipoFacturasDeductivas()
 {
-	var tipo = $('#cbotipoFactura').val();// Evalua la seleccion del combo del tipo de la factura para mostrar controles
+	var tipo = $('#cbotipoFactura').val();
 	$('#tr_NumDocumento').show();
 	$('#trEntrada').show();
 	$('#tr_TotalDocumento').show();
@@ -431,42 +426,11 @@ function tipoFacturasDeductivas()
 	$('#div_beneficiario').show();
 	
 	switch(tipo){
-		case "1"://
+		case "1"://NOMINA
 			$('#tabuladores').tabs('enable',1);
 			$('#tabuladores').tabs('enable',2);
-			$('#tabuladores').tabs('enable',3);
-			break;
-		case "2"://
-			$('#tabuladores').tabs('enable',1);
-			$('#tabuladores').tabs('enable',2);
-			$('#tabuladores').tabs('enable',3);
-			break;
-		case "3"://
-			$('#tabuladores').tabs('enable',1);
-			$('#tabuladores').tabs('enable',2);
-			break;
-		case "4"://
-			$('#tabuladores').tabs('enable',1);
-			$('#tabuladores').tabs('enable',2);
-			break;
-		case "6"://
-			$('#tabuladores').tabs('enable',1);
-			$('#tabuladores').tabs('enable',2);
-			break;
-		case "7"://
-			$('#tabuladores').tabs('enable',1);
-			$('#tabuladores').tabs('enable',2);
-		
-			break;
-		case "8"://
-			$('#tabuladores').tabs('enable',1);
-			$('#tabuladores').tabs('enable',2);
-			
-			break;
-		case "9"://
-			$('#tabuladores').tabs('enable',1);
 			$('#div_benaficiario').show();
-			$('#tabuladores').tabs('enable',2);;
+			//$('#tabuladores').tabs('enable',2);;
 			$('#tr_NumDocumento').hide();
 			$('#trEntrada').hide();
 			$('#tr_TotalDocumento').hide();
@@ -478,6 +442,41 @@ function tipoFacturasDeductivas()
 			$('#div_benaficiarioFijo').show();
 			$('#div_beneficiario').hide();
 			break;
+		case "2"://OBRAS
+			$('#tabuladores').tabs('enable',1);
+			$('#tabuladores').tabs('enable',2);
+			$('#tabuladores').tabs('enable',3);
+			break;
+		case "3"://PEDIDO
+			$('#tabuladores').tabs('enable',1);
+			$('#tabuladores').tabs('enable',2);
+			break;
+		case "4"://OT/OS
+			$('#tabuladores').tabs('enable',1);
+			$('#tabuladores').tabs('enable',2);
+			break;
+		case "6"://CONTRATO
+			$('#tabuladores').tabs('enable',1);
+			$('#tabuladores').tabs('enable',2);
+			break;
+		case "7"://HONORARIOS
+			$('#tabuladores').tabs('enable',1);
+			$('#tabuladores').tabs('enable',2);
+			break;
+		case "8"://ARRENDAMIENTOS
+			$('#tabuladores').tabs('enable',1);
+			$('#tabuladores').tabs('enable',2);
+			break;
+		case "9"://FONDO FIJO
+			$('#tabuladores').tabs('enable',1);
+			$('#tabuladores').tabs('enable',2);
+			
+			break;
+		case "10"://CON RETENCION
+			$('#tabuladores').tabs('enable',1);
+			$('#tabuladores').tabs('enable',2);
+			
+			break;	
 		default: 
 			$('#tabuladores').tabs('option', 'disabled', [1,2,3]);
 			break;
@@ -649,18 +648,18 @@ function eliminarArchivo(idArchivo){
 
 function muestraTiposDocumento(){
 	var idDependencia = $('#cbodependencia').val();
-	if($('#cbotipodocumento').val()==1)
+	if($('#cbotipodocumento').val()==1)//O.S. y O.T.
 	{
 		if(idDependencia==0||idDependencia=="") {jAlert('Es necesario seleccionar la Unidad Administrativa para listar las Ordenes de Servicio y Trabajo'); return false;}
 			jWindow('<iframe width="650" height="400" name="consultaPedido" id="consultaPedido" frameborder="0" src="../consultas/muestra_OT_OS_facturas.action?idDependencia='+idDependencia+'"></iframe>','Listado de O.S. y O.T.', '','Cerrar ',1);
 	}
-	if($('#cbotipodocumento').val()==2)
+	if($('#cbotipodocumento').val()==2)//PEDIDO
 	{
 		if(idDependencia==0||idDependencia=="") {jAlert('Es necesario seleccionar la Unidad Administrativa para listar los Pedidos'); return false;}
 			jWindow('<iframe width="650" height="400" name="consultaPedido" id="consultaPedido" frameborder="0" src="../consultas/muestra_pedidos_facturas.action?idDependencia='+idDependencia+'"></iframe>','Listado de Pedidos con Entradas de Almacen', '','Cerrar ',1);
 	}
 	
-	if($('#cbotipodocumento').val()==3)
+	if($('#cbotipodocumento').val()==3)//VALE
 	{
 		if(idDependencia==0||idDependencia=="") {jAlert('Es necesario seleccionar la Unidad Administrativa para listar los Pedidos'); return false;}
 		
@@ -678,7 +677,7 @@ function muestraTiposDocumento(){
 
 	}
 	
-	if($('#cbotipodocumento').val()==4)
+	if($('#cbotipodocumento').val()==4)//CONTRATO
 	{
 		if(idDependencia==0||idDependencia=="") {jAlert('Es necesario seleccionar la Unidad Administrativa para listar los contratos'); return false;}
 		
@@ -949,6 +948,7 @@ function guardarFactura()
 							$('#cmdcerrar').attr('disabled', false);
 							desabilitarControles();;	
 							$('#tabuladores').tabs('enable',1);
+							tipoFacturasDeductivas();
 							cargarDetallePresupuestalDoc($('#CVE_FACTURA').val());
 							$('#tr_file').show();
 							CloseDelay('Factura guardada con éxito');
@@ -1017,7 +1017,7 @@ function desabilitarControles()
 /*funcion para validar los detalles de los conceptos*/
 function validarDetalles(){
 	if($('#cbotipodocumento').attr('value')==''||$('#cbotipodocumento').attr('value')==0) {jAlert('Es necesesario seleccionar el tipo de documento para cargar a la factura','Advertencia'); return true;}
-	if(($('#CVE_DOC').attr('value')==''||$('#CVE_DOC').attr('value')==0) && $('#cbotipoFactura').val()!='9') {jAlert('Es necesario selecionar un documento de Pedido, OS/OT para continuar', 'Advertencia'); return true;}
+	if(($('#CVE_DOC').attr('value')==''||$('#CVE_DOC').attr('value')==0) && $('#cbotipoFactura').val()!='1') {jAlert('Es necesario selecionar un documento de Pedido, OS/OT para continuar', 'Advertencia'); return true;}
 	if($('#txtfecha').attr('value')=='') {jAlert('La facha de la factura no es válida', 'Advertencia'); return true;}
 	if($('#txtnumfactura').attr('value')=='') {jAlert('El número de la factura no es valido', 'Advertencia'); return true;}
 	//if($('#txtsubtotal').attr('value')==''){jAlert('El subtotal de la factura no es válido','Advertencia'); return true;}

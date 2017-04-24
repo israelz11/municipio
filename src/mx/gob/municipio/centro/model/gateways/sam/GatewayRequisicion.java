@@ -283,6 +283,14 @@ public class GatewayRequisicion  extends BaseGateway {
 				sql+=" AND R.FECHA_FINIQUITADO IS NOT NULL ";
 		if (estatus.contains("1")) //STATUS = CERRADO
 			sql+=" AND R.FECHA_CIERRE IS NOT NULL ";
+		if (estatus.contains("0")) //STATUS = CERRADO
+			sql+=" AND R.FECHA_CIERRE IS NULL ";
+		if (estatus.contains("2")) //STATUS = CERRADO
+			sql+=" AND R.FECHA_CIERRE IS NOT NULL ";
+		if (estatus.contains("4")) //STATUS = CERRADO
+			sql+=" AND R.STATUS=4 ";
+		if (estatus.contains("9")) //STATUS = CERRADO
+			estatus = "0,1,2,4,5 ";
 		
 		return this.getNamedJdbcTemplate().queryForList("SELECT R.CVE_REQ, R.NUM_REQ, R.CVE_PERS, C.ID_PROYECTO, C.N_PROGRAMA, R.CLV_PARTID, R.ID_DEPENDENCIA, R.OBSERVA, R.TIPO, "+
 																"TIPO_REQ = (CASE r.TIPO WHEN 1 THEN 'REQ.' WHEN 2 THEN 'O.S.' WHEN 3 THEN 'O.T.' WHEN 4 THEN 'O.T.M.P.' WHEN 5 THEN 'O.S.BOMBAS' WHEN 6 THEN 'PAQUETE' WHEN 7 THEN 'REQ. CALEN' WHEN 8 THEN 'OS. CALEN' END), "+

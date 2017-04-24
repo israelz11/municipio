@@ -14,7 +14,7 @@
 
 
 <link rel="stylesheet" href="../../include/css/bootstrap2.css" type="text/css"> 
-<link rel="stylesheet" href="../../include/css/bootstrap-3.3.4/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="../../include/css/bootstrap-3.3.4.css">
 <link rel="stylesheet" href="../../include/css/boostrap-select/dist/css/bootstrap-select.css">
 <link rel="stylesheet" href="../../include/css/bootstrap-datetimepicker-master/build/css/bootstrap-datetimepicker.css">
 
@@ -65,7 +65,7 @@ a:active {
     <!--bloque form-group 1 -->   
     <div class="form-group">
               <label for="dependencia" class="control-label col-md-2">Unidad:</label>
-              <div class="col-md-6">
+              <div class="col-md-5">
                 <sec:authorize ifNotGranted="ROLE_Sam_PRIVILEGIOS_VER_TODAS_LAS_UNIDADES">
                           <c:out value="${nombreUnidad}"/>
                           <input type="hidden" name="dependencia" id="dependencia" value="<c:out value='${idUnidad}'/>">
@@ -84,7 +84,8 @@ a:active {
                            </select>
                     </sec:authorize>
             </div>   
-            <div class="col-md-4"><!-- Revisar como llamar la funcion desde el jsp -->
+            <div class="col-md-5"><!-- Revisar como llamar la funcion desde el jsp -->
+            	
          		<!--  	
                 <input type="checkbox" name="status" id="status" value="0" <c:if test="${fn:contains(status,'0')}" ></c:if>>
                 <label style="width:100px;" for="status">&nbsp; Edición</label>
@@ -92,7 +93,24 @@ a:active {
                 <label style="width:100px;" for="status">&nbsp; Cerrado</label>
                 <input name="status" id="status" value="2" type="checkbox" <c:if test="${fn:contains(status,'2')}" ></c:if>>
                 <label style="width:100px;" for="status">&nbsp; En proceso</label>-->
-                <input type="hidden" value="" name="status" id="status"> 
+                <label for="basic" class="control-label col-md-1">Estatus</label>
+                <div class="col-md-3">
+                	<select class="selectpicker form-control m-b" id="cboFilterStatus" data-live-search="true" multiple data-style="btn-primary">
+				              <optgroup label="">
+				                  <option value="9" selected="selected">[Todas los Estatus]</option>
+				              </optgroup>
+				              <optgroup label="">
+				                      <option value="0">EDICION</option>
+				                      <option value="1">CERRADO</option>
+				                      <option value="2">PROCESO</option>
+				                      <option value="4">CANCELADO</option>
+				                      <option value="5">FINIQUITADO</option>
+				              </optgroup>
+				          </select>
+                </div>	
+				        <!-- <input type="hidden" value="${status}" name="status" id="status">  -->
+				          
+                <input type="hidden" value="${status}" name="status" id="status"> 
             </div>
     </div>
     <!--bloque form-group 2 -->   
@@ -130,7 +148,10 @@ a:active {
                 <div class="col-md-6">
                          
                         <input class="btn btn-success btn-sm" name="btnBuscar" id="btnBuscar"  value="Buscar" onClick="getListaReq2()" style="width:100px" type="button">
-                               
+                        <button class="btn btn-success btn-sm" name="btnBuscar" id="btnBuscar"  value="Buscar" onClick="getListaReq2()" style="width:100px">
+                        	<span class="glyphicon glyphicon-search"></span> Buscar   
+                        </button>
+                          
                  </div>
             </div>
        </div> 
@@ -144,7 +165,7 @@ a:active {
                     <option value="2" <c:if test='${2==cboconOP}'> selected </c:if>>Sin Ordenes de Pago</option>
                 </select>  
             </div>
-            <div class="col-md-2">
+            <div class="col-md-4">
             <select name="cbotipo" id="cbotipo" class="form-control input-sm" style="width:200px; height:29px;font-size:12px">
               <option value="0">[Todos los tipos]</option>
               <c:forEach items="${tipoRequisicion}" var="item">
@@ -221,21 +242,7 @@ a:active {
                   <textarea class="form-control" name="txtlistado" rows="3" wrap="virtual" rows="5"  id="txtlistado" style="width:455px"> <c:out value='${txtlistado}'/> </textarea>
               </div>
               <div class="col-md-5">
-              			<div class="form-group">
-				        <label for="basic" class="control-label">Seleccione un Estatus</label>
-				          <select class="selectpicker form-control m-b" id="cboFilterStatus" data-live-search="true" multiple data-style="btn-primary">
-				              <optgroup label="">
-				                  <option value="9" selected="selected">[Todas los Estatus]</option>
-				              </optgroup>
-				              <optgroup label="">
-				                      <option value="0">EDICION</option>
-				                      <option value="1">CERRADO</option>
-				                      <option value="2">PROCESO</option>
-				                      <option value="4">CANCELADO</option>
-				                      <option value="5">FINIQUITADO</option>
-				              </optgroup>
-				          </select>
-      </div>
+              			
               </div>
        </div><!-- Termina Bloque 7 -->
 		
@@ -369,7 +376,7 @@ a:active {
 </table>
     <div class="alert alert-info">
         <strong>Total de registros encontrados: <c:out value='${CONTADOR}'/></strong><br/>
-        <strong>Valor checkStatus: <c:out value='${fn:contains(options,0)}'/></strong>
+      
     </div>
     
 </div>

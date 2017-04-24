@@ -32,6 +32,9 @@ public class GatewayFacturas extends BaseGateway {
 	@Autowired
 	public GatewayRequisicion gatewayRequisicion;
 	
+	@Autowired
+	public GatewayBitacora gatewayBitacora;
+	
 	private List<Map> presupuesto = new ArrayList<Map>();
 	//private List<HashMap<String,String>> hashMaps = new ArrayList<HashMap<String,String>>();
 	
@@ -193,6 +196,7 @@ public class GatewayFacturas extends BaseGateway {
 							total,
 							0
 					});
+					
 				}
 				else
 					this.getJdbcTemplate().update("INSERT INTO SAM_FACTURAS("+tipoDocto+", NUM_FACTURA, ID_ENTRADA, CLV_BENEFI, CVE_PERS, ID_TIPO, ID_DEPENDENCIA, NOTAS, EJERCICIO, PERIODO, FECHA, FECHA_DOCUMENTO, SUBTOTAL, IVA, TOTAL, STATUS) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", new Object[]{
@@ -213,7 +217,7 @@ public class GatewayFacturas extends BaseGateway {
 							total,
 							0
 					});
-				
+				gatewayBitacora.guardarBitacora(gatewayBitacora.FACTURA_NUEVA, ejercicio, cve_pers, cve_factura, num_fact, "FAC", fecha_doc, null, null, null, null);
 				cve_factura = this.getJdbcTemplate().queryForLong("SELECT MAX(CVE_FACTURA) from SAM_FACTURAS");
 			}
 			else
@@ -232,6 +236,7 @@ public class GatewayFacturas extends BaseGateway {
 							total,
 							cve_factura
 					});
+					
 				}
 				else 
 					this.getJdbcTemplate().update("UPDATE SAM_FACTURAS SET "+tipoDocto+"=?, CLV_BENEFI=?, ID_TIPO=?, ID_DEPENDENCIA=?, ID_ENTRADA=?, NOTAS=?, FECHA_DOCUMENTO=?, SUBTOTAL=?, IVA=?, TOTAL=? WHERE CVE_FACTURA =? ", new Object[]{
@@ -247,13 +252,15 @@ public class GatewayFacturas extends BaseGateway {
 						total,
 						cve_factura
 				});
-				
+				gatewayBitacora.guardarBitacora(gatewayBitacora.FACTURA_ACTUALIZAR, ejercicio, cve_pers, cve_factura, num_fact, "FAC", fecha_doc, null, null, null, null);
 			}
 			
 			//Actualizar el importe de la factura
 			BigDecimal importe = (BigDecimal) this.getJdbcTemplate().queryForObject("SELECT ISNULL(SUM(IMPORTE),0) FROM SAM_FACTURA_DETALLE WHERE CVE_FACTURA =?", new Object[]{cve_factura}, BigDecimal.class);
 			this.getJdbcTemplate().update("UPDATE SAM_FACTURAS SET TOTAL =? WHERE CVE_FACTURA =?", new Object[]{importe, cve_factura});
 			
+			
+			//
 			return cve_factura;
 		}
 		catch(Exception e)
@@ -262,7 +269,9 @@ public class GatewayFacturas extends BaseGateway {
 		}
 	}
 	
-	public void cerrarFactura(final Long cve_factura, final int cve_pers)
+	
+	//-------------------------------CERRAR LA FACTURA------------------------------------------------------------------
+	public void cerrarFactura(final Long cve_factura, final int cve_pers,final int ejercicio)
 	{
 		try
 		{
@@ -276,8 +285,10 @@ public class GatewayFacturas extends BaseGateway {
             protected void   doInTransactionWithoutResult(TransactionStatus status) {
 	            	String tipoDocto = "";
 	            	String consulta = "";
-	            	
+	            	String num_docto="";
+	            	//Map num_devengo =GatewayFacturas.guardarFactura(num_factura); //getOrden(idOrden);
             		Map factura = getFactura(cve_factura);
+            		
             		List<Map> movimientos = getDetalles(cve_factura);
             				
             		if(factura.get("CVE_REQ")!=null) {tipoDocto = "CVE_REQ"; consulta = "'O.S', 'O.T', 'REQ'";}
@@ -386,14 +397,13 @@ public class GatewayFacturas extends BaseGateway {
 
 	            			}
 	            			
-	            			//Aqui estaba el cierre de la factura
-	            			/*Guardar en la bitacora*/
+	            			
 	            		}
 	            		else
 	            			throw new RuntimeException("No se puede cerrar la factura, el importe a devengar es mayor al compromiso");
             		
 	            	}
-	    			//Validar equi si se finiquita el contrato
+	    			//Validar si se finiquita el contrato al cerrar el devengado
 	    			if(factura.get("CVE_CONTRATO")!=null) {
 	    				BigDecimal presupuestoContrato = (BigDecimal) getJdbcTemplate().queryForObject("SELECT SUM(MONTO) FROM VT_COMPROMISOS WHERE CONSULTA='COMPROMETIDO' AND TIPO_DOC ='CON' AND CVE_DOC = ?", new Object[]{factura.get("CVE_CONTRATO")}, BigDecimal.class);
 	    				if(Double.parseDouble(factura.get("TOTAL").toString())== presupuestoContrato.doubleValue())
@@ -406,7 +416,12 @@ public class GatewayFacturas extends BaseGateway {
 	    			//Cierra la factura
             		Date fecha_finalizado = new Date();
             		getJdbcTemplate().update("UPDATE SAM_FACTURAS SET STATUS = ?, FECHA_CIERRE = ?, FECHA_FINALIZADO =?, MES_FINALIZADO=?, DIA_FINALIZADO=? WHERE CVE_FACTURA =?",new Object[]{1, new Date(), fecha_finalizado, fecha_finalizado.getMonth()+1, fecha_finalizado.getDay(), cve_factura});
-    				
+            		
+            		
+            		//Aqui estaba el cierre de la factura
+        			/*Guardar en la bitacora
+        			 Abraham Gonzalez */
+        			gatewayBitacora.guardarBitacora(gatewayBitacora.FACTURA_CERRAR, ejercicio, cve_pers, cve_factura,"", "FAC", new Date(), null, null, null, null);
             } 
          });
 		}
@@ -416,10 +431,16 @@ public class GatewayFacturas extends BaseGateway {
 		}
 	}
 
+	//Mapeo de los detalles de las facturas para cargar al seleccionar el listado de las facturas desde la op 
 	public List<Map> getDetalles(Long cve_factura){
 		return this.getJdbcTemplate().queryForList("SELECT *FROM SAM_FACTURA_DETALLE WHERE CVE_FACTURA = ?", new Object[]{cve_factura});
 	}
 	
+	//Mapeo de las retenciones de las facturas para cargar en la op
+	public List<Map> getRetencion(Long cve_factura) {
+		return this.getJdbcTemplate().queryForList("SELECT CVE_FACTURA,CONS,CLV_RETENC,IMPORTE FROM SAM_FACTURA_MOV_RETENC WHERE CVE_FACTURA = ?",new Object[]{cve_factura});
+		
+	}
 	public List<Map> getListadoFacturas(Map m){
 		String sql = "SELECT F.CVE_FACTURA " +
 						      ",F.NUM_FACTURA" +
@@ -591,6 +612,16 @@ public class GatewayFacturas extends BaseGateway {
 	            	}
 	            }
 		 });
+	}
+	public void guardaBitacora(Long cve_orden, int ejercicio, int cve_pers, Map orden){
+		try{
+			String folio=rellenarCeros(cve_orden.toString(),6);
+			//guarda en la bitacora
+			gatewayBitacora.guardarBitacora(gatewayBitacora.FACTURA_CANCELADA, ejercicio, cve_pers, cve_orden, folio, "FAC", (Date) orden.get("V_FECHA"), null, null, null, Double.parseDouble(orden.get("IMPORTE").toString()));
+		}
+		catch ( DataAccessException e) {
+			//log.info(e.getMessage());
+		}
 	}
 	
 	public void cancelarFacturas(final Long[] idFacturas, final int cve_pers, final int ejercicio)
@@ -768,6 +799,7 @@ public class GatewayFacturas extends BaseGateway {
 		 });    
     }
 	
+	//LISTADO DE RETENCIONES EN FACTURA....
 	public List getRetenciones(Long cve_factura) {	   
 		   return this.getJdbcTemplate().queryForList("select M.CVE_FACTURA, " +
 	            "M.CONS,M.CLV_RETENC,R.RETENCION,M.IMPORTE, " +
@@ -895,8 +927,9 @@ public class GatewayFacturas extends BaseGateway {
 		try
 		{
 			Long cve_factura =0L;
-			getJdbcTemplate().update("INSERT INTO SAM_FACTURAS(NUM_FACTURA, ID_TIPO, ID_ENTRADA, CLV_BENEFI, CVE_PERS, ID_DEPENDENCIA, NOTAS, EJERCICIO, PERIODO, FECHA, FECHA_DOCUMENTO, FECHA_CIERRE, SUBTOTAL, IVA, TOTAL, STATUS) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", new Object[]{
-					"NOM "+row.get("MES").toString()+" "+row.get("TIPO_NOMINA").toString()+row.get("ID_RECURSO").toString()+row.get("CLV_UNIADM").toString()+row.get("ID_PROYECTO").toString()+row.get("CLV_PARTID").toString()+row.get("N_PROGRAMA").toString(),
+			
+			getJdbcTemplate().update("INSERT INTO SAM_FACTURAS(NUM_FACTURA, ID_TIPO, ID_ENTRADA, CLV_BENEFI, CVE_PERS, ID_DEPENDENCIA, NOTAS, EJERCICIO, PERIODO, FECHA, FECHA_DOCUMENTO, FECHA_CIERRE, SUBTOTAL, IVA, TOTAL, STATUS) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", 
+					new Object[]{"NOM "+row.get("MES").toString()+" "+row.get("TIPO_NOMINA").toString()+row.get("ID_RECURSO").toString()+row.get("CLV_UNIADM").toString()+row.get("ID_PROYECTO").toString()+row.get("CLV_PARTID").toString()+row.get("N_PROGRAMA").toString(),
 					1,
 					0,
 					"8000",
@@ -917,8 +950,10 @@ public class GatewayFacturas extends BaseGateway {
 			});
 			
 			//Recupera la factura 
-			cve_factura = getJdbcTemplate().queryForLong("SELECT MAX(CVE_FACTURA) FROM SAM_FACTURAS");
+			//Long cveOp =getNumeroOrdenNuevo(ejercicio);
 			
+			cve_factura = getJdbcTemplate().queryForLong("SELECT MAX(CVE_FACTURA) FROM SAM_FACTURAS");
+			//gatewayBitacora.guardarBitacora(gatewayBitacora.FACTURA_NUEVA, ejercicio, cve_pers, cve_factura, new Object[]{"NOM "+row.get("MES").toString()+" "+row.get("TIPO_NOMINA").toString()+row.get("ID_RECURSO").toString()+row.get("CLV_UNIADM").toString()+row.get("ID_PROYECTO").toString()+row.get("CLV_PARTID").toString()+row.get("N_PROGRAMA").toString(), "OP", new Date(), null, null, null, null);
 			return cve_factura;
 		}
 		catch(DataAccessException e)
@@ -1017,7 +1052,7 @@ public class GatewayFacturas extends BaseGateway {
 				getJdbcTemplate().update("UPDATE SAM_FACTURAS SET CVE_OP = ? WHERE CVE_FACTURA =?", new Object[]{cve_op, rw.get("CVE_FACTURA")});
 			}
 			
-			//Guardamos las deductivas de la OP
+			//Guardamos las deductivas de la Factura
 			int i =0;
 			List<Map> retenciones = getJdbcTemplate().queryForList("SELECT *FROM SAM_FACTURA_MOV_RETENC WHERE CVE_FACTURA =?", new Object[]{cve_facturaTemp});
 			for(Map retenc : retenciones)

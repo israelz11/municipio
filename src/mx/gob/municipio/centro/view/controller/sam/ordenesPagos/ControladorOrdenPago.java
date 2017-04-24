@@ -124,6 +124,7 @@ public class ControladorOrdenPago extends ControladorBase  {
 	    return idOrden;
 	    }	    
 	    
+//---------------------------------- CERRAR ORDEN DE PAGO ------------------------------------------------------------------------------------------------	    
     public String  cerrarOrden(final Long idOrden  ){
 	    	 try {                 
 		            this.getTransactionTemplate().execute(new TransactionCallbackWithoutResult(){

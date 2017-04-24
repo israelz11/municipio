@@ -45,7 +45,7 @@ return tipo > 0;
 }
 
 public  boolean  actualizarPrincipalDetalle(Integer idDetalle,Long idOrden,String proyecto, String partida, String nota, Double importe, Long idVale, int ejercicio, int cve_pers, String tipo){
-	//Verfificar si tiene los privilegios en solo lectura Ordenes de Pago
+	//Verificar si tiene los privilegios en solo lectura Ordenes de Pago
 	if(getPrivilegioEn(cve_pers, 114)){
 		throw new RuntimeException("No cuenta por los privilegios suficientes para realizar esta operación, solo lectura");
 	}
@@ -286,6 +286,7 @@ public  boolean  actualizarPrincipalDetalle(Integer idDetalle,Long idOrden,Strin
 	}
 	
 	/*Metodo para obtener un listado de los anexos de la OP*/
+	
 	public List getAnexosOP(Long idOrden) {
 		try{
 			//return this.getJdbcTemplate().queryForList("SELECT SAM_OP_ANEXOS.*, TIPODOC_OP.DESCR FROM SAM_OP_ANEXOS INNER JOIN TIPODOC_OP ON (TIPODOC_OP.T_DOCTO = SAM_OP_ANEXOS.T_DOCTO) WHERE CVE_OP = ? AND SAM_OP_ANEXOS.T_DOCTO <>'XML' ORDER BY ANX_CONS ASC", new Object[]{idOrden});

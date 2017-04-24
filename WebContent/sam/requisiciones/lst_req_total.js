@@ -56,7 +56,30 @@ $(document).ready(function() {
 		  
 		 
 	   });
+	    if ($('#status').value()!=""){
 	    
+	    	//$('#cboFilterStatus').selectpicker('val',$('#status').value());
+	    	//$('.cboFilterStatus').selectpicker('val',['0','1','2','4','5']);
+	    	$('.cboFilterStatus').selectpicker('val',$('#status').value());
+	    	$('#cboFilterStatus').selectpicker('refresh');
+	    	
+	    	alert('prueba' + $('.cboFilterStatus').selectpicker('val',$('#status').val()) );
+	    	//
+	   }
+	   // $("select[name=color1]").change(function(){
+	    //	            alert($('select[name=color1]').val());
+	    	//            $('input[name=valor1]').val($(this).val());
+	    	//        });
+	    
+	    /*
+	    $(function() {
+
+	    	  $('.selectpicker').on('change', function(){
+	    	    var selected = $(this).find("option:selected").attr("value");
+	    	    alert(selected);
+	    	  });
+	    	  
+	    	});*/
 			  
 	    $('#datetimepicker1').datetimepicker();
   $('.tiptip a.button, .tiptip button').tipTip();

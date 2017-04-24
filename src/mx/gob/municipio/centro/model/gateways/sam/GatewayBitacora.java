@@ -55,6 +55,16 @@ public class GatewayBitacora extends BaseGateway {
 	public static int OP_MOV_AGREGO_VALES		= 35;
 	public static int OP_CAMBIA_FECHA			= 36;
 	
+	/*PARA LAS FACTURAS*/
+	public static int FACTURA_NUEVA=54;
+	public static int FACTURA_ACTUALIZAR =55;
+	public static int FACTURA_CANCELADA =56;
+	public static int FACTURA_CERRAR =57;
+	public static int FACTURA_MOV_AGREGO_RETENCIONES =58;
+	public static int FACTURA_MOV_ACTUALIZA_RETENCION =59;
+	public static int FACTURA_MOV_ACTUALIZA_IMPORTE =61;
+	
+	
 	/*PARA LOS VALES*/
 	public static int VALE_NUEVO		= 37;
 	public static int VALE_ACTUALIZA 	= 38;

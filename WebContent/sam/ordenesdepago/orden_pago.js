@@ -350,7 +350,7 @@ function _guardarOP(){
 },async=false );
 }
 
-function cerrarOrden( ) {
+function cerrarOrden3( ) {
 	var tipo_gto = $('#tipoGasto').val();
 	jConfirm('¿Confirma que desea cerrar la Orden de Pago?','Cerrar Orden Pago', function(r){
 			if(r){			
@@ -371,8 +371,71 @@ function cerrarOrden( ) {
 		}
 	});
 }
+function _cerrarOrden3(){
+	controladorOrdenPagoRemoto.cerrarOrden( $('#id_orden').attr('value'), {
+				callback:function(items) {
+					if (items != "exito")
+							jAlert(items, 'Advertencia');
+					   else {
+						   getReporteOP($('#id_orden').attr('value'));
+						   limpiarForma();
+						   $('#btnCerrar').attr('disabled',true);	
+						   CloseDelay("Orden de Pago cerrada con éxito");
+					   }	  
+				} 					   				
+				,
+				errorHandler:function(errorString, exception) { 
+					jError(errorString, 'Error');     
+				}
+			
+		});
+}
+function cerrarOrden() {
+	var tipo_gto = $('#tipoGasto').val();
+	swal({
+		  title: "¿Cerrar Orden de Pago?",
+		  text: "Una vez cerrado el documento no podra ser modificado!",
+		  type: "warning",
+		  showCancelButton: true,
+		  confirmButtonColor: "#DD6B55",
+		  confirmButtonText: "Si, Cerrar",
+		  cancelButtonText: "No, Deshacer",
+		  closeOnConfirm: false,
+		  closeOnCancel: false
+		},
+		function(isConfirm){
+		  if (isConfirm) {
+		    swal("Cerrada!", "Orden de Pago cerrada con exito!.", "success");
+		    controladorOrdenPagoRemoto.validarTipoGasto($('#id_orden').attr('value'), tipo_gto, "x");
+		    controladorOrdenPagoRemoto.cerrarOrden( $('#id_orden').attr('value'));
+		    limpiarForma();
+			   $('#btnCerrar').attr('disabled',true);	
+		  } else {
+			    swal("Cancelar", "El documento no será cerrado!:)", "error");
+		  }
+		});
+	/*
+	jConfirm('¿Confirma que desea cerrar la Orden de Pago?','Cerrar Orden Pago', function(r){
+			if(r){			
+				ShowDelay('Cerrando Orden de Pago','');	
+				controladorOrdenPagoRemoto.validarTipoGasto($('#id_orden').attr('value'), tipo_gto, "x", {
+							callback:function(items){
+								if(items=='')
+									_cerrarOrden();
+								else
+									jError(items,'Advertencia');
+							} 					   				
+							,
+							errorHandler:function(errorString, exception) { 
+								jError(errorString, 'Error'); 
+							}
+						
+			});
+		}
+	});*/
+}
 
-function _cerrarOrden(){
+function _cerrarOrden2(){
 	controladorOrdenPagoRemoto.cerrarOrden( $('#id_orden').attr('value'), {
 				callback:function(items) {
 					if (items != "exito")

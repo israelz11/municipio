@@ -451,6 +451,7 @@ public  void actualizarPrincipalDocumento(Integer idDocumento,String tipoMovDoc,
 	  actualizarDocumento(idDocumento,tipoMovDoc,numeroDoc,notaDoc, idOrden, ejercicio, cve_pers);
 }
 
+//Inserta el anexo a la OP desde el DEVENGADO
 public void insertaDocumento(Integer idDocumento,String tipoMovDoc,String numeroDoc,String notaDoc,Long idOrden, int ejercicio, int cve_pers ){
 	try{
 		String folio=rellenarCeros(idOrden.toString(),6);
@@ -1293,6 +1294,8 @@ public boolean cambiarFechaOrdenPago(Long cve_op, String fechaNueva, int ejercic
 		return this.getJdbcTemplate().queryForInt("SELECT COUNT(*) FROM SAM_MOV_OP WHERE CVE_FACTURA = ? AND CVE_OP =?", new Object[]{cve_factura, cve_op})>0;
 	}
 	
+	
+	//------------------------------------- CARGA LA LISTA DE FACTURAS SELECCIONADAS EN LOS DETALLES DE ORDEN DE PAGO---------------------------------------------------------
 	public String guardarFacturasEnOrdenPago(final Long cve_op, final Long[] cve_facturas, final int ejercicio, final int cve_pers){
 		try { 
 			final String result = ""; 
@@ -1303,11 +1306,16 @@ public boolean cambiarFechaOrdenPago(Long cve_op, String fechaNueva, int ejercic
 	            	
 	            	
 	            	int numAnexo = getJdbcTemplate().queryForInt("SELECT MAX(ANX_CONS) FROM SAM_OP_ANEXOS WHERE CVE_OP = ?", new Object[]{cve_op});
+	            	
 	            	for(Long cve_factura: cve_facturas){
+	            		
 	            		numAnexo++;
 	            		Map factura = gatewayFacturas.getFactura(cve_factura);
-	            		List<Map> facturaMovtos = gatewayFacturas.getDetalles(cve_factura);
 	            		
+	            		List<Map> facturaMovtos = gatewayFacturas.getDetalles(cve_factura);
+	            		List<Map> facturaRetenc = gatewayFacturas.getRetencion(cve_factura);
+	            		
+	            		//Listado de las retenciones
 	            		
 	            		if(!factura.get("STATUS").toString().equals("1"))
 	            			throw new RuntimeException("El Estatus de la factura "+factura.get("NUM_FACTURA").toString()+" no es valido ó no esta devengada en el presupuesto");
@@ -1319,14 +1327,44 @@ public boolean cambiarFechaOrdenPago(Long cve_op, String fechaNueva, int ejercic
 	            		if(exitsteMovimiento(Long.parseLong(factura.get("CVE_FACTURA").toString()), cve_op))
 	            			throw new RuntimeException("La factura "+factura.get("NUM_FACTURA").toString()+" ya existe en los movimientos de la Orden de Pago");
 	            		
+	            		
 	            		//Guarda los movimiento de la factura en la OP
+	            		
 	            		for(Map detalleFac: facturaMovtos)
 	            		{
 		            		getJdbcTemplate().update("INSERT INTO SAM_MOV_OP(CVE_OP, ID_PROYECTO, CLV_PARTID, CVE_FACTURA, NOTA, TIPO, MONTO) VALUES(?,?,?,?,?,?,?)", new Object[]{cve_op, detalleFac.get("ID_PROYECTO"), detalleFac.get("CLV_PARTID"), cve_factura, "Soporta la factura No. "+factura.get("NUM_FACTURA"), "FACTURA", detalleFac.get("IMPORTE")});
-	            		}
+		            	}
 	            		
+	            		
+	            		//IMPORTA LAS DEDUCCIONES DESDE LAS FACTURAS A LA ORDEN DE PAGO
+            			/*
+	            		int i =getJdbcTemplate().queryForInt("SELECT COUNT(*) AS N FROM SAM_FACTURA_MOV_RETENC WHERE CVE_FACTURA =?", new Object[]{cve_factura});;
+            			List<Map> retenciones = getJdbcTemplate().queryForList("SELECT * FROM SAM_FACTURA_MOV_RETENC WHERE CVE_FACTURA =?", new Object[]{cve_factura});
+            			for(Map retenc : retenciones)
+            			{
+            				i++;
+            				getJdbcTemplate().update("INSERT INTO MOV_RETENC(CVE_OP, RET_CONS, CLV_RETENC, IMPORTE, PAGADO) VALUES(?,?,?,?,?)", new Object[]{
+            						cve_op,
+            						i,
+            						retenc.get("CLV_RETENC"),
+            						retenc.get("IMPORTE"),
+            						0
+            				});
+            			}
+	            		*/      		
 	            		//if(!factura.get("ID_TIPO").toString().equals("9"))
 	            		
+	            		/*Guardar las deductivas de la factura en Orden de pago si existen*/
+	            		/*Retenciones de la Orden de pago*/
+	            		
+	            		int cont =getJdbcTemplate().queryForInt("SELECT COUNT(*) FROM SAM_FACTURA_MOV_RETENC WHERE CVE_FACTURA =?", new Object[]{cve_factura});;
+	            		List <Map> detalles = getJdbcTemplate().queryForList("SELECT *FROM SAM_FACTURA_MOV_RETENC WHERE CVE_FACTURA =?", new Object[]{cve_factura});
+	            		for(Map row: detalles){
+	            			cont++;
+	            			getJdbcTemplate().update("INSERT INTO MOV_RETENC (CVE_OP, RET_CONS, CLV_RETENC, IMPORTE, PAGADO) " +
+	            					"VALUES (?,?,?,?,?)"
+	            					, new Object[]{cve_op, (cont), row.get("CLV_RETENC"), row.get("IMPORTE"), 0});
+	            		}
 	            		
 	            		/*Guarda los archivos de la factura en la OP siempre y cuando la factura tenga archivos*/
 	            		if(getJdbcTemplate().queryForInt("SELECT COUNT(*) FROM SAM_FACTURAS_ARCHIVOS WHERE CVE_FACTURA =?", new Object[]{cve_factura})>0)
@@ -1338,17 +1376,7 @@ public boolean cambiarFechaOrdenPago(Long cve_op, String fechaNueva, int ejercic
 	            			getJdbcTemplate().update("UPDATE SAM_OP_ANEXOS SET FILENAME =?, FILEPATH=?, DATEFILE=?, FILETYPE=?, FILELENGTH=? WHERE CVE_OP =? AND ANX_CONS=?", new Object[]{"["+det.get("ID_ARCHIVO") + "] "+ det.get("NOMBRE"), "../"+det.get("RUTA"), new Date(), det.get("EXT"), det.get("TAMANO"), cve_op, numAnexo});
 	            		}
 	            		
-	            		/*Retenciones de la Orden de pago*/
-	            		int cont = getJdbcTemplate().queryForInt("SELECT COUNT(*) AS N FROM MOV_RETENC WHERE CVE_OP =?", new Object[]{cve_op});
-	            		/*Guardar las deductivas de la factura en Orden de pago si existen*/
-	            		List <Map> detalles = getJdbcTemplate().queryForList("SELECT *FROM SAM_FACTURA_MOV_RETENC WHERE CVE_FACTURA =?", new Object[]{cve_factura});
-	            		for(Map row: detalles){
-	            			cont++;
-	            			getJdbcTemplate().update("INSERT INTO MOV_RETENC (CVE_OP, RET_CONS, CLV_RETENC, IMPORTE, PAGADO) " +
-	            					"VALUES (?,?,?,?,?)"
-	            					, new Object[]{cve_op, (cont), row.get("CLV_RETENC"), row.get("IMPORTE"), 0});
-	            		}
-	            		
+	            		      			            		
 	            		/*Guardar las comprobaciones de vale de la Factura en la Orden de Pago si existen*/
 	            		List <Map> detallesVales = getJdbcTemplate().queryForList("SELECT *FROM SAM_FACTURAS_VALES WHERE CVE_FACTURA =?", new Object[]{cve_factura});
 	            		cont = 0;

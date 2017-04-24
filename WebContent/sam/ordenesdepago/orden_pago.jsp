@@ -8,6 +8,12 @@
 <head>
 <title>Captura de Ordenes de pago</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+
+
+
 <link href="../../include/css/estilosam.css" rel="stylesheet" type="text/css" />
 <link href="../../include/js/autocomplete/jquery.autocomplete.css" rel="stylesheet" type="text/css" />
 <link type="text/css" href="../../include/css/black-tie/jquery-ui-1.7.3.custom.css" rel="stylesheet" />	
@@ -33,18 +39,19 @@
 <script type="text/javascript" src="../../dwr/engine.js"> </script>  
 <script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>
 <link rel="stylesheet" href="../../include/js/autocomplete/jquery.autocomplete.css" type="text/css" />
-<!--<script type="text/javascript" src="../../include/js/jquery.tabs/jquery-1.1.3.1.pack.js"></script>
-<script type="text/javascript" src="../../include/js/jquery.tabs/jquery.history_remote.pack.js"></script>
-<script type="text/javascript" src="../../include/js/jquery.tabs/jquery.tabs.pack.js"></script>-->
-<!--<link rel="stylesheet" href="../../include/js/jquery.tabs/jquery.tabs.css" type="text/css" media="print, projection, screen">-->
-<!-- Additional IE/Win specific style sheet (Conditional Comments) -->
-<!--[if lte IE 7]>
-<link rel="stylesheet" href="../../include/js/jquery.tabs/jquery.tabs-ie.css" type="text/css" media="projection, screen">
-<![endif]-->
 
-<link rel="stylesheet" href="../../include/css/css/css3-buttons.css" type="text/css" media="screen">
+
+<!--  <link rel="stylesheet" href="../../include/css/css/css3-buttons.css" type="text/css" media="screen">  -->
 <link rel="stylesheet" href="../../include/css/tiptip.css" type="text/css"  media="screen">
 <script src="../../include/css/jquery.tiptip.js"></script>
+
+<link rel="stylesheet" href="../../include/css/bootstrap2.css" type="text/css"/>
+<link rel="stylesheet" href="../../include/css/bootstrap-3.3.4.css" type="text/css">
+<script src="../../include/js/bootstrap-3.3.4.js"></script>
+
+<link rel="stylesheet" href="../../include/css/sweet-alert.css" type="text/css">
+<script src="../../include/js/sweet-alert.js"></script>
+
 
 <style type="text/css">
 a:link {
@@ -82,7 +89,57 @@ a:active {
 <input type="hidden" name="multipliesOt" id="multipliesOt" value="SI" >
 </sec:authorize>
 <input type="hidden" name="id_ordenDetalle" id="id_ordenDetalle">
-<table width="95%" align="center"><tr><td><h1>Ordenes de Pago - Captura de Ordenes de Pago</h1></td></tr></table>          
+
+<h1 class="h1-encabezado">Ordenes de Pago - Captura de Ordenes de Pago</h1>
+<div class="well">
+	<div class="form-group">
+		<label for="cbUnidad" class="control-label col-md-2 col-md-offset-1">Unidad administrativa:</label>
+		<div class="col-md-3">	
+		    <sec:authorize ifNotGranted="ROLE_Sam_PRIVILEGIOS_VER_TODAS_LAS_UNIDADES">
+      			<c:out value="${nombreUnidad}"/><input type="hidden" name="cbUnidad" id="cbUnidad" value='<c:out value="${idUnidad}"/>' />
+      		</sec:authorize>
+       		<sec:authorize ifAllGranted="ROLE_Sam_PRIVILEGIOS_VER_TODAS_LAS_UNIDADES">
+       			<select name="cbUnidad" class="form-control input-sm" id="cbUnidad" onChange="llenarTablaDeOrdenes();">
+            		<c:forEach items="${unidadesAdmiva}" var="item" varStatus="status">                  
+              			<option value="<c:out value="${item.ID}"/>" 
+              			<c:if test="${item.ID==idUnidad}"> selected </c:if> >
+             			<c:out value="${item.DEPENDENCIA}"/></option>
+           			</c:forEach>
+          		</select>
+        	</sec:authorize>
+       </div>
+       <div class="form-group">
+       <div class="col-md-offset-2 col-md-4">
+		<div style="display:">
+          		<!-- <button name="btnNuevaOp" id="btnNuevaOp" onClick="nuevaOp();limpiarForma();" type="button" class="button blue middle"><span class="label" style="width:150px">Nueva Orden de Pago</span></button> -->
+          		<input class="btn btn-info btn-sm" name="btnNuevaOp" id="btnNuevaOp" onClick="nuevaOp();limpiarForma();"  value="Nueva Orden de Pago" style="width:150px" type="button">
+          		<button class="btn btn-cerrar btn-sm" name="btnNuevaOp" id="btnNuevaOp" onClick="nuevaOp();limpiarForma();" value="Nueva Orden" style="width:150px">Nueva Orden de Pago</button>
+          		<button type="button" class="btn btn-primary btn-lg btn-block">Block level button</button>
+          </div>
+        </div>   
+		</div>
+	</div>
+	<br/>
+	<br/>
+	<br/>
+	<div class="form-gorup">
+		<table border="0" cellpadding="0" cellspacing="0" class="table" width="100%" id="listaOrdenes">
+        <thead class="thead-inverse input-sm">
+        <tr>
+          <th width="5%" height="20">Numero</th>
+          <th width="17%" >Tipo</th>
+          <th width="10%" >Fecha</th>
+          <th width="49%" >Concepto</th>
+          <th width="16%" >Estado</th>
+          <th width="3%" >Opc.</th>
+        </tr>
+        </thead>
+         <tbody>
+         </tbody>
+        </table>
+	</div>    
+	
+</div><!-- Cierra el WELL -->
 <table width="95%" align="center"><tr><td>          
 <div id="listaOrdenesPendientes"  align="center">
       <table width="100%" border="0"  align="center" cellpadding="0" cellspacing="0" class="formulario">
@@ -97,17 +154,21 @@ a:active {
       </sec:authorize>
        <sec:authorize ifAllGranted="ROLE_Sam_PRIVILEGIOS_VER_TODAS_LAS_UNIDADES">
        <div class="styled-select">
-        <select name="cbUnidad" class="comboBox" id="cbUnidad" onChange="llenarTablaDeOrdenes();" style="width:445px">
+        <select name="cbUnidad" class="form-control sm" id="cbUnidad" onChange="llenarTablaDeOrdenes();" style="width:445px">
             <c:forEach items="${unidadesAdmiva}" var="item" varStatus="status">                  
-              <option value="<c:out value="${item.ID}"/>" <c:if test="${item.ID==idUnidad}"> selected </c:if> ><c:out value="${item.DEPENDENCIA}"/></option>
-            </c:forEach>
-          </select>
+              	<option value="<c:out value="${item.ID}"/>" 
+              		<c:if test="${item.ID==idUnidad}"> selected </c:if> >
+             		<c:out value="${item.DEPENDENCIA}"/></option>
+           	</c:forEach>
+          		</select>
          </div>
        </sec:authorize></td>
           <td width="30%" align="left">
           <!-- MOSTRAR Y OCULTAR ESTE ELEMENTO A CONVENIENCIA -->
           <div style="display:">
-          		<button name="btnNuevaOp" id="btnNuevaOp" onClick="nuevaOp();limpiarForma();" type="button" class="button blue middle"><span class="label" style="width:150px">Nueva Orden de Pago</span></button>
+          		<!-- <button name="btnNuevaOp" id="btnNuevaOp" onClick="nuevaOp();limpiarForma();" type="button" class="button blue middle"><span class="label" style="width:150px">Nueva Orden de Pago</span></button> -->
+          		<input class="btn btn-info btn-sm" name="btnNuevaOp" id="btnNuevaOp" onClick="nuevaOp();limpiarForma();"  value="Nueva Orden de Pago" style="width:150px" type="button">
+          		<button class="btn btn-cerrar btn-sm" name="btnNuevaOp" id="btnNuevaOp" onClick="nuevaOp();limpiarForma();" value="Nueva Orden" style="width:150px">Nueva Orden de Pago</button>
           </div>
           </td>
         </tr>
@@ -117,7 +178,7 @@ a:active {
         <tr>
           <td colspan="3" >
         <table border="0" cellpadding="0" cellspacing="0" class="listas" width="100%" id="listaOrdenes">
-        <thead>
+        <thead class="thead-inverse">
         <tr>
           <th width="5%" height="20">Numero</th>
           <th width="17%" >Tipo</th>
@@ -236,17 +297,25 @@ a:active {
           <td height="40" align="left" ><table width="500" border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td><div class="buttons tiptip">
-					<button name="cmdregresar" id="cmdregresar" onClick="regresar()" title="Volver al inicio para crear nueva Orden de Pago por unidad adm." type="button" class="button red middle"><span class="label" style="width:100px">Regresar</span></button>
+					<!-- <button name="cmdregresar" id="cmdregresar" onClick="regresar()" title="Volver al inicio para crear nueva Orden de Pago por unidad adm." type="button" class="btn tn-default"><span class="label" style="width:100px">Regresar</span></button> -->
+					<input class="btn btn-info btn-sm" name="cmdregresar" id="cmdregresar" onClick="regresar()"  value="Regresar" style="width:100px" type="button">
+                </div></td>
+                
+                <td><div class="buttons tiptip">
+					<!--<button name="xGrabar" id="xGrabar" onClick="limpiarForma()" title="Limpia valores para continuar con nueva Orden de Pago." type="button" class="btn btn-info"><span class="label" style="width:100px">Nuevo</span></button>-->
+					<input class="btn btn-info btn-sm" name="xGrabar" id="xGrabar"  value="Nuevo" onClick="limpiarForma()"  style="width:100px" type="button">
                 </div></td>
                 <td><div class="buttons tiptip">
-					<button name="xGrabar" id="xGrabar" onClick="limpiarForma()" title="Limpia valores para continuar con nueva Orden de Pago." type="button" class="button red middle"><span class="label" style="width:100px">Nuevo</span></button>
+                		
+                <button class="btn btn-cerrar btn-sm" name="btnCerrar" id="btnCerrar" value="Cerrar" onClick="cerrarOrden()"  style="width:100px">
+                       	<!-- <span class="glyphicon glyphicon-search"></span> Buscar  -->Cerrar  
+                </button>
+					<!-- <button name="btnCerrar" id="btnCerrar" onClick="cerrarOrden()" title="Cierra para comprometer el importe de la Orden de Pago." type="button" class="btn btn-cerrar"><span class="label" style="width:100px">Cerrar</span></button> -->
                 </div></td>
                 <td><div class="buttons tiptip">
-					<button name="btnCerrar" id="btnCerrar" onClick="cerrarOrden()" title="Cierra para comprometer el importe de la Orden de Pago." type="button" class="button red middle"><span class="label" style="width:100px">Cerrar</span></button>
-                </div></td>
-                <td><div class="buttons tiptip">
-					<button name="btnGrabar" id="btnGrabar" onClick="guardar()" title="Guardar la informacion general de Orden de Pago." type="button" class="button blue middle"><span class="label" style="width:100px">Guardar</span></button>
-                </div></td>
+                	<input class="btn btn-success btn-sm" name="btnGrabar" id="btnGrabar"  value="Guardar" onClick="guardar()"  style="width:100px" type="button">
+				</div></td>
+                
               </tr>
           </table></td>
         </tr>
@@ -580,8 +649,8 @@ a:active {
         </table>
   </div>
   
-  </div>
-  </div>
+  </div><!-- Cierra tabsOrdenes -->
+  </div><!-- Cierra tabsOrdenesEnca -->
   </td></tr></table>
 </form>
 </body>

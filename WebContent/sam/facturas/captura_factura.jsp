@@ -65,10 +65,10 @@ a:active {
     <td align="center">
 <div id="tabuladores">
   <ul>
-    <li><a href="#fragment-facturas">Encabezado</a></li> 	  <!-- 0 -->
-    <li><a href="#fragment-movimientos">Movimientos</a></li>  <!-- 1 -->
-    <li><a href="#fragment-retenciones">Retenciones</a></li>  <!-- 2 -->	<!-- Muestra la pestaña de Retenciones -->
-    <li ><a href="#fragment-vales">Vales</a></li>			  <!-- 3 -->
+    <li><a href="#fragment-facturas">Encabezado</a></li>
+    <li><a href="#fragment-movimientos">Movimientos</a></li>
+    <li><a href="#fragment-retenciones">Retenciones</a></li>
+    <li ><a href="#fragment-vales">Vales</a></li>
   </ul>
 
   <div id="fragment-facturas" align="left">
@@ -105,7 +105,7 @@ a:active {
       <td align="left" valign="middle"><div class="styled-select">
         <select name="cbotipodocumento" class="comboBox" id="cbotipodocumento" style="width:170px">
           <option value="0" selected>[Seleccione]</option>
-          <option value="4" <c:if test='${factura.CVE_CONTRATO!=null}'>selected</c:if>>CONTRATO</option> <!--  -->
+          <option value="4" <c:if test='${factura.CVE_CONTRATO!=null}'>selected</c:if>>CONTRATO</option>
           <option value="1" <c:if test='${factura.CVE_REQ!=null}'>selected</c:if>>O.S. y O.T.</option>
           <option value="2" <c:if test='${factura.CVE_PED!=null}'>selected</c:if>>PEDIDO</option>
           <option value="3" <c:if test='${factura.CVE_VALE!=null}'>selected</c:if>>VALE</option>
@@ -119,9 +119,9 @@ a:active {
       <div class="styled-select">
       	 <select name="cbotipoFactura" id="cbotipoFactura" style="width:170px">
               <option value="0">[Seleccione]</option>
-              <c:forEach items="${tipoFacturas}" var="item" varStatus="status"> <!-- Obtiene el valor del select del tipo facturas -->
+              <c:forEach items="${tipoFacturas}" var="item" varStatus="status"> 
                 <option value='<c:out value="${item.ID_TIPO_FAC}"/>' 
-                 <c:if test='${item.ID_TIPO_FAC==factura.ID_TIPO}'> selected </c:if>><!--Compara la seleccion con el tipo que trae el JQUERY -->
+                 <c:if test='${item.ID_TIPO_FAC==factura.ID_TIPO}'> selected </c:if>>
                 <c:out value='${item.DESCRIPCION}'/>
                 </option>
                 </c:forEach>

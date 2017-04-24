@@ -100,7 +100,7 @@ public class ControladorFacturas extends ControladorBase {
 	
 	public void cerrarFactura(Long cve_factura)
 	{
-		gatewayFacturas.cerrarFactura(cve_factura, this.getSesion().getIdUsuario());
+		gatewayFacturas.cerrarFactura(cve_factura, this.getSesion().getIdUsuario(), this.getSesion().getEjercicio());
 	}
 	
 	public List<Map> getArchivosFactura(Long cve_factura){
