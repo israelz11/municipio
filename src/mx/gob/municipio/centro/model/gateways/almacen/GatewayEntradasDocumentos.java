@@ -39,6 +39,7 @@ public class GatewayEntradasDocumentos extends BaseGatewayAlmacen {
             	if(Id_Entrada==null){
             		//guardar uno nuevo
             		Id_Entrada = guardar(id_dependencia, id_almacen, id_proveedor, id_pedido, id_tipo_documento, num_documento, proyecto, partida, descripcion, fecha_documento, tipoEntrada, cve_pers, tipoEfecto, movimiento, idEntrada2);
+            		getJdbcTemplate().update("INSERT INTO HISTORY(ID_ENTRADA, ID_DEPENDENCIA, CREATEDDATE, CVE_PERS) VALUES(?,?,?,?)", new Object[]{1,1,1,2});
             		if(id_pedido!=null){
             			if(id_pedido!=0)
             				guardarDetalleDocumento(Id_Entrada, id_pedido);
@@ -48,6 +49,7 @@ public class GatewayEntradasDocumentos extends BaseGatewayAlmacen {
             	{
             		//modificar uno existente
             		editar(id_entrada, id_dependencia, id_almacen, id_proveedor, id_pedido, id_tipo_documento, num_documento, proyecto, partida, descripcion, fecha_documento, tipoEntrada, subtotal, descuento, iva, tipoIva, tipoEfecto, movimiento, idEntrada2);
+            		getJdbcTemplate().update("INSERT INTO HISTORY(ID_ENTRADA, ID_DEPENDENCIA, CREATEDDATE, CVE_PERS) VALUES(?,?,?,?)", new Object[]{1,1,1,2});
             		//comprobar que existen detalles al guardar. si es asi aun que haya pedido no se anexaran nuevos detalles
             		if(!comprobarDetalles(id_entrada)){
             			guardarDetalleDocumento(Id_Entrada, id_pedido);
