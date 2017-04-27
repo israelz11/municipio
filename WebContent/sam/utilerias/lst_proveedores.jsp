@@ -3,15 +3,15 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html">
 <html>
 <head>
 
-<link rel="stylesheet" href="../../include/css/sweet-alert.css" type="text/css">
-<link rel="stylesheet" href="../../include/css/bootstrap-3.3.6.css" type="text/css">
-<link rel="stylesheet" href="../../include/css/bootstrap2.css" type="text/css">
+<link rel="stylesheet" href="../../include/css/sweet-alert.css" type="text/css"/>
+<link rel="stylesheet" href="../../include/css/bootstrap-3.3.4.css" type="text/css"/>
+<link rel="stylesheet" href="../../include/css/bootstrap2.css" type="text/css"/>
 <!-- <link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css"/>  -->
-<link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css">
+<link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css"/>
 <script type="text/javascript" src="../../include/js/jquery-1.3.2.min.js"></script>
 <script type="text/javascript" src="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.min.js"></script>
 <script type="text/javascript" src="../../include/js/toolSam.js"></script>
@@ -19,6 +19,7 @@
 <script type="text/javascript" src="../../dwr/engine.js"></script>
 <script type="text/javascript" src="../../dwr/interface/ControladorListadoBeneficiariosRemoto.js"> </script>
 <script type="text/javascript" src="lst_proveedores.js"></script>
+<script type="text/javascript" src="../../include/js/bootstrap-3.3.4.js"></script>
 <script type="text/javascript" src="../../include/js/sweet-alert.min.js"></script>
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -64,6 +65,10 @@
       					<option value="0" <c:if test='${cbotipo==0}'> selected </c:if>>[Ambos]</option>
       					<option value="1" <c:if test='${cbotipo==1}'> selected </c:if>>Beneficiarios</option>
       					<option value="2" <c:if test='${cbotipo==2}'> selected </c:if>>Funcionarios</option>
+      					<option value="3" <c:if test='${cbotipo==3}'> selected </c:if>>Persona Fisica</option>
+      					<option value="4" <c:if test='${cbotipo==4}'> selected </c:if>>Persona Moral</option>
+      					<option value="5" <c:if test='${cbotipo==5}'> selected </c:if>>Funcionario Municipal</option>
+      					
     				</select>
               	</div>
 			</div>
