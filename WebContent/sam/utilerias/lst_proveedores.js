@@ -33,23 +33,14 @@ function getReporteBenefi(id){
 function nuevoEditarBeneficiario(idBeneficiario){
 	var titulo = (idBeneficiario==0) ? "Nuevo beneficiario": "Editar beneficiario";
 	jWindow('<iframe width="800" height="400" name="BENEFI" id="BENEFI" frameborder="0" src="../../sam/ordenesdepago/beneficiario.action?id='+idBeneficiario+'"></iframe>', titulo, '','',0, function(){compruebaVariable();});
+	
 }
-/*
-function deshabilitarBeneficiario(id_beneficiario){
-	jConfirm('¿Confirma que desea deshabilitar al beneficiario?','Confirmar', function(r){
-		if(r){
-			ShowDelay('Deshabilitando beneficiario','');
-			ControladorListadoBeneficiariosRemoto.deshabilitarBeneficiario(id_beneficiario,{callback:function(items){
-							 CloseDelay('Beneficiario deshabilitado con exito', function(){buscarBeneficiarios();});
-			},
-			errorHandler:function(errorString, exception) { 
-				jError('Fallo la operacion:<br>Error::'+errorString+'-message::'+exception.message+'-JavaClass::'+exception.javaClassName+'.<br><strong>Consulte a su administrador</strong>', 'Error al guardar Pedido');   
-				return false;
-			}
-			});	
-		}
+
+function nuevoBeneficiario(){
+	$('#nuevo_beneficiario').click(function(){
+		
 	});
-}*/
+}
 
 function deshabilitarBeneficiario(id_beneficiario){
 	

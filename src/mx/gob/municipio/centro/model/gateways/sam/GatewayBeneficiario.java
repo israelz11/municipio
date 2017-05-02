@@ -90,14 +90,17 @@ public class GatewayBeneficiario extends BaseGateway {
 			  actualizar(clave,razonSocial,responsable,responsable2,rfc,curp,telefono,tipo,calle,colonia,ciudad,estado,cp,idBanco,noCuenta,tipoCuenta,idBeneficiarioPadre,vigencia);
 		 return clave;
 	}
-		
+	
+	
+	//AGREGAR UN NUEVO BENEFICIARIO--------------------------------------------------------------
 	public Long inserta( String razonSocial,String responsable,String responsable2,String rfc,String curp,String telefono,String tipo,String calle,String colonia,String ciudad,String estado,Integer cp,Integer idBanco,String noCuenta,String tipoCuenta,String idBeneficiarioPadre,String vigencia ){
 		try
 		{
 			Long cveBeneficiario =getNumeroBeneficiarioNuevo(tipo)+1;
-			String folio=rellenarCeros(cveBeneficiario.toString(),4);		
-			if(this.getJdbcTemplate().queryForInt("SELECT COUNT(*) AS N FROM CAT_BENEFI WHERE STATUS = 1 AND (NCOMERCIA = ? OR RFC = ?)", new Object[]{razonSocial, rfc}) > 0)
-				throw new Exception("El nombre del Beneficiario o RFC ya se encuentran registrados en el sistema.");
+			String folio=rellenarCeros(cveBeneficiario.toString(),4);	
+			//if(this.getJdbcTemplate().queryForInt("SELECT COUNT(*) AS N FROM CAT_BENEFI WHERE STATUS = 1 AND (NCOMERCIA = ? OR RFC = ?)", new Object[]{razonSocial, rfc}) > 0)
+			if(this.getJdbcTemplate().queryForInt("SELECT COUNT(*) AS N FROM CAT_BENEFI WHERE RFC = ?)", new Object[]{rfc}) > 0)
+				throw new Exception("El Beneficiario ya se encuentran registrados en el sistema; actualizar la informacion.");
 			
 			this.getJdbcTemplate().update("insert into cat_benefi (ID_BENEFICIARIO,  NCOMERCIA, BENEFICIAR, BENEFICIA2, RFC, CURP,TELEFONOS, TIPOBENEFI, DOMIFISCAL,COLONIA, CIUDAD, ESTADO, "+
 					" CODIGOPOST, CLV_BNCSUC, NUM_CTA, TIPO_CTA, VIGENCIA, STATUS) " +

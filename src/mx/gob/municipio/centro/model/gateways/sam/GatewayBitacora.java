@@ -88,6 +88,10 @@ public class GatewayBitacora extends BaseGateway {
 	public final static int CON_TERMINO = 52;
 	public final static int CON_CERRO = 53;
 	
+	/*ALMACEN*/
+	
+	public final static int Entrada_almacen = 57;
+	
 	/*Constructor*/
 	public GatewayBitacora() {}
 	
