@@ -9,6 +9,7 @@ $(document).ready(function() {
 	//implementando manejadores de eventos
  	$('#btnBuscar').click(function (event){buscarBeneficiarios()});
  	$('#cmdnuevo').click(function (event){nuevoEditarBeneficiario(0)});
+ 	getBeneficiarios('txtprestadorservicio','CVE_BENEFI','');
 
 });
 

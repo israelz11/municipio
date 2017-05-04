@@ -735,7 +735,7 @@ public class GatewayRequisicion  extends BaseGateway {
 		
 		
     }
-	/*Metodo privado que apertura la requisicion*/
+/*------------------------------------------Metodo privado que apertura la requisicion-----------------------------------------------------------------*/
 	public void aperturarRequisicion(final Long cve_req, final  int cve_pers, final int ejercicio){
 		try {                 
             this.getTransactionTemplate().execute(new TransactionCallbackWithoutResult(){
@@ -785,7 +785,7 @@ public class GatewayRequisicion  extends BaseGateway {
 		    	    boolean abrirOtOs = getPrivilegioEn(cve_pers, 108);
 		    	    boolean exitoApert = false;
 		    	    
-		    	    if(abrirReq&&(requisicion.get("TIPO").toString().equals("1")||requisicion.get("TIPO").toString().equals("2")))
+		    	    if(abrirReq&&(requisicion.get("TIPO").toString().equals("1")||requisicion.get("TIPO").toString().equals("2")||requisicion.get("TIPO").toString().equals("7")))
 		    	    	exitoApert = true;
 		    	    if(!exitoApert)
 		    	    	throw new RuntimeException("No cuenta con privilegios suficientes para realizar esta operación (Apertura OT/OS)");

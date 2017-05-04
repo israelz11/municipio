@@ -129,6 +129,7 @@ default-lazy-init="true" >
  <bean id="gatewayUsuariosAlmacen" class="mx.gob.municipio.centro.model.gateways.almacen.GatewayUsuariosAlmacen"></bean>
  <bean id="gatewaySalidas" class="mx.gob.municipio.centro.model.gateways.almacen.GatewaySalidas"></bean>
  <bean id="gatewayInventario" class="mx.gob.municipio.centro.model.gateways.almacen.GatewayInventario"></bean>
+ <bean id="gatewayBitacoraAlmacen" class="mx.gob.municipio.centro.model.gateways.almacen.GatewayBitacoraAlmacen"></bean>
  
  
  <bean id="dataSourceCorrespondencia" class="org.springframework.jndi.JndiObjectFactoryBean">

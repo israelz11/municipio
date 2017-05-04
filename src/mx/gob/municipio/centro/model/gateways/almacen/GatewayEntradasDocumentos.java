@@ -18,13 +18,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+
 import mx.gob.municipio.centro.model.bases.BaseGatewayAlmacen;
+import mx.gob.municipio.centro.model.gateways.sam.GatewayBitacora;
 import mx.gob.municipio.centro.model.gateways.sam.GatewayPedidos;
 
 public class GatewayEntradasDocumentos extends BaseGatewayAlmacen {
 	private static Logger log = Logger.getLogger(GatewayEntradasDocumentos.class.getName());
 	@Autowired
 	GatewayPedidos gatewayPedidos;
+	
+	@Autowired
+	public GatewayBitacoraAlmacen gatewayBitacoraAlmacen;
 	
 	public Long Id_Entrada;
 	public GatewayEntradasDocumentos() {
@@ -39,20 +44,27 @@ public class GatewayEntradasDocumentos extends BaseGatewayAlmacen {
             	if(Id_Entrada==null){
             		//guardar uno nuevo
             		Id_Entrada = guardar(id_dependencia, id_almacen, id_proveedor, id_pedido, id_tipo_documento, num_documento, proyecto, partida, descripcion, fecha_documento, tipoEntrada, cve_pers, tipoEfecto, movimiento, idEntrada2);
-            		getJdbcTemplate().update("INSERT INTO HISTORY(ID_ENTRADA, ID_DEPENDENCIA, CREATEDDATE, CVE_PERS) VALUES(?,?,?,?)", new Object[]{1,1,1,2});
+            		//getJdbcTemplate().update("INSERT INTO HISTORY(ID_ENTRADA, ID_DEPENDENCIA, CREATEDDATE, CVE_PERS) VALUES(?,?,?,?)", new Object[]{1,1,1,2});
+            		
             		if(id_pedido!=null){
             			if(id_pedido!=0)
             				guardarDetalleDocumento(Id_Entrada, id_pedido);
+            			    gatewayBitacoraAlmacen.guardarBitacoraAlmacen(gatewayBitacoraAlmacen.Actualiza_Entrada,Id_Entrada, cve_pers, id_almacen, id_dependencia, id_pedido, "ENTRADA",1,Integer.parseInt(id_proveedor), new Date(), null, subtotal);
             		}
             	}
             	else
             	{
             		//modificar uno existente
             		editar(id_entrada, id_dependencia, id_almacen, id_proveedor, id_pedido, id_tipo_documento, num_documento, proyecto, partida, descripcion, fecha_documento, tipoEntrada, subtotal, descuento, iva, tipoIva, tipoEfecto, movimiento, idEntrada2);
-            		getJdbcTemplate().update("INSERT INTO HISTORY(ID_ENTRADA, ID_DEPENDENCIA, CREATEDDATE, CVE_PERS) VALUES(?,?,?,?)", new Object[]{1,1,1,2});
+            		//getJdbcTemplate().update("INSERT INTO HISTORY(ID_ENTRADA, ID_DEPENDENCIA, CREATEDDATE, CVE_PERS) VALUES(?,?,?,?)", new Object[]{1,1,1,2});
+            		//gatewayBitacora.guardarBitacora(gatewayBitacora.OP_NUEVA_ORDEN, ejercicio, cve_pers, cveOp, folio, "OP", fecha, null, null, null, null);
+            		
+            		//CVE_DOC, CVE_PERS, ID_ALMACEN, ID_DEPENDENCIA, ID_PEDIDO, TIPO_DOC, ID_ARTICULO, ID_PROVEEDOR, FECHA,FECHA_DOC,DESCRIPCION,MONTO
+            		
             		//comprobar que existen detalles al guardar. si es asi aun que haya pedido no se anexaran nuevos detalles
             		if(!comprobarDetalles(id_entrada)){
             			guardarDetalleDocumento(Id_Entrada, id_pedido);
+            			gatewayBitacoraAlmacen.guardarBitacoraAlmacen(gatewayBitacoraAlmacen.Actualiza_Entrada,Id_Entrada, cve_pers, id_almacen, id_dependencia, id_pedido, "ENTRADA",1,Integer.parseInt(id_proveedor), new Date(), null, subtotal);
             		}
             	}
             } 
@@ -64,6 +76,7 @@ public class GatewayEntradasDocumentos extends BaseGatewayAlmacen {
 		return this.getJdbcTemplate().queryForInt("SELECT COUNT(*) FROM DETALLES_ENTRADAS WHERE ID_ENTRADA = ?", new Object[]{id_entrada})>0;
 	}
 	
+	//final Long id_entrada, final int id_dependencia, final int id_almacen, final String id_proveedor, final Long id_pedido, final int id_tipo_documento, final String num_documento, final String proyecto, final String partida, final String descripcion, final Date fecha_documento, final int tipoEntrada, final Double subtotal, final Double descuento, final Double iva, final int tipoIva, final int cve_pers, final int tipoEfecto, final int movimiento, final Long idEntrada2)
 	private void guardarDetalleDocumento(Long id_entrada, Long id_pedido){
 		Long id_art = 0L; 
 		int tipo_entrada = this.getJdbcTemplate().queryForInt("SELECT ID_TIPO_ENTRADA FROM ENTRADAS WHERE ID_ENTRADA =?", new Object[]{id_entrada});
@@ -259,6 +272,7 @@ public class GatewayEntradasDocumentos extends BaseGatewayAlmacen {
             protected void   doInTransactionWithoutResult(TransactionStatus status) {   
             	Map documento = getEntradaDocumento(id_entrada);
             	List <Map> result = getConceptos(id_entrada);
+            	Vector vector_ped_movtos = new Vector();
             	Date fecha = new Date();
             	for (Map row:result)
             	{
@@ -303,6 +317,9 @@ public class GatewayEntradasDocumentos extends BaseGatewayAlmacen {
             				//guardar el ultimo id del inventario en el detalle que genero la entrada del elemento al inventario
             				getJdbcTemplate().update("UPDATE DETALLES_ENTRADAS SET ID_INVENTARIO = ? WHERE ID_DETALLE_ENTRADA = ?", new Object[]{id_inv_temp, Long.parseLong(row.get("ID_DETALLE_ENTRADA").toString())});
             				
+            				for(int i=0; i<vector_ped_movtos.size(); i++){
+                				finiquitar_pedido(Long.parseLong(vector_ped_movtos.get(i).toString()));
+            				}
             			}
             			
             		}
@@ -312,6 +329,9 @@ public class GatewayEntradasDocumentos extends BaseGatewayAlmacen {
     			getJdbcTemplate().update("UPDATE DETALLES_ENTRADAS SET STATUS = ? WHERE ID_ENTRADA = ?", new Object[]{1, id_entrada});
     			//Marcar la fecha de cierre del documento
     			getJdbcTemplate().update("UPDATE ENTRADAS SET FECHA_CIERRE = ?, STATUS = ? WHERE ID_ENTRADA = ?", new Object[]{fecha, 1,id_entrada});
+    			//aqui cachamos los detalles del sam_ped_movtos
+    			//vector_ped_movtos.add(Long.parseLong(result.get("sam_ped_movtos").toString()));
+    			//vectorDetalle.add(Long.parseLong(detalle.get("ID_DETALLE_ENTRADA").toString()));
     			
             } 
         });  
@@ -359,6 +379,16 @@ public class GatewayEntradasDocumentos extends BaseGatewayAlmacen {
 		}
 	}
 	
+	private boolean finiquitar_pedido(long id_ped_movto){
+		try {
+			this.getJdbcTemplate().update("UPDATE SAM_PED_MOVTOS SET STATUS =5 WHERE ID_PED_MOVTO = ?", new Object[]{id_ped_movto});
+			return true;
+		} catch (DataAccessException e) {
+			return false;
+		}
+		
+	}
+	
 	public void cancelarEntradaDocumento(final Long id_entrada, final int cve_pers){
 		try{
 			 this.getTransactionTemplate().execute(new TransactionCallbackWithoutResult(){
@@ -371,6 +401,9 @@ public class GatewayEntradasDocumentos extends BaseGatewayAlmacen {
 						//Validar que puede cancelar las entradas
 						if(!getPrivilegioEn(cve_pers, 120))
 							throw new RuntimeException("No se puede cancelar la entrada, su usuario no cuenta con los privilegios suficientes");
+						
+						if(getJdbcTemplate().queryForInt("SELECT COUNT(*) FROM ENTRADAS WHERE ID_ENTRADA =? AND STATUS=1", new Object[]{id_entrada})>0)
+							throw new RuntimeException("No se puede cancelar la entrada, invalidar primero");
 						
 						Map entrada = getEntradaDocumento(id_entrada);
 						List <Map> conceptos = getConceptos(id_entrada);
@@ -391,7 +424,7 @@ public class GatewayEntradasDocumentos extends BaseGatewayAlmacen {
 								for(int i=0; i<vectorInventario.size(); i++){
 									devolverArticulo(Long.parseLong(vectorInventario.get(i).toString()), Long.parseLong(vectorDetalle.get(i).toString()));
 								}
-								getJdbcTemplate().update("UPDATE ENTRADAS SET STATUS = 0 WHERE ID_ENTRADA = ?", new Object[]{id_entrada});
+								getJdbcTemplate().update("UPDATE ENTRADAS SET STATUS = 2 WHERE ID_ENTRADA = ?", new Object[]{id_entrada});
 							//}
 						
 	                } 
@@ -496,10 +529,10 @@ public class GatewayEntradasDocumentos extends BaseGatewayAlmacen {
 									Map entrada = getEntradaDocumento(idEntrada);
 									List <Map> conceptos = getConceptos(idEntrada);
 									
-									if(entrada.get("STATUS").toString().equals("0"))
-										throw new RuntimeException("La entrada que desea cancelar no es valida o se encuentra en edición");
+									//if(entrada.get("STATUS").toString().equals("0"))
+										//throw new RuntimeException("La entrada que desea cancelar no es valida o se encuentra en edición");
 									
-									getJdbcTemplate().update("UPDATE ENTRADAS SET STATUS = 0 WHERE ID_ENTRADA = ?", new Object[]{idEntrada});
+									getJdbcTemplate().update("UPDATE ENTRADAS SET STATUS = 2 WHERE ID_ENTRADA = ?", new Object[]{idEntrada});
 									
 									for(Map detalle: conceptos){
 											Map detalle2 = getMapArticulo(Long.parseLong(entrada.get("ID_DEPENDENCIA").toString()), Long.parseLong(entrada.get("ID_ALMACEN").toString()), Long.parseLong(detalle.get("ID_ARTICULO").toString()));

@@ -219,6 +219,7 @@ public class ControladorPedidos extends ControladorBase {
             }	        
 	}
 	
+//-----------------------------APERURA DE PEDIDOS-------------------------------------------------------------------	
 	public boolean aperturarPedidos(final List<Long> cvePed){
 		boolean exito=false;
 		try {                 
@@ -236,6 +237,7 @@ public class ControladorPedidos extends ControladorBase {
         return exito;
 	}
 	
+//-------------------------------------CANCELAR PEDIDOS-------------------------------------	
 	public void cancelarPedido(final Long[] cve_ped){
 		  try {    
 	            this.getTransactionTemplate().execute(new TransactionCallbackWithoutResult(){

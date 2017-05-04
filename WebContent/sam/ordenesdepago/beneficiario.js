@@ -33,6 +33,7 @@ function limpiar(){
 			 $('#banco').attr('value','');
 			 $('#idBanco').attr('value','');
 			 $('#noCuenta').attr('value','');
+			 $('#clabeb').attr('value','');
 			 $('#tipoCuenta').attr('value','');
 			 $('#beneficiarioPadre').attr('value','');
 			 $('#idBeneficiarioPadre').attr('value','');
@@ -68,6 +69,7 @@ function guardar(){
 	 var cp=$('#cp').attr('value');
 	 var idBanco=$('#cbobanco').attr('value');
 	 var noCuenta=$('#noCuenta').attr('value');
+	 var clabeb=$('#clabeb').attr('value');
 	 var tipoCuenta=$('#tipoCuenta').attr('value');
 	 var idBeneficiarioPadre=$('#idBeneficiarioPadre').attr('value');			 	 
 	 if ( tipo=="") {jAlert('El Tipo de beneficiario no es válido', 'Advertencia'); return false;}
@@ -75,14 +77,20 @@ function guardar(){
 		 if ( rfc=="")  {jAlert('El RFC no es válido', 'Advertencia'); return false;}
 		 if ( razonSocial=="")  {jAlert('La Razón Social no es válida', 'Advertencia'); return false;}
 		 if ( responsable=="")  {jAlert('El Responsable no es válido', 'Advertencia'); return false;}
-		 if ( telefono=="")  {jAlert('El número de telefono no es válido', 'Advertencia'); return false;}
+		 //if ( telefono=="")  {jAlert('El número de telefono no es válido', 'Advertencia'); return false;}
+		 if (telefono.length!=10)  {jAlert('El número de telefono no es válido', 'Advertencia'); return false;}
+		
 		 if ( calle=="") {jAlert('La Calle no es válida', 'Advertencia'); return false;}
 		 if ( colonia=="")  {jAlert('La Colonia no es válida', 'Advertencia'); return false;}
 		 if ( estado=="")  {jAlert('El Estado no es válido', 'Advertencia'); return false;}
 		 if ( ciudad=="")  {jAlert('La Ciudad no es válida', 'Advertencia'); return false;}
 		 if ( cp=="")  {jAlert('El Codigo postal no es válido', 'Advertencia'); return false;}
+		 if ( noCuenta=="") {alert('La Cuenta debe ser capturada.', 'Advertencia'); return false;}
+		 if ( clabeb=="") {alert('La Cuenta debe ser capturada.', 'Advertencia'); return false;}
+		 //if ((clabeb).val().length!=18) {alert("La CLABE debe tener 18 digitos", 'Advertencia'); return false;}
 		 //if ( idBanco != "" && $('#noCuenta').attr('value') == ""  )  {jAlert('El Número de cuenta no es válido', 'Advertencia'); return false;}
-		 //if ( idBanco != "" && $('#tipoCuenta').attr('value') == ""  )  {jAlert('El Tipo de cuenta no es válido', 'Advertencia'); return false;}
+		 
+		
 	 }
 	 else
 	 {
@@ -91,19 +99,23 @@ function guardar(){
 	
 	
 	var vigencia='1';
+	
 	if (!$('#vigencia').attr('checked'))	
 	   vigencia='0';
 	
 	ShowDelay('Guardando Beneficiario','');
-    controladorBeneficiarioRemoto.guardarBeneficiario(clave,razonSocial,responsable,responsable2,rfc,curp,telefono,tipo,calle,colonia,ciudad,estado,cp,idBanco,noCuenta,tipoCuenta,idBeneficiarioPadre,vigencia,{
+    controladorBeneficiarioRemoto.guardarBeneficiario(clave,razonSocial,responsable,responsable2,rfc,curp,telefono,tipo,calle,colonia,ciudad,estado,cp,idBanco,noCuenta,tipoCuenta,idBeneficiarioPadre,vigencia,clabeb,{
 			 callback:function(items) {
 				 $('#idProveedor').attr('value', items);
 				 window.parent.cambiarVariable(razonSocial);
 				 swal("Good job!", "Beneficiario Guardado con éxito!", "success");
+				 
 				 CloseDelay("Beneficiario guardado con éxito", 2000, function(){
-					 
+					 limpiar();
+					 window.showModalDialog();
 					 buscarBeneficiario();
-				});
+					 
+				 });
  		     }	
 			,errorHandler:function(errorString, exception) { 
 			   jError(errorString, 'Error'); 
@@ -211,6 +223,7 @@ function guardar(){
 			 $('#banco').attr('value',getHTML(items.BANCO));
 			 $('#idBanco').attr('value',getHTML(items.CLV_BNCSUC));
 			 $('#noCuenta').attr('value',getHTML(items.NUM_CTA));
+			 $('#clabeb').attr('value',getHTML(items.CLABE));
 			 $('#tipoCuenta').attr('value',getHTML(items.TIPO_CTA));
 			 $('#beneficiarioPadre').attr('value',getHTML(items.BENEFICIARIO));
 			 $('#idBeneficiarioPadre').attr('value',getHTML(items.CLAVE_PADRE));

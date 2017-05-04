@@ -398,7 +398,7 @@ public class GatewayPedidos extends BaseGateway {
 		}
 	}
 	
-	/*Metodo privado que apertura el pedido*/
+/*---------------------------------------Metodo privado que apertura el pedido--------------------------------------------------------*/
   public void aperturarPedido(Long cve_ped, int cve_pers, Integer ejercicio){	
 	  try { 
 		  
@@ -483,8 +483,8 @@ public class GatewayPedidos extends BaseGateway {
                 		gatewayBitacora.guardarBitacora(gatewayBitacora.APERTURA_PEDIDO, ejercicio, cve_pers, cve_ped, folio, "PED", (Date) ped.get("FECHA_PED"), ped.get("ID_PROYECTO").toString(), ped.get("CLV_PARTID").toString(), null, Double.parseDouble(ped.get("TOTAL").toString()));
                 		
                 		//SE AGREGA PROCEDIMIENTO ALMACENADO DE PEREDO PARA CONTABILIZAR MODIFICACION PEDIDOS 28/JUL/2013
-						StoreProcedurePedidos sp = new StoreProcedurePedidos(getJdbcTemplate().getDataSource());
-						Map result = sp.execute(cve_ped, 2);
+						//StoreProcedurePedidos sp = new StoreProcedurePedidos(getJdbcTemplate().getDataSource());
+						//Map result = sp.execute(cve_ped, 2);
 					    //TERMINA PROCEDIMIENT0
                 	}
                 	else{

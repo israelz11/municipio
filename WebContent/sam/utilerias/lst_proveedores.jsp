@@ -43,7 +43,10 @@
 			<div class="form-group">
 				<label for="txtprestadorservicio" class="control-label col-md-2">Beneficiario:</label>
               	<div class="col-md-4">
-              		<input type="text" id="txtprestadorservicio" name="txtprestadorservicio" class="form-control"  value="<c:out value='${txtprestadorservicio}'/>"/>
+              		<input type="text" id="txtprestadorservicio" name="txtprestadorservicio" class="form-control input-sm"  value="<c:out value='${txtprestadorservicio}'/>"/>
+              		 <input type="hidden" id="CVE_BENEFI" name="CVE_BENEFI" value="<c:out value='${CVE_BENEFI}'/>" /> 
+              		<!-- Beneficiario:<td><input type="text" id="txtprestadorservicio" name="txtprestadorservicio" class="input" style="width:453px" value="<c:out value='${txtprestadorservicio}'/>"/>
+                                       -->
               	</div>
               	<div class="col-md-3 col-md-offset-2">
               		<input  name="btnBuscar" type="button" class="btn btn-buscar" id="btnBuscar"   value="Buscar" style="width:150px" />
@@ -52,7 +55,7 @@
 			<div class="form-group">
 				<label for="txtrfc" class="control-label col-md-2">RFC:</label>
               	<div class="col-md-2">
-              		<input type="text" id="txtrfc" name="txtrfc" class="form-control" value="<c:out value='${txtrfc}'/>"/>
+              		<input type="text" id="txtrfc" name="txtrfc" class="form-control input-sm" value="<c:out value='${txtrfc}'/>"/>
               	</div>
               	<div class="col-md-3 col-md-offset-4">
               		<input  name="cmdnuevo" type="button" class="btn btn-info" id="cmdnuevo"   value="Nuevo..." style="width:150px" />
@@ -61,7 +64,7 @@
 			<div class="form-group">
 				<label for="txtrfc" class="control-label col-md-2">Filtrar por:</label>
               	<div class="col-md-2">
-              		<select name="cbotipo" class="form-control" id="cbotipo" style="width:150px" >
+              		<select name="cbotipo" class="form-control input-sm" id="cbotipo" style="width:150px" >
       					<option value="0" <c:if test='${cbotipo==0}'> selected </c:if>>[Ambos]</option>
       					<option value="1" <c:if test='${cbotipo==1}'> selected </c:if>>Beneficiarios</option>
       					<option value="2" <c:if test='${cbotipo==2}'> selected </c:if>>Funcionarios</option>

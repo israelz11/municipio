@@ -71,8 +71,8 @@ public class ControladorBeneficiario extends ControladorBase  {
 		return gatewayBeneficiario.getBeneficiariosPorEjemplo(razonSocial);
 	}
 
-	public Long guardarBeneficiario(Long clave,String razonSocial,String responsable,String responsable2,String rfc,String curp,String telefono,String tipo,String calle,String colonia,String ciudad,String estado,Integer cp,Integer idBanco,String noCuenta,String tipoCuenta,String idBeneficiarioPadre,String vigencia){
-		return gatewayBeneficiario.actualizarPrincipal(clave,razonSocial,responsable,responsable2,rfc,curp,telefono,tipo,calle,colonia,ciudad,estado,cp,idBanco,noCuenta,tipoCuenta,idBeneficiarioPadre,vigencia);
+	public Long guardarBeneficiario(Long clave,String razonSocial,String responsable,String responsable2,String rfc,String curp,String telefono,String tipo,String calle,String colonia,String ciudad,String estado,Integer cp,Integer idBanco,String noCuenta,String tipoCuenta,String idBeneficiarioPadre,String vigencia,String clabeb){
+		return gatewayBeneficiario.actualizarPrincipal(clave,razonSocial,responsable,responsable2,rfc,curp,telefono,tipo,calle,colonia,ciudad,estado,cp,idBanco,noCuenta,tipoCuenta,idBeneficiarioPadre,vigencia,clabeb);
 	}
 	
 	@ModelAttribute("bancos")

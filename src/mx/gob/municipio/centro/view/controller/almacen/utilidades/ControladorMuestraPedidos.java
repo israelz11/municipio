@@ -35,7 +35,7 @@ public class ControladorMuestraPedidos extends ControladorBaseAlmacen {
 	
 	 public List<Map> getListaPedidos(int idDependencia){
 		List<Map> LstPedidos = new ArrayList();
-		List<Map> Pedidos = this.getJdbcTemplate().queryForList("SELECT CVE_PED, "+
+		List<Map> Pedidos = this.getJdbcTemplate().queryForList("SELECT  DISTINCT SAM_PEDIDOS_EX.CVE_PED, "+
 				"NUM_PED,  "+
 				"SAM_PEDIDOS_EX.CVE_REQ, "+ 
 				"SAM_REQUISIC.ID_PROYECTO, "+ 
@@ -52,8 +52,9 @@ public class ControladorMuestraPedidos extends ControladorBaseAlmacen {
 				"INNER JOIN SAM_REQUISIC ON (SAM_REQUISIC.CVE_REQ = SAM_PEDIDOS_EX.CVE_REQ)  "+
 				"INNER JOIN CEDULA_TEC ON (CEDULA_TEC.ID_PROYECTO=SAM_REQUISIC.ID_PROYECTO)  "+
 				"INNER JOIN CAT_BENEFI ON (CAT_BENEFI.CLV_BENEFI=SAM_PEDIDOS_EX.CLV_BENEFI)  "+
+				"INNER JOIN SAM_PED_MOVTOS ON (SAM_PED_MOVTOS.CVE_PED=SAM_PEDIDOS_EX.CVE_PED) "+
 				"INNER JOIN CAT_DEPENDENCIAS ON (CAT_DEPENDENCIAS.ID = SAM_REQUISIC.ID_DEPENDENCIA)  "+
-			"WHERE SAM_PEDIDOS_EX.STATUS IN(1,4,5) /*CVE_PED NOT IN (SELECT ID_PEDIDO FROM ENTRADAS WHERE STATUS IN(1,4,5))*/ AND CAT_DEPENDENCIAS.ID = ? ORDER BY CVE_PED ASC", new Object[]{idDependencia});
+			"WHERE SAM_PEDIDOS_EX.STATUS IN(1,4,5) AND SAM_PED_MOVTOS.STATUS=1 /*CVE_PED NOT IN (SELECT ID_PEDIDO FROM ENTRADAS WHERE STATUS IN(1,4,5))*/ AND CAT_DEPENDENCIAS.ID = ? ORDER BY CVE_PED ASC", new Object[]{idDependencia});
 		for(Map Pedido: Pedidos)
 		{
 			String StatusLote = "Incompleto";

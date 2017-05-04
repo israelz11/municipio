@@ -18,6 +18,6 @@ public class GatewayBancos extends BaseGateway {
 	}
 	
 	public List<Map> getBancosTodos( ){
-	    return this.getJdbcTemplate().queryForList("select CLV_BNCSUC,BANCO,PLAZA,SUCURSAL,NUM_SUC,ID from CAT_BNCSUC  ");		
+	    return this.getJdbcTemplate().queryForList("select CLV_BNCSUC,BANCO,PLAZA,SUCURSAL,NUM_SUC,ID from SAM_CAT_BNCSUC  ");		
 	}
 }

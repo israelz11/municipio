@@ -1,118 +1,17 @@
 // JavaScript Document
-var banStatus = false;
-
 $(document).ready(function() {
-	
-
-	  $('#cboFilterStatus').on('changed.bs.select', function (e) {
-			              
-	                    
-	                  var selected = $(this).find("option:selected").val();
-	                  var StatusArray = ($(this).selectpicker('val') != null ? $(this).selectpicker('val').toString().split(',') : []);
-
-	                  if (StatusArray.indexOf("9") != -1) {
-	                      if (!banStatus) {
-	                          $(this).find('option[value=9]').prop('selected', false).removeAttr('selected');
-	                          $(this).selectpicker('refresh');
-	                          banStatus = true;
-	                      }
-	                      else {
-	                          $(this).selectpicker('deselectAll');
-	                          $(this).find('option[value=9]').prop('selected', true);
-	                          $(this).selectpicker('refresh');
-	                          banStatus = false;
-	                      }
-	                  }
-	                  else {
-	                      if (StatusArray.indexOf("9") == -1) //No se encontro 0
-	                      {
-	                          $(this).find('option[value=9]').prop('selected', false).removeAttr('selected');
-	                          $(this).selectpicker('refresh');
-	                      }
-	                      else //0 Encontrado
-	                      {
-	                          $(this).selectpicker('deselectAll');
-	                          $(this).find('option[value=9]').prop('selected', true);
-	                          $(this).selectpicker('refresh');
-	                      }
-	                  }
-	    });
-
-	    $('#cmdSeleccion').on('click', function (e) {;
-	          if($('#cboFilterStatus').selectpicker('val')== null)
-	          {
-	              alert('No se ha seleccionado ningun Estatus');
-	              return false;
-	          }
-	              
-	          alert('Los Estatus seleccionados son: ' + $('#cboFilterStatus').selectpicker('val').toString().split(','));
-	     });    
-		
-		
-	    $('#cmdClean').on('click', function(e){
-		  $('#cboFilterStatus').selectpicker('deselectAll');
-		  $('#cboFilterStatus').selectpicker('refresh');
-			 
-		  
-		 
-	   });
-	    if ($('#status').value()!=""){
-	    
-	    	//$('#cboFilterStatus').selectpicker('val',$('#status').value());
-	    	//$('.cboFilterStatus').selectpicker('val',['0','1','2','4','5']);
-	    	$('.cboFilterStatus').selectpicker('val',$('#status').value());
-	    	$('#cboFilterStatus').selectpicker('refresh');
-	    	
-	    	alert('prueba' + $('.cboFilterStatus').selectpicker('val',$('#status').val()) );
-	    	//
-	   }
-	   // $("select[name=color1]").change(function(){
-	    //	            alert($('select[name=color1]').val());
-	    	//            $('input[name=valor1]').val($(this).val());
-	    	//        });
-	    
-	    /*
-	    $(function() {
-
-	    	  $('.selectpicker').on('change', function(){
-	    	    var selected = $(this).find("option:selected").attr("value");
-	    	    alert(selected);
-	    	  });
-	    	  
-	    	});*/
-			  
-	    $('#datetimepicker1').datetimepicker();
+	// Launch TipTip tooltip
   $('.tiptip a.button, .tiptip button').tipTip();
+  $('#todos').click( function (event){ $('input[name=chkrequisiciones]').attr('checked', this.checked); });//Para seleccionar todos los checkbox Abraham Gonzalez 12/07/2016
   var imagen="../../imagenes/cal.gif";	
   var formatFecha="dd/mm/yy";	
   $("#fechaInicial").datepicker({showOn: 'button', buttonImage:imagen , buttonImageOnly: true,dateFormat: formatFecha});  
   $("#fechaFinal").datepicker({showOn: 'button', buttonImage: imagen, buttonImageOnly: true,dateFormat: formatFecha}); 
   $('#cmdpdf').click(function (event){mostrarOpcionPDF();});   
   getBeneficiarios('txtprestadorservicio','CVE_BENEFI','');
- 
- 
-
+  $('#ui-datepicker-div').hide();
 });
 
-function getListaReq2(){
-	
-	if($('#cboFilterStatus').selectpicker('val')== null)
-    {
-        alert('No se ha seleccionado ningun Estatus');
-        return false;
-    }
- 	
- 	$('#status').val($('#cboFilterStatus').selectpicker('val').toString());
- 	$('#forma').submit();
-    alert('Los Estatus seleccionados son: ' + $('#cboFilterStatus').selectpicker('val').toString().split(','));	
-    
-}
-
-
-$('#cboSearch').selectpicker({
-      style: 'btn-info',
-      size: 4
-});
 
 function reembolsos(cve_req, modulo){
 	controladorListadoRequisicionesRemoto.getReembolsoRequisiciones(cve_req, {
@@ -273,6 +172,16 @@ function getListadoReqConOp(){
 	$('#forma').attr('action',"lst_req_total.action");
 }
 
+//Checkbox para seleccionar toda la lista.... Abraham Gonzalez 12/07/2016
+	$("input[name=todos]").change(function(){
+		$('input[type=chkrequisiciones]').each( function() {			
+			if($("input[name=todos]:checked").length == 1){
+				this.checked = true;
+			} else {
+				this.checked = false;
+			}
+		});
+	});
 function agregarReqLista(){
 	var checkClaves = [];
     $('input[name=chkrequisiciones]:checked').each(function() { checkClaves.push($(this).val());});	
@@ -374,7 +283,21 @@ function aperturarRequisiciones(){
 }
 
 
-
+function getListaReq(){
+	 var checkStatus = [];
+     $('input[name=status]:checked').each(function() {checkStatus.push($(this).val());});	 
+	 var error="";
+	 var titulo ="Error de validacion";
+	 if (checkStatus.length==0 )   error="Debe de seleccionar un Estatus<br>";
+	 if($('#txtprestadorservicio').attr('value')=='') $('#CVE_BENEFI').attr('value', '0');
+	 if ($('#fechaInicial').attr('value')=="" && $('#fechaFinal').attr('value')!="" || $('#fechaInicial').attr('value')!="" && $('#fechaFinal').attr('value')=="")  error+="El rango de fechas no es valido<br>";
+	 //	var s = 'lst_pedidos.action?idUnidad='+$('#cbodependencia').attr('value')+"&fechaInicial="+$('#fechaInicial').attr('value')+"&fechaFinal="+$('#fechaFinal').attr('value')+"&status="+checkStatus+"&tipo_gto="+$('#cbotipogasto').attr('value');
+	 //	document.location = s;
+if (error=="")
+	$("#forma").submit();
+else
+  jAlert(error,titulo);
+}
 
 function getRequisicion(claveReq)   {
 	$('#claveRequisicion').attr('value',claveReq);
