@@ -293,6 +293,7 @@ public class GatewaySalidas extends BaseGatewayAlmacen {
 		}
 	}
 	
+//------------------------------------------------CANCELAR SALIDAS--------------------------
 	public void invalidarSalidas(Long id_salida){
 		try{
 			Double existencia =0.0;
@@ -301,11 +302,11 @@ public class GatewaySalidas extends BaseGatewayAlmacen {
 				throw new RuntimeException("La salida ("+id_salida+") no procede para realizar esta operación, consulte a su administrador");
 			
 			Long id_entrada = this.getJdbcTemplate().queryForLong("SELECT ID_ENTRADA FROM SALIDAS WHERE ID_SALIDA=?", new Object[]{id_salida});
-			this.getJdbcTemplate().update("UPDATE SALIDAS SET STATUS=0 WHERE ID_SALIDA =?", new Object[]{id_salida});
+			this.getJdbcTemplate().update("UPDATE SALIDAS SET STATUS=2 WHERE ID_SALIDA =?", new Object[]{id_salida});
 			List <Map> detalles_entrada = this.getDetallesSalida(id_salida);
 			for(Map row: detalles_entrada){
 				this.getJdbcTemplate().update("UPDATE INVENTARIO SET CANTIDAD = CANTIDAD + ? WHERE ID_INVENTARIO =?", new Object[]{row.get("CANTIDAD"), row.get("ID_INVENTARIO")});
-				this.getJdbcTemplate().update("UPDATE DETALLE_SALIDA SET STATUS = 0 WHERE ID_DETALLE_SALIDA =?", new Object[]{row.get("ID_DETALLE_SALIDA")});
+				this.getJdbcTemplate().update("UPDATE DETALLE_SALIDA SET STATUS = 2 WHERE ID_DETALLE_SALIDA =?", new Object[]{row.get("ID_DETALLE_SALIDA")});
 			}
 		}
 		catch ( DataAccessException e) {

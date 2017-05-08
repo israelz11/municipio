@@ -291,6 +291,8 @@ public class GatewayEntradasDocumentos extends BaseGatewayAlmacen {
             				getJdbcTemplate().update("UPDATE INVENTARIO SET CANTIDAD = (CANTIDAD + ?) WHERE ID_INVENTARIO = ?", new Object[]{(Double.parseDouble(row.get("CANTIDAD").toString())), idInventario});
             				//actualizar el id_inventario de la tabla DETALLES_ENTRADA
             				getJdbcTemplate().update("UPDATE DETALLES_ENTRADAS SET ID_INVENTARIO = ? WHERE ID_DETALLE_ENTRADA = ?", new Object[]{idInventario, row.get("ID_DETALLE_ENTRADA")});
+            				
+            				vector_ped_movtos.add(Long.parseLong(row.get("ID_PED_MOVTO").toString()));
             			}
             			else{
             				//de caso contrario guarda un nuevo elemento en el INVENTARIO
@@ -317,9 +319,7 @@ public class GatewayEntradasDocumentos extends BaseGatewayAlmacen {
             				//guardar el ultimo id del inventario en el detalle que genero la entrada del elemento al inventario
             				getJdbcTemplate().update("UPDATE DETALLES_ENTRADAS SET ID_INVENTARIO = ? WHERE ID_DETALLE_ENTRADA = ?", new Object[]{id_inv_temp, Long.parseLong(row.get("ID_DETALLE_ENTRADA").toString())});
             				
-            				for(int i=0; i<vector_ped_movtos.size(); i++){
-                				finiquitar_pedido(Long.parseLong(vector_ped_movtos.get(i).toString()));
-            				}
+            				
             			}
             			
             		}
@@ -330,9 +330,13 @@ public class GatewayEntradasDocumentos extends BaseGatewayAlmacen {
     			//Marcar la fecha de cierre del documento
     			getJdbcTemplate().update("UPDATE ENTRADAS SET FECHA_CIERRE = ?, STATUS = ? WHERE ID_ENTRADA = ?", new Object[]{fecha, 1,id_entrada});
     			//aqui cachamos los detalles del sam_ped_movtos
-    			//vector_ped_movtos.add(Long.parseLong(result.get("sam_ped_movtos").toString()));
-    			//vectorDetalle.add(Long.parseLong(detalle.get("ID_DETALLE_ENTRADA").toString()));
     			
+    			//aqui cachamos los detalles del sam_ped_movtos
+    			
+    			//vectorDetalle.add(Long.parseLong(detalle.get("ID_DETALLE_ENTRADA").toString()));
+    			for(int i=0; i<vector_ped_movtos.size(); i++){
+    				finiquitar_pedido(Long.parseLong(vector_ped_movtos.get(i).toString()));
+				}
             } 
         });  
 		return "";
