@@ -44,27 +44,22 @@ public class GatewayEntradasDocumentos extends BaseGatewayAlmacen {
             	if(Id_Entrada==null){
             		//guardar uno nuevo
             		Id_Entrada = guardar(id_dependencia, id_almacen, id_proveedor, id_pedido, id_tipo_documento, num_documento, proyecto, partida, descripcion, fecha_documento, tipoEntrada, cve_pers, tipoEfecto, movimiento, idEntrada2);
-            		//getJdbcTemplate().update("INSERT INTO HISTORY(ID_ENTRADA, ID_DEPENDENCIA, CREATEDDATE, CVE_PERS) VALUES(?,?,?,?)", new Object[]{1,1,1,2});
             		
             		if(id_pedido!=null){
             			if(id_pedido!=0)
             				guardarDetalleDocumento(Id_Entrada, id_pedido);
-            			    gatewayBitacoraAlmacen.guardarBitacoraAlmacen(gatewayBitacoraAlmacen.Actualiza_Entrada,Id_Entrada, cve_pers, id_almacen, id_dependencia, id_pedido, "ENTRADA",1,Integer.parseInt(id_proveedor), new Date(), null, subtotal);
+            			    gatewayBitacoraAlmacen.guardarBitacoraAlmacen(gatewayBitacoraAlmacen.Nueva_Entrada,Id_Entrada, cve_pers, id_almacen, id_dependencia, id_pedido, "ENTRADA",1,Integer.parseInt(id_proveedor), new Date(), null, subtotal);
             		}
             	}
             	else
             	{
             		//modificar uno existente
             		editar(id_entrada, id_dependencia, id_almacen, id_proveedor, id_pedido, id_tipo_documento, num_documento, proyecto, partida, descripcion, fecha_documento, tipoEntrada, subtotal, descuento, iva, tipoIva, tipoEfecto, movimiento, idEntrada2);
-            		//getJdbcTemplate().update("INSERT INTO HISTORY(ID_ENTRADA, ID_DEPENDENCIA, CREATEDDATE, CVE_PERS) VALUES(?,?,?,?)", new Object[]{1,1,1,2});
-            		//gatewayBitacora.guardarBitacora(gatewayBitacora.OP_NUEVA_ORDEN, ejercicio, cve_pers, cveOp, folio, "OP", fecha, null, null, null, null);
-            		
-            		//CVE_DOC, CVE_PERS, ID_ALMACEN, ID_DEPENDENCIA, ID_PEDIDO, TIPO_DOC, ID_ARTICULO, ID_PROVEEDOR, FECHA,FECHA_DOC,DESCRIPCION,MONTO
-            		
+            		            		
             		//comprobar que existen detalles al guardar. si es asi aun que haya pedido no se anexaran nuevos detalles
             		if(!comprobarDetalles(id_entrada)){
             			guardarDetalleDocumento(Id_Entrada, id_pedido);
-            			gatewayBitacoraAlmacen.guardarBitacoraAlmacen(gatewayBitacoraAlmacen.Actualiza_Entrada,Id_Entrada, cve_pers, id_almacen, id_dependencia, id_pedido, "ENTRADA",1,Integer.parseInt(id_proveedor), new Date(), null, subtotal);
+            			gatewayBitacoraAlmacen.guardarBitacoraAlmacen(gatewayBitacoraAlmacen.Nueva_Entrada,Id_Entrada, cve_pers, id_almacen, id_dependencia, id_pedido, "ENTRADA",1,Integer.parseInt(id_proveedor), new Date(), null, subtotal);
             		}
             	}
             } 
@@ -79,7 +74,14 @@ public class GatewayEntradasDocumentos extends BaseGatewayAlmacen {
 	//final Long id_entrada, final int id_dependencia, final int id_almacen, final String id_proveedor, final Long id_pedido, final int id_tipo_documento, final String num_documento, final String proyecto, final String partida, final String descripcion, final Date fecha_documento, final int tipoEntrada, final Double subtotal, final Double descuento, final Double iva, final int tipoIva, final int cve_pers, final int tipoEfecto, final int movimiento, final Long idEntrada2)
 	private void guardarDetalleDocumento(Long id_entrada, Long id_pedido){
 		Long id_art = 0L; 
+		Integer id_articulo = (int) (long) id_art;
+		Map documento = getEntradaDocumento(id_entrada);
 		int tipo_entrada = this.getJdbcTemplate().queryForInt("SELECT ID_TIPO_ENTRADA FROM ENTRADAS WHERE ID_ENTRADA =?", new Object[]{id_entrada});
+		int cve_pers =this.getJdbcTemplate().queryForInt("SELECT ID_PERSONA FROM ENTRADAS WHERE ID_ENTRADA =?", new Object[]{id_entrada});
+		int id_almacen =this.getJdbcTemplate().queryForInt("SELECT ID_ALMACEN FROM ENTRADAS WHERE ID_ENTRADA =?", new Object[]{id_entrada});
+		int id_dependencia =this.getJdbcTemplate().queryForInt("SELECT ID_DEPENDENCIA FROM ENTRADAS WHERE ID_ENTRADA =?", new Object[]{id_entrada});
+		int id_beneficiario =this.getJdbcTemplate().queryForInt("SELECT ID_PROVEEDOR FROM ENTRADAS WHERE ID_ENTRADA =?", new Object[]{id_entrada});
+		
 		List <Map> resultado = this.gatewayPedidos.getConceptos(id_pedido);
 		
 		Date fecha = new Date();
@@ -87,8 +89,13 @@ public class GatewayEntradasDocumentos extends BaseGatewayAlmacen {
 			if(this.comprobarLoteAntes(Long.parseLong(row.get("ID_PED_MOVTO").toString()))>0){
 				id_art = Long.parseLong(row.get("ID_ARTICULO").toString());
 				this.getJdbcTemplate().update("INSERT INTO DETALLES_ENTRADAS(ID_ENTRADA, ID_ARTICULO, ID_PED_MOVTO, ID_UNIDAD_MEDIDA, CANTIDAD, PRECIO, DESCRIPCION, FECHA, STATUS) VALUES(?,?,?,?,?,?,?,?,?)", new Object []{id_entrada, id_art, row.get("ID_PED_MOVTO").toString() , row.get("CLV_UNIMED").toString(), ((tipo_entrada==2) ? 0: row.get("CANTIDAD").toString()), row.get("PRECIO_UNI").toString(), row.get("DESCRIP").toString(), fecha, 0});
+				  
+				gatewayBitacoraAlmacen.guardarBitacoraAlmacen(gatewayBitacoraAlmacen.Detalle_Entrada,id_entrada, cve_pers, id_almacen, id_dependencia, id_pedido, "DETALLE_ENTRADA",Integer.parseInt(row.get("ID_ARTICULO").toString()), id_beneficiario, new Date(), row.get("DESCRIP").toString(),Double.parseDouble(row.get("PRECIO_UNI").toString()));
+				log.info("Movimiento Bitarora: " +Integer.parseInt(row.get("ID_ARTICULO").toString()));
 			}
 		}
+		
+		
 	}
 
 	private Long getIdArticulo(Long id){
@@ -161,6 +168,8 @@ public class GatewayEntradasDocumentos extends BaseGatewayAlmacen {
 			}
 			total = (subtotal-descuento)+iva;
 			this.getJdbcTemplate().update("UPDATE ENTRADAS SET ID_ALMACEN=?, ID_ENTRADA_CANCELADA=?, ID_ENTRADA_AGREGADA=?, ID_PROVEEDOR=?, ID_PEDIDO=?, ID_TIPO_DOCUMENTO=?, DOCUMENTO=?, DESCRIPCION=?, ID_PROYECTO=?, PARTIDA=?, FECHA_DOCUMENTO=?, FECHA_OFICIAL=?, SUBTOTAL=?, DESCUENTO=?, IVA=?, TIPO_IVA=?, TOTAL=? WHERE ID_ENTRADA = ?", new Object[]{id_almacen, (movimiento==2 ? idEntrada2: null), (movimiento==1 ? idEntrada2: null), id_proveedor, id_pedido, id_tipo_documento, num_documento, descripcion, proyecto, partida, fecha_documento, (tipoEfecto==0 ? fecha_documento: null), subtotal, descuento, iva, tipoIva, total, id_entrada});
+			
+			//para imprimir en consola.................
 			log.info("Actualiza ENTRADA cuando no hay Pedido SUBTOTAL: "+subtotal.toString()+" DESCUENTO: "+descuento.toString()+" IVA: "+iva.toString()+" TIPO_IVA: "+tipoIva+" TOTAL: "+total.toString());
 		}
 	}
@@ -212,6 +221,7 @@ public class GatewayEntradasDocumentos extends BaseGatewayAlmacen {
 			return this.getJdbcTemplate().queryForMap("SELECT ID_ENTRADA, "+
 																"ENTRADAS.ID_DEPENDENCIA, "+
 																"ENTRADAS.ID_ALMACEN,  "+
+																"ENTRADAS.ID_PERSONA, "+
 																"ID_PROVEEDOR, "+
 																"ID_TIPO_DOCUMENTO,  "+
 																"ENTRADAS.ID_GRUPO, "+
@@ -276,6 +286,8 @@ public class GatewayEntradasDocumentos extends BaseGatewayAlmacen {
             	Date fecha = new Date();
             	for (Map row:result)
             	{
+            		vector_ped_movtos.add(Long.parseLong(row.get("ID_PED_MOVTO").toString()));
+            		
             		//comprobar la existencia de la resta en pedidos
             		if(!comprobarLote(Long.parseLong(row.get("ID_DETALLE_ENTRADA").toString()), Double.parseDouble(row.get("CANTIDAD").toString()))){
             			throw new RuntimeException("No se puede completar la operación, la cantidad de lote excede al disponible en Pedido");
@@ -292,7 +304,7 @@ public class GatewayEntradasDocumentos extends BaseGatewayAlmacen {
             				//actualizar el id_inventario de la tabla DETALLES_ENTRADA
             				getJdbcTemplate().update("UPDATE DETALLES_ENTRADAS SET ID_INVENTARIO = ? WHERE ID_DETALLE_ENTRADA = ?", new Object[]{idInventario, row.get("ID_DETALLE_ENTRADA")});
             				
-            				vector_ped_movtos.add(Long.parseLong(row.get("ID_PED_MOVTO").toString()));
+            				
             			}
             			else{
             				//de caso contrario guarda un nuevo elemento en el INVENTARIO
@@ -321,7 +333,7 @@ public class GatewayEntradasDocumentos extends BaseGatewayAlmacen {
             				
             				
             			}
-            			
+            			//AQUI PARA HACER PRUEBAS------------------------------
             		}
             	}
             	
@@ -337,6 +349,9 @@ public class GatewayEntradasDocumentos extends BaseGatewayAlmacen {
     			for(int i=0; i<vector_ped_movtos.size(); i++){
     				finiquitar_pedido(Long.parseLong(vector_ped_movtos.get(i).toString()));
 				}
+    			
+    			gatewayBitacoraAlmacen.guardarBitacoraAlmacen(gatewayBitacoraAlmacen.Cierra_Entrada,Id_Entrada,Integer.parseInt(documento.get("ID_PERSONA").toString()),Integer.parseInt(documento.get("ID_ALMACEN").toString()),Integer.parseInt(documento.get("ID_DEPENDENCIA").toString()),Long.parseLong(documento.get("ID_PEDIDO").toString()),"ENTRADA",1,1, new Date(), null, 0.0);
+    			//gatewayBitacoraAlmacen.guardarBitacoraAlmacen(gatewayBitacoraAlmacen.Cierra_Entrada,Id_Entrada,Integer.parseInt(documento.get("cve_pers").toString()),Integer.parseInt(documento.get("ID_ALMACEN").toString()),Integer.parseInt(documento.get("ID_DEPENDENCIA").toString()),Long.parseLong(documento.get("ID_PEDIDO").toString()),"ENTRADA",1,1, new Date(), null, 0.0);
             } 
         });  
 		return "";

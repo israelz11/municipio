@@ -13,6 +13,7 @@ public class GatewayBitacoraAlmacen extends BaseGatewayAlmacen {
 	public final static int Actualiza_Entrada = 2;
 	public final static int Cancela_Entrada = 3;
 	public final static int Cierra_Entrada = 4;
+	public final static int Detalle_Entrada = 5;
 	
 	public GatewayBitacoraAlmacen() {
 		// TODO Auto-generated constructor stub

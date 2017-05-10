@@ -85,7 +85,7 @@ public class ControladorMuestraPedidos extends ControladorBaseAlmacen {
 				LstPedidos.addAll(Pedidos);
 			
 		}
-		
+		log.config("Listado de Pedidos" + LstPedidos );
 		return LstPedidos;
 	    /*return this.getJdbcTemplate().queryForList("SELECT CVE_PED, "+
 															"NUM_PED,  "+

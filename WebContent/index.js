@@ -2,8 +2,9 @@
 
 $(document).ready(function() {
 		// Launch TipTip tooltip
-		$('.tiptip a.button, .tiptip button').tipTip();
 		popup();
+		$('.tiptip a.button, .tiptip button').tipTip();
+		
 	});
 
 function valida_datos(){
@@ -33,7 +34,7 @@ function validacion_ingreso() {
 	}
 	
 function popup(){
-	window.open('popup.html','mywindow','width=500,height=210');
+	window.open('popup.html?x=2','mywindow','width=500,height=210');
 }
 
 function CojerValorCookie(indice) {   

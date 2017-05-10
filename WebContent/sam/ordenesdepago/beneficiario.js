@@ -109,10 +109,9 @@ function guardar(){
 				 $('#idProveedor').attr('value', items);
 				 window.parent.cambiarVariable(razonSocial);
 				 swal("Good job!", "Beneficiario Guardado con éxito!", "success");
-				 
 				 CloseDelay("Beneficiario guardado con éxito", 2000, function(){
 					 limpiar();
-					 window.showModalDialog();
+					
 					 buscarBeneficiario();
 					 
 				 });
