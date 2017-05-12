@@ -78,14 +78,14 @@ function guardar(){
 		 if ( razonSocial=="")  {jAlert('La Razón Social no es válida', 'Advertencia'); return false;}
 		 if ( responsable=="")  {jAlert('El Responsable no es válido', 'Advertencia'); return false;}
 		 //if ( telefono=="")  {jAlert('El número de telefono no es válido', 'Advertencia'); return false;}
-		 if (telefono.length!=10)  {jAlert('El número de telefono no es válido', 'Advertencia'); return false;}
+		 //if (telefono.length!=10)  {jAlert('El número de telefono no es válido', 'Advertencia'); return false;}
 		
 		 if ( calle=="") {jAlert('La Calle no es válida', 'Advertencia'); return false;}
 		 if ( colonia=="")  {jAlert('La Colonia no es válida', 'Advertencia'); return false;}
 		 if ( estado=="")  {jAlert('El Estado no es válido', 'Advertencia'); return false;}
 		 if ( ciudad=="")  {jAlert('La Ciudad no es válida', 'Advertencia'); return false;}
 		 if ( cp=="")  {jAlert('El Codigo postal no es válido', 'Advertencia'); return false;}
-		 if ( noCuenta=="") {alert('La Cuenta debe ser capturada.', 'Advertencia'); return false;}
+		 //if ( noCuenta=="") {alert('La Cuenta debe ser capturada.', 'Advertencia'); return false;}
 		 if ( clabeb=="") {alert('La Cuenta debe ser capturada.', 'Advertencia'); return false;}
 		 //if ((clabeb).val().length!=18) {alert("La CLABE debe tener 18 digitos", 'Advertencia'); return false;}
 		 //if ( idBanco != "" && $('#noCuenta').attr('value') == ""  )  {jAlert('El Número de cuenta no es válido', 'Advertencia'); return false;}

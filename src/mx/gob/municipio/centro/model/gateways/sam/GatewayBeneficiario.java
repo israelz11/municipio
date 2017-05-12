@@ -52,10 +52,10 @@ public class GatewayBeneficiario extends BaseGateway {
 	public  Map    getBeneficiario(Long idBeneficiario){
 		if(idBeneficiario!=0)
 			return this.getJdbcTemplate().queryForMap("SELECT     A.CLV_BENEFI, A.CLV_BNCSUC, A.NCOMERCIA, A.BENEFICIAR, A.BENEFICIA2, A.RFC, A.CURP, A.TIPOBENEFI, A.DOMIFISCAL, A.CIUDAD, A.ESTADO, "+ 
-					  " A.CODIGOPOST, A.TELEFONOS, A.COLONIA, A.NUM_CTA, A.TIPO_CTA, A.CLAVE_PADRE, A.ID_BENEFICIARIO, A.VIGENCIA, A.STATUS,A.CLABE  "+
+					  " A.CODIGOPOST, A.TELEFONOS, A.COLONIA, A.NUM_CTA, A.TIPO_CTA, A.CLAVE_PADRE, A.ID_BENEFICIARIO, A.VIGENCIA, A.STATUS,A.CLABE,  "+
 	                  " B.BANCO, B.SUCURSAL, B.PLAZA, "+
 	                  " (SELECT NCOMERCIA FROM CAT_BENEFI WHERE CLV_BENEFI=A.CLAVE_PADRE  ) BENEFICIARIO "+
-	                  " FROM        CAT_BENEFI AS A LEFT OUTER JOIN CAT_BNCSUC  B ON A.CLV_BNCSUC = B.CLV_BNCSUC WHERE  A.ID_BENEFICIARIO =  ?", new Object []{idBeneficiario});
+	                  " FROM        CAT_BENEFI AS A LEFT OUTER JOIN SAM_CAT_BNCSUC  B ON A.CLV_BNCSUC = B.CLV_BNCSUC WHERE  A.ID_BENEFICIARIO =  ?", new Object []{idBeneficiario});
 		else
 			return null;
 	}
@@ -83,7 +83,7 @@ public class GatewayBeneficiario extends BaseGateway {
                       " FROM        CAT_BENEFI AS A LEFT OUTER JOIN  CAT_BNCSUC  B ON A.CLV_BNCSUC = B.CLV_BNCSUC WHERE  A.NCOMERCIA like  ? AND A.STATUS=1", new Object []{razonSocial+"%"});
 	}
 	
-	public  Long   actualizarPrincipal(Long clave,String razonSocial,String responsable,String responsable2,String rfc,String curp,String telefono,String tipo,String calle,String colonia,String ciudad,String estado,Integer cp,Integer idBanco,String noCuenta,String tipoCuenta,String idBeneficiarioPadre,String vigencia, Integer clabeb){
+	public  Long   actualizarPrincipal(Long clave,String razonSocial,String responsable,String responsable2,String rfc,String curp,String telefono,String tipo,String calle,String colonia,String ciudad,String estado,Integer cp,Integer idBanco,String noCuenta,String tipoCuenta,String idBeneficiarioPadre,String vigencia,String clabeb){
 		 if (clave == 0) 		  
 			  clave = inserta(razonSocial,responsable,responsable2,rfc,curp,telefono,tipo,calle,colonia,ciudad,estado,cp,idBanco,noCuenta,tipoCuenta,idBeneficiarioPadre,vigencia,clabeb);	  	  
 		  else
@@ -93,7 +93,7 @@ public class GatewayBeneficiario extends BaseGateway {
 	
 	
 	//AGREGAR UN NUEVO BENEFICIARIO--------------------------------------------------------------
-	public Long inserta( String razonSocial,String responsable,String responsable2,String rfc,String curp,String telefono,String tipo,String calle,String colonia,String ciudad,String estado,Integer cp,Integer idBanco,String noCuenta,String tipoCuenta,String idBeneficiarioPadre,String vigencia,Integer clabeb){
+	public Long inserta( String razonSocial,String responsable,String responsable2,String rfc,String curp,String telefono,String tipo,String calle,String colonia,String ciudad,String estado,Integer cp,Integer idBanco,String noCuenta,String tipoCuenta,String idBeneficiarioPadre,String vigencia,String clabeb){
 		try
 		{
 			Long cveBeneficiario =getNumeroBeneficiarioNuevo(tipo)+1;
@@ -123,10 +123,10 @@ public class GatewayBeneficiario extends BaseGateway {
 		return this.getJdbcTemplate().queryForLong(SQL);
 	}
 	
-	public void actualizar(Long clave,String razonSocial,String responsable,String responsable2,String rfc,String curp,String telefono,String tipo,String calle,String colonia,String ciudad,String estado,Integer cp,Integer idBanco,String noCuenta,String tipoCuenta,String idBeneficiarioPadre,String vigencia,Integer clabeb ){	
+	public void actualizar(Long clave,String razonSocial,String responsable,String responsable2,String rfc,String curp,String telefono,String tipo,String calle,String colonia,String ciudad,String estado,Integer cp,Integer idBanco,String noCuenta,String tipoCuenta,String idBeneficiarioPadre,String vigencia,String clabeb ){	
 		this.getJdbcTemplate().update("update cat_benefi  set   NCOMERCIA=?, BENEFICIAR=?, BENEFICIA2=?, RFC=?, CURP=?,TELEFONOS=?, TIPOBENEFI=?, DOMIFISCAL=?,COLONIA=?, CIUDAD=?, ESTADO=?, "+
 				" CODIGOPOST=?,CLV_BNCSUC=?,  NUM_CTA=?, TIPO_CTA=?, CLAVE_PADRE=?, STATUS=?, CLABE=?    where ID_BENEFICIARIO=? "
-				, new Object[]{razonSocial,responsable,responsable2,rfc,curp,telefono,tipo,calle,colonia,ciudad,estado,cp,idBanco,noCuenta,tipoCuenta,idBeneficiarioPadre,vigencia,clave,clabeb});
+				, new Object[]{razonSocial,responsable,responsable2,rfc,curp,telefono,tipo,calle,colonia,ciudad,estado,cp,idBanco,noCuenta,tipoCuenta,idBeneficiarioPadre,vigencia,clabeb,clave});
 	}	
 	
 	public void eliminar(Long idBeneficiario ) {
