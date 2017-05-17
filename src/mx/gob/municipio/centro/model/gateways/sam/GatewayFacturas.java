@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import mx.gob.municipio.centro.model.bases.BaseGateway;
 import mx.gob.municipio.centro.model.gateways.sam.catalogos.GatewayMeses;
 
+import org.jfree.util.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.transaction.TransactionStatus;
@@ -367,12 +368,13 @@ public class GatewayFacturas extends BaseGateway {
 		            			/*Revisar que tipo de documento se ha cerrado*/
 		            			Map documento = getJdbcTemplate().queryForMap("SELECT * FROM VT_COMPROMISOS WHERE TIPO_DOC IN("+consulta+") AND ID_PROYECTO = ? AND CLV_PARTID = ? AND CONSULTA = 'COMPROMETIDO' AND PERIODO = ? AND CVE_DOC = ?", new Object[]{movimiento.get("ID_PROYECTO"), movimiento.get("CLV_PARTID"), factura.get("PERIODO"), factura.get(tipoDocto)});
 		            			
+		            			//VALIDAR SI EL IMPORTE DEL PEDIDO DEVENGADO ES EL TOTAL PARA FINIQUITAR EL PEDIDO//
 		            			if(documento.get("TIPO_DOC").toString().equals("PED")&&(presupuestoDisponible.doubleValue() - Double.parseDouble(factura.get("TOTAL").toString()))<1)
 		            				getJdbcTemplate().update("UPDATE SAM_PEDIDOS_EX SET FECHA_FINIQUITADO =?, MES_FINALIZADO=?, DIA_FINALIZADO=? WHERE CVE_PED =?", new Object[]{fecha_finalizado, fecha_finalizado.getMonth()+1, fecha_finalizado.getDay(), documento.get("CVE_DOC")});
 		            			
 		            			if(documento.get("TIPO_DOC").toString().equals("O.S"))
 		            			{
-		            				int MesActual = gatewayMeses.getMesActivo(2015);
+		            				int MesActual = gatewayMeses.getMesActivo(2015);//PORQUE EL AÑO LO TIENE ESCRITO EN ESTA PARTE?
 		            				Map OrdenServicio = getJdbcTemplate().queryForMap("SELECT * FROM SAM_REQUISIC WHERE CVE_REQ=?", new Object[]{documento.get("CVE_DOC")});
 		            				//Orden de Servicio Calendarizada
 		            				if(OrdenServicio.get("TIPO").toString().equals("8"))
@@ -413,6 +415,20 @@ public class GatewayFacturas extends BaseGateway {
 	    					getJdbcTemplate().update("UPDATE SAM_CONTRATOS SET FECHA_FINIQUITADO = ? WHERE CVE_CONTRATO =?",new Object[]{new Date(), factura.get("CVE_CONTRATO")});
 	    				}
 	    			}
+	    			
+//-------------------------------Validar si se finiquita el PEDIDO al cerrar el devengado......................12/05/17
+	    			//if(factura.get("CVE_PED")!=null) {
+	    				//BigDecimal presupuestoPedido = (BigDecimal) getJdbcTemplate().queryForObject("SELECT SUM(MONTO) FROM VT_COMPROMISOS WHERE CONSULTA='COMPROMETIDO' AND TIPO_DOC ='PED' AND CVE_DOC = ?", new Object[]{factura.get("CVE_PED")}, BigDecimal.class);
+	    				//if(Double.parseDouble(factura.get("TOTAL").toString())== presupuestoPedido.doubleValue())
+	    				//{
+	    					//Finiquitar el contrato
+	    				//	Date fecha_finalizado = new Date();
+	    				//	getJdbcTemplate().update("UPDATE SAM_PEDIDOS_EX SET FECHA_FINIQUITADO =?, MES_FINALIZADO=?, DIA_FINALIZADO=? WHERE CVE_PED =?",new Object[]{fecha_finalizado, fecha_finalizado.getMonth()+1, fecha_finalizado.getDay(), factura.get("CVE_DOC")});
+	    				//}
+	    		//	}
+	    			
+	    			
+	    			
 	    			//Cierra la factura
             		Date fecha_finalizado = new Date();
             		getJdbcTemplate().update("UPDATE SAM_FACTURAS SET STATUS = ?, FECHA_CIERRE = ?, FECHA_FINALIZADO =?, MES_FINALIZADO=?, DIA_FINALIZADO=? WHERE CVE_FACTURA =?",new Object[]{1, new Date(), fecha_finalizado, fecha_finalizado.getMonth()+1, fecha_finalizado.getDay(), cve_factura});
@@ -500,6 +516,202 @@ public class GatewayFacturas extends BaseGateway {
 		
 		sql+=" ORDER BY F.CVE_FACTURA ASC";
 		return this.getNamedJdbcTemplate().queryForList(sql, m);	
+	}
+	
+	//---------------------------Listado para mostrar las facturar para generar la op
+
+	public List<Map> getListadoFacturas_OP(Map m){
+		String sql="SELECT F.CVE_FACTURA " +
+						      ",F.NUM_FACTURA" +
+						      ",F.CVE_REQ" +
+						      ",F.CVE_PED" +
+						      ",F.ID_ENTRADA" +
+						      ",F.CVE_OP" +
+						      ",F.CVE_PERS" +
+						      ",C.NCOMERCIA" +
+						      ",R.NUM_REQ" +
+						      ",P.NUM_PED" +
+						      ",F.ID_DEPENDENCIA" +
+						      ",DEP.DEPENDENCIA" + 
+						      ",F.NOTAS" +
+						      ",F.EJERCICIO" +
+						      ",F.PERIODO" +
+						      ",F.FECHA" +
+						      ",CONVERT(VARCHAR(10), F.FECHA_DOCUMENTO, 103) AS FECHA_DOCUMENTO" +
+						      ",F.FECHA_CIERRE" +
+						      ",F.FECHA_FINALIZADO" +
+						      ",F.SUBTOTAL" +
+						      ",F.IVA" +
+						      ",F.TOTAL" +
+						      ",F.STATUS" +
+						      ",(CASE F.STATUS WHEN 0 THEN 'Edición' WHEN 1 THEN 'Cerrado' WHEN 2 THEN 'Cancelado' WHEN 3 THEN 'Finiquitado' END) AS STATUS_DESC " +
+						  "FROM SAM_FACTURAS AS F " +
+						       "LEFT JOIN CAT_DEPENDENCIAS AS DEP ON (DEP.ID = F.ID_DEPENDENCIA) " +
+								"LEFT JOIN SAM_REQUISIC AS R ON (R.CVE_REQ = F.CVE_REQ) " +
+								"LEFT JOIN SAM_PEDIDOS_EX AS P ON (P.CVE_PED = F.CVE_PED) " +
+								"LEFT JOIN SAM_VALES_EX AS V ON (V.CVE_VALE = F.CVE_VALE) "+
+								"LEFT JOIN CAT_BENEFI AS C ON C.CLV_BENEFI=F.CLV_BENEFI " +
+								//+ "(C.CLV_BENEFI = (CASE ISNULL(F.CVE_PED,0) WHEN 0 THEN (CASE ISNULL(F.CVE_REQ,0) WHEN 0 THEN (SELECT VAL.CLV_BENEFI FROM SAM_VALES_EX AS VAL WHERE VAL.CVE_VALE = F.CVE_VALE) ELSE (SELECT OT.CLV_BENEFI FROM SAM_ORDEN_TRAB AS OT WHERE OT.CVE_REQ = F.CVE_REQ) END)  ELSE (SELECT PED.CLV_BENEFI FROM SAM_PEDIDOS_EX AS PED WHERE PED.CVE_PED = F.CVE_PED) END )) " +
+								" WHERE F.STATUS IN(1)";
+	
+		//return this.getJdbcTemplate().queryForList("SELECT E.ID_ENTRADA, E.FOLIO, E.ID_PEDIDO, P.CLV_BENEFI, P.NUM_PED, CONVERT(VARCHAR(10), E.FECHA,103) AS FECHA, E.IVA, E.SUBTOTAL, E.TOTAL, E.DESCRIPCION, T.DESCRIPCION AS TIPO_ENTRADA " +
+				//" FROM ENTRADAS AS E INNER JOIN TIPO_ENTRADA AS T ON (T.ID_TIPO_ENTRADA = E.ID_TIPO_ENTRADA) INNER JOIN SAM_PEDIDOS_EX AS P ON (P.CVE_PED = E.ID_PEDIDO) WHERE E.ID_PEDIDO = ? AND (SELECT COUNT(*) FROM SAM_FACTURAS WHERE STATUS IN (1) AND SAM_FACTURAS.ID_ENTRADA = E.ID_ENTRADA) = 0", new Object[]{cve_factura});
+		
+		return this.getNamedJdbcTemplate().queryForList(sql, m);
+	}	
+//--------------------------------------------------------------------------------
+	
+	public List<Map> getListadoFacturas_OP3(Map m){
+		String sql = "SELECT F.CVE_FACTURA " +
+						      ",F.NUM_FACTURA" +
+						      ",F.CVE_REQ" +
+						      ",F.CVE_PED" +
+						      ",F.ID_ENTRADA" +
+						      ",F.CVE_OP" +
+						      ",F.CVE_PERS" +
+						      ",C.NCOMERCIA" +
+						      ",R.NUM_REQ" +
+						      ",P.NUM_PED" +
+						      ",F.ID_DEPENDENCIA" +
+						      ",DEP.DEPENDENCIA" + 
+						      ",F.NOTAS" +
+						      ",F.EJERCICIO" +
+						      ",F.PERIODO" +
+						      ",F.FECHA" +
+						      ",CONVERT(VARCHAR(10), F.FECHA_DOCUMENTO, 103) AS FECHA_DOCUMENTO" +
+						      ",F.FECHA_CIERRE" +
+						      ",F.FECHA_FINALIZADO" +
+						      ",F.SUBTOTAL" +
+						      ",F.IVA" +
+						      ",F.TOTAL" +
+						      ",F.STATUS" +
+						      ",(CASE F.STATUS WHEN 0 THEN 'Edición' WHEN 1 THEN 'Cerrado' WHEN 2 THEN 'Cancelado' WHEN 3 THEN 'Finiquitado' END) AS STATUS_DESC " +
+						  "FROM SAM_FACTURAS AS F " +
+						       "LEFT JOIN CAT_DEPENDENCIAS AS DEP ON (DEP.ID = F.ID_DEPENDENCIA) " +
+								"LEFT JOIN SAM_REQUISIC AS R ON (R.CVE_REQ = F.CVE_REQ) " +
+								"LEFT JOIN SAM_PEDIDOS_EX AS P ON (P.CVE_PED = F.CVE_PED) " +
+								"LEFT JOIN SAM_VALES_EX AS V ON (V.CVE_VALE = F.CVE_VALE) "+
+								"LEFT JOIN CAT_BENEFI AS C ON (C.CLV_BENEFI = (CASE ISNULL(F.CVE_PED,0) WHEN 0 THEN (CASE ISNULL(F.CVE_REQ,0) WHEN 0 THEN (SELECT VAL.CLV_BENEFI FROM SAM_VALES_EX AS VAL WHERE VAL.CVE_VALE = F.CVE_VALE) ELSE (SELECT OT.CLV_BENEFI FROM SAM_ORDEN_TRAB AS OT WHERE OT.CVE_REQ = F.CVE_REQ) END)  ELSE (SELECT PED.CLV_BENEFI FROM SAM_PEDIDOS_EX AS PED WHERE PED.CVE_PED = F.CVE_PED) END )) " +
+								" WHERE F.STATUS IN("+m.get("estatus").toString()+") ";
+		
+		if(m.get("cbodependencia")!=null)
+			if(!m.get("cbodependencia").toString().equals("0"))
+				sql += " AND F.ID_DEPENDENCIA =:cbodependencia";
+		
+		if(m.get("clv_benefi")!=null)
+			if(!m.get("clv_benefi").equals("0"))
+				sql+= " AND C.CLV_BENEFI =:clv_benefi";
+		
+		if (m.get("fechaInicial") != null && m.get("fechaFinal") != null ) 
+			if (!m.get("fechaInicial").equals("") && !m.get("fechaFinal").equals("") ) 
+				sql += " AND CONVERT(datetime,convert(varchar(10), F.FECHA_DOCUMENTO ,103),103) between :fechaInicial and :fechaFinal ";	
+		
+		if(m.get("numped")!=null)
+			if(!m.get("numped").equals(""))
+				sql += " AND P.NUM_PED LIKE '%"+m.get("numped").toString()+"%'";
+		
+		if(m.get("numreq")!=null)
+			if(!m.get("numreq").equals(""))
+				sql += " AND R.NUM_REQ LIKE '%"+m.get("numreq").toString()+"%'";
+		
+		if(m.get("numfactura")!=null)
+			if(!m.get("numfactura").equals(""))
+				sql += " AND F.NUM_FACTURA LIKE '%"+m.get("numfactura").toString()+"%'";
+		
+		sql+=" ORDER BY F.CVE_FACTURA ASC";
+		return this.getNamedJdbcTemplate().queryForList(sql, m);	
+	}
+	
+	
+//---------------------------Listado para mmostrar las facturar para generar la op
+	public List<Map> getListadoFacturas_OP2(int cve_pers){
+		return this.getJdbcTemplate().queryForList("SELECT CVE_FACTURA ,NUM_FACTURA, CVE_REQ, CVE_PED, ID_ENTRADA, NOTAS, SUM(TOTAL) AS TOTAL, TOTAL_DOC, STATUS, STATUS_DESC " +
+					 " FROM ( SELECT F.CVE_FACTURA " +
+						      ",F.NUM_FACTURA" +
+						      ",F.CVE_REQ" +
+						      ",F.CVE_PED" +
+						      ",F.ID_ENTRADA" +
+						      ",(SELECT TOP 1 FOLIO FROM ENTRADAS WHERE ID_ENTRADA = F.ID_ENTRADA) AS FOLIO_ENTRADA"+
+						      ",M.ID_PROYECTO "+
+						      ",M.CLV_PARTID "+
+						      ",F.CVE_OP" +
+						      ",F.CVE_PERS" +
+						      ",C.CLV_BENEFI"+
+						      ",C.NCOMERCIA" +
+						      ",R.NUM_REQ" +
+						      ",P.NUM_PED" +
+						      ",F.ID_DEPENDENCIA" +
+						      ",F.NOTAS" +
+						      ",F.EJERCICIO" +
+						      ",F.PERIODO" +
+						      ",F.FECHA" +
+						      ",CONVERT(VARCHAR(10), F.FECHA_DOCUMENTO, 103) AS FECHA_DOCUMENTO" +
+						      ",F.FECHA_CIERRE" +
+						      ",F.FECHA_FINALIZADO" +
+						      ",F.SUBTOTAL" +
+						      ",F.IVA" +
+						      ",F.TOTAL" +
+						      ",(CASE ISNULL(F.CVE_PED,0) WHEN 0 THEN (SELECT OT.COSTO_TOTAL FROM SAM_ORDEN_TRAB AS OT WHERE OT.CVE_REQ = F.CVE_REQ) ELSE (SELECT TOP 1 E.TOTAL FROM ENTRADAS AS E WHERE E.ID_PEDIDO =F.CVE_PED) END) AS TOTAL_DOC"+
+						      ",F.STATUS" +
+						      ",(CASE F.STATUS WHEN 0 THEN 'Edición' WHEN 1 THEN 'Cerrado' END) AS STATUS_DESC " +
+						  "FROM SAM_FACTURAS AS F " +
+						        "INNER JOIN SAM_FACTURA_DETALLE AS M ON (M.CVE_FACTURA = F.CVE_FACTURA) "+
+								"LEFT JOIN SAM_REQUISIC AS R ON (R.CVE_REQ = F.CVE_REQ) " +
+								"LEFT JOIN SAM_PEDIDOS_EX AS P ON (P.CVE_PED = F.CVE_PED) " +
+								"LEFT JOIN VPROYECTO AS VP ON (VP.ID_PROYECTO = M.ID_PROYECTO) " +
+								"LEFT JOIN CAT_RECURSO AS CR ON (CR.ID = VP.ID_RECURSO) "+
+								"LEFT JOIN CAT_BENEFI AS C ON (C.CLV_BENEFI = F.CLV_BENEFI) " +
+								" WHERE F.STATUS=1 AND " +
+								" F.CVE_FACTURA NOT IN (SELECT M.CVE_FACTURA FROM SAM_MOV_OP AS M WHERE (M.CVE_FACTURA = F.CVE_FACTURA )) "  +
+								") AS R " +
+						" GROUP BY CVE_FACTURA ,NUM_FACTURA, CVE_REQ, CVE_PED, ID_ENTRADA, NOTAS, TOTAL_DOC, STATUS, STATUS_DESC ");
+								
+	}
+	
+	
+	//LISTADO PARA GENERAR LA OP DESDE UNA FACTURA................
+	@SuppressWarnings("unchecked")
+	public List<Map> getListadoFacturas_OP2(Map m){
+		String sql = "SELECT F.CVE_FACTURA " +
+						      ",F.NUM_FACTURA" +
+						      ",F.CVE_REQ" +
+						      ",F.CVE_PED" +
+						      ",F.ID_ENTRADA" +
+						      ",F.CVE_OP" +
+						      ",F.CVE_PERS" +
+						      ",C.NCOMERCIA" +
+						      ",R.NUM_REQ" +
+						      ",P.NUM_PED" +
+						      ",F.ID_DEPENDENCIA" +
+						      ",DEP.DEPENDENCIA" + 
+						      ",F.NOTAS" +
+						      ",F.EJERCICIO" +
+						      ",F.PERIODO" +
+						      ",F.FECHA" +
+						      ",CONVERT(VARCHAR(10), F.FECHA_DOCUMENTO, 103) AS FECHA_DOCUMENTO" +
+						      ",F.FECHA_CIERRE" +
+						      ",F.FECHA_FINALIZADO" +
+						      ",F.SUBTOTAL" +
+						      ",F.IVA" +
+						      ",F.TOTAL" +
+						      ",F.STATUS" +
+						      ",(CASE F.STATUS WHEN 0 THEN 'Edición' WHEN 1 THEN 'Cerrado' WHEN 2 THEN 'Cancelado' WHEN 3 THEN 'Finiquitado' END) AS STATUS_DESC " +
+						  "FROM SAM_FACTURAS AS F " +
+						       "LEFT JOIN CAT_DEPENDENCIAS AS DEP ON (DEP.ID = F.ID_DEPENDENCIA) " +
+								"LEFT JOIN SAM_REQUISIC AS R ON (R.CVE_REQ = F.CVE_REQ) " +
+								"LEFT JOIN SAM_PEDIDOS_EX AS P ON (P.CVE_PED = F.CVE_PED) " +
+								"LEFT JOIN SAM_VALES_EX AS V ON (V.CVE_VALE = F.CVE_VALE) "+
+								"LEFT JOIN CAT_BENEFI AS C ON (C.CLV_BENEFI = (CASE ISNULL(F.CVE_PED,0) WHEN 0 THEN (CASE ISNULL(F.CVE_REQ,0) WHEN 0 THEN (SELECT VAL.CLV_BENEFI FROM SAM_VALES_EX AS VAL WHERE VAL.CVE_VALE = F.CVE_VALE) ELSE (SELECT OT.CLV_BENEFI FROM SAM_ORDEN_TRAB AS OT WHERE OT.CVE_REQ = F.CVE_REQ) END)  ELSE (SELECT PED.CLV_BENEFI FROM SAM_PEDIDOS_EX AS PED WHERE PED.CVE_PED = F.CVE_PED) END )) " +
+								" WHERE F.STATUS IN(1) ";
+		
+		
+		
+		
+		
+		sql+=" ORDER BY F.CVE_FACTURA ASC";
+		//Log.debug("prueba"+getListadoFacturas_OP(m));
+		return this.getNamedJdbcTemplate().queryForList(sql, m);
+		
 	}
 	
 	public Map getFactura(Long cve_factura){

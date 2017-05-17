@@ -658,12 +658,13 @@ function buscarOrden( idOrden ) {
 	row.appendChild( Td("",centro,"",html) );
 	tabla.appendChild( row );
  } 
- 
+ //Manda a generar la nueva Orden de Pago
  function nuevaOp(){
 	$('#cve_op').attr('value','');
 	$('#accion').attr('value','');
     $('#tabsOrdenesEnca').show(); 
-	$('#listaOrdenesPendientes').hide();		
+	$('#listaOrdenesPendientes').hide();
+	getDevenOP();
  }
 /*Fin Listado de ordenes*/
  
@@ -1220,7 +1221,11 @@ function cargarVales(vale) {
  
  
 function getPedidos(){
-	jWindow('<iframe width="800" height="400" name="PED" id="PED" frameborder="0" src="../../sam/consultas/muestra_Pedidos.action?tipoGasto='+$('#tipoGasto').attr('value')+'&unidad='+$('#cbUnidad').attr('value')+'&clv_benefi='+$('#xClaveBen').attr('value')+'&proyecto='+$('#CPROYECTO').attr('value')+'&clv_partid='+$('#CCLV_PARTID').attr('value')+'"></iframe>','Cargar Pedidos en Ordene de Pago', '','Cerrar',1);
+	jWindow('<iframe width="800" height="400" name="PED" id="PED" frameborder="0" src="../../sam/consultas/muestra_Pedidos.action?tipoGasto='+$('#tipoGasto').attr('value')+'&unidad='+$('#cbUnidad').attr('value')+'&clv_benefi='+$('#xClaveBen').attr('value')+'&proyecto='+$('#CPROYECTO').attr('value')+'&clv_partid='+$('#CCLV_PARTID').attr('value')+'"></iframe>','Cargar Pedidos en Ordenes de Pago', '','Cerrar',1);
+}
+
+function getDevenOP(){
+	jWindow('<iframe width="800" height="400" name="PED" id="PED" frameborder="0" src="../../sam/consultas/muestra_dev_op.action?"></iframe>','Devengado para la Orden de Pago', '','Cerrar',1);
 }
 
 function getTabla(items,tipoElemento){
@@ -1245,7 +1250,9 @@ function generarDetallesFactura(checkIDs){
 								llenarTablaDeDetallesOrdenes();	
 								llenarTablaDeDocumentos();
 								llenarTablaDeVales();
+								llenarTablaDeRetenciones();
 								CloseDelay("Facturas cargadas con exito");
+								
 						} 					   				
 						,
 						errorHandler:function(errorString, exception) { 
@@ -1481,4 +1488,7 @@ function getTablaOT(items,tipoElemento){
         }); 	
 	tabla +="<tr><td height ='25' align='center' colspan='6' ><input name='btnGuardarOT' id='btnGuardarOT' type='button' class='botones' onClick='generarDetallesOT();' value='Aceptar ' />&nbsp;<input   name='' id='' type='button' class='botones' onClick='_closeDelay();' value='Cancelar' /></td></tr>";
 	return tabla +="</table>";	
+}
+function generarxListaOP (){
+	
 }

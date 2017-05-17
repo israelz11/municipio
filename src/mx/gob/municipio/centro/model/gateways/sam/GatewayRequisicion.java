@@ -19,6 +19,7 @@ import mx.gob.municipio.centro.model.gateways.sam.catalogos.GatewayMeses;
 import mx.gob.municipio.centro.view.controller.sam.pedidos.StoreProcedurePedidos;
 import mx.gob.municipio.centro.view.controller.sam.requisiciones.StoreProcedureRequisiciones;
 
+import org.jfree.util.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.transaction.TransactionStatus;
@@ -497,6 +498,7 @@ public class GatewayRequisicion  extends BaseGateway {
 	
 	
 	/*Metodo para cerrar la Requisicion*/
+	/*MODIFICADO PARA LA VALIDACION DEL BENEFICIARIO EN OS U OT PARA NO CERRAR VACIO*/
 	public boolean cerrarRequisicion(final Long cve_req, final Integer idUsuario, final String claveUnidad,final List<Map<String,String>> calendario){
 		/*Determinar si tiene presupuesto*/
 		exito=false;
@@ -516,20 +518,28 @@ public class GatewayRequisicion  extends BaseGateway {
 					if(tipo_req!=1&&tipo_req!=7){
 						if(!cerrarOtOs)
 							throw new RuntimeException("No cuenta con privilegios suficientes para realizar esta operación (Cerrar OT/OS)");
+						if (tipo_req != 1 && tipo_req != 7){
+							//validar si la OT/OS tiene beneficiario
+							String beneficiario=requisicion.get("CLV_BENEFI").toString();
+							char[] validaNull = beneficiario.toCharArray();
+						    for (int x=0;x<validaNull.length;x++)
+						        System.out.println("[" + x + "] " + validaNull[x]);
+							//if (beneficiario.isEmpty()||beneficiario.length()<0||beneficiario==null)
+						    if ((validaNull[0]=='N') && (validaNull[1]=='U'))
+							//if(requisicion.get("CLV_BENEFI")==null && (tipo_req != 1 && tipo_req != 7))
+							{
+								throw new RuntimeException("No se puede cerrar el documento por que no se ha capturado un beneficiario.");
+							}
+							Log.debug("Este es la clave del beneficiario" + beneficiario);
+							/*if((tipo_req !=1 && tipo_req !=7)) 
+								if(req.get("CLV_BENEFI")== null)
+									throw new RuntimeException("No se puede cerrar el documento por que no se ha especificado un beneficiario válido");
+							*/
+							}
 					}
 					
 					Map req = getRequisicion(cve_req);
 					
-					//validar si la OT/OS tiene beneficiario
-					if(requisicion.get("CLV_BENEFI")==null && (tipo_req != 1 && tipo_req != 7))
-					{
-						throw new RuntimeException("No se puede cerrar el documento por que no se ha especificado un beneficiario válido");
-					}
-					
-					/*if((tipo_req !=1 && tipo_req !=7)) 
-						if(req.get("CLV_BENEFI")== null)
-							throw new RuntimeException("No se puede cerrar el documento por que no se ha especificado un beneficiario válido");
-					*/
 					String proyecto="";//(String)requisicion.get("PROYECTO");
 					String partida =requisicion.get("CLV_PARTID").toString();
 					Double importe= (((BigDecimal)requisicion.get("IMPORTE"))).doubleValue();

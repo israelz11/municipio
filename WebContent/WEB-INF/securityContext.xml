@@ -127,6 +127,7 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans
 	<security:intercept-url pattern="/sam/consultas/muestra_archivos_proyectos.*" access="ROLE_Sam_Presupuesto_Presupuesto_Global"/>
 	<security:intercept-url pattern="/sam/consultas/_subirArchivoProyecto.*" access="ROLE_Sam_Presupuesto_Presupuesto_Global"/>
 	<security:intercept-url pattern="/sam/consultas/archivos/**" filters="none"/>
+	<security:intercept-url pattern="/sam/consultas/muestra_dev_op.*" access="ROLE_Sam_Ordenes_de_Pago_Captura_de_Orden_de_Pago"/>
 	
 	<security:intercept-url pattern="/sam/mir/captura_mir.*" access="ROLE_Sam_M.I.R._Capturar_M.I.R."/>
 	<security:intercept-url pattern="/sam/mir/muestra_programas.*" access="ROLE_Sam_M.I.R._Capturar_M.I.R."/>

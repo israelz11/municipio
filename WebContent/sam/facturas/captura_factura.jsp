@@ -26,7 +26,7 @@
 <script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>
 <script type="text/javascript" src="../../dwr/interface/autocompleteDiversosRemoto.js"> </script>
 <script type="text/javascript" src="../../include/js/autocomplete/autompleteVarios.js"></script>
-<script type="text/javascript" src="captura_factura.js"></script>
+<script type="text/javascript" src="captura_factura.js?x=<%=System.currentTimeMillis()%>"></script>
 <script type="text/javascript" src="../../include/js/presupuesto/presupuesto.js"></script>
 <script type="text/javascript" src="../../include/js/otros/productos.js"></script>
 <link rel="stylesheet" href="../../include/css/css/css3-buttons.css" type="text/css" media="screen">
