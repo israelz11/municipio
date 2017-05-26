@@ -452,6 +452,13 @@ public class GatewayFacturas extends BaseGateway {
 		return this.getJdbcTemplate().queryForList("SELECT *FROM SAM_FACTURA_DETALLE WHERE CVE_FACTURA = ?", new Object[]{cve_factura});
 	}
 	
+	//Mapeo maestro de facturas para cargar al seleccionar el listado de las facturas desde la op
+	//---------------------------------Abraham Gonzalez 18/05/2017-------------------------------
+	public List<Map> getMaestro(Long cve_factura){
+		return this.getJdbcTemplate().queryForList("SELECT *FROM SAM_FACTURAS WHERE STATUS=1 AND CVE_FACTURA= ?", new Object[]{cve_factura});
+	}
+	
+	
 	//Mapeo de las retenciones de las facturas para cargar en la op
 	public List<Map> getRetencion(Long cve_factura) {
 		return this.getJdbcTemplate().queryForList("SELECT CVE_FACTURA,CONS,CLV_RETENC,IMPORTE FROM SAM_FACTURA_MOV_RETENC WHERE CVE_FACTURA = ?",new Object[]{cve_factura});

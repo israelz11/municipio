@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css"/>
 <script type="text/javascript" src="../../include/js/jquery-1.3.2.min.js"></script>
 <script type="text/javascript" src="../../include/js/toolSam.js"></script>
+<script type="text/javascript" src="muestra_dev_op.js"></script>
 <style type="text/css">
 <!--
 body {
@@ -41,10 +42,14 @@ a:active {
   <tr>
     <td><h1>Listado de Facturas
         <c:out value='${desMes}'/>
-    </h1></td>
+    </h1>
+	  <div style="position: absolute;right: 34px;top: 30px;">
+	  	<input class="btn btn-info btn-sm" name="btnGeneraOp" id="btnGeneraOp" onclick="generarOPS()" value="Generar Orden de Pago" style="width:150px" type="button">
+	  </div>
+    </td>
   </tr>
 </table>
-<table class="listas" border="0" align="center" cellpadding="0" cellspacing="0" width="95%">
+<table class="listas" id="listadevengado" border="0" align="center" cellpadding="0" cellspacing="0" width="95%">
   <tr bgcolor="#889FC9">
     <th width="4%" height="21" align="center">&nbsp;</th>
     <th width="20%" align="center">Num. Documento</th>

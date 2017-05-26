@@ -542,7 +542,7 @@ public class GatewayRequisicion  extends BaseGateway {
 					
 					String proyecto="";//(String)requisicion.get("PROYECTO");
 					String partida =requisicion.get("CLV_PARTID").toString();
-					Double importe= (((BigDecimal)requisicion.get("IMPORTE"))).doubleValue();
+					Double importe= (((BigDecimal)requisicion.get("IMPORTE"))).doubleValue();//viene en 0 el importe de la requisicion..............
 					int tipo =Integer.parseInt(requisicion.get("TIPO").toString());
 					Long cve_contrato = (requisicion.get("CVE_CONTRATO")==null) ? 0L: Long.parseLong(requisicion.get("CVE_CONTRATO").toString());
 					Long cve_vale = (requisicion.get("CVE_VALE")==null) ? 0L: Long.parseLong(requisicion.get("CVE_VALE").toString());
@@ -557,7 +557,7 @@ public class GatewayRequisicion  extends BaseGateway {
 						//Agregado Israel de la Cruz, 10/09/2015
 						getJdbcTemplate().update("DELETE FROM SAM_COMP_REQUISIC WHERE CVE_REQ=?",new Object []{cve_req});
 						
-						if(tipo_req == 5 || tipo_req == 8)
+						if(tipo_req == 5 || tipo_req == 8)//5=O.S. Bombas o 8=O.S. Calendarizada
 						{
 							getJdbcTemplate().update("UPDATE SAM_ORDEN_TRAB SET SAM_ORDEN_TRAB.COSTO_TOTAL=(SELECT SUM(SAM_REQ_MOVTOS.CANTIDAD*SAM_REQ_MOVTOS.PRECIO_EST) AS TOTAL FROM SAM_REQ_MOVTOS WHERE SAM_REQ_MOVTOS.CVE_REQ = ?) WHERE SAM_ORDEN_TRAB.CVE_REQ = ? ", new Object[]{cve_req, cve_req});
 						}
@@ -1024,6 +1024,7 @@ public class GatewayRequisicion  extends BaseGateway {
 	/*Metodo para que verificar y cerrar una requisicion si sus elementos ya estan pedidos totalmente apartados en pedidos en requisicion Anualizada tipo(7)*/
 	//1: Si la requisicion no tiene mas pedidos cerrar
 	//2: Si la requisicion ya tiene otro pedido entonces en proceso
+	@SuppressWarnings("static-access")
 	public void cambiarStatusRequisicion(Long cve_req){
 		boolean cerrar = true;
 		//obtener los lostes de la requisicion

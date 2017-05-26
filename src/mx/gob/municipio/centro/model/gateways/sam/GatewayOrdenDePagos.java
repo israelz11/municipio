@@ -55,7 +55,8 @@ public class GatewayOrdenDePagos extends BaseGateway  {
   public static final int OP_ESTADO_AUTORIZADA = 5;
   public static final int OP_ESTADO_PAGADA = 6;	
 	
-public  Long actualizarPrincipalOrden(Long cveOp , int ejercicio, int tipo,Date fecha,String  pedido,String  cveBeneficiario,int  cvePersona,String  cveParbit, String reembolsoFondo,String  concurso,String  nota,int  status,Integer  cveRequisicion, double importeIva, String cveUnidad, Integer periodo, int tipoGasto, Integer idGrupo, Long cve_contrato  ){
+  
+public  Long actualizarPrincipalOrden(Long cveOp , int ejercicio, int tipo,Date fecha,String  pedido,String  cveBeneficiario,int  cvePersona,String  cveParbit, String reembolsoFondo,String  concurso,String  nota,int  status,Integer  cveRequisicion, double importeIva, int cveUnidad, Integer periodo, int tipoGasto, Integer idGrupo, Long cve_contrato  ){
 	//Verfificar si tiene los privilegios en solo lectura Ordenes de Pago
 	/*if(!getPrivilegioEn(cvePersona, 114)){
 		throw new RuntimeException("No cuenta por los privilegios suficientes para realizar esta operación, solo lectura");
@@ -71,8 +72,9 @@ public  Long actualizarPrincipalOrden(Long cveOp , int ejercicio, int tipo,Date 
 return  cveOp; 
 }
 
-	
-public Long insertaOrden( int ejercicio, int tipo,Date  fecha,String  pedido,String  cveBeneficiario,int  cvePersona, String reembolsoFondo,String  concurso,String  nota,int  status,Integer  cveRequisicion, double importeIva, String cveUnidad , Integer periodo, int tipoGasto, Integer idGrupo, int cve_pers, Long cve_contrato   ){
+
+//-------------------------------------Metodo de generar la Orden de pago----------------------------------
+public Long insertaOrden( int ejercicio, int tipo,Date  fecha,String  pedido,String  cveBeneficiario,int  cvePersona, String reembolsoFondo,String  concurso,String  nota,int  status,Integer  cveRequisicion, double importeIva, int cveUnidad , Integer periodo, int tipoGasto, Integer idGrupo, int cve_pers, Long cve_contrato   ){
 	try{
 		
 		Boolean tieneIva = importeIva != 0 ;
@@ -1423,6 +1425,172 @@ public boolean cambiarFechaOrdenPago(Long cve_op, String fechaNueva, int ejercic
 	        throw new RuntimeException("La operación ha fallado, error al cargar las facturas a la Orden de Pago",e);
 	   }
 	}
+	
+	//-------------------------------------Metodo de generar la Orden de pago desde la lista de Facturas----------------------------------
+	//Pruebas de Abraham-------------------------------20-05-17
+	public Long insertaOrdenxFacturas(int id_unidad , String cve_facturas,final int cve_pers, int ejercicio ){
+		
+		//, int tipo,Date fecha,String  pedido,String  cveBeneficiario,int  cvePersona,String  cveParbit, String reembolsoFondo,String  concurso,String  nota,int  status,Integer  cveRequisicion, double importeIva, String cveUnidad, Integer periodo, int tipoGasto, Integer idGrupo, Long cve_contrato
+		try {
+			
+				Long cveOp=0L; 
+				
+				String clv_benefi=null;
+				Double iva = 0D;
+				Integer periodo=0;
+				String arraycve_fac[]=cve_facturas.split(",");
+				
+				for(String cve_factura: arraycve_fac){
+					Map factura = gatewayFacturas.getFactura(Long.parseLong(cve_factura));
+            		clv_benefi = factura.get("CLV_BENEFI").toString();
+            		iva = iva+ Double.parseDouble(factura.get("IVA").toString());
+            		periodo=Integer.parseInt(factura.get("PERIODO").toString());
+				      		
+				}
+				cveOp=insertaOrden( ejercicio, 12, new Date(), "NULL", clv_benefi,cve_pers, "NULL", "NULL", "", -1, 0, iva,id_unidad,periodo,1, 0, cve_pers,Long.parseLong("0"));
+				  //cveOp= insertaOrden(ejercicio, tipo,fecha,pedido,cveBeneficiario,cvePersona,reembolsoFondo,concurso,nota,status,cveRequisicion, importeIva,cveUnidad,periodo,tipoGasto,idGrupo, cvePersona, cve_contrato );
+			  
+			return  cveOp;
+		} catch (DataAccessException e) {                               
+	        throw new RuntimeException("La operación ha fallado, error al cargar las facturas a la Orden de Pago",e);
+	   }
+		
+	
+	}
+
+	
+	
+	//------------------------------------- CARGA LA LISTA DE FACTURAS SELECCIONADAS PARA GENERAR UNA ORDEN DE PAGO---------------------------------------------------------
+											//final Long cve_op, final Long[] cve_facturas,Date  fecha, String  cveBeneficiario, final int ejercicio, final int cve_pers,String reembolsoFondo,String  concurso,String  nota,int  status,Integer  cveRequisicion, double importeIva, String cveUnidad , Integer periodo, int tipoGasto, Integer idGrupo, Long cve_contrato						
+		public String GenerarOrdenPagoxDevengo(final Long cve_op, final Long[] cve_facturas,Date  fecha, String  cveBeneficiario, final int ejercicio, final int cve_pers,String reembolsoFondo,String  concurso,String  nota,int  status,Integer  cveRequisicion, double importeIva, String cveUnidad , Integer periodo, int tipoGasto, Integer idGrupo, Long cve_contrato){
+			
+			try { 
+				final String result = ""; 
+				this.getTransactionTemplate().execute(new TransactionCallbackWithoutResult(){
+		            @Override
+		            protected void   doInTransactionWithoutResult(TransactionStatus status) {
+		            	/*Comprobar algunos datos antes*/
+		            	
+		            	int numAnexo = getJdbcTemplate().queryForInt("SELECT MAX(ANX_CONS) FROM SAM_OP_ANEXOS WHERE CVE_OP = ?", new Object[]{cve_op});
+		            	
+		            	for(Long cve_factura: cve_facturas){
+		            		
+		            		numAnexo++;
+		            		Map factura = gatewayFacturas.getFactura(cve_factura);
+		            		
+		            		insertaOrden( ejercicio, 12, new Date(), "NULL", factura.get("CLV_BENEFI").toString(), cve_pers, "NULL", "NULL", factura.get("NOTAS").toString(), -1, 0, Double.parseDouble(factura.get("IVA").toString()),Integer.parseInt(factura.get("ID_DEPENDENCIA").toString()),Integer.parseInt(factura.get("PERIODO").toString()),1, 0, cve_pers,Long.parseLong("0"));
+		            		
+		            		List<Map> facturaMovtos = gatewayFacturas.getDetalles(cve_factura);
+		            		List<Map> facturaRetenc = gatewayFacturas.getRetencion(cve_factura);
+		            		
+		            		//Listado de las retenciones
+		            		
+		            		if(!factura.get("STATUS").toString().equals("1"))
+		            			throw new RuntimeException("El Estatus de la factura "+factura.get("NUM_FACTURA").toString()+" no es valido ó no esta devengada en el presupuesto");
+		            		if(!existeDevengadoFactura(Long.parseLong(factura.get("CVE_FACTURA").toString())))
+		            			throw new RuntimeException("El Presupuesto Devengado de la factura "+factura.get("NUM_FACTURA").toString()+" no existe, error de insuficiencia presupuestal");
+		            		if(existeEnOtrasOrdenPago(Long.parseLong(factura.get("CVE_FACTURA").toString())))
+		            			throw new RuntimeException("La factura "+factura.get("NUM_FACTURA").toString()+" ya existe en otra Orden de Pago");
+		            		/*Comprobar que tampoco se repida el movimiento*/
+		            		if(exitsteMovimiento(Long.parseLong(factura.get("CVE_FACTURA").toString()), cve_op))
+		            			throw new RuntimeException("La factura "+factura.get("NUM_FACTURA").toString()+" ya existe en los movimientos de la Orden de Pago");
+		            		
+		            		
+		            		//Guarda los movimiento de la factura en la OP
+		            		
+		            		for(Map detalleFac: facturaMovtos)
+		            		{
+			            		getJdbcTemplate().update("INSERT INTO SAM_MOV_OP(CVE_OP, ID_PROYECTO, CLV_PARTID, CVE_FACTURA, NOTA, TIPO, MONTO) VALUES(?,?,?,?,?,?,?)", new Object[]{cve_op, detalleFac.get("ID_PROYECTO"), detalleFac.get("CLV_PARTID"), cve_factura, "Soporta la factura No. "+factura.get("NUM_FACTURA"), "FACTURA", detalleFac.get("IMPORTE")});
+			            	}
+		            		
+		            		
+		            		//IMPORTA LAS DEDUCCIONES DESDE LAS FACTURAS A LA ORDEN DE PAGO
+	            			/*
+		            		int i =getJdbcTemplate().queryForInt("SELECT COUNT(*) AS N FROM SAM_FACTURA_MOV_RETENC WHERE CVE_FACTURA =?", new Object[]{cve_factura});;
+	            			List<Map> retenciones = getJdbcTemplate().queryForList("SELECT * FROM SAM_FACTURA_MOV_RETENC WHERE CVE_FACTURA =?", new Object[]{cve_factura});
+	            			for(Map retenc : retenciones)
+	            			{
+	            				i++;
+	            				getJdbcTemplate().update("INSERT INTO MOV_RETENC(CVE_OP, RET_CONS, CLV_RETENC, IMPORTE, PAGADO) VALUES(?,?,?,?,?)", new Object[]{
+	            						cve_op,
+	            						i,
+	            						retenc.get("CLV_RETENC"),
+	            						retenc.get("IMPORTE"),
+	            						0
+	            				});
+	            			}
+		            		*/      		
+		            		//if(!factura.get("ID_TIPO").toString().equals("9"))
+		            		
+		            		/*Guardar las deductivas de la factura en Orden de pago si existen*/
+		            		/*Retenciones de la Orden de pago*/
+		            		
+		            		int cont =getJdbcTemplate().queryForInt("SELECT COUNT(*) FROM SAM_FACTURA_MOV_RETENC WHERE CVE_FACTURA =?", new Object[]{cve_factura});;
+		            		List <Map> detalles = getJdbcTemplate().queryForList("SELECT *FROM SAM_FACTURA_MOV_RETENC WHERE CVE_FACTURA =?", new Object[]{cve_factura});
+		            		for(Map row: detalles){
+		            			cont++;
+		            			getJdbcTemplate().update("INSERT INTO MOV_RETENC (CVE_OP, RET_CONS, CLV_RETENC, IMPORTE, PAGADO) " +
+		            					"VALUES (?,?,?,?,?)"
+		            					, new Object[]{cve_op, (cont), row.get("CLV_RETENC"), row.get("IMPORTE"), 0});
+		            		}
+		            		
+		            		/*Guarda los archivos de la factura en la OP siempre y cuando la factura tenga archivos*/
+		            		if(getJdbcTemplate().queryForInt("SELECT COUNT(*) FROM SAM_FACTURAS_ARCHIVOS WHERE CVE_FACTURA =?", new Object[]{cve_factura})>0)
+		            		{
+		            			//Guarda un nuevo anexo
+		            			insertaDocumento(numAnexo, "FAC", factura.get("NUM_FACTURA").toString(), factura.get("NOTAS").toString(), cve_op, ejercicio, cve_pers);
+		            			
+		            			Map det = getJdbcTemplate().queryForMap("SELECT top 1 *FROM SAM_FACTURAS_ARCHIVOS WHERE CVE_FACTURA =?", new Object[]{cve_factura});
+		            			getJdbcTemplate().update("UPDATE SAM_OP_ANEXOS SET FILENAME =?, FILEPATH=?, DATEFILE=?, FILETYPE=?, FILELENGTH=? WHERE CVE_OP =? AND ANX_CONS=?", new Object[]{"["+det.get("ID_ARCHIVO") + "] "+ det.get("NOMBRE"), "../"+det.get("RUTA"), new Date(), det.get("EXT"), det.get("TAMANO"), cve_op, numAnexo});
+		            		}
+		            		
+		            		      			            		
+		            		/*Guardar las comprobaciones de vale de la Factura en la Orden de Pago si existen*/
+		            		List <Map> detallesVales = getJdbcTemplate().queryForList("SELECT *FROM SAM_FACTURAS_VALES WHERE CVE_FACTURA =?", new Object[]{cve_factura});
+		            		cont = 0;
+		            		for(Map row: detallesVales){
+		            			cont++;
+		            			getJdbcTemplate().update("INSERT INTO COMP_VALES (CVE_VALE, CONS_VALE, CVE_OP, TIPO, ID_PROYECTO, CLV_PARTID, IMPORTE, IMP_ANTERIOR, IMP_PENDIENTE, FECHA) " +
+		            					"VALUES (?,?,?,?,?,?,?,?,?,?)"
+		            					, new Object[]{row.get("CVE_VALE"), cont, cve_op, "OP", row.get("ID_PROYECTO"), row.get("CLV_PARTID"), row.get("IMPORTE"), 0,0, new Date()});
+		            		}
+		            	}
+		       
+		            	
+		            } 
+		        });
+				
+				//Guardar el Iva de las facturas existentes solo cuando no existe IVA en la OP
+	        	List<Map> DetFacturasOP = getJdbcTemplate().queryForList("SELECT * FROM SAM_MOV_OP WHERE CVE_OP = ? AND CVE_FACTURA IS NOT NULL", new Object[]{cve_op});
+	        	Map OrdenPago = getJdbcTemplate().queryForMap("SELECT * FROM SAM_ORD_PAGO WHERE CVE_OP =?", new Object[]{cve_op});
+	        	if(OrdenPago.get("IMPORTE_IVA")!=null)
+	        	{
+		        	if(Double.parseDouble(OrdenPago.get("IMPORTE_IVA").toString())==0)
+		        	{
+		        		double Iva = 0.00;
+		        		for(Map row: DetFacturasOP)
+		        		{
+		        			Map factura = gatewayFacturas.getFactura(Long.parseLong(row.get("CVE_FACTURA").toString()));
+		        			if(factura.get("IVA")!=null)
+		        			{
+			        			if(((BigDecimal)factura.get("IVA")).doubleValue()>0)
+			        				Iva = Iva +  ((BigDecimal)factura.get("IVA")).doubleValue();
+		        			}
+		        		}
+		        		//Guardar el IVA en la OP
+		        		if (Iva>0)
+		        		{
+		        			getJdbcTemplate().update("UPDATE SAM_ORD_PAGO SET IVA = 1, IMPORTE_IVA = ? WHERE CVE_OP =?", new Object[]{Iva, cve_op});
+		        		}
+		        	}
+	        	}
+	        	
+				return result;
+			}
+			catch (DataAccessException e) {                               
+		        throw new RuntimeException("La operación ha fallado, error al cargar las facturas a la Orden de Pago",e);
+		   }
+		}
 	
 	public void generarDetallesContrato(String num_contrato, Long cve_contrato, Long cve_op, Double importe_op,  int proyecto, String clv_partid)
 	{
