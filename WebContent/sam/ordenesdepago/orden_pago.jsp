@@ -1,3 +1,4 @@
+<%@page import="java.util.Date"%>
 <%@ page contentType="text/html;charset=utf-8"  %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -34,7 +35,7 @@
 <script type="text/javascript" src="../../include/js/autocomplete/autompleteVarios.js"></script>
 <script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>
 <script type="text/javascript" src="../../include/js/presupuesto/presupuesto.js"></script>
-<script type="text/javascript" src="orden_pago.js"></script>
+<script type="text/javascript" src="orden_pago.js?x=<%=System.currentTimeMillis()%>"></script>
 <script type="text/javascript" src="../../include/js/toolSam.js"></script>
 <script type="text/javascript" src="../../dwr/engine.js"> </script>  
 <script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>
@@ -114,7 +115,7 @@ a:active {
           		<!-- <button name="btnNuevaOp" id="btnNuevaOp" onClick="nuevaOp();limpiarForma();" type="button" class="button blue middle"><span class="label" style="width:150px">Nueva Orden de Pago</span></button> -->
           		<input class="btn btn-info btn-sm" name="btnNuevaOp" id="btnNuevaOp" onClick="nuevaOp();limpiarForma();"  value="Nueva Orden de Pago" style="width:150px" type="button">
           		<button class="btn btn-cerrar btn-sm" name="btnNuevaOp" id="btnNuevaOp" onClick="nuevaOp();limpiarForma();" value="Nueva Orden" style="width:150px">Nueva Orden de Pago</button>
-          		<button type="button" class="btn btn-primary btn-lg btn-block">Block level button</button>
+          		
           </div>
         </div>   
 		</div>
@@ -122,6 +123,8 @@ a:active {
 	<br/>
 	<br/>
 	<br/>
+
+</div><!-- Cierra el WELL -->
 	<div class="form-gorup">
 		<table border="0" cellpadding="0" cellspacing="0" class="table" width="100%" id="listaOrdenes">
         <thead class="thead-inverse input-sm">
@@ -138,63 +141,6 @@ a:active {
          </tbody>
         </table>
 	</div>    
-	
-</div><!-- Cierra el WELL -->
-<table width="95%" align="center"><tr><td>          
-<div id="listaOrdenesPendientes"  align="center">
-      <table width="100%" border="0"  align="center" cellpadding="0" cellspacing="0" class="formulario">
-        <tr >
-          <th colspan="3">&nbsp;</th>
-          </tr>
-        <tr >
-          <th width="15%">Unidad administrativa:</th>
-          <td width="55%" align="left">
-       <sec:authorize ifNotGranted="ROLE_Sam_PRIVILEGIOS_VER_TODAS_LAS_UNIDADES">
-      <c:out value="${nombreUnidad}"/><input type="hidden" name="cbUnidad" id="cbUnidad" value='<c:out value="${idUnidad}"/>' />
-      </sec:authorize>
-       <sec:authorize ifAllGranted="ROLE_Sam_PRIVILEGIOS_VER_TODAS_LAS_UNIDADES">
-       <div class="styled-select">
-        <select name="cbUnidad" class="form-control sm" id="cbUnidad" onChange="llenarTablaDeOrdenes();" style="width:445px">
-            <c:forEach items="${unidadesAdmiva}" var="item" varStatus="status">                  
-              	<option value="<c:out value="${item.ID}"/>" 
-              		<c:if test="${item.ID==idUnidad}"> selected </c:if> >
-             		<c:out value="${item.DEPENDENCIA}"/></option>
-           	</c:forEach>
-          		</select>
-         </div>
-       </sec:authorize></td>
-          <td width="30%" align="left">
-          <!-- MOSTRAR Y OCULTAR ESTE ELEMENTO A CONVENIENCIA -->
-          <div style="display:">
-          		<!-- <button name="btnNuevaOp" id="btnNuevaOp" onClick="nuevaOp();limpiarForma();" type="button" class="button blue middle"><span class="label" style="width:150px">Nueva Orden de Pago</span></button> -->
-          		<input class="btn btn-info btn-sm" name="btnNuevaOp" id="btnNuevaOp" onClick="nuevaOp();limpiarForma();"  value="Nueva Orden de Pago" style="width:150px" type="button">
-          		<button class="btn btn-cerrar btn-sm" name="btnNuevaOp" id="btnNuevaOp" onClick="nuevaOp();limpiarForma();" value="Nueva Orden" style="width:150px">Nueva Orden de Pago</button>
-          </div>
-          </td>
-        </tr>
-        <tr>
-          <th colspan="3">&nbsp;</th>
-          </tr>
-        <tr>
-          <td colspan="3" >
-        <table border="0" cellpadding="0" cellspacing="0" class="listas" width="100%" id="listaOrdenes">
-        <thead class="thead-inverse">
-        <tr>
-          <th width="5%" height="20">Numero</th>
-          <th width="17%" >Tipo</th>
-          <th width="10%" >Fecha</th>
-          <th width="49%" >Concepto</th>
-          <th width="16%" >Estado</th>
-          <th width="3%" >Opc.</th>
-        </tr>
-        </thead>
-         <tbody>
-         </tbody>
-        </table>
-        </td>
-        </tr>
-      </table>
-</div>
 <div id="tabsOrdenesEnca"  >
 <div id="tabsOrdenes"  >
   <ul>
@@ -268,6 +214,7 @@ a:active {
         <tr >
           <th height="30">*Fecha:</th>
           <td  ><input name="fecha" type="text" class="input" id="fecha" value="" style="width:111px" maxlength="10"/></td>
+          <td  ><input name="fecha2" type="hidden" class="input" id="fecha2" value=<%=new java.util.Date()%> style="width:111px" maxlength="10"/></td>
         </tr>
         
         <tr>

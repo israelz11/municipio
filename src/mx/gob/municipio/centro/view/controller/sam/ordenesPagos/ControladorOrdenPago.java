@@ -119,10 +119,20 @@ public class ControladorOrdenPago extends ControladorBase  {
 	 	   return this.getJdbcTemplate().queryForList("select T_DOCTO, DESCR   from  TIPODOC_OP order by DESCR ");
 	 }
 	     
-	    public Long guardarOrden(Long cveOp ,  int tipo,String  fecha,String  cveBeneficiario,String  cveParbit, String reembolsoFondo,String  concurso,String  nota,int  status,Integer  cveRequisicion, double importeIva , String cveUnidad, Integer periodo,int tipoGasto, Long cve_contrato  ){
+	    //--------------------------Parametros recibidos desde el .js para guardar la cabecera de la Orden de Pago-------------------------------------------
+	    public Long guardarOrden(Long cveOp ,  int tipo,String  fecha,String  cveBeneficiario,String  cveParbit, String reembolsoFondo,String  concurso,String  nota,int  status,Integer  cveRequisicion, double importeIva , int cveUnidad, Integer periodo,int tipoGasto, Long cve_contrato  ){
 	    	Long idOrden= gatewayOrdenDePagos.actualizarPrincipalOrden(cveOp,getSesion().getEjercicio(), tipo,this.formatoFecha(fecha),null,cveBeneficiario,this.getSesion().getIdUsuario(),cveParbit, reembolsoFondo,concurso,nota,status,cveRequisicion, importeIva,cveUnidad,periodo,tipoGasto,this.getSesion().getIdGrupo(), cve_contrato); 	    		    	
 	    return idOrden;
 	    }	    
+	    
+	    
+	    //--------------------------Parametros recibidos desde el .js para guardar la cabecera de la Orden de Pago desde el listado de Facturas-------------------------------------------
+	    //Abraham gonzalez pruebas------------------20-05-17//Long cveOp , final Long[] cve_facturas,final int cve_pers, int ejercicio
+	    public Long geraropxfacturas(int id_unidad , List<Long> cve_facturas){
+	    	Long idOrden= gatewayOrdenDePagos.insertaOrdenxFacturas(id_unidad,cve_facturas,getSesion().getIdUsuario(),getSesion().getEjercicio(),getSesion().getIdGrupo()); 	    		    	
+	    return idOrden;
+	    }	    
+	    
 	    
 //---------------------------------- CERRAR ORDEN DE PAGO ------------------------------------------------------------------------------------------------	    
     public String  cerrarOrden(final Long idOrden  ){
@@ -996,9 +1006,11 @@ public class ControladorOrdenPago extends ControladorBase  {
     	return gatewayOrdenDePagos.getListaAnexosArchivosOP(cve_op);
     }
     
+    //-------Controlador que guarda los detalles de las Facturas en las OP--------
     public String guardarFacturasEnOrdenPago(final Long cve_op, final Long[] cve_facturas){
     	return gatewayOrdenDePagos.guardarFacturasEnOrdenPago(cve_op, cve_facturas, this.getSesion().getEjercicio(), this.getSesion().getIdUsuario());
     }
+    
     
     public void generarDetallesContrato(String num_contrato, Long cve_contrato, Long cve_op, Double importe_op,  int proyecto, String clv_partid)
     {

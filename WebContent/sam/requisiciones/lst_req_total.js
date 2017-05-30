@@ -13,6 +13,17 @@ $(document).ready(function() {
 });
 
 
+//Checkbox para seleccionar toda la lista.... Abraham Gonzalez 12/07/2016
+$("input[name=todos]").change(function(){
+	$('input[type=chkrequisiciones]').each( function() {			
+		if($("input[name=todos]:checked").length == 1){
+			this.checked = true;
+		} else {
+			this.checked = false;
+		}
+	});
+});
+
 function reembolsos(cve_req, modulo){
 	controladorListadoRequisicionesRemoto.getReembolsoRequisiciones(cve_req, {
 						callback:function(items) { 		
@@ -172,16 +183,7 @@ function getListadoReqConOp(){
 	$('#forma').attr('action',"lst_req_total.action");
 }
 
-//Checkbox para seleccionar toda la lista.... Abraham Gonzalez 12/07/2016
-	$("input[name=todos]").change(function(){
-		$('input[type=chkrequisiciones]').each( function() {			
-			if($("input[name=todos]:checked").length == 1){
-				this.checked = true;
-			} else {
-				this.checked = false;
-			}
-		});
-	});
+
 function agregarReqLista(){
 	var checkClaves = [];
     $('input[name=chkrequisiciones]:checked').each(function() { checkClaves.push($(this).val());});	

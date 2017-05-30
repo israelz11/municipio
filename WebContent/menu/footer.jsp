@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title></title>
 <link href="../include/css/estilos.css" rel="stylesheet" type="text/css" />
+<link href="../include/css/bootstrap-3.3.7.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>

@@ -96,6 +96,7 @@
 			<dwr:include method="guardarFacturasEnOrdenPago" />
 			<dwr:include method="generarDetallesContrato" />
 			<dwr:include method="obtenerIvaOrdenPago" />
+			<dwr:include method="geraropxfacturas" />
 			
 		</dwr:remote>
 	</bean>

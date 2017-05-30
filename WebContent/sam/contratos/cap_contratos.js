@@ -266,10 +266,33 @@ function muestraDocumento(){
 	
 	if($('#cbotipocontrato').val()==0){jAlert('Es necesario seleccionar el tipo de contrato', 'Advertencia'); return false;}
 
-	if($('#cbotipocontrato').val()==7)
-		jWindow('<iframe width="650" height="400" name="consultaPedido" id="consultaPedido" frameborder="0" src="../../sam/consultas/muestra_pedidos_contratos.action?idDependencia='+idDependencia+'"></iframe>','Listado de Pedidos', '','Cerrar ',1);
+	if 	($('#cbotipocontrato').val()==7){            //Adquisicion
+				jWindow('<iframe width="650" height="400" name="consultaPedido" id="consultaPedido" frameborder="0" src="../../sam/consultas/muestra_pedidos_contratos.action?idDependencia='+idDependencia+'"></iframe>','Listado de Pedidos', '','Cerrar ',1);
+		}
+	else if ($('#cbotipocontrato').val()==13)      //VALE
+	{
+		//if(idDependencia==0||idDependencia=="") {jAlert('Es necesario seleccionar la Unidad Administrativa para listar los Pedidos'); return false;}
+		
+		//var clv_benefi;
+		//var tipo_gto;
+		//var tipo_doc;
+		
+		//if(typeof(clv_benefi)=='undefined') clv_benefi =0;
+		//if(typeof(tipo_gto)=='undefined') tipo_gto =0;
+		//if(typeof(tipo_doc)=='undefined') tipo_doc =1; //SOLO VALES ANTICIPO OBRAS (AO)
+		
+		//if($('#CVE_DOC').attr('value')=='') $('#CVE_DOC').attr('value', 0);
+		
+		//jWindow('<iframe width="750" height="350" name="ventanaVales" id="ventanaVales" frameborder="0" src="../../sam/consultas/muestra_Vales_Contratos.action?idVale='+$('#CVE_DOC').attr('value')+'&idDependencia='+idDependencia+'&tipo_gto='+tipo_gto+'&clv_benefi='+clv_benefi+'&tipo_doc='+tipo_doc+'"></iframe>','Listado de Vales disponibles', '','Cerrar',1);
+		jWindow('<iframe width="750" height="350" name="ventanaVales" id="ventanaVales" frameborder="0" src="../../sam/consultas/muestra_Vales_Contratos.action?idVale='+$('#CVE_DOC').attr('value')+'&idDependencia='+idDependencia+'&tipo_gto='+tipo_gto+'&clv_benefi='+clv_benefi+'&tipo_doc='+tipo_doc+'"></iframe>','Listado de Vales disponibles', '','Cerrar',1);
+	}
+		
 	else
+		//alert("deberia mostrar el listado de OS/OT");
 		jWindow('<iframe width="800" height="400" name="DocumentoContrato" id="DocumentoContrato" frameborder="0" src="../../sam/consultas/muestra_os_contratos.action?num_req='+num_req+'&idDependencia='+idDependencia+'&clv_benefi='+clv_benefi+'"></iframe>','O.S. y REQ. Calendarizadas disponibles para contratos', '','Cerrar',1);
+		
+
+	
 }
 
 function cargarOS(cve_req, num_doc, proveedor, clv_benefi){

@@ -1,5 +1,6 @@
 var contrato = false;
 var ID_DEPENDENCIA=0;
+
 /* Carga inicial del los metodos utilizados */
 $(document).ready(function(){
 	var options = { 
@@ -40,6 +41,8 @@ $(document).ready(function(){
   $('#txtpartida').blur(function(event){  __getPresupuesto($('#ID_PROYECTO').attr('value'), $('#txtproyecto').attr('value'),$('#txtpartida').attr('value'), $('#cbomes').attr('value'),  'txtpresupuesto','txtdisponible',$('#tipoGasto').attr('value'));});  
   getBeneficiarios('xBeneficiario','xClaveBen',$('#tipoBeneficiario').attr('value'));
   llenarTablaDeOrdenes(); 
+  
+  
   /*Buscar orden de pago si se puede editar*/
   if(($('#cve_op').attr('value')!=''||$('#cve_op').attr('value')!='0')&&($('#accion').attr('value')=='edit')){
 	  buscarOrden($('#cve_op').attr('value'));  
@@ -140,6 +143,7 @@ function muestraContratosOP()
 		
 }
 
+//Carga el listado de las facturas que se agregan en el detalle-----------------------------------------------------------------
 function getFacturas(){
 	
 	var idDependencia = ID_DEPENDENCIA;
@@ -148,6 +152,49 @@ function getFacturas(){
 	if(typeof(idDependencia)=='undefined') idDependencia =0;
 	
 	jWindow('<iframe width="800" height="400" name="FAC" id="FAC" frameborder="0" src="../../sam/consultas/muestra_facturas.action?tipoGasto='+$('#tipoGasto').attr('value')+'&unidad='+idDependencia+'&clv_benefi='+$('#xClaveBen').attr('value')+'"></iframe>','Facturas disponibles', '','Cerrar',1);
+}
+
+
+
+//Obtener la fecha actual
+function obtiene_fecha() {
+
+	var fecha_actual = new Date()
+
+	var dia = fecha_actual.getDate()
+	var mes = fecha_actual.getMonth() + 1
+	var anio = fecha_actual.getFullYear()
+
+	if (mes < 10)
+	mes = '0' + mes
+
+	if (dia < 10)
+	dia = '0' + dia
+
+	return (dia + "/" + mes + "/" + anio)
+	}
+
+	function MostrarFecha() {
+	document.write ( obtiene_fecha() )
+	}
+	
+	
+	
+//--------------------------------------Generar la Orden de Pago desde una lista de facturas------18/05/2017	
+function generarOPS(checkFacturas){
+	 alert ("demos del listado orden pago.js" + checkFacturas);
+	
+	 alert("id unidad" + $('#cbUnidad').val());
+	   controladorOrdenPagoRemoto.geraropxfacturas($('#cbUnidad').val(),checkFacturas,{
+			callback:function(items){
+				alert("orden de pago generada" + items);
+			} 					   				
+			,
+			errorHandler:function(errorString, exception) { 
+				jError("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");       
+			}
+		
+	});
 }
 
 function guardarAnexos(){
@@ -293,7 +340,9 @@ function limpiarForma(){
 	removerContrato();
 }
 
-function guardar ( ) {
+//Guardar la Orden de Pago
+
+function guardar () {
    
    var tipo_gto = $('#tipoGasto').val();
     if ($('#fecha').attr('value')=="") {jAlert('La fecha de la Orden de Pago no es válida'); return false;};
@@ -328,6 +377,7 @@ function _guardarOP(){
 	  var check = $('#reembolso').is(':checked');
 	  var temp_check = "";
 	  if(check) temp_check = "S"; else temp_check = "N";
+	  				 
 	  controladorOrdenPagoRemoto.guardarOrden( $('#id_orden').attr('value'),$('#xTipo').attr('value'),$('#fecha').attr('value'),$('#xClaveBen').attr('value'),null,temp_check,$('#xConcurso').attr('value'),$('#xNota').attr('value'),$('#estatus').attr('value'),null, $('#xImporteIva').attr('value'),$('#cbUnidad').attr('value'),$('#cbomes').attr('value'),$('#tipoGasto').attr('value'), $('#CVE_CONTRATO').attr('value'),{
 	  callback:function(items) {
 		  ID_DEPENDENCIA = $('#cbUnidad').attr('value');
@@ -1239,12 +1289,12 @@ function getTabla(items,tipoElemento){
 	return tabla +="</table>";	
 }
 
-/*NUEVOS DETALLES PARA FACTURAS, Israel 20 Ene 2013*/
+/*CARGAR DETALLES DEL DEVENGADO A LA ORDEN DE PAGO --------------------------------, Israel 20 Ene 2013*/
 function generarDetallesFactura(checkIDs){
 	var cve_op = $('#id_orden').attr('value');
 	if (checkIDs.length > 0 ) {
 		ShowDelay("Insertando detalle de Facturas en Orden de Pago","");
-		controladorOrdenPagoRemoto.guardarFacturasEnOrdenPago(cve_op,checkIDs, {
+		controladorOrdenPagoRemoto.guardarFacturasEnOrdenPago(cve_op,checkIDs, {//GenerarOrdenPagoxDevengo
 						callback:function(items){	
 								CargarIvaFactura();
 								llenarTablaDeDetallesOrdenes();	
@@ -1374,6 +1424,8 @@ function generarDetallePedidoParcialOP(){
 	 else 
 	    jAlert('Es necesario que seleccione un elemento de la lista para realizar esta operación', 'Advertencia');
  }
+ 
+
  
  function validaEnter(e, fn){
 	 if(e.keyCode==13) 
