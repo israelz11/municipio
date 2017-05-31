@@ -45,11 +45,10 @@
 <!--  <link rel="stylesheet" href="../../include/css/css/css3-buttons.css" type="text/css" media="screen">  -->
 <link rel="stylesheet" href="../../include/css/tiptip.css" type="text/css"  media="screen">
 <script src="../../include/css/jquery.tiptip.js"></script>
-
-<link rel="stylesheet" href="../../include/css/bootstrap2.css" type="text/css"/>
 <link rel="stylesheet" href="../../include/css/bootstrap-3.3.4.css" type="text/css">
 <script src="../../include/js/bootstrap-3.3.4.js"></script>
 
+<link rel="stylesheet" href="../../include/css/bootstrap2.css" type="text/css"/>
 <link rel="stylesheet" href="../../include/css/sweet-alert.css" type="text/css">
 <script src="../../include/js/sweet-alert.js"></script>
 
@@ -70,6 +69,7 @@ a:active {
 </style>
 </head>
 <body>
+
 <form name="forma" id="forma" method="post" enctype="multipart/form-data">
 <input name="id_orden" type="hidden"  id="id_orden" size="8" maxlength="6" readonly value="" />
 <input name="cve_op" type="hidden"  id="cve_op" size="8" value="<c:out value='${cve_op}'/>" />

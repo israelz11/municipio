@@ -59,6 +59,17 @@ label,input[type="submit"]{
 .table-hover > tbody > tr:hover {
   background-color: #8FF0F9;
 }
+.table > thead > tr > th, 
+.table > tbody > tr > th, 
+.table > tfoot > tr > th, 
+.table > thead > tr > td, 
+.table > tbody > tr > td, 
+.table > tfoot > tr > td {
+    padding: 4px;
+    line-height: 1.42857143;
+    vertical-align: top;
+    border-top: 1px solid #ddd;
+}
 .h1-encabezado{
 	color:#0F48EC;
 }
@@ -72,7 +83,7 @@ input[name="gpoestatus"]{
 	  line-height: normal;
 }
 .table td {
-   text-align: center;   
+   text-align:left;   
 }
 .thead-inverse th {
   color: #fff;
@@ -89,6 +100,7 @@ table.formulario
   line-height: 1.42857143;
   vertical-align: top;
   /*border-top: 1px solid #ddd;*/
+  text-align:left;
 }
 
 /* Estilos Especificos para el Header el TH, Encabezados */
@@ -537,3 +549,49 @@ select:hover{
    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.3);
 }
 */
+table-listados {
+  background-color: transparent;
+}
+caption {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  color: #777;
+  text-align: left;
+}
+th {
+  text-align: left;
+}
+.table-listados {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 20px;
+}
+.table-listados > thead > tr > th,
+.table-listados > tbody > tr > th,
+.table-listados > tfoot > tr > th,
+.table-listados > thead > tr > td,
+.table-listados > tbody > tr > td,
+.table-listados > tfoot > tr > td {
+  padding: 4px;
+  line-height: 1.42857143;
+  vertical-align: top;
+  border-top: 1px solid #ddd;
+}
+.table-listados > thead > tr > th {
+  vertical-align: bottom;
+  border-bottom: 2px solid #ddd;
+}
+.table-listados > caption + thead > tr:first-child > th,
+.table-listados > colgroup + thead > tr:first-child > th,
+.table-listados > thead:first-child > tr:first-child > th,
+.table-listados > caption + thead > tr:first-child > td,
+.table-listados > colgroup + thead > tr:first-child > td,
+.table-listados > thead:first-child > tr:first-child > td {
+  border-top: 0;
+}
+.table-listados > tbody + tbody {
+  border-top: 2px solid #ddd;
+}
+.table-listados .table {
+  background-color: #fff;
+}
