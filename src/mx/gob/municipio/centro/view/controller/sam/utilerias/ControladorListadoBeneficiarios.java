@@ -37,7 +37,6 @@ public class ControladorListadoBeneficiarios extends ControladorBase {
 		String ncomercia = (request.getParameter("txtprestadorservicio")!=null) ? request.getParameter("txtprestadorservicio"): "";
 		String rfc = (request.getParameter("txtrfc")!=null) ?request.getParameter("txtrfc"):"";
 		String vigencia = (request.getParameter("vigencia")!=null) ? request.getParameter("vigencia"):"";
-
 		Integer  tipo = (request.getParameter("cbotipo")!=null)? Integer.parseInt(request.getParameter("cbotipo").toString()): 0;
 				
 		modelo.put("txtprestadorservicio", ncomercia);

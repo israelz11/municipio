@@ -36,11 +36,11 @@
 
 
 <link rel="stylesheet" href="../../include/css/bootstrap-3.3.4.css" type="text/css">
-
+<link rel="stylesheet" href="../../include/css/bootstrap2.css" type="text/css"/>
 <script src="../../include/js/bootstrap-3.3.4.js"></script>
 
 
-<!--<link rel="stylesheet" href="../../include/css/bootstrap2.css" type="text/css"/>
+<!--
 
 <script type="text/javascript" src="../../include/js/jquery.tabs/jquery-1.1.3.1.pack.js"></script>
 <script type="text/javascript" src="../../include/js/jquery.tabs/jquery.history_remote.pack.js"></script>
@@ -74,46 +74,67 @@ a:active {
           <h1 class="h1-encabezado"> Listado de Orden de Pago</h1>
     </div>  
     <div class="well">
-    	<div class="form-group"><!-- Unidad -->
+    	<div class="form-group row"><!-- Unidad -->
           <label for="grupo" class="col-md-2 control-label">Unidad:</label>
           <div class="col-md-5">
    			<sec:authorize ifNotGranted="ROLE_Sam_PRIVILEGIOS_VER_TODAS_LAS_UNIDADES">
-      		<c:out value="${nombreUnidad}"/><input type="hidden" name="cbodependencia" id="cbodependencia" value='<c:out value="${idUnidad}"/>' />
+      		<c:out value="${nombreUnidad}"/><input type="hidden" name="cbodependencia" class="form-control input-sm" id="cbodependencia" value='<c:out value="${idUnidad}"/>' />
       		</sec:authorize>
        		<sec:authorize ifAllGranted="ROLE_Sam_PRIVILEGIOS_VER_TODAS_LAS_UNIDADES">
-       		<div class="styled-select">
-          		<select name="cbodependencia" class="form-control input-sm" id="cbodependencia" style="width:500px" class="comboBox" >
+       			<select name="cbodependencia" class="form-control input-sm" id="cbodependencia">
             		<option value="0">[Todas la Unidades Administrativas]</option>
             		<c:forEach items="${unidadesAdmiva}" var="item" varStatus="status"> 
               		<option value='<c:out value="${item.ID}"/>' <c:if test='${item.ID==idUnidad}'> selected </c:if>><c:out value='${item.DEPENDENCIA}'/></option>
               		</c:forEach>
           		</select>
-          	</div>
+          	
       	  	</sec:authorize>
           </div>
+          <div class="col-md-1">
+          		<input type="checkbox" name="status" id="status"  value="-1" <c:if test="${fn:contains(status,'-1')}" >checked</c:if>>&nbsp;Edición
+          </div>
+		 <div class="col-md-1">
+		 	<input type="checkbox" name="status" id="status"  value="0" <c:if test="${fn:contains(status,'0')}" >checked</c:if>> Cerrada
+		 </div>
+		  <div class="col-md-1">
+		 	<input type="checkbox" name="status" id="status"  value="4" <c:if test="${fn:contains(status,'4')}" >checked</c:if>>Cancelada
+		 </div>
         </div> <!-- Unidad -->
         <div class="form-group"><!-- Tipo de gasto -->
           <label for="grupo" class="col-md-2 control-label">Tipo de gasto:</label>
           <div class="col-md-5">
-   			<select name="cbotipogasto" class="form-control input-sm" id="cbotipogasto" style="width:500px">
+   			<select name="cbotipogasto" class="form-control input-sm" id="cbotipogasto">
 			      <option value="0">[Todos los tipos de gastos]</option>
 			      <c:forEach items="${tipodeGasto}" var="item" varStatus="status">
 			        <option value='<c:out value="${item.ID}"/>' <c:if test='${item.ID==tipo_gto}'> selected</c:if>><c:out value='${item.RECURSO}'/></option>
 			      </c:forEach>
   			  </select>
           </div>
+          <div class="col-md-1">
+          	<input name="status" type="checkbox" id="status"  value="6" <c:if test="${fn:contains(status,'6')}">checked</c:if>> Ejercida
+   		  </div>
+          <div class="col-md-1">
+          		[<input type="checkbox" name="status" id="status"  value="7" <c:if test="${fn:contains(status,'7')}" >checked</c:if>>&nbsp;Pagada]
+          </div>
+          <div>
+          	<button name="btnBuscar" id="btnBuscar" onClick="getOrden()" type="button" class="button blue middle"><span class="label" style="width:100px">Buscar</span></button>
+  
+          </div>
       	</div> <!-- Tipo de gasto -->
       	<div class="form-group"><!-- Beneficiario -->
           <label for="grupo" class="col-md-2 control-label">Beneficiario:</label>
           <div class="col-md-5">
-   			<input type="text" id="txtprestadorservicio" name="txtprestadorservicio" class="form-control input-sm" style="width:498px" value="<c:out value='${txtprestadorservicio}'/>"/>
+   			<input type="text" id="txtprestadorservicio" name="txtprestadorservicio" class="form-control input-sm" value="<c:out value='${txtprestadorservicio}'/>"/>
       		<input type="hidden" id="CVE_BENEFI" name="CVE_BENEFI" value="<c:out value='${CVE_BENEFI}'/>" />
+          </div>
+          <div class="col-md-offset-2 col-md-1">
+          		<button name="cmdpdf" id="cmdpdf" onClick="getListadoOrdenPago()" title="Mostrar listado en formato PDF" type="button" class="button red middle"><span class="label" style="width:100px">Imprimir PDF</span></button>
           </div>
       	</div> <!-- Beneficiario -->
       	<div class="form-group"><!-- CAPITULO -->
           <label for="grupo" class="col-md-2 control-label">Capitulo:</label>
           <div class="col-md-5">
-   			<select name="cbocapitulo" class="form-control input-sm"  id="cbocapitulo" style="width:500px;">
+   			<select name="cbocapitulo" class="form-control input-sm"  id="cbocapitulo">
 				<option value="0"> [Todos los capitulos]</option>
 			    	<c:forEach items="${capitulos}" var="item" varStatus="status">
 			        <option value='<c:out value="${item.CLV_CAPITU}"/>' 
@@ -125,128 +146,63 @@ a:active {
 			      </c:forEach>
     		</select>
           </div>
+          <div class="col-md-2">
+          		<input type="checkbox" name="verUnidad" id="verUnidad" value="1"  <c:if test='${verUnidad==1}'>  checked </c:if>>Incluir documentos de la Unidad
+          </div>
       	</div> <!-- CAPITULO -->
+      	<sec:authorize ifAllGranted="ROLE_Sam_PRIVILEGIOS_VER_TODOS_LOS_DOCUMENTOS_DE_LA_UNIDAD">
       	<div class="form-group"><!-- Num. Pedido -->
-          <label for="grupo" class="col-md-2 control-label">Núm. Pedido:</label>
-          <div class="col-md-5">
-   			<input name="txtnumop" type="text"  id="txtnumop" maxlength="50" style="width:150px" class="form-control input-sm" value="<c:out value='${txtnumop}'/>">
-     		 Núm. Pedido:
-      		<input name="txtpedido" class="form-control input-sm" type="text" id="txtpedido" maxlength="50" style="width:150px" value="<c:out value='${txtpedido}'/>">
-          </div>
-      	</div> <!-- Num. Pedido -->
-      	<div class="form-group"><!-- Núm.  Orden:,Núm. Pedido: -->
-          <label for="grupo" class="col-md-2 control-label">Núm.  Orden:</label>
-          <div class="col-md-5">
-   			<div class="col-xs-3">
-    			<input type="text" class="form-control" placeholder="Núm.  Orden .col-xs-3">
-  			</div>
-  			<div class="col-xs-4">
-  				<label for="grupo" class="col-md-2 control-label">Núm. Pedido:</label>
-    			<input type="text" class="form-control" placeholder="Núm. Pedido .col-xs-4">
-  			</div>
-          </div>
-      	</div> <!-- Núm.  Orden:, Num. Pedido -->
+	          <label for="txtnumop" class="col-md-2 control-label">Núm. Orden:</label>
+	          <div class="col-md-2">
+	   				<input name="txtnumop" type="text"  id="txtnumop" maxlength="50"  placeholder="Núm. Orden" class="form-control input-sm" value="<c:out value='${txtnumop}'/>">
+	     	  </div>
+	     	   	<!--<label for="txtpedido" class="col-md-1 control-label">Núm. Pedido:</label>  -->
+	     	  <div class="col-md-2">
+	     	  		<input name="txtpedido" class="form-control input-sm" type="text" id="txtpedido" placeholder="Núm. Pedido" maxlength="50"  value="<c:out value='${txtpedido}'/>">
+	     	  </div>	
+	     	   
+     	</div> <!-- Num. Pedido -->
+      		<div class="form-group"><!-- Num. Pedido -->
+	         <label for="grupo" class="col-md-2 control-label">Desde:</label>
+	          <div class="col-md-1">
+	   				<input type="text" name="fechaInicial" id="fechaInicial" value="${fechaInicial}" size="12"maxlength="10" class="form-control input-sm" style="width:100px"  id="inputKey" placeholder="Desde">
+			  </div>
+	     	  <div class="col-md-1">
+	   				<input type="text" name="fechaFinal"  id="fechaFinal" value="${fechaFinal}" size="12"  maxlength="10" class="form-control input-sm" style="width:100px"  id="inputValue" placeholder="Hasta">
+	     	  </div>
+	     	   	<!--<label for="txtpedido" class="col-md-1 control-label">Núm. Pedido:</label>  -->
+	     	  <div class="col-md-6">
+	     	  		<label for="cbotipo" class="col-md-2 control-label">Tipo: </label>
+			                <div class="col-md-4">
+			                     <select name="cbotipo" class="form-control input-sm" id="cbotipo">
+								      <option value="-1">[Todos los tipos]</option>
+								      <c:forEach items="${tipoDocumentosOp}" var="item" varStatus="status">
+								      <option value="<c:out value='${item.ID_TIPO_ORDEN_PAGO}'/>" <c:if test='${item.ID_TIPO_ORDEN_PAGO==cbotipo}'> selected </c:if> >
+								      <c:out value="${item.DESCRIPCION}"/>
+								      </option>
+								      </c:forEach>
+		    					</select>
+			                </div>
+	     	  </div>		 
+     	</div> <!-- Num. Pedido -->
+      	</sec:authorize>
+      	<div class= "form-group row">
+      		<div class="col-md-12">
+      			<div class="col-md-6">
+      				
+      			</div>
+      			<div class="col-md-6">
+      				
+      			</div>
+      		</div>
+      		
+      	</div>
     </div> <!-- Cierre del Well -->
     
-    <div class="row">
-                    <div class="form-group col-md-6">
-                        <label for="ejemplo_email_3" class="col-md-4 control-label" name="nombre">Primer Nombre</label>
-
-                        <div class="col-md-8">
-                            <input class="form-control" name="text_nom1" id="text_nom1" required/>
-                        </div>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="ejemplo_email_3" class="col-md-5 col-lg-4 control-label">Segundo Nombre</label>
-
-                        <div class="col-md-7 col-lg-8">
-                            <input class="form-control" name="text_nom2" id="text_nom2">
-                        </div>
-                    </div>
-                </div>
-<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0" class="formulario">
-  
-  <tr>
-   
-    <td width="15%"><input type="checkbox" name="status" id="status"  value="-1" <c:if test="${fn:contains(status,'-1')}" >checked</c:if>>
-      &nbsp;Edición</td>
-    <td width="15%"><input type="checkbox" name="status" id="status"  value="0" <c:if test="${fn:contains(status,'0')}" >checked</c:if>
-    > Cerrada</td>
-    <td width="15%"><input type="checkbox" name="status" id="status"  value="4" <c:if test="${fn:contains(status,'4')}" >checked</c:if>
-    >Cancelada</td>
-  </tr>
-  <tr >
-   
-   
-    <td ><input name="status" type="checkbox" id="status"  value="6" <c:if test="${fn:contains(status,'6')}">checked</c:if>
-      > Ejercida</td>
-    <td >[<input type="checkbox" name="status" id="status"  value="7" <c:if test="${fn:contains(status,'7')}" >checked</c:if>>
-      &nbsp;Pagada]</td>
-    <td rowspan="3" >
-    <table width="300" border="0" cellspacing="0" cellpadding="0">
-      <tr>
-        <td><button name="btnBuscar" id="btnBuscar" onClick="getOrden()" type="button" class="button blue middle"><span class="label" style="width:100px">Buscar</span></button></td>
-      </tr>
-      <tr>
-        <td><div class="buttons tiptip">
-          <button name="cmdpdf" id="cmdpdf" onClick="getListadoOrdenPago()" title="Mostrar listado en formato PDF" type="button" class="button red middle"><span class="label" style="width:100px">Imprimir PDF</span></button>
-          </div></td>
-      </tr>
-      </table>
-   </td>
-  </tr>
-  
-  <tr >
-    <th height="25" > 
-    <td><div class="styled-select">
     
-   </div></td>
-    <td colspan="2"><input type="checkbox" name="verUnidad" id="verUnidad" value="1"  <c:if test='${verUnidad==1}'>  checked </c:if>>Incluir documentos de la Unidad </td>
-    </tr>
-    <sec:authorize ifAllGranted="ROLE_Sam_PRIVILEGIOS_VER_TODOS_LOS_DOCUMENTOS_DE_LA_UNIDAD">
-  <tr >
-    <th height="30" >Por fecha de :</th>
-    <td height="30" ><strong>
-    <input name="fechaInicial" type="text" id="fechaInicial" value="${fechaInicial}" size="12"maxlength="10">
-&nbsp;Hasta &nbsp;
-<input name="fechaFinal" type="text" id="fechaFinal" value="${fechaFinal}" size="12"  maxlength="10">
-    &nbsp;&nbsp;Tipo: 
     
-    <select name="cbotipo" class="comboBox" id="cbotipo" style="width:160px">
-      <option value="-1">[Todos los tipos]</option>
-      <c:forEach items="${tipoDocumentosOp}" var="item" varStatus="status">
-              <option value="<c:out value='${item.ID_TIPO_ORDEN_PAGO}'/>" <c:if test='${item.ID_TIPO_ORDEN_PAGO==cbotipo}'> selected </c:if> >
-                <c:out value="${item.DESCRIPCION}"/>
-                </option>
-            </c:forEach>
-    </select>
-    </div>
-    </strong></td>
-    <td height="30" >&nbsp;</td>
-    <td height="30" >&nbsp;</td>
-    <td height="30" >&nbsp;</td>
-  </tr>
-  <tr >
-    <th height="30" >Núm.  Orden:</th>
-    <td height="30" ><table width="575" border="0" cellspacing="0" cellpadding="0">
-      <tr>
-      
-        <td width="182" height="25"><input name="txtnumop" type="text"  id="txtnumop" maxlength="50" style="width:150px" class="input" value="<c:out value='${txtnumop}'/>"></td>
-        <td width="89"><strong>Núm. Pedido:</strong></td>
-        <td width="206"><input name="txtpedido" class="input" type="text" id="txtpedido" maxlength="50" style="width:150px" value="<c:out value='${txtpedido}'/>"></td>
-        <td width="98">&nbsp;</td>
-        </tr>
-      </table></td>
-    <td height="30" >&nbsp;</td>
-    <td height="30" >&nbsp;</td>
-    <td height="30" >&nbsp;</td>
-  </tr>
-  <tr >
-    <td height="25" >&nbsp;</td>
-    <td height="25" colspan="4" ></td>
-  </tr>
-       </sec:authorize>  
-</table>
+    
+    
 <br />
 <table width="95%" class="table table-sm table-hover table-responsive" align="center" id="listaRequisiciones"  cellpadding="0" cellspacing="0">
  <thead>

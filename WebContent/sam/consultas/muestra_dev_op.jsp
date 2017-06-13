@@ -49,6 +49,14 @@ a:active {
     </td>
   </tr>
 </table>
+<div>
+	<select name="idtipogasto" class="comboBox" id="idtipogasto" style="width:100%">
+         <c:forEach items="${tipoGastos}" var="item" varStatus="status">                  
+         <option value="<c:out value='${item.ID}'/>" <c:if test='${item.ID==tipoGasto}'> selected </c:if>><c:out value="${item.RECURSO}"/></option>
+         </c:forEach>
+    </select>
+</div>
+
 <table class="listas" id="listadevengado" border="0" align="center" cellpadding="0" cellspacing="0" width="95%">
   <tr bgcolor="#889FC9">
     <th width="4%" height="21" align="center">&nbsp;</th>

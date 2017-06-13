@@ -9,11 +9,13 @@
 <title>Listado de Requisiciones</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css">
-<link rel="stylesheet" href="../../include/css/bootstrap.css" type="text/css">
+<link rel="stylesheet" href="../../include/css/bootstrap-3.3.4.css" type="text/css">
+<link rel="stylesheet" href="../../include/css/bootstrap2.css" type="text/css">
 <link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css">
 <link type="text/css" href="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.css" rel="stylesheet" />	
-<script type="text/javascript" src="../../include/js/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="../../include/js/jquery-2.2.1.min.js"></script>
 <link rel="stylesheet" href="../../include/css/css/css3-buttons.css" type="text/css" media="screen">
 <link rel="stylesheet" href="../../include/css/tiptip.css" type="text/css"  media="screen">
 <script src="../../include/css/jquery.tiptip.js"></script>
@@ -199,9 +201,10 @@ a:active {
    </sec:authorize>      
 </table>
 <br />
+<!-- table table-hover table table-condensed table-striped -->
 <div class="container-fluid">
-<table width="95%" class="table table-hover table table-condensed table-striped" align="center" id="listaRequisiciones" cellpadding="0" cellspacing="0">
- <thead>
+<table width="95%" class="listados" align="center" id="listaRequisiciones" cellpadding="0" cellspacing="0">
+ <thead class="thead-inverse">
   <tr>
     <th width="4%"><input type="checkbox" name="todos" id="todos"></th>
     <th width="9%" height="20">Número</th>

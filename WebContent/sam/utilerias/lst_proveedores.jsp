@@ -124,7 +124,7 @@
   		
   	</table>
   	<div class="alert alert-info">
-       	<strong>Total de registros encontrados: <c:out value='${CONTADOR}'/></strong><br/>
+       	<strong>Total de registros encontrados: <c:out value="${cont}"/></strong><br/>
     </div>
   	
   </div><!-- Cierre del container -->

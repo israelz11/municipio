@@ -143,7 +143,7 @@ function _reembolsoRequisicion(cve_req){
 		});
 	
 }
-
+//IMPRIME EL LISTADO DE LAS REQUISICIONES
 function mostrarOpcionPDF(){
 	var html = '<table class="listas" border="0" align="center" cellpadding="1" cellspacing="2" width="405" >'+
 				'  <tr id="x1" onmouseover="color_over(\'x1\')" onmouseout="color_out(\'x1\')"> '+
@@ -320,6 +320,7 @@ function getConsultaRequisicion(claveReq)   {
 	$('#forma').attr('action',"lst_req_total.action");
 }
 
+//PARAMETRO QUE LLAMA EL REPORTE DEL LISTADO DE LAS REQUISICIONES.................
 function getListadoRequisiciones()   {
 $('#forma').attr('target',"impresionlistado");
 $('#forma').attr('action',"../reportes/rpt_listado_requisiciones.action");

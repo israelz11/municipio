@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import antlr.Parser;
 import mx.gob.municipio.centro.model.gateways.sam.GatewayFacturas;
+import mx.gob.municipio.centro.model.gateways.sam.GatewayPlanArbit;
 import mx.gob.municipio.centro.model.gateways.sam.GatewayUnidadAdm;
 import mx.gob.municipio.centro.view.bases.ControladorBase;
 
@@ -28,6 +30,9 @@ public class ControladorMuestraDevengadoOrdenDePago  extends ControladorBase{
 	@Autowired 
 	GatewayFacturas gatewayFacturas;
 	
+	@Autowired 
+	GatewayPlanArbit gatewayPlanArbit;
+	
 	public ControladorMuestraDevengadoOrdenDePago() {
 		// TODO Auto-generated constructor stub
 	}
@@ -38,11 +43,18 @@ public class ControladorMuestraDevengadoOrdenDePago  extends ControladorBase{
 	
 	public String  requestGetControlador( Map modelo, HttpServletRequest request) {
 		
-		//modelo.put("CVE_FACTURA", request.getParameter("CVE_FACTURA"));
-		//modelo.put("listadoFacturas",this.gatewayFacturas.getListadoFacturas_OP(cve_ped));
-		//Log.debug(this.gatewayFacturas.getListadoFacturas_OP(this.getSesion().getIdUsuario()));
+		
+	
 		//listaFacturas es el objeto que recorre el JSP-------------------
+		int  idtipoGasto = Integer.parseInt((request.getParameter("idtipogasto").toString()));
+		//Log.info(idtipoGasto);
+		
+		modelo.put("tipoGastos",gatewayPlanArbit.getTipodeGasto());
+		
+		modelo.put("tipoGasto", idtipoGasto);
 		modelo.put("listaFacturas", gatewayFacturas.getListadoFacturas_OP(modelo));
+		
+		
 	    return "sam/consultas/muestra_dev_op.jsp";
 	    
 	}

@@ -310,6 +310,7 @@ public class GatewayRequisicion  extends BaseGateway {
 	/*Metodo que genera el listado de requisiciones y busca mendiante los parametros*/
 	public List<Map> getListaDeRequisicionesPorEjemplo2(String unidad, String  estatus , Date fInicial, Date fFinal , Integer ejercicio, Integer tipo, String  verUnidad, String numreq, Integer idUsuario, String unidad_usuario, String proyecto, String clv_partid, String tipogto, String beneficiario, boolean privilegio, String cboconOP){
 		Map parametros =  new HashMap<String,Object>();
+		
 		/*Asignacion de parametros*/
 		parametros.put("unidad", unidad);
 		parametros.put("fechaInicial", fInicial);

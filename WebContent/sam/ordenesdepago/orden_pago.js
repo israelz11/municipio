@@ -628,6 +628,7 @@ function buscarOrden( idOrden ) {
 				$('#xNota').attr('value',items.NOTA);
 				$('#estatus').attr('value',items.STATUS);
 				$('#xImporteIva').attr('value',items.IMPORTE_IVA);		
+				
 				nuevaOp();
 				$('#tipoGasto').val(items.ID_RECURSO);	 	  	    	
 				$('#tabsOrdenes').tabs('option', 'disabled', [4]);	
@@ -1274,8 +1275,9 @@ function getPedidos(){
 	jWindow('<iframe width="800" height="400" name="PED" id="PED" frameborder="0" src="../../sam/consultas/muestra_Pedidos.action?tipoGasto='+$('#tipoGasto').attr('value')+'&unidad='+$('#cbUnidad').attr('value')+'&clv_benefi='+$('#xClaveBen').attr('value')+'&proyecto='+$('#CPROYECTO').attr('value')+'&clv_partid='+$('#CCLV_PARTID').attr('value')+'"></iframe>','Cargar Pedidos en Ordenes de Pago', '','Cerrar',1);
 }
 
+//Muestra Listado de Facturas para generar la Orden de Pago
 function getDevenOP(){
-	jWindow('<iframe width="800" height="400" name="PED" id="PED" frameborder="0" src="../../sam/consultas/muestra_dev_op.action?"></iframe>','Devengado para la Orden de Pago', '','Cerrar',1);
+	jWindow('<iframe width="800" height="400" name="PED" id="PED" frameborder="0" src="../../sam/consultas/muestra_dev_op.action?idtipogasto=1"></iframe>','Devengado para la Orden de Pago', '','Cerrar',1);
 }
 
 function getTabla(items,tipoElemento){
