@@ -33,21 +33,18 @@ a:active {
 -->
 </style>
 <script language="javascript">
-<!--
-function cargar(idVale, num_vale, proveedor,clv_benefi,disponible, comprobado){
-	window.parent.getValeDocumento(idVale, num_vale, disponible, comprobado);
+
+<!--Invoca el JQuery cap_contratos.js -->
+function cargar(id_vale,num_vale,clv_benefi, comprobado,por_comprobar){
+	parent.getValeDocumento(id_vale,num_vale,clv_benefi, comprobado,por_comprobar);
 }
-
--->
 </script>
-
 </head>
-
 <body>  
 <table width="95%" align="center">
   <tr>
     <td><h1>Listado de Vales de la Unidad
-        <!--<c:out value='${desMes}'/>-->
+        <c:out value='${desMes}'/>
     </h1></td>
   </tr>
 </table>
@@ -56,17 +53,17 @@ function cargar(idVale, num_vale, proveedor,clv_benefi,disponible, comprobado){
     <th width="18%" height="21" align="center">Num. Vale</th>
     <th width="51%" height="21" align="center">Concepto</th>
     <th width="14%" align="center">Fecha</th>
-    <th width="17%" align="center">Total</th>
+    <th width="17%" align="center">Por Comprobar</th>
   </tr>
    <c:set var="cont" value="${0}" />
-  <c:forEach items="${documentos}" var="item" varStatus="status" ><!-- documentos es el nombre de la lista que se manda al JS -->
+  <c:forEach items="${listadovales}" var="item" varStatus="status" >
     <c:set var="cont" value="${cont+1}" /> 
     <tr>
-      <td width="18%" height="20" align="center"><a href="javascript:cargar('<c:out value='${item.CVE_VALE}'/>', '<c:out value='${item.NUM_VALE}'/>', '<c:out value='${item.DISPONIBLE}'/>', '<c:out value='${item.COMPROBADO}'/>')"><c:out value='${item.NUM_VALE}'/></a></td>
+      <td width="18%" height="20" align="center"><a href="javascript:cargar('${item.CVE_VALE}','${item.NUM_VALE}','${item.CLV_BENEFI}','${item.COMPROBADO}', '${item.POR_COMPROBAR}')"><c:out value='${item.NUM_VALE}'/></a></td>
       <td width="51%" height="20" align="left"><c:out value='${item.JUSTIF}'/>
       </td>
       <td width="14%" height="20" align="center"><c:out value='${item.FECHA}'/></td>
-      <td width="17%" height="20" align="right">$<fmt:formatNumber value='${item.TOTAL}' pattern="###,###,###.00"/>&nbsp;</td>
+      <td width="17%" height="20" align="right">$<fmt:formatNumber value='${item.POR_COMPROBAR}' pattern="###,###,###.00"/>&nbsp;</td>
     </tr>
   </c:forEach>
 </table>

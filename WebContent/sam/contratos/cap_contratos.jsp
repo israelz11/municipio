@@ -23,9 +23,9 @@
     <script type="text/javascript" src="../../include/js/jquery.maxlength.js"></script>
     <script type="text/javascript" src="../../include/js/jquery.bestupper.min.js"></script>
     <script type="text/javascript" src="../../include/js/toolSam.js"></script>
-    <script type="text/javascript" src="../../include/js/presupuesto/presupuesto.js"></script>
+    <script type="text/javascript" src="../../include/js/presupuesto/presupuesto.js?x=<%=System.currentTimeMillis()%>"></script>
     <script type="text/javascript" src="../../include/js/otros/productos.js"></script>
-    <script type="text/javascript" src="cap_contratos.js"></script>
+    <script type="text/javascript" src="cap_contratos.js?x=<%=System.currentTimeMillis()%>"></script>
     
     <link rel="stylesheet" href="../../include/css/css/css3-buttons.css" type="text/css" media="screen">
     <link rel="stylesheet" href="../../include/css/tiptip.css" type="text/css"  media="screen">
@@ -250,6 +250,7 @@ a:active {
        
         <th width="90">Partida:</th>
         <td width="151"><input name="txtpartida" type="text" class="input" id="txtpartida"  value='' size="20" maxlength="4"  ></td>
+        <input type="hidden" id="CLV_PARTID" value="0"/></td>
         <th width="62">Mes</th>
         <td width="165">
         	<div class="styled-select">

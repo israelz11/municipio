@@ -156,46 +156,7 @@ function getFacturas(){
 
 
 
-//Obtener la fecha actual
-function obtiene_fecha() {
 
-	var fecha_actual = new Date()
-
-	var dia = fecha_actual.getDate()
-	var mes = fecha_actual.getMonth() + 1
-	var anio = fecha_actual.getFullYear()
-
-	if (mes < 10)
-	mes = '0' + mes
-
-	if (dia < 10)
-	dia = '0' + dia
-
-	return (dia + "/" + mes + "/" + anio)
-	}
-
-	function MostrarFecha() {
-	document.write ( obtiene_fecha() )
-	}
-	
-	
-	
-//--------------------------------------Generar la Orden de Pago desde una lista de facturas------18/05/2017	
-function generarOPS(checkFacturas){
-	 alert ("demos del listado orden pago.js" + checkFacturas);
-	
-	 alert("id unidad" + $('#cbUnidad').val());
-	   controladorOrdenPagoRemoto.geraropxfacturas($('#cbUnidad').val(),checkFacturas,{
-			callback:function(items){
-				alert("orden de pago generada" + items);
-			} 					   				
-			,
-			errorHandler:function(errorString, exception) { 
-				jError("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");       
-			}
-		
-	});
-}
 
 function guardarAnexos(){
 	var file = $("#archivo").val();
@@ -367,9 +328,6 @@ function guardar () {
 					});
 				}
 			});	  
-			
-			
-	
 }
 
 function _guardarOP(){
@@ -957,6 +915,7 @@ function pintaDetallesOrdenes( table, consecutivo,unidad, idproyecto, proyecto,p
 	$('#importeRetencion').attr('value',"");
  }
  
+ //VALIDAR LA RETENCION A SOLO LECTURA.........................
  function guardarRetencion(){
 	var error="";  
   	var cveParbit=$('#tipoGasto').attr('value');
@@ -1275,11 +1234,6 @@ function getPedidos(){
 	jWindow('<iframe width="800" height="400" name="PED" id="PED" frameborder="0" src="../../sam/consultas/muestra_Pedidos.action?tipoGasto='+$('#tipoGasto').attr('value')+'&unidad='+$('#cbUnidad').attr('value')+'&clv_benefi='+$('#xClaveBen').attr('value')+'&proyecto='+$('#CPROYECTO').attr('value')+'&clv_partid='+$('#CCLV_PARTID').attr('value')+'"></iframe>','Cargar Pedidos en Ordenes de Pago', '','Cerrar',1);
 }
 
-//Muestra Listado de Facturas para generar la Orden de Pago
-function getDevenOP(){
-	jWindow('<iframe width="800" height="400" name="PED" id="PED" frameborder="0" src="../../sam/consultas/muestra_dev_op.action?idtipogasto=1"></iframe>','Devengado para la Orden de Pago', '','Cerrar',1);
-}
-
 function getTabla(items,tipoElemento){
 	var tabla ="<table width='90%' align='center'><tr><td><h1>Pedidos disponibles</h1></td></tr></table>";
 		tabla +="<table width='90%' border='0' align='center' cellpadding='0' cellspacing='0' class='formulario'>";
@@ -1545,4 +1499,47 @@ function getTablaOT(items,tipoElemento){
 }
 function generarxListaOP (){
 	
+}
+//Obtener la fecha actual
+function obtiene_fecha() {
+
+	var fecha_actual = new Date()
+
+	var dia = fecha_actual.getDate()
+	var mes = fecha_actual.getMonth() + 1
+	var anio = fecha_actual.getFullYear()
+
+	if (mes < 10)
+	mes = '0' + mes
+
+	if (dia < 10)
+	dia = '0' + dia
+
+	return (dia + "/" + mes + "/" + anio)
+	}
+
+	function MostrarFecha() {
+	document.write ( obtiene_fecha() )
+	}
+	
+//Muestra Listado de Facturas para generar la Orden de Pago
+	function getDevenOP(){
+		jWindow('<iframe width="800" height="400" name="FAC" id="FAC" frameborder="0" src="../../sam/consultas/muestra_dev_op.action?idtipogasto=1"></iframe>','Devengado para la Orden de Pago', '','Cerrar',1);
+	}	
+	
+//--------------------------------------Generar la Orden de Pago desde una lista de facturas------18/05/2017	
+function generarOPS(checkFacturas){
+	 alert ("demos del listado orden pago.js" + checkFacturas);
+	
+	 //alert("id unidad" + $('#cbUnidad').val());
+	   controladorOrdenPagoRemoto.geraropxfacturas($('#cbUnidad').val(),checkFacturas,{
+			callback:function(items){
+				alert("orden de pago generada" + items);
+			} 					   				
+			,
+			errorHandler:function(errorString, exception) { 
+				jError("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");       
+			}
+		
+	});
 }

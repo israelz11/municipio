@@ -225,7 +225,7 @@ a:active {
           <th height="30">*Beneficiario:</th>
           <td ><input name="xBeneficiario" id="xBeneficiario"  type="text" class="input" value="" style="width:445px" maxlength="50" />
               <input name="xClaveBen" type="hidden"  id="xClaveBen" size="8" maxlength="6" readonly value="1225" />
-            <a href="javascript:buscarBeneficiarioEmer();"> <img src="../../imagenes/buscar.png" alt="Bsqueda del Beneficiario" width="22" height="22" border="0" style="display:none" /></a></td>
+              <a href="javascript:buscarBeneficiarioEmer();"> <img src="../../imagenes/buscar.png" alt="Bsqueda del Beneficiario" width="22" height="22" border="0" style="display:none" /></a></td>
         </tr>
         <tr >
           <th height="30">Concurso:</th>

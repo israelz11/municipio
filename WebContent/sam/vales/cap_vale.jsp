@@ -8,10 +8,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Vales - Captura de Vales</title>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
-<link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css">
+<link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css"/>
 <link href="../../include/js/autocomplete/jquery.autocomplete.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="../../include/css/black-tie/jquery-ui-1.7.3.custom.css" type="text/css" />	
-<link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css">
+<link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css"/>
 <script type="text/javascript" src="../../dwr/interface/autocompleteDiversosRemoto.js"> </script>
 <script type="text/javascript" src="../../dwr/interface/controladorValesRemoto.js"> </script>
 <script type="text/javascript" src="../../dwr/interface/controladorProyectoPartida.js"> </script>
@@ -30,16 +30,16 @@
 <script type="text/javascript" src="../../include/js/presupuesto/presupuesto.js"></script>
 <script type="text/javascript" src="cap_vale.js"></script>
 
-<link rel="stylesheet" href="../../include/css/css/css3-buttons.css" type="text/css" media="screen">
-<link rel="stylesheet" href="../../include/css/tiptip.css" type="text/css"  media="screen">
+<link rel="stylesheet" href="../../include/css/css/css3-buttons.css" type="text/css" media="screen"/>
+<link rel="stylesheet" href="../../include/css/tiptip.css" type="text/css"  media="screen"/>
 <script src="../../include/css/jquery.tiptip.js"></script>
 
 </head>
 <body  >
 <table width="100%" align="center"><tr><td><h1>Vales - Captura de Vales</h1></td></tr></table>
 <form name="forma" id="forma" method="post" enctype="multipart/form-data">
-<input type="hidden" name="cve_val"  id="cve_val"value='<c:out value="${vale.CVE_VALE}"/>'>
-<input type="hidden" name="claveBeneficiario" id="claveBeneficiario" value='<c:out value="${vale.CLV_BENEFI}"/>'>
+<input type="hidden" name="cve_val"  id="cve_val"value='<c:out value="${vale.CVE_VALE}"/>'/>
+<input type="hidden" name="claveBeneficiario" id="claveBeneficiario" value='<c:out value="${vale.CLV_BENEFI}"/>'/>
 <input type="hidden" name="tipoBeneficiario" id="tipoBeneficiario" />
 <div id="tabuladores">
   <ul>

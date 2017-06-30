@@ -349,12 +349,13 @@ public class GatewayVales  extends BaseGateway {
 		
 	}
 	
+	
 	public List<Map> getListaValesPresupuesto(Long cve_vale, String clv_benefi, int idRecurso, int tipo_doc, int cve_pers, int idDependencia){
 		String clausula = "";
 		String status = "STATUS IN (4)";
 		
 		//if(tipo_doc!=7) status = "STATUS IN (1,3)";
-		if(cve_vale!=0) clausula = " AND CVE_VALE = "+cve_vale+" "+(!clv_benefi.equals("0") ? "AND CLV_BENEFI='"+clv_benefi+"'": "")+" "+(idRecurso!=0? " AND ID_RECURSO = "+idRecurso+"":"") + (tipo_doc==1 ? " AND TIPO='AO'":"");
+		if(cve_vale!=0) clausula = " AND CVE_VALE = "+cve_vale+" "+(!clv_benefi.equals("0") ? "AND CLV_BENEFI='"+clv_benefi+"'": "")+" "+(idRecurso!=0? " AND ID_RECURSO = "+idRecurso+"":"") + (tipo_doc==1 ? " AND TIPO='AO'":"");//tipo de vale de obras revisar-----
 	
 		return this.getJdbcTemplate().queryForList("SELECT *,"+ 
 															"CONVERT(NVARCHAR, FECHA, 103) AS FECHA, "+ 
@@ -369,11 +370,6 @@ public class GatewayVales  extends BaseGateway {
 															"	,2) AS DISPONIBLE, "+ 
 															"ROUND(( "+
 																		" 0 + (SELECT ISNULL(SUM(VT.MONTO), 0) FROM VT_COMPROMISOS AS VT WHERE VT.CONSULTA IN('PRECOMPROMETIDO', 'COMPROMETIDO') AND VT.TIPO_DOC ='VAL' AND VT.CVE_DOC = SAM_VALES_EX.CVE_VALE) "+
-															/*
-															"			(SELECT ISNULL(SUM(M.MONTO),0) FROM SAM_MOV_OP AS M INNER JOIN SAM_ORD_PAGO AS O ON (O.CVE_OP = M.CVE_OP) WHERE M.CVE_VALE = SAM_VALES_EX.CVE_VALE AND O.STATUS NOT IN (-2, -1, 4)) "+
-															"		   +(SELECT ISNULL(SUM(R.IMPORTE),0) FROM SAM_COMP_REQUISIC AS R INNER JOIN SAM_REQUISIC AS RR ON (RR.CVE_REQ = R.CVE_REQ) WHERE RR.CVE_VALE = SAM_VALES_EX.CVE_VALE AND R.PERIODO = SAM_VALES_EX.MES AND RR.STATUS NOT IN (0, 4, 5)) "+
-															"		   +(SELECT ISNULL(SUM(P.TOTAL),0) FROM SAM_PEDIDOS_EX AS P INNER JOIN SAM_REQUISIC AS R ON (R.CVE_REQ = P.CVE_REQ) WHERE R.PERIODO = SAM_VALES_EX.MES AND R.CVE_VALE = SAM_VALES_EX.CVE_VALE AND  P.STATUS NOT IN (0, 3, 5)) " +
-															*/
 															"	),2) AS COMPROBADO "+
 														"FROM SAM_VALES_EX WHERE "+status+" AND ID_DEPENDENCIA =? "+clausula, new Object[]{idDependencia});
 	}

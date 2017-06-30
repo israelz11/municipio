@@ -108,8 +108,9 @@ a:active {
           <option value="4" <c:if test='${factura.CVE_CONTRATO!=null}'>selected</c:if>>CONTRATO</option>
           <option value="1" <c:if test='${factura.CVE_REQ!=null}'>selected</c:if>>O.S. y O.T.</option>
           <option value="2" <c:if test='${factura.CVE_PED!=null}'>selected</c:if>>PEDIDO</option>
-          <option value="3" <c:if test='${factura.CVE_VALE!=null}'>selected</c:if>>VALE</option>
-          <option value="5" <c:if test='${factura.CVE_REQ==null&&factura.CVE_CONTRATO==null&&factura.CVE_VALE==null&&factura.CVE_PED==null}'>selected</c:if>>LIBRE</option>
+          <!-- <option value="3" <c:if test='${factura.CVE_VALE!=null}'>selected</c:if>>VALE</option> -->
+          <!-- <option value="5" <c:if test='${factura.CVE_REQ==null&&factura.CVE_CONTRATO==null&&factura.CVE_VALE==null&&factura.CVE_PED==null}'>selected</c:if>>LIBRE</option> -->
+          <option value="5" <c:if test='${factura.CVE_REQ==null&&factura.CVE_CONTRATO==null&&factura.CVE_PED==null}'>selected</c:if>>LIBRE</option>
         </select>
       </div></td>
     </tr>
@@ -128,7 +129,8 @@ a:active {
               </select>
              
        </div>
-       <input name="CVE_DOC" type="hidden" id="CVE_DOC" value="${factura.CVE_PED}${factura.CVE_REQ}${factura.CVE_VALE}${factura.CVE_CONTRATO}"/> 
+       <!-- <input name="CVE_DOC" type="hidden" id="CVE_DOC" value="${factura.CVE_PED}${factura.CVE_REQ}${factura.CVE_VALE}${factura.CVE_CONTRATO}"/> -->
+       <input name="CVE_DOC" type="hidden" id="CVE_DOC" value="${factura.CVE_PED}${factura.CVE_REQ}${factura.CVE_CONTRATO}"/> 
        <input name="CLV_BENEFI" type="hidden" id="CLV_BENEFI" value="${factura.CLV_BENEFI}"/>
        <input name="ID_ENTRADA" type="hidden" id="ID_ENTRADA" value="<c:out value='${factura.ID_ENTRADA}'/>"/>
        <input name="ID_PROYECTO" type="hidden" id="ID_PROYECTO" value="${factura.ID_PROYECTO}"/>
@@ -139,7 +141,7 @@ a:active {
     <tr id="tr_NumDocumento">
       <th height="30" class="field_label">*Numero de documento:</th>
       <td align="left" valign="middle"><input name="txtdocumento" type="text" class="input" id="txtdocumento" maxlength="30"  style="width:170px" value="${factura.NUM_REQ}${factura.NUM_PED}${factura.NUM_VALE}${factura.NUM_CONTRATO}">
-         <img src="../../imagenes/search_16.png" alt="" align="absmiddle" id="img_movimiento"   style="cursor:pointer" title="Buscar entradas"/>
+         <img src="../../imagenes/search_16.png" alt="" align="absmiddle" id="img_movimiento"   style="cursor:pointer" title="Buscar documento"/>
          <img src="../../imagenes/cross.png" alt="" align="absmiddle" width="16" height="16" id="img_detele" style="cursor:pointer">
          </td>
     </tr>

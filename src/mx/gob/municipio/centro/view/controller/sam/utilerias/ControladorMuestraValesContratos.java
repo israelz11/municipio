@@ -30,7 +30,7 @@ public class ControladorMuestraValesContratos extends ControladorBase {
 		int tipo_doc = (request.getParameter("tipo_doc")!=null) ? Integer.parseInt(request.getParameter("tipo_doc").toString()): 0;
 		
 		modelo.put("documentos", gatewayContratos.getListaValesPresupuesto(cve_vale, clv_benefi,  tipo_gto, tipo_doc, this.getSesion().getIdUsuario(), idDependencia));
-	    return "sam/consultas/muestra_vales.jsp";
+	    return "sam/consultas/muestraVales_tipo_contratos.jsp";
 	}
 
 }

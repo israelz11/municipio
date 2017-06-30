@@ -128,13 +128,6 @@ function ValidarTipoContrato()
 	}
 }
 
-function regresaPedido(cve_ped, num_ped, clv_benefi){
-	$('#CVE_DOC').attr('value', cve_ped);
-	$('#txtdocumento').attr('value', num_ped);
-	$('#CLV_BENEFI').attr('value', clv_benefi);
-	buscarBeneficiario($('#CLV_BENEFI').attr('value'));
-	_closeDelay();
-}
 
 function buscarBeneficiario(clv_benefi){
 	ControladorContratosRemoto.getBeneficiarioContrato(clv_benefi,{
@@ -258,41 +251,27 @@ function _validate(){
 	return true;
 }
 
+//Carga el documento segun el tipo de Compromiso a capturar..............27/06/2017................................
 function muestraDocumento(){
 	if($('#txtbeneficiario').attr('value')=='') $('#CLV_BENEFI').attr('value', '');
 	var num_req = $('#txtdocumento').attr('value');
 	var idDependencia = $('#cbodependencia').val();
 	var clv_benefi = $('#CLV_BENEFI').attr('value');
 	
+	if(idDependencia==0||idDependencia=="") {jAlert('Es necesario seleccionar la Unidad Administrativa para listar los documentos'); return false;}
 	if($('#cbotipocontrato').val()==0){jAlert('Es necesario seleccionar el tipo de contrato', 'Advertencia'); return false;}
-
+	if($('#tipoGasto').val()==0){jAlert('Es necesario seleccionar el tipo de gasto', 'Advertencia'); return false;}
 	if 	($('#cbotipocontrato').val()==7){            //Adquisicion
 				jWindow('<iframe width="650" height="400" name="consultaPedido" id="consultaPedido" frameborder="0" src="../../sam/consultas/muestra_pedidos_contratos.action?idDependencia='+idDependencia+'"></iframe>','Listado de Pedidos', '','Cerrar ',1);
-		}
-	else if ($('#cbotipocontrato').val()==13)      //VALE
+	}else if ($('#cbotipocontrato').val()==13)      //VALE
 	{
-		//if(idDependencia==0||idDependencia=="") {jAlert('Es necesario seleccionar la Unidad Administrativa para listar los Pedidos'); return false;}
-		
-		//var clv_benefi;
-		//var tipo_gto;
-		//var tipo_doc;
-		
-		//if(typeof(clv_benefi)=='undefined') clv_benefi =0;
-		//if(typeof(tipo_gto)=='undefined') tipo_gto =0;
-		//if(typeof(tipo_doc)=='undefined') tipo_doc =1; //SOLO VALES ANTICIPO OBRAS (AO)
-		
-		//if($('#CVE_DOC').attr('value')=='') $('#CVE_DOC').attr('value', 0);
-		
-		//jWindow('<iframe width="750" height="350" name="ventanaVales" id="ventanaVales" frameborder="0" src="../../sam/consultas/muestra_Vales_Contratos.action?idVale='+$('#CVE_DOC').attr('value')+'&idDependencia='+idDependencia+'&tipo_gto='+tipo_gto+'&clv_benefi='+clv_benefi+'&tipo_doc='+tipo_doc+'"></iframe>','Listado de Vales disponibles', '','Cerrar',1);
-		jWindow('<iframe width="750" height="350" name="ventanaVales" id="ventanaVales" frameborder="0" src="../../sam/consultas/muestra_Vales_Contratos.action?idVale='+$('#CVE_DOC').attr('value')+'&idDependencia='+idDependencia+'&tipo_gto='+tipo_gto+'&clv_benefi='+clv_benefi+'&tipo_doc='+tipo_doc+'"></iframe>','Listado de Vales disponibles', '','Cerrar',1);
-	}
-		
-	else
-		//alert("deberia mostrar el listado de OS/OT");
-		jWindow('<iframe width="800" height="400" name="DocumentoContrato" id="DocumentoContrato" frameborder="0" src="../../sam/consultas/muestra_os_contratos.action?num_req='+num_req+'&idDependencia='+idDependencia+'&clv_benefi='+clv_benefi+'"></iframe>','O.S. y REQ. Calendarizadas disponibles para contratos', '','Cerrar',1);
-		
-
-	
+		var tipo_doc;
+		if(typeof(clv_benefi)=='undefined') clv_benefi =0;
+		if(typeof(idDependencia)=='undefined') idDependencia =0;
+		if($('#CVE_DOC').attr('value')=='') $('#CVE_DOC').attr('value', 0);
+		  jWindow('<iframe width="750" height="350" name="ventanaVales" id="ventanaVales" frameborder="0" src="../../sam/consultas/muestraVales_tipo_contratos.action?num_vale='+$('#CVE_DOC').attr('value')+'&idDependencia='+idDependencia+'&clv_benefi='+clv_benefi+'"></iframe>','Listado de Vales disponibles', '','Cerrar',1);
+	}else
+		  jWindow('<iframe width="800" height="400" name="DocumentoContrato" id="DocumentoContrato" frameborder="0" src="../../sam/consultas/muestra_os_contratos.action?num_req='+num_req+'&idDependencia='+idDependencia+'&clv_benefi='+clv_benefi+'"></iframe>','O.S. y REQ. Calendarizadas disponibles para contratos', '','Cerrar',1);
 }
 
 function cargarOS(cve_req, num_doc, proveedor, clv_benefi){
@@ -302,6 +281,15 @@ function cargarOS(cve_req, num_doc, proveedor, clv_benefi){
 	$('#CLV_BENEFI').attr('value', clv_benefi);
 	_closeDelay();
 }
+
+function regresaPedido(cve_ped, num_ped, clv_benefi){
+	$('#CVE_DOC').attr('value', cve_ped);
+	$('#txtdocumento').attr('value', num_ped);
+	$('#CLV_BENEFI').attr('value', clv_benefi);
+	buscarBeneficiario($('#CLV_BENEFI').attr('value'));
+	_closeDelay();
+}
+
 
 function getConceptos(){
 	quitRow("listaConceptos");
@@ -387,4 +375,40 @@ function getReportePedido(clavePed) {
 	$('#forma').attr('target',"impresion");
 	$('#forma').submit();
 	$('#forma').attr('target',"");
+}
+
+function getValeDocumento(id_vale,num_vale,clv_benefi, comprobado,por_comprobar){
+	$('#txtdocumento').val(num_vale);
+	$('#CVE_DOC').attr('value', id_vale);
+	_closeDelay();
+} 
+
+//Agregado por Abraham Gonzalez el 27-06-2017 para comprobacion de vales desde contratos ------------------
+function costumFunction(){
+	cargarBeneficiarioyPresupuestoVale();
+}
+
+function cargarBeneficiarioyPresupuestoVale()
+{
+	if($('#cbotipocontrato').val()==13)
+		if($('#CVE_DOC').val()!=''&&$('#CVE_DOC').val()!='0')
+			if($('#ID_PROYECTO').val()!=''&&$('#ID_PROYECTO').val()!='0')
+				if($('#CLV_PARTID').val()!=''&&$('#CLV_PARTID').val()!='0')
+				{
+					//$('#trEntrada').hide();
+					//buscamos el beneficiario
+					ControladorContratosRemoto.getBeneficiarioContratos('VAL', $('#CVE_DOC').val(), {
+							
+							  callback:function(items){
+											$('#txtbeneficiario').val()(items);
+											 
+						} 					   				
+						,
+							errorHandler:function(errorString, exception) { 
+								jError(errorString,'Error');   
+							}
+						});	
+						
+				}
+				
 }

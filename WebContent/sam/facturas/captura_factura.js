@@ -62,13 +62,14 @@ $(document).ready(function(){
 			cargarBeneficiarioyPresupuestoPedidos($('#CLV_BENEFI').val(), $('#CVE_DOC').val());
 			cargarDetallePresupuestalDoc($('#CVE_FACTURA').val());
 		 }
+		 /*
 		 if($('#cbotipodocumento').val()=='3')
-			cargarBeneficiarioyPresupuestoVale();
-		if($('#cbotipodocumento').val()=='4')
-		{
+			cargarBeneficiarioyPresupuestoVale();*/
+		 if($('#cbotipodocumento').val()=='4')
+		 {
 			PresupuestoBeneficiarioContrato($('#CLV_BENEFI').val(), $('#CVE_DOC').val());
 			cargarDetallePresupuestalDoc($('#CVE_FACTURA').val());
-		}
+		 }
 
 		mostrarDetallesArchivos();
 		llenarTablaDeRetenciones();

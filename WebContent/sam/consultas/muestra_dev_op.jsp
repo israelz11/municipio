@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css"/>
 <script type="text/javascript" src="../../include/js/jquery-1.3.2.min.js"></script>
 <script type="text/javascript" src="../../include/js/toolSam.js"></script>
-<script type="text/javascript" src="muestra_dev_op.js?x=<%=System.currentTimeMillis()%>""></script>
+<script type="text/javascript" src="muestra_dev_op.js?x=<%=System.currentTimeMillis()%>"></script>
 <style type="text/css">
 <!--
 body {

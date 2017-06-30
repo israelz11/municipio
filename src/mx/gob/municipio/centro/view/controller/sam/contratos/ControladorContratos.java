@@ -158,4 +158,9 @@ public class ControladorContratos extends ControladorBase {
 	{
 		gatewayContratos.eliminarArchivoContrato(this.getSesion().getIdUsuario(), idArchivo, request);
 	}
+	
+	public String getBeneficiarioContratos(String tipo_doc, Long cve_doc)
+	{
+		return gatewayContratos.getBeneficiarioContratos(tipo_doc, cve_doc);
+	}
 }

@@ -173,7 +173,7 @@ a:active {
     <td align="center"><c:out value='${item.FECHA_INICIO}'/></td>
     <td align="center"><c:out value='${item.FECHA_TERMINO}'/></td>
     <td align="left">&nbsp;<c:out value='${item.PROVEEDOR}'/></td>
-    <td align="center"><c:out value='${item.NUM_DOC}'/></td>
+    <td align="center"><c:out value='${item.NUM_DOCTOS}'/></td>
     <td align="center"><c:out value='${item.TIPO_CONTRATO}'/></td>
     <td align="center"><c:out value='${item.STATUS_DESC}'/></td>
     <td align="right"><fmt:formatNumber value="${item.IMPORTE}"  pattern="#,###,###,##0.00" /> </td>

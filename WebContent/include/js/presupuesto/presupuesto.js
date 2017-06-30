@@ -2,22 +2,23 @@
 function __getPresupuesto(idproyecto, proyecto, partida, mes,  ctrl_presupuesto, ctrl_disponible, tipoGasto){
 	var cve_vale = $('#CVE_VALE').attr('value');
 	if(typeof(cve_vale)=='undefined') cve_vale = 0;
-	
-	if(proyecto!=''&&partida!=''&&(proyecto.length>=3)&&partida.length==4){ //Valida proyectos apartir de 3 caracteres
+	//alert("entra uno")
+	if(/*proyecto!=''&&*/partida!=''&&/*proyecto.length==4&&*/partida.length==4){
+		
 			__limpiarPresupuestoSaldo(ctrl_presupuesto, ctrl_disponible);
 			/*Obtiene el presupuesto de manera normal*/
+			
+		
 			if(cve_vale==0){
 				controladorProyectoPartida.getPresupuesto(idproyecto, proyecto, partida, parseInt(mes),tipoGasto, 0, {
 					callback:function(items){
+						//alert("entra dos")
 						if (items.length > 0)
-						{
 							jQuery.each(items,function(i) {
 									$('#'+ctrl_presupuesto).attr('value', formatNumber(parseFloat(this.PREACTUAL),'$'));
 									$('#'+ctrl_disponible).attr('value', formatNumber(parseFloat(this.DISPONIBLE),'$'));							
 							});
-						}
 						else {
-							
 							$('#ID_PROYECTO').attr('value','0');
 							$('#txtproyecto').attr('value','');
 							$('#txtpartida').attr('value', '');
@@ -40,12 +41,10 @@ function __getPresupuesto(idproyecto, proyecto, partida, mes,  ctrl_presupuesto,
 				controladorProyectoPartida.getListaValesPresupuesto(cve_vale, idproyecto, partida, 0, mes, {
 						callback:function(items){
 						if (items.length > 0)
-							{
-								jQuery.each(items,function(i) {
-										$('#'+ctrl_presupuesto).attr('value', formatNumber(parseFloat(this.TOTAL),'$'));
-										$('#'+ctrl_disponible).attr('value', formatNumber(parseFloat(this.DISPONIBLE),'$'));						
-								});
-							}
+							jQuery.each(items,function(i) {
+									$('#'+ctrl_presupuesto).attr('value', formatNumber(parseFloat(this.TOTAL),'$'));
+									$('#'+ctrl_disponible).attr('value', formatNumber(parseFloat(this.DISPONIBLE),'$'));						
+							});
 						else {
 							$('#ID_PROYECTO').attr('value','0');
 							$('#txtproyecto').attr('value','');
