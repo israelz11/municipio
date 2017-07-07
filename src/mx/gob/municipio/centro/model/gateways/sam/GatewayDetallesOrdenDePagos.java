@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 
-import com.sun.org.apache.xalan.internal.xsltc.compiler.util.Type;
+
 
 import mx.gob.municipio.centro.model.bases.BaseGateway;
 

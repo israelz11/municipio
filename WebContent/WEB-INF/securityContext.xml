@@ -96,6 +96,7 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans
 	<security:intercept-url pattern="/sam/consultas/muestraVales_tipo_contratos.*" access="ROLE_Sam_Contratos_Captura_de_Contratos"  />
 	<security:intercept-url pattern="/sam/consultas/muestra_contratos.*" access="ROLE_Sam_Requisiciones_Captura_de_Requisición, ROLE_Sam_Ordenes_de_Pago_Captura_de_Orden_de_Pago,ROLE_Sam_Pedidos_Listado_de_Requisiciones,ROLE_Sam_Pedidos_Listado_de_pedidos,ROLE_Sam_Vales_Captura_de_Vales,ROLE_Sam_Facturas_Captura_de_factura"  />
 	<security:intercept-url pattern="/sam/consultas/muestra_pedidos_contratos.*" access="ROLE_Sam_Contratos_Captura_de_Contratos" />
+	<security:intercept-url pattern="/sam/consultas/muestraVales_tipo_contratos.*" access="ROLE_Sam_Contratos_Captura_de_Contratos"  />
 	<security:intercept-url pattern="/sam/contratos/_subirArchivo.*" access="ROLE_Sam_Contratos_Captura_de_Contratos"/>
 	<security:intercept-url pattern="/sam/contratos/archivos/**" filters="none"/>
 	<security:intercept-url pattern="/sam/consultas/muestra_Vales_Contratos.*" access="ROLE_Sam_Contratos_Captura_de_Contratos"  />

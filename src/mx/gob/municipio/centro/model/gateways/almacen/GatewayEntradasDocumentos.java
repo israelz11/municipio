@@ -19,6 +19,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 
+import antlr.Parser;
 import mx.gob.municipio.centro.model.bases.BaseGatewayAlmacen;
 import mx.gob.municipio.centro.model.gateways.sam.GatewayBitacora;
 import mx.gob.municipio.centro.model.gateways.sam.GatewayPedidos;
@@ -280,9 +281,12 @@ public class GatewayEntradasDocumentos extends BaseGatewayAlmacen {
 		this.getTransactionTemplate().execute(new TransactionCallbackWithoutResult(){
             @Override
             protected void   doInTransactionWithoutResult(TransactionStatus status) {   
-            	Map documento = getEntradaDocumento(id_entrada);
-            	List <Map> result = getConceptos(id_entrada);
-            	Vector vector_ped_movtos = new Vector();
+            	@SuppressWarnings("rawtypes")
+				Map documento = getEntradaDocumento(id_entrada);
+            	@SuppressWarnings("rawtypes")
+				List <Map> result = getConceptos(id_entrada);
+            	@SuppressWarnings("rawtypes")
+				Vector vector_ped_movtos = new Vector();
             	Date fecha = new Date();
             	for (Map row:result)
             	{
@@ -343,15 +347,14 @@ public class GatewayEntradasDocumentos extends BaseGatewayAlmacen {
     			getJdbcTemplate().update("UPDATE ENTRADAS SET FECHA_CIERRE = ?, STATUS = ? WHERE ID_ENTRADA = ?", new Object[]{fecha, 1,id_entrada});
     			//aqui cachamos los detalles del sam_ped_movtos
     			
-    			//aqui cachamos los detalles del sam_ped_movtos
     			
-    			//vectorDetalle.add(Long.parseLong(detalle.get("ID_DETALLE_ENTRADA").toString()));
     			for(int i=0; i<vector_ped_movtos.size(); i++){
-    				finiquitar_pedido(Long.parseLong(vector_ped_movtos.get(i).toString()));
+    			   				
+    					finiquitar_pedido(Long.parseLong(vector_ped_movtos.get(i).toString()));
 				}
     			
     			gatewayBitacoraAlmacen.guardarBitacoraAlmacen(gatewayBitacoraAlmacen.Cierra_Entrada,Id_Entrada,Integer.parseInt(documento.get("ID_PERSONA").toString()),Integer.parseInt(documento.get("ID_ALMACEN").toString()),Integer.parseInt(documento.get("ID_DEPENDENCIA").toString()),Long.parseLong(documento.get("ID_PEDIDO").toString()),"ENTRADA",1,1, new Date(), null, 0.0);
-    			//gatewayBitacoraAlmacen.guardarBitacoraAlmacen(gatewayBitacoraAlmacen.Cierra_Entrada,Id_Entrada,Integer.parseInt(documento.get("cve_pers").toString()),Integer.parseInt(documento.get("ID_ALMACEN").toString()),Integer.parseInt(documento.get("ID_DEPENDENCIA").toString()),Long.parseLong(documento.get("ID_PEDIDO").toString()),"ENTRADA",1,1, new Date(), null, 0.0);
+    			
             } 
         });  
 		return "";
@@ -398,8 +401,23 @@ public class GatewayEntradasDocumentos extends BaseGatewayAlmacen {
 		}
 	}
 	
+	private boolean enPedido(long id_ped_movto,double por_entregar){
+		try {
+			this.getJdbcTemplate().queryForLong(
+    				"SELECT PM.CANTIDAD,(PM.CANTIDAD-SUM(DE.CANTIDAD))POR_ENTRAR FROM DETALLES_ENTRADAS DE "+
+    				"INNER JOIN ENTRADAS E ON E.ID_ENTRADA=DE.ID_ENTRADA "+
+    				"INNER JOIN SAM_PED_MOVTOS PM ON PM.ID_PED_MOVTO=DE.ID_PED_MOVTO "+
+    				"WHERE E.STATUS=1 AND E.ID_PED_MOVTO=?"+
+    				"GROUP BY PM.CANTIDAD");
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return false;
+	}
+	
 	private boolean finiquitar_pedido(long id_ped_movto){
 		try {
+			
 			this.getJdbcTemplate().update("UPDATE SAM_PED_MOVTOS SET STATUS =5 WHERE ID_PED_MOVTO = ?", new Object[]{id_ped_movto});
 			return true;
 		} catch (DataAccessException e) {
@@ -489,6 +507,7 @@ public class GatewayEntradasDocumentos extends BaseGatewayAlmacen {
 		else
 			return false;
 	}
+	
 	
 	public Double comprobarLoteAntes(Long id_ped_movto){
 		return (Double)this.getJdbcTemplate().queryForObject("SELECT (SAM_PED_MOVTOS.CANTIDAD - ISNULL((SELECT SUM(D.CANTIDAD) FROM DETALLES_ENTRADAS AS D WHERE D.STATUS=1 AND D.ID_PED_MOVTO = SAM_PED_MOVTOS.ID_PED_MOVTO),0)) AS N FROM SAM_PED_MOVTOS WHERE SAM_PED_MOVTOS.ID_PED_MOVTO = ?"	, new Object[]{id_ped_movto}, Double.class);	

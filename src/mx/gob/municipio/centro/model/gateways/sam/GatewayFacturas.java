@@ -631,19 +631,7 @@ public class GatewayFacturas extends BaseGateway {
 				     
 				      ",F.ID_ENTRADA" +
 				      ",(SELECT TOP 1 FOLIO FROM ENTRADAS WHERE ID_ENTRADA = F.ID_ENTRADA) AS FOLIO_ENTRADA"+
-				       /*",(CASE ISNULL(F.CVE_PED,0) "+
-						  "WHEN 0 THEN "+
-						  "	(SELECT SR.ID_PROYECTO FROM SAM_REQUISIC AS SR WHERE SR.CVE_REQ = F.CVE_REQ) "+
-						  " ELSE "+
-						  "	(SELECT EN.ID_PROYECTO FROM ENTRADAS AS EN WHERE EN.ID_ENTRADA = F.ID_ENTRADA) END "+
-					      "	  ) AS ID_PROYECTO "+
-				      ",(CASE ISNULL(F.CVE_PED,0)  "+
-						  "WHEN 0 THEN  "+
-						  "	(SELECT SR.CLV_PARTID FROM SAM_REQUISIC AS SR WHERE SR.CVE_REQ = F.CVE_REQ)  "+
-						  " ELSE  "+
-						  " (SELECT EN.PARTIDA FROM ENTRADAS AS EN WHERE EN.ID_ENTRADA = F.ID_ENTRADA ) END "+
-					      ") AS CLV_PARTID "+
-					      */
+				     
 				      ",F.CVE_OP" +
 				      ",F.CVE_PERS" +
 				      ",C.NCOMERCIA" +

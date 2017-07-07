@@ -2,6 +2,7 @@
     <wb-module deploy-name="sam">
         <wb-resource deploy-path="/" source-path="/WebContent"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/diseño"/>
         <property name="java-output-path"/>
         <property name="context-root" value="sam"/>
     </wb-module>

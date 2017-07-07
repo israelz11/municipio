@@ -31,7 +31,7 @@
 		</property>
 	</bean>
 
-	<bean id="autocompleteDiversos"
+	<bean id="autocompleteDiversos" 
 		class="mx.gob.municipio.centro.view.sam.componentes.autocomplete.AutocompleteDiversos">
 		<dwr:remote javascript="autocompleteDiversosRemoto">
 			<dwr:include method="getBeneficiariosTodos" />
