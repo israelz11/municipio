@@ -10,26 +10,38 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css">
 <link rel="stylesheet" href="../../include/css/bootstrap-3.3.4.css" type="text/css">
 <link rel="stylesheet" href="../../include/css/bootstrap2.css" type="text/css">
-<link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css">
-<link type="text/css" href="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.css" rel="stylesheet" />	
+<link rel="stylesheet" href="../../include/css/jquery.alerts.css" type="text/css">
+<link rel="stylesheet" href="../../include/css/bootstrap-select.css" type="text/css">
+
+
 <script type="text/javascript" src="../../include/js/jquery-2.2.1.min.js"></script>
-<link rel="stylesheet" href="../../include/css/css/css3-buttons.css" type="text/css" media="screen">
-<link rel="stylesheet" href="../../include/css/tiptip.css" type="text/css"  media="screen">
-<script src="../../include/css/jquery.tiptip.js"></script>
-<script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>
-<script type="text/javascript" src="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.min.js"></script>
+
+<script type="text/javascript" src="../../include/js/bootstrap-3.3.4.js"></script>
+<script type="text/javascript" src="../../include/js/bootstrap-select.js"></script>
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" src="../../include/js/jquery.alerts.js"></script>
+
+<link rel="stylesheet" href="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.min.js" type="text/css" />
 <script type="text/javascript" src="../../dwr/interface/controladorListadoRequisicionesRemoto.js"> </script>
 <script type="text/javascript" src="../../dwr/engine.js"></script>
 <script type="text/javascript" src="../../include/js/autocomplete/jquery.autocomplete.js"></script>
 <script type="text/javascript" src="../../include/js/autocomplete/autompleteVarios.js"></script>
 <script type="text/javascript" src="../../dwr/interface/autocompleteDiversosRemoto.js"> </script>
 <script type="text/javascript" src="../../include/js/toolSam.js"></script>
-<script type="text/javascript" src="lst_req_total.js"> </script>
+<script type="text/javascript" src="lst_req_total.js?x=<%=System.currentTimeMillis()%>"> </script>
 <link rel="stylesheet" href="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.css" type="text/css" />
 <link rel="stylesheet" href="../../include/js/autocomplete/jquery.autocomplete.css" type="text/css" />
+
 
 <style type="text/css">
 a:link {
@@ -47,171 +59,136 @@ a:active {
 </style>
 </head>
 <body  >
-<form  action="lst_req_total.action" method="post" id="forma" name="forma">
+<form  action="lst_req_total.action" class="form-horizontal" method="post" id="forma" name="forma">
 <input type="hidden" name="ejercicio" id="ejercicio" value="<c:out value='${ejercicio}'/>">
 <input type="hidden" name="claveRequisicion" id="claveRequisicion" >
-<table width="95%" align="center"><tr><td><h1>Requisiciones - Listado de Requisiciones, Ordenes de Trabajo y Ordenes de Servicio</h1></td></tr></table>
-<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0" class="formulario">
-  <tr>
-    <th height="16">&nbsp;</th>
-    <td colspan="4">&nbsp;</td>
-    </tr>
-  <tr >
-    <th  width="11%" height="25">Unidad:</th>
-<td>
-<sec:authorize ifNotGranted="ROLE_Sam_PRIVILEGIOS_VER_TODAS_LAS_UNIDADES">
-      <c:out value="${nombreUnidad}"/>
-      <input type="hidden" name="dependencia" id="dependencia" value="<c:out value='${idUnidad}'/>">
-      <input type="hidden" name="todo" id="todo" value="0">
-</sec:authorize>
-<sec:authorize ifAllGranted="ROLE_Sam_PRIVILEGIOS_VER_TODAS_LAS_UNIDADES">
-<input type="hidden" name="todo" id="todo" value="1">
-<div class="styled-select">
-    <select name="dependencia" id="dependencia" style="width:455px;">
-               <option value="0" <c:if test='${item.ID==0}'> selected </c:if>>[Todas las Unidades Administrativas]</option>
-    <c:forEach items="${unidadesAdmiva}" var="item" varStatus="status"> 
-                      <option value='<c:out value="${item.ID}"/>' 
-                        <c:if test='${item.ID==idUnidad}'> selected </c:if>>
-                       <c:out value='${item.DEPENDENCIA}'/>
-                </option>
-   </c:forEach>
-   </select>
- </div>
-</sec:authorize>
-  </td>
-    <td width="15%"><input type="checkbox" name="status" id="status"  value="0" <c:if test="${fn:contains(status,'0')}" >checked</c:if>
-    >&nbsp;Edición</td>
-    <td width="15%"><input type="checkbox" name="status" id="status"  value="1" <c:if test="${fn:contains(status,'1')}" >checked</c:if>
-    >&nbsp;Cerrado</td>
-    <td width="15%"><input type="checkbox" name="status" id="status" class="checkbox-inline" value="2" <c:if test="${fn:contains(status,'2')}" >checked</c:if>>&nbsp;En Proceso</td>
-  </tr>
-  <tr >
-    <th height="36" >Tipo de gasto:    
-    <td>
-    <div class="styled-select">
-    <strong>
-    <select name="cbotipogasto" id="cbotipogasto" style="width:455px;">
-      <option value="0"> [Todos los tipos de gastos]
-        <c:forEach items="${tipodeGasto}" var="item" varStatus="status">
-        <option value='<c:out value="${item.ID}"/>'
-          
-        <c:if test='${item.ID==cbotipogasto}'> selected </c:if>
-  >
-  <c:out value='${item.RECURSO}'/>
-        </option>
-      </c:forEach>
-    </select>
-    </strong>
-    </div></td>
-    <td ><input name="status" type="checkbox" id="status"  value="4" <c:if test="${fn:contains(status,'4')}" >checked</c:if>>&nbsp;Canceladas</td>
-    <td ><input name="status" type="checkbox" id="status"  value="5" <c:if test="${fn:contains(descripcion_estatus,'finiquitado')}">checked</c:if>>&nbsp;Finiquitadas</td>
-    <td >&nbsp;</td>
-  </tr>
-  <tr >
-    <th height="25" >Beneficiario:<td><input type="text" id="txtprestadorservicio" name="txtprestadorservicio" class="input" style="width:453px" value="<c:out value='${txtprestadorservicio}'/>"/>
-      <input type="hidden" id="CVE_BENEFI" name="CVE_BENEFI" value="<c:out value='${CVE_BENEFI}'/>" /></td>
-    <td ></td>
-    <td ></td>
-    <td rowspan="4" ><table width="140" border="0" cellspacing="0" cellpadding="0">
-      <tr>
-        <td height="40">
-        <button name="btnBuscar" id="btnBuscar" onClick="getListaReq()" type="button" class="button blue middle"><span class="label" style="width:100px">Buscar</span></button>
-        </td>
-      </tr>
-      <tr>
-        <td>
-        <div class="buttons tiptip">
-        	<button name="cmdpdf" id="cmdpdf" title="Mostrar listado en formato PDF" type="button" class="button red middle"><span class="label" style="width:100px">Imprimir... </span></button>
-        </div>
-        </td>
-      </tr>
-    </table><br/><br/></td>
-  </tr>
-  <tr >
-    <th height="31" >Adicional: <td>
-    <div class="styled-select">
-      <select name="cboconOP" id="cboconOP" style="width:455px;">
-        <option value="0" <c:if test='${0==cboconOP}'> selected </c:if>>[Todas las opciones]</option>
-        <option value="1" <c:if test='${1==cboconOP}'> selected </c:if>>Con Ordenes de Pago</option>
-        <option value="2" <c:if test='${2==cboconOP}'> selected </c:if>>Sin Ordenes de Pago</option>
-      </select>
+
+ <div class="row col-md-offset-2">
+          <h1 class="h1-encabezado"> Requisiciones - Listado de Requisiciones, Ordenes de Trabajo y Ordenes de Servicio</h1>
+ </div>  
+<div class="well">
+    
+    
+    <div class="form-group">
+      <label class="control-label col-sm-1" for="email">Unidad:</label>
+      <div class="col-sm-4">
+        <sec:authorize ifNotGranted="ROLE_Sam_PRIVILEGIOS_VER_TODAS_LAS_UNIDADES">
+			      <c:out value="${nombreUnidad}"/>
+			      <input type="hidden" name="dependencia" id="dependencia" value="<c:out value='${idUnidad}'/>">
+			      <input type="hidden" name="todo" id="todo" value="0">
+			</sec:authorize>
+			<sec:authorize ifAllGranted="ROLE_Sam_PRIVILEGIOS_VER_TODAS_LAS_UNIDADES">
+				<input type="hidden" name="todo" id="todo" value="1">
+				
+			    	<select name="dependencia" id="dependencia" class="form-control input-sm">
+			               <option value="0" <c:if test='${item.ID==0}'> selected </c:if>>[Todas las Unidades Administrativas]</option>
+			    		<c:forEach items="${unidadesAdmiva}" var="item" varStatus="status"> 
+			                <option value='<c:out value="${item.ID}"/>' 
+			                <c:if test='${item.ID==idUnidad}'> selected </c:if>>
+			                <c:out value='${item.DEPENDENCIA}'/>
+			               </option>
+			   			</c:forEach>
+			   		</select>
+			</sec:authorize>
+		</div>
+		<!--
+		<div class="col-md-5 col-md-offset-2">
+			<input type="checkbox" name="status" id="status" class="checkbox-inline" value="0" <c:if test="${fn:contains(status,'0')}" >checked</c:if>>&nbsp;Edición
+			<input type="checkbox" name="status" id="status" class="checkbox-inline"value="1" <c:if test="${fn:contains(status,'1')}" >checked</c:if>>&nbsp;Cerrado
+			<input type="checkbox" name="status" id="status" class="checkbox-inline" value="2" <c:if test="${fn:contains(status,'2')}" >checked</c:if>>&nbsp;En Proceso</td>
+			<input name="status" type="checkbox" id="status" class="checkbox-inline" value="4" <c:if test="${fn:contains(status,'4')}" >checked</c:if>>&nbsp;Canceladas
+	  		<input name="status" type="checkbox" id="status" class="checkbox-inline" value="5" <c:if test="${fn:contains(descripcion_estatus,'finiquitado')}">checked</c:if>>&nbsp;Finiquitadas
+		</div>  -->
+	</div>
+	 <div class="form-group">
+      <label class="control-label col-sm-1" for="cbotipogasto">Tipo de gasto:</label>
+      <div class="col-sm-4">          
+        <select name="cbotipogasto" id="cbotipogasto " class="form-control input-sm">
+      		<option value="0"> [Todos los tipos de gastos]
+        		<c:forEach items="${tipodeGasto}" var="item" varStatus="status">
+        		<option value='<c:out value="${item.ID}"/>'
+				<c:if test='${item.ID==cbotipogasto}'> selected </c:if>>
+  				<c:out value='${item.RECURSO}'/>
+        	</option>
+      			</c:forEach>
+    	</select>
       </div>
-    </td>
-    <td colspan="2" ><input type="checkbox" name="verUnidad" id="verUnidad" value="1"  <c:if test='${verUnidad==1}'>  checked </c:if> 
-      >Incluir documentos de  la Unidad</td>
-  </tr>
-  <tr >
-    <th height="25" >Por fecha de :
-    <td><table width="458" border="0" cellspacing="0" cellpadding="0">
-      <tr>
-        <td width="94"><input name="fechaInicial" type="text" id="fechaInicial" maxlength="10" style="width:70px" value="<c:out value='${fechaInicial}'/>"></td>
-        <td width="48">&nbsp;<strong>Hasta</strong></td>
-        <td width="104"><input name="fechaFinal" type="text" id="fechaFinal" value="<c:out value='${fechaFinal}'/>"  maxlength="10" style="width:70px"></td>
-        <td width="49"><strong>Tipo:</strong></td>
-        <td width="163"><strong>
-          <div class="styled-select">
-            <select name="cbotipo" id="cbotipo" style="width:160px">
-              <option value="0">[Todos los tipos]</option>
-              <c:forEach items="${tipoRequisicion}" var="item">
-                <option value='<c:out value="${item.Id_TipoRequisicion}"/>' 
-                <c:if test='${item.Id_TipoRequisicion==tipo}'> selected </c:if>
-                >
-                <c:out value='${item.Descripcion}'/>
+      <label for="cboFilterStatus" class="control-label col-md-offset-2 col-sm-1">Seleccione un Estatus</label>
+      <div class="col-sm-2">
+	  	<select class="selectpicker form-control input-sm m-b" name="cboFilterStatus" id="cboFilterStatus" data-live-search="true" multiple data-style="btn-primary">
+        	<optgroup label="">
+        	
+            	<option value="9" <c:if test = "${fn:contains(status, '9')}"> selected </c:if>>[Todas los Estatus]</option>
+              	</optgroup>
+              	<optgroup label="">
+                      <option value="0"  <c:if test = "${fn:contains(status, '0')}"> selected </c:if>>EDICION</option>
+                      <option value="1"  <c:if test = "${fn:contains(status, '1')}"> selected </c:if>>CERRADO</option>
+                       <option value="2"  <c:if test = "${fn:contains(status,'2')}"> selected </c:if>>PROCESO</option>
+                      <option value="4"  <c:if test = "${fn:contains(status, '4')}"> selected </c:if>>CANCELADO</option>
+                      <option value="5"  <c:if test = "${fn:contains(status, '5')}"> selected </c:if>>FINIQUITADO</option>
+              	</optgroup>
+          </select>
+      </div>
+ 	</div>
+	<div class="form-group">
+      <label class="control-label col-sm-1" for="email">Beneficiario:</label>
+      <div class="col-sm-4">
+        <input type="text" id="txtprestadorservicio" name="txtprestadorservicio" class="form-control input-sm" value="<c:out value='${txtprestadorservicio}'/>"/>
+		<input type="hidden" id="CVE_BENEFI" name="CVE_BENEFI" value="<c:out value='${CVE_BENEFI}'/>" />
+      </div>
+       <div class="col-sm-4 col-md-offset-2">
+      	<button type="button" class="btn btn-buscar btn-md" name="btnBuscar" id="btnBuscar" onClick="getListaReq()">Buscar</button>
+		<button type="button" class="btn btn-imprimir btn-md"  name="cmdpdf" id="cmdpdf">Imprimir...</button>
+      </div>
+    </div> 
+	<div class="form-group">
+      <label class="control-label col-sm-1" for="email">Fecha:</label>
+      <div class="col-sm-2">
+        <input placeholder="Desde" name="fechaInicial" type="text" id="fechaInicial" maxlength="10" class="form-control input-sm" value="<c:out value='${fechaInicial}'/>">
+	  </div>
+      <div class="col-sm-2">
+      	<input placeholder="Hasta" name="fechaFinal" type="text" id="fechaFinal" class="form-control input-sm" value="<c:out value='${fechaFinal}'/>"  maxlength="10">
+      </div>
+    </div> 
+	<div class="form-group">
+      <label class="control-label col-sm-1" for="email">Requisicion:</label>
+      <div class="col-sm-2">
+      	<input placeholder="No. Requisicion" name="txtrequisicion" type="text" id="txtrequisicion" class="form-control input-sm" value="<c:out value='${txtrequisicion}'/>">
+      </div>
+      <div class="col-sm-2">
+      		<select name="cbotipo" id="cbotipo" class="form-control input-sm">
+            	<option value="0">[Todos los tipos]</option>
+      	        	<c:forEach items="${tipoRequisicion}" var="item">
+        	      	<option value='<c:out value="${item.Id_TipoRequisicion}"/>' 
+            	    <c:if test='${item.Id_TipoRequisicion==tipo}'> selected </c:if>>
+                	<c:out value='${item.Descripcion}'/>
                 </option>
                 </c:forEach>
-              </select>
-            </div>
-          </strong></td>
-        </tr>
-    </table></td>
-    <td colspan="2">
-    <sec:authorize ifAllGranted="ROLE_Sam_PRIVILEGIOS_LISTAR_LOTES_DE_REQUISICIONES_EN_EXCEL_ADMON">
-        <input type="checkbox" name="chklistar" id="chklistar" value="1"  <c:if test='${chklistar==1}'>  checked </c:if> 
-          >
-          Consultar solo Requisiciones agregadas en listado
-     </sec:authorize>
-    </td>
-    </tr>
-  <sec:authorize ifAllGranted="ROLE_Sam_PRIVILEGIOS_VER_TODOS_LOS_DOCUMENTOS_DE_LA_UNIDAD">
-  <tr >
-    <th height="25" >Núm.  Requisición:</th>
-    <td height="25" colspan="3" ><table width="631" border="0" cellspacing="0" cellpadding="0">
-      <tr>
-        <td width="173"><input name="txtrequisicion" type="text" id="txtrequisicion" maxlength="50" style="width:150px" value="<c:out value='${txtrequisicion}'/>"></td>
-        <td width="68"><strong>Programa:</strong></td>
-        <td width="86"><input name="txtproyecto" type="text" id="txtproyecto" maxlength="4" style="width:70px" value="<c:out value='${txtproyecto}'/>"></td>
-        <td width="56"><strong>Partida:</strong></td>
-        <td width="248"><input name="txtpartida" type="text" id="txtpartida" maxlength="4" style="width:70px" onKeyPress="return keyNumbero(event);" value="<c:out value='${txtpartida}'/>"></td>
-        </tr>
-    </table></td>
-    </tr>
-   <sec:authorize ifAllGranted="ROLE_Sam_PRIVILEGIOS_LISTAR_LOTES_DE_REQUISICIONES_EN_EXCEL_ADMON"> 
-   <input type="hidden" value="1" id="REPORTE_ESPECIAL_2">
-  <tr >
-    <th height="25" >Requisiciones en lista:</th>
-    <td height="25" colspan="3" ><textarea name="txtlistado" rows="5" wrap="virtual" class="textarea" id="txtlistado" style="width:455px"><c:out value='${txtlistado}'/></textarea></td>
-    <td height="25" >&nbsp;</td> 
-  </tr>
-  </sec:authorize>
-  <tr >
-    <td height="25" ></td>
-    <td height="25" colspan="3" ></td>
-    <td height="25" >&nbsp;</td>
-  </tr>
-   </sec:authorize>      
-</table>
-<br />
+             </select>
+      </div> 
+	</div>
+	<div class="form-group">
+	      <label class="control-label col-sm-1" for="email">Proyecto:</label>
+	      <div class="col-sm-2">
+	      	<input placeholder="Proyecto" name="txtproyecto" type="text" id="txtproyecto" class="form-control input-sm" value="<c:out value='${txtproyecto}'/>">
+	      </div>
+	      <label for="txtpartida" class="sr-only control-label">Partida:</label>
+	      <div class="col-sm-2">
+	      	<input placeholder="Partida" name="txtpartida" type="text" id="txtpartida" class="form-control input-sm" onKeyPress="return keyNumbero(event);" value="<c:out value='${txtpartida}'/>">
+	      </div>
+	</div> 
+</div><!--  
 <!-- table table-hover table table-condensed table-striped -->
 <div class="container-fluid">
-<table width="95%" class="listados" align="center" id="listaRequisiciones" cellpadding="0" cellspacing="0">
+<table width="95%" class="table table-hover table-sm" align="center" id="listaRequisiciones" cellpadding="0" cellspacing="0">
  <thead class="thead-inverse">
   <tr>
     <th width="4%"><input type="checkbox" name="todos" id="todos"></th>
     <th width="9%" height="20">Número</th>
     <th width="9%"> Fecha</th>
     <th width="7%">Estado</th>
-    <th width="9%">Tipo</th>
-    <th width="50%">Notas</th>
+    <th width="7%">Tipo</th>
+    <th width="52%">Notas</th>
     <th width="10%">Programa / Partida</th>
     <th width="7%">Importe</th>
     <th width="7%">Opciones</th>

@@ -246,6 +246,7 @@ fieldset[disabled] .btn-asignar.focus {
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
   background-color: #D3006E;
 }*/
+
 .btn-imprimir {
   color: #fff;
   background-color: #D3006E;
@@ -333,7 +334,7 @@ fieldset[disabled] .btn-imprimir.focus {
 .btn-buscar.active.focus,
 .open > .dropdown-toggle.btn-buscar.focus {
   color: #fff;
-  background-color: #c3327e;
+  background-color: #403f74;
   border-color: #8281B7;
 }
 .btn-buscar:active,
@@ -350,8 +351,8 @@ fieldset[disabled] .btn-buscar:focus,
 .btn-buscar.disabled.focus,
 .btn-buscar[disabled].focus,
 fieldset[disabled] .btn-buscar.focus {
-  background-color: #337ab7;
-  border-color: #2e6da4;
+  background-color: #403f74;
+  border-color: #8281B7;
 }
 /**************************************************************************************/
 /*

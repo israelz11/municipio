@@ -1,13 +1,92 @@
 // JavaScript Document
+var banStatus = false;
+
 $(document).ready(function() {
+	$('#cboFilterStatus').on('changed.bs.select', function (e) {
+        
+
+        var selected = $(this).find("option:selected").val();
+        var StatusArray = ($(this).selectpicker('val') != null ? $(this).selectpicker('val').toString().split(',') : []);
+
+        if (StatusArray.indexOf("9") != -1) {
+            if (!banStatus) {
+                $(this).find('option[value=9]').prop('selected', false).removeAttr('selected');
+                $(this).selectpicker('refresh');
+                banStatus = true;
+            }
+            else {
+                $(this).selectpicker('deselectAll');
+                $(this).find('option[value=9]').prop('selected', true);
+                $(this).selectpicker('refresh');
+                banStatus = false;
+            }
+        }
+        else {
+            if (StatusArray.indexOf("9") == -1) //No se encontro 0
+            {
+                $(this).find('option[value=9]').prop('selected', false).removeAttr('selected');
+                $(this).selectpicker('refresh');
+            }
+            else //0 Encontrado
+            {
+                $(this).selectpicker('deselectAll');
+                $(this).find('option[value=9]').prop('selected', true);
+                $(this).selectpicker('refresh');
+            }
+        }
+});
+
+$('#cmdSeleccion').on('click', function (e) {;
+if($('#cboFilterStatus').selectpicker('val')== null)
+{
+    alert('No se ha seleccionado ningun Estatus');
+    return false;
+}
+    
+alert('Los Estatus seleccionados son: ' + $('#cboFilterStatus').selectpicker('val').toString().split(','));
+});    
+
+
+$('#cmdClean').on('click', function(e){
+$('#cboFilterStatus').selectpicker('deselectAll');
+$('#cboFilterStatus').selectpicker('refresh');
+
+});
+
+function getListaReq2(){
+	
+	if($('#cboFilterStatus').selectpicker('val')== null)
+    {
+        alert('No se ha seleccionado ningun Estatus');
+        return false;
+    }
+ 	
+ 	$('#status').val($('#cboFilterStatus').selectpicker('val').toString());
+ 	$('#forma').submit();
+    alert('Los Estatus seleccionados son: ' + $('#cboFilterStatus').selectpicker('val').toString().split(','));	
+    
+}
+
+
+//Checkbox para seleccionar toda la lista.... Abraham Gonzalez 12/07/2016
+$("input[name=todos]").change(function(){
+	$('input[type=chkrequisiciones]').each( function() {			
+		if($("input[name=todos]:checked").length == 1){
+			this.checked = true;
+		} else {
+			this.checked = false;
+		}
+	});
+});
+	
 	// Launch TipTip tooltip
-  $('.tiptip a.button, .tiptip button').tipTip();
+  //$('.tiptip a.button, .tiptip button').tipTip();
   $('#todos').click( function (event){ $('input[name=chkrequisiciones]').attr('checked', this.checked); });//Para seleccionar todos los checkbox Abraham Gonzalez 12/07/2016
   var imagen="../../imagenes/cal.gif";	
   var formatFecha="dd/mm/yy";	
-  $("#fechaInicial").datepicker({showOn: 'button', buttonImage:imagen , buttonImageOnly: true,dateFormat: formatFecha});  
-  $("#fechaFinal").datepicker({showOn: 'button', buttonImage: imagen, buttonImageOnly: true,dateFormat: formatFecha}); 
-  $('#cmdpdf').click(function (event){mostrarOpcionPDF();});   
+  //$("#fechaInicial").datepicker({showOn: 'button', buttonImage:imagen , buttonImageOnly: true,dateFormat: formatFecha});  
+  //$("#fechaFinal").datepicker({showOn: 'button', buttonImage: imagen, buttonImageOnly: true,dateFormat: formatFecha}); 
+  $('#cmdpdf').on('click',function (event){mostrarOpcionPDF();});   
   getBeneficiarios('txtprestadorservicio','CVE_BENEFI','');
   $('#ui-datepicker-div').hide();
 });
@@ -167,7 +246,13 @@ function mostrarOpcionPDF(){
 }
 
 function getListadoRequisicionExcel(){
-	if($('#txtlistado').attr('value')==''){jAlert('Es necesario agregar Requisiciones al listado para realizar esta operación','Advertencia'); return false;}
+	var index=[];
+	$("input[name=todos]:checked").each(function(){
+		index.push($(this).val());
+	});
+	alert("demo " + index);
+	$('#claveRequisicion').attr('value',claveReq);
+	//if($('#txtlistado').attr('value')==''){jAlert('Es necesario agregar Requisiciones al listado para realizar esta operación','Advertencia'); return false;}
 	$('#forma').attr('target',"impresionlistadoExcel");
 	$('#forma').attr('action',"../reportes/rpt_listado_requisicionesExcel.xls");
 	$('#forma').submit();
@@ -183,7 +268,7 @@ function getListadoReqConOp(){
 	$('#forma').attr('action',"lst_req_total.action");
 }
 
-
+//------------------------------------Corregir para imprimir seleccionadas desde los check
 function agregarReqLista(){
 	var checkClaves = [];
     $('input[name=chkrequisiciones]:checked').each(function() { checkClaves.push($(this).val());});	
@@ -284,13 +369,17 @@ function aperturarRequisiciones(){
 	    jAlert('Es necesario seleccionar por lo menos una Requisicion del listado', 'Advertencia');
 }
 
-
+//------------------------Filtra el listado segun el estatus seleccionado-----------------------------
 function getListaReq(){
-	 var checkStatus = [];
-     $('input[name=status]:checked').each(function() {checkStatus.push($(this).val());});	 
+	//var checkStatus2 = [];
+	//$('#cboFilterStatus').selectpicker('val').toString().each(function(){checkStatus2.push($(this).val());});
+	//alert("array que se genero: " +checkStatus2);
+    // $('input[name=status]:checked').each(function() {checkStatus.push($(this).val());});	 
 	 var error="";
 	 var titulo ="Error de validacion";
-	 if (checkStatus.length==0 )   error="Debe de seleccionar un Estatus<br>";
+	 //if (checkStatus.length==0 )   error="Debe de seleccionar un Estatus<br>";
+	 $('#cboFilterStatus').selectpicker('val');
+	 alert("Status seleccionados: " +$('#cboFilterStatus').selectpicker('val').toString().split(','));
 	 if($('#txtprestadorservicio').attr('value')=='') $('#CVE_BENEFI').attr('value', '0');
 	 if ($('#fechaInicial').attr('value')=="" && $('#fechaFinal').attr('value')!="" || $('#fechaInicial').attr('value')!="" && $('#fechaFinal').attr('value')=="")  error+="El rango de fechas no es valido<br>";
 	 //	var s = 'lst_pedidos.action?idUnidad='+$('#cbodependencia').attr('value')+"&fechaInicial="+$('#fechaInicial').attr('value')+"&fechaFinal="+$('#fechaFinal').attr('value')+"&status="+checkStatus+"&tipo_gto="+$('#cbotipogasto').attr('value');
@@ -338,4 +427,5 @@ function editarRequisicion(cve_req, status){
 function consultarRequisicion(cve_req){
 	document.location = 'consultaRequisicion.action?cve_req='+cve_req+'&accion=0';
 }
+
 

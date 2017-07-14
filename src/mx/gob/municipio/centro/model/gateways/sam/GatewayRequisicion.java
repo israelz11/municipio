@@ -280,17 +280,23 @@ public class GatewayRequisicion  extends BaseGateway {
 		if(beneficiario!=null&&!beneficiario.equals(""))
 			if(!beneficiario.equals("0")&&!beneficiario.equals(""))
 				sql+= " AND B.CLV_BENEFI =:beneficiario";
+		/*
 		if (estatus.contains("1") && estatus.contains("5")) //STATUS =1 Y 5 CON FECHA DE FINIQUITADO...
 				sql+=" AND R.FECHA_FINIQUITADO IS NOT NULL ";
-		if (estatus.contains("1")) //STATUS = CERRADO
-			sql+=" AND R.FECHA_CIERRE IS NOT NULL ";
-		if (estatus.contains("0")) //STATUS = CERRADO
-			sql+=" AND R.FECHA_CIERRE IS NULL ";
-		if (estatus.contains("2")) //STATUS = CERRADO
-			sql+=" AND R.FECHA_CIERRE IS NOT NULL ";
-		if (estatus.contains("4")) //STATUS = CERRADO
+		
+		if (estatus.contains("0")) //STATUS = EDICION
+			sql+=" AND R.STATUS=0";
+		
+		if (estatus.contains("2")) //STATUS = PROCESO
+			sql+=" AND R.STATUS=2 ";
+		
+		if (estatus.contains("4")) //STATUS = CANCELADO
 			sql+=" AND R.STATUS=4 ";
-		if (estatus.contains("9")) //STATUS = CERRADO
+		
+		if (estatus.contains("5")) //STATUS = FINIQUITADO
+			sql+=" AND R.STATUS=5 ";*/
+		
+		if (estatus.contains("9")) //STATUS = TODOS
 			estatus = "0,1,2,4,5 ";
 		
 		return this.getNamedJdbcTemplate().queryForList("SELECT R.CVE_REQ, R.NUM_REQ, R.CVE_PERS, C.ID_PROYECTO, C.N_PROGRAMA, R.CLV_PARTID, R.ID_DEPENDENCIA, R.OBSERVA, R.TIPO, "+

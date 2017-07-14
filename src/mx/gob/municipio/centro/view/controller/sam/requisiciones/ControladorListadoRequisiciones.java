@@ -76,7 +76,8 @@ public class ControladorListadoRequisiciones extends ControladorBase {
 				unidad = request.getParameter("dependencia");
 		}
 		
-		String estatus=request.getParameter("status")==null ? Integer.toString(gatewayRequisicion.REQ_STATUS_NUEVO): this.arrayToString(request.getParameterValues("status"),",");//Componente status
+		//String estatus=request.getParameter("status")==null ? Integer.toString(gatewayRequisicion.REQ_STATUS_NUEVO): this.arrayToString(request.getParameterValues("status"),",");//Componente status
+		String estatus=request.getParameter("cboFilterStatus")==null ? Integer.toString(gatewayRequisicion.REQ_STATUS_NUEVO): this.arrayToString(request.getParameterValues("cboFilterStatus"),",");//Componente status
 		String fechaIni=request.getParameter("fechaInicial");
 		String fechaFin=request.getParameter("fechaFinal");
 		String verUnidad=request.getParameter("verUnidad");
