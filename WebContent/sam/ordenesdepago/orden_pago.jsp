@@ -45,8 +45,8 @@
 <!--  <link rel="stylesheet" href="../../include/css/css/css3-buttons.css" type="text/css" media="screen">  -->
 <link rel="stylesheet" href="../../include/css/tiptip.css" type="text/css"  media="screen">
 <script src="../../include/css/jquery.tiptip.js"></script>
-<link rel="stylesheet" href="../../include/css/bootstrap-3.3.4.css" type="text/css">
-<script src="../../include/js/bootstrap-3.3.4.js"></script>
+<link rel="stylesheet" href="../../include/css/bootstrap-3.3.7.css" type="text/css">
+<script src="../../include/js/bootstrap-3.3.7.js"></script>
 
 <link rel="stylesheet" href="../../include/css/bootstrap2.css" type="text/css"/>
 <link rel="stylesheet" href="../../include/css/sweet-alert.css" type="text/css">
@@ -411,14 +411,16 @@ a:active {
               </tr>
               <tr>
                 <th height="31">*Importe:</th>
-                <td><input name="importeRetencion" type="text" class="input" id="importeRetencion" onkeypress=" return keyNumbero( event );"></td>
+                <td><input name="importeRetencion" readonly type="text" class="input" id="importeRetencion" onkeypress=" return keyNumbero( event );"></td>
               </tr>
+             
               <tr>
                 <th height="56">&nbsp;</th>
                 <td><table width="400" border="0" cellspacing="0" cellpadding="0">
                   <tr>
                     <td><div class="buttons tiptip">
-						<button name="cmdNuevaRetencion" id="cmdNuevaRetencion" onClick="" type="button" class="button red middle"><span class="label" style="width:150px">Nueva Retención</span></button>
+                    
+						<button name="cmdNuevaRetencion" id="cmdNuevaRetencion" type="button" class="btn btn-info"><span class="label" style="width:150px">Nueva Retención</span></button>
                 	</div></td>
                     <td><div class="buttons tiptip">
 						<button name="cmdNuevaRetencion" id="cmdNuevaRetencion" onClick="guardarRetencion()" type="button" class="button blue middle"><span class="label" style="width:150px">Guardar Retención</span></button>

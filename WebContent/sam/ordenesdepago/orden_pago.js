@@ -16,6 +16,9 @@ $(document).ready(function(){
 		return false;
 	});
 	
+  $('#importeRetencion').click(function (){
+	  alert('La retencion debe ser capturada desde el devengado, favor de cancelar y volver a capturar el devengado');
+  });	
   $('#BorraOs2').click(function(event){guardarAnexos();});
   $('.tiptip a.button, .tiptip button').tipTip();
   $('#txtproyecto').bestupper(); 

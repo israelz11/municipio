@@ -86,10 +86,88 @@ $("input[name=todos]").change(function(){
   var formatFecha="dd/mm/yy";	
   //$("#fechaInicial").datepicker({showOn: 'button', buttonImage:imagen , buttonImageOnly: true,dateFormat: formatFecha});  
   //$("#fechaFinal").datepicker({showOn: 'button', buttonImage: imagen, buttonImageOnly: true,dateFormat: formatFecha}); 
-  $('#cmdpdf').on('click',function (event){mostrarOpcionPDF();});   
+  //$('#cmdpdf').on('click',function (event){mostrarOpcionPDF();});   
   getBeneficiarios('txtprestadorservicio','CVE_BENEFI','');
   $('#ui-datepicker-div').hide();
+  
+  
+   
+  // Prompt (login)
+  $('#cmdpdf').on('click', function() {
+    $.alertable.prompt('Login to continue', {
+      prompt:
+      '<input type="text" class="alertable-input" name="username" placeholder="Username">' +
+      '<input type="password" class="alertable-input" name="password" placeholder="Password">' +
+      '<label>' +
+      '<input type="checkbox" name="remember" value="true"> ' +
+      'Remember me' +
+      '</label>'
+    }).then(function(data) {
+      console.log('Login submitted', data);
+    }, function() {
+      console.log('Login canceled');
+    });
+  });
+  
+  // Prompt (login)
+  $('#cmdpdf2').on('click', function() {
+    $.alertable.prompt('Opciones de Reporte', {
+      prompt:
+    	  '<table class="listas" border="0" align="center" cellpadding="1" cellspacing="2" width="405" >'+
+			'  <tr id="x1" onmouseover="color_over(\'x1\')" onmouseout="color_out(\'x1\')"> '+
+			'	<td width="33" height="27" align="center" style="cursor:pointer" onclick="getListadoRequisiciones()"> '+
+			'	  <img src="../../imagenes/pdf.gif"/></td>' +
+			'	<td width="362" height="27" align="left" style="cursor:pointer" onclick="getListadoRequisiciones()">&nbsp;Listado de OS/OT/REQ Nomal en PDF</td> '+
+			'  </tr> '+
+			
+			'  <tr id="x2" onmouseover="color_over(\'x2\')" onmouseout="color_out(\'x2\')" onclick=""> '+
+			'	  <td height="27" align="center"  style="cursor:pointer" onclick="getListadoReqConOp()"><img src="../../imagenes/pdf.gif" /></td> '+
+			'	  <td height="27" align="left" style="cursor:pointer" onclick="getListadoReqConOp()">&nbsp;Listado de OS/OT/REQ con Ordenes de Pago relacionadas en PDF</td> '+
+			'	</tr> '
+		
+    }).then(function(data) {
+      console.log('Cerrar', data);
+    }, function() {
+      console.log('Login canceled');
+    });
+  });
 });
+
+
+
+//IMPRIME EL LISTADO DE LAS REQUISICIONES
+function mostrarOpcionPDF(){
+	var html = '<table class="listas" border="0" align="center" cellpadding="1" cellspacing="2" width="405" >'+
+				'  <tr id="x1" onmouseover="color_over(\'x1\')" onmouseout="color_out(\'x1\')"> '+
+				'	<td width="33" height="27" align="center" style="cursor:pointer" onclick="getListadoRequisiciones()"> '+
+				'	  <img src="../../imagenes/pdf.gif"/></td>' +
+				'	<td width="362" height="27" align="left" style="cursor:pointer" onclick="getListadoRequisiciones()">&nbsp;Listado de OS/OT/REQ Nomal en PDF</td> '+
+				'  </tr> '+
+				
+				'  <tr id="x2" onmouseover="color_over(\'x2\')" onmouseout="color_out(\'x2\')" onclick=""> '+
+				'	  <td height="27" align="center"  style="cursor:pointer" onclick="getListadoReqConOp()"><img src="../../imagenes/pdf.gif" /></td> '+
+				'	  <td height="27" align="left" style="cursor:pointer" onclick="getListadoReqConOp()">&nbsp;Listado de OS/OT/REQ con Ordenes de Pago relacionadas en PDF</td> '+
+				'	</tr> ';
+			if($('#REPORTE_ESPECIAL_2').attr('value')=='1'){
+				html+=	'  <tr id="x3" onmouseover="color_over(\'x3\')" onmouseout="color_out(\'x3\')" onclick=""> '+
+						'	  <td height="27" align="center"  style="cursor:pointer" onclick="getListadoRequisicionExcel()"><img src="../../imagenes/excel.png"height="18"  /></td> '+
+						'	  <td height="27" align="left" style="cursor:pointer" onclick="getListadoRequisicionExcel()">&nbsp;Listado de Requisiciones con lotes relacionados en XLS</td> '+
+						'	</tr> ';
+			}
+			html+='</table>';
+	jWindow(html,'Opciones de Reporte', '','Cerrar',1);
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 //Checkbox para seleccionar toda la lista.... Abraham Gonzalez 12/07/2016
@@ -221,28 +299,6 @@ function _reembolsoRequisicion(cve_req){
 				}
 		});
 	
-}
-//IMPRIME EL LISTADO DE LAS REQUISICIONES
-function mostrarOpcionPDF(){
-	var html = '<table class="listas" border="0" align="center" cellpadding="1" cellspacing="2" width="405" >'+
-				'  <tr id="x1" onmouseover="color_over(\'x1\')" onmouseout="color_out(\'x1\')"> '+
-				'	<td width="33" height="27" align="center" style="cursor:pointer" onclick="getListadoRequisiciones()"> '+
-				'	  <img src="../../imagenes/pdf.gif"/></td>' +
-				'	<td width="362" height="27" align="left" style="cursor:pointer" onclick="getListadoRequisiciones()">&nbsp;Listado de OS/OT/REQ Nomal en PDF</td> '+
-				'  </tr> '+
-				
-				'  <tr id="x2" onmouseover="color_over(\'x2\')" onmouseout="color_out(\'x2\')" onclick=""> '+
-				'	  <td height="27" align="center"  style="cursor:pointer" onclick="getListadoReqConOp()"><img src="../../imagenes/pdf.gif" /></td> '+
-				'	  <td height="27" align="left" style="cursor:pointer" onclick="getListadoReqConOp()">&nbsp;Listado de OS/OT/REQ con Ordenes de Pago relacionadas en PDF</td> '+
-				'	</tr> ';
-			if($('#REPORTE_ESPECIAL_2').attr('value')=='1'){
-				html+=	'  <tr id="x3" onmouseover="color_over(\'x3\')" onmouseout="color_out(\'x3\')" onclick=""> '+
-						'	  <td height="27" align="center"  style="cursor:pointer" onclick="getListadoRequisicionExcel()"><img src="../../imagenes/excel.png"height="18"  /></td> '+
-						'	  <td height="27" align="left" style="cursor:pointer" onclick="getListadoRequisicionExcel()">&nbsp;Listado de Requisiciones con lotes relacionados en XLS</td> '+
-						'	</tr> ';
-			}
-			html+='</table>';
-	jWindow(html,'Opciones de Reporte', '','Cerrar',1);
 }
 
 function getListadoRequisicionExcel(){

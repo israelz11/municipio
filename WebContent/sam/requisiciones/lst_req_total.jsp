@@ -10,27 +10,17 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<link rel="stylesheet" href="../../include/css/bootstrap-3.3.4.css" type="text/css">
+<link rel="stylesheet" href="../../include/css/bootstrap-3.3.7.css" type="text/css">
 <link rel="stylesheet" href="../../include/css/bootstrap2.css" type="text/css">
-<link rel="stylesheet" href="../../include/css/jquery.alerts.css" type="text/css">
+<link rel="stylesheet" href="../../include/css/jquery.alertable.css" type="text/css">
+<link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css">
 <link rel="stylesheet" href="../../include/css/bootstrap-select.css" type="text/css">
-
-
 <script type="text/javascript" src="../../include/js/jquery-2.2.1.min.js"></script>
-
-<script type="text/javascript" src="../../include/js/bootstrap-3.3.4.js"></script>
+<script type="text/javascript" src="../../include/js/bootstrap-3.3.7.js"></script>
 <script type="text/javascript" src="../../include/js/bootstrap-select.js"></script>
-
-
-
-
-
-
-
-
-
+<script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>
+<script type="text/javascript" src="../../include/js/jquery.alertable.min.js"></script>
 <script type="text/javascript" src="../../include/js/jquery.alerts.js"></script>
-
 <link rel="stylesheet" href="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.min.js" type="text/css" />
 <script type="text/javascript" src="../../dwr/interface/controladorListadoRequisicionesRemoto.js"> </script>
 <script type="text/javascript" src="../../dwr/engine.js"></script>
@@ -138,7 +128,7 @@ a:active {
       </div>
        <div class="col-sm-4 col-md-offset-2">
       	<button type="button" class="btn btn-buscar btn-md" name="btnBuscar" id="btnBuscar" onClick="getListaReq()">Buscar</button>
-		<button type="button" class="btn btn-imprimir btn-md"  name="cmdpdf" id="cmdpdf">Imprimir...</button>
+		<button type="button" class="btn btn-imprimir btn-md"  name="cmdpdf2" id="cmdpdf2">Imprimir...</button>
       </div>
     </div> 
 	<div class="form-group">
@@ -177,7 +167,62 @@ a:active {
 	      	<input placeholder="Partida" name="txtpartida" type="text" id="txtpartida" class="form-control input-sm" onKeyPress="return keyNumbero(event);" value="<c:out value='${txtpartida}'/>">
 	      </div>
 	</div> 
-</div><!--  
+</div>
+<!-- Large modal -->
+
+<div class="center"><button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-primary center-block">Click Me</button></div>
+
+
+<!-- line modal -->
+<div class="modal fade" id="squarespaceModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+			<h3 class="modal-title" id="lineModalLabel">My Modal</h3>
+		</div>
+		<div class="modal-body">
+			
+            <!-- content goes here -->
+			<form>
+              <div class="form-group">
+                <label for="exampleInputEmail1">Email address</label>
+                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+              </div>
+              <div class="form-group">
+                <label for="exampleInputPassword1">Password</label>
+                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+              </div>
+              <div class="form-group">
+                <label for="exampleInputFile">File input</label>
+                <input type="file" id="exampleInputFile">
+                <p class="help-block">Example block-level help text here.</p>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox"> Check me out
+                </label>
+              </div>
+              <button type="submit" class="btn btn-default">Submit</button>
+            </form>
+
+		</div>
+		<div class="modal-footer">
+			<div class="btn-group btn-group-justified" role="group" aria-label="group button">
+				<div class="btn-group" role="group">
+					<button type="button" class="btn btn-default" data-dismiss="modal"  role="button">Close</button>
+				</div>
+				<div class="btn-group btn-delete hidden" role="group">
+					<button type="button" id="delImage" class="btn btn-default btn-hover-red" data-dismiss="modal"  role="button">Delete</button>
+				</div>
+				<div class="btn-group" role="group">
+					<button type="button" id="saveImage" class="btn btn-default btn-hover-green" data-action="save" role="button">Save</button>
+				</div>
+			</div>
+		</div>
+	</div>
+  </div>
+</div>  
 <!-- table table-hover table table-condensed table-striped -->
 <div class="container-fluid">
 <table width="95%" class="table table-hover table-sm" align="center" id="listaRequisiciones" cellpadding="0" cellspacing="0">
