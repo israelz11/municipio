@@ -13,6 +13,7 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans
 
   <context:annotation-config/>
   
+  
     <security:http auto-config="true" access-denied-page="/accesoDenegado.action"   >        
     <security:form-login login-page="/index.action" default-target-url="/menu/index.action" always-use-default-target="true" authentication-failure-url="/index.action?message=1"/>
     <security:logout logout-success-url="/index.action" logout-url="/j_spring_security_logout" invalidate-session="true"  />            

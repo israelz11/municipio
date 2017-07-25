@@ -464,6 +464,12 @@ public class GatewayFacturas extends BaseGateway {
 		return this.getJdbcTemplate().queryForList("SELECT CVE_FACTURA,CONS,CLV_RETENC,IMPORTE FROM SAM_FACTURA_MOV_RETENC WHERE CVE_FACTURA = ?",new Object[]{cve_factura});
 		
 	}
+	//Mapeo de los vales de las facturas para cargar en la op
+	public List<Map> getVales(Long cve_factura) {
+		return this.getJdbcTemplate().queryForList("SELECT CVE_FACTURA,CVE_VALE,ID_PROYECTO,CLV_PARTID,IMPORTE FROM SAM_FACTURAS_VALES WHERE CVE_FACTURA = ?",new Object[]{cve_factura});
+		
+	}
+	
 	public List<Map> getListadoFacturas(Map m){
 		String sql = "SELECT F.CVE_FACTURA " +
 						      ",F.NUM_FACTURA" +

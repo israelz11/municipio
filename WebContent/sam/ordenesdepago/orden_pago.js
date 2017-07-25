@@ -1130,7 +1130,7 @@ function showResponse(data)  {
  /*Fin de Documentos*/
  
  
- /*Inicio de Vales*/
+/*-----------------------------Inicio de Vales-------------------------------------------*/
 function llenarTablaDeVales() {
 	 quitRow("listasVales");
 	 var idOrden=$('#id_orden').attr('value');
@@ -1296,8 +1296,8 @@ function generarDetallesFactura(checkIDs){
 								CargarIvaFactura();
 								llenarTablaDeDetallesOrdenes();	
 								llenarTablaDeDocumentos();
-								llenarTablaDeVales();
 								llenarTablaDeRetenciones();
+								llenarTablaDeVales();
 								CloseDelay("Facturas cargadas con exito");
 								
 						} 					   				
@@ -1568,7 +1568,7 @@ function obtiene_fecha() {
 		jWindow('<iframe width="800" height="400" name="FAC" id="FAC" frameborder="0" src="../../sam/consultas/muestra_dev_op.action?idtipogasto=1"></iframe>','Devengado para la Orden de Pago', '','Cerrar',1);
 	}	
 	
-//--------------------------------------Generar la Orden de Pago desde una lista de facturas------18/05/2017	
+//--------------------------------------Generar la Orden de Pago desde una lista de facturas *****------18/05/2017	
 function generarOPS(checkFacturas){
 	 alert ("demos del listado orden pago.js" + checkFacturas);
 	

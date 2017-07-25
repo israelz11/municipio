@@ -24,6 +24,7 @@ import mx.gob.municipio.centro.view.bases.ControladorBase;
 public class ControladorMuestraDevengadoOrdenDePago  extends ControladorBase{
 	public final static  int VER_TODAS_LAS_UNIDADES = 25;
 	
+	
 	@Autowired
 	GatewayUnidadAdm gatewayUnidadAdm;
 	

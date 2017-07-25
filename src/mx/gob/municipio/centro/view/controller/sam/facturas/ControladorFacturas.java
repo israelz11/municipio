@@ -118,6 +118,9 @@ public class ControladorFacturas extends ControladorBase {
 		return gatewayFacturas.getRetenciones(cve_factura);
 	}
 	
+	public List geVales(Long cve_factura){
+		return gatewayFacturas.getVales(cve_factura);
+	}
 	public void eliminarRetenciones(final List<Integer> retenciones,final  Long cve_factura){
 		gatewayFacturas.eliminarRetenciones(retenciones, cve_factura);
 	}

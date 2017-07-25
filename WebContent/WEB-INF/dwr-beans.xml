@@ -858,6 +858,7 @@
 		</dwr:remote>
 	</bean>
 	
+	
 	<bean id="controladorMIR"
 		class="mx.gob.municipio.centro.view.controller.sam.mir.ControladorMatrizIndicadoresResultados">
 		<dwr:remote javascript="controladorMIRRemoto">

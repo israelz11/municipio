@@ -29,6 +29,7 @@ public class ControladorListadoOrdenesDePago extends ControladorBase {
 
 	public ControladorListadoOrdenesDePago(){}
 	
+	
 	public final static  int VER_TODAS_LAS_UNIDADES = 25;
 //	final String STATUS_NUEVA="0"; 
 	@Autowired

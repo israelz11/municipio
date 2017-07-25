@@ -33,7 +33,7 @@ a:active {
 -->
 </style>
 <script language="javascript">
-<!--
+
 function cargarDocumentos(){
 	var checkID = [];
 	var cont = 0;
@@ -45,7 +45,7 @@ function cargarDocumentos(){
 	
 		window.parent.generarDetallesFactura(checkID);
 }
--->
+
 </script>
 </head>
 <body>  

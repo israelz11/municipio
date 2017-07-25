@@ -451,31 +451,38 @@ function tipoFacturasDeductivas()
 		case "3"://PEDIDO
 			$('#tabuladores').tabs('enable',1);
 			$('#tabuladores').tabs('enable',2);
+			$('#tabuladores').tabs('enable',3);
 			break;
 		case "4"://OT/OS
 			$('#tabuladores').tabs('enable',1);
 			$('#tabuladores').tabs('enable',2);
+			$('#tabuladores').tabs('enable',3);
 			break;
 		case "6"://CONTRATO
 			$('#tabuladores').tabs('enable',1);
 			$('#tabuladores').tabs('enable',2);
+			$('#tabuladores').tabs('enable',3);
 			break;
 		case "7"://HONORARIOS
 			$('#tabuladores').tabs('enable',1);
 			$('#tabuladores').tabs('enable',2);
+			$('#tabuladores').tabs('enable',3);
 			break;
 		case "8"://ARRENDAMIENTOS
 			$('#tabuladores').tabs('enable',1);
 			$('#tabuladores').tabs('enable',2);
+			$('#tabuladores').tabs('enable',3);
 			break;
 		case "9"://FONDO FIJO
 			$('#tabuladores').tabs('enable',1);
 			$('#tabuladores').tabs('enable',2);
+			$('#tabuladores').tabs('enable',3);
 			
 			break;
 		case "10"://CON RETENCION
 			$('#tabuladores').tabs('enable',1);
 			$('#tabuladores').tabs('enable',2);
+			$('#tabuladores').tabs('enable',3);
 			
 			break;	
 		default: 

@@ -1,5 +1,4 @@
 $(document).ready(function(){ 
-
 		
 	$('#idtipogasto').change(function(){
 		alert("Selecccion: "+ $(this).val());
@@ -25,8 +24,9 @@ function generarOPS(){
 function ActulizaListado(id){
 	
 	document.location="../../sam/consultas/muestra_dev_op.action?idtipogasto="+id;
+	
 }
 
-	
+
 
 
