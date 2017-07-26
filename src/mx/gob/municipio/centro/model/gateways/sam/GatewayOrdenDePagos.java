@@ -1421,10 +1421,9 @@ public boolean cambiarFechaOrdenPago(Long cve_op, String fechaNueva, int ejercic
 					//Crear la Orden de Pago Y Generar los detalles de la orde de pago
 					//int ejercicio, int tipo,Date  fecha,String  pedido,String  cveBeneficiario,int  cvePersona, String reembolsoFondo,String  concurso,String  nota,int  status,Integer  cveRequisicion, double importeIva, int cveUnidad , Integer periodo, int tipoGasto, Integer idGrupo, int cve_pers, Long cve_contrato   ){
 				
-							insertaOrden( ejercicio, 12, new Date(), null, clv_benefi,cve_pers, reembolso, null, "", -1, 0, iva,id_unidad,periodo,1, 0, id_grupo,Long.parseLong("0"));
-							
-					//cveOp= insertaOrden(ejercicio, tipo,fecha,pedido,cveBeneficiario,cvePersona,reembolsoFondo,concurso,nota,status,cveRequisicion, importeIva,cveUnidad,periodo,tipoGasto,idGrupo, cvePersona, cve_contrato );
-						
+					cveOp = insertaOrden( ejercicio, 12, new Date(), null, clv_benefi,cve_pers, reembolso, null, "", -1, 0, iva,id_unidad,periodo,1, 0, id_grupo,Long.parseLong("0"));
+					guardarFacturasEnOrdenPago(cveOp, (Long[])cve_facturas.toArray(new Long[cve_facturas.size()]), ejercicio, cve_pers);
+					
 		            }
 	            });
 			//*BUSCAR AQUI LA ULTIMA CVE_OP QUE SE CREO PARA REGRESAR EL CV_OP*/
