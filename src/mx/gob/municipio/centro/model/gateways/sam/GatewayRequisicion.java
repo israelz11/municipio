@@ -214,7 +214,7 @@ public class GatewayRequisicion  extends BaseGateway {
 	}
 	
 	/*Metodo que genera el listado de requisiciones y busca mendiante los parametros*/
-	public List<Map> getListaDeRequisicionesPorEjemplo(String unidad, String  estatus , Date fInicial, Date fFinal , Integer ejercicio, Integer tipo, String  verUnidad, String numreq, Integer idUsuario, String unidad_usuario, String proyecto, String clv_partid, String tipogto, String beneficiario, boolean privilegio, String cboconOP, String listadoReq){
+	public List<Map> getListaDeRequisicionesPorEjemplo(String unidad,String  estatus , Date fInicial, Date fFinal , Integer ejercicio, Integer tipo, String  verUnidad, String numreq, Integer idUsuario, String unidad_usuario, String proyecto, String clv_partid, String tipogto, String beneficiario, boolean privilegio, String cboconOP, String listadoReq){
 		Map parametros =  new HashMap<String,Object>();
 		/*Asignacion de parametros*/
 		parametros.put("unidad", unidad);
@@ -280,22 +280,7 @@ public class GatewayRequisicion  extends BaseGateway {
 		if(beneficiario!=null&&!beneficiario.equals(""))
 			if(!beneficiario.equals("0")&&!beneficiario.equals(""))
 				sql+= " AND B.CLV_BENEFI =:beneficiario";
-		/*
-		if (estatus.contains("1") && estatus.contains("5")) //STATUS =1 Y 5 CON FECHA DE FINIQUITADO...
-				sql+=" AND R.FECHA_FINIQUITADO IS NOT NULL ";
-		
-		if (estatus.contains("0")) //STATUS = EDICION
-			sql+=" AND R.STATUS=0";
-		
-		if (estatus.contains("2")) //STATUS = PROCESO
-			sql+=" AND R.STATUS=2 ";
-		
-		if (estatus.contains("4")) //STATUS = CANCELADO
-			sql+=" AND R.STATUS=4 ";
-		
-		if (estatus.contains("5")) //STATUS = FINIQUITADO
-			sql+=" AND R.STATUS=5 ";*/
-		
+	
 		if (estatus.contains("9")) //STATUS = TODOS
 			estatus = "0,1,2,4,5 ";
 		

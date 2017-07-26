@@ -26,7 +26,7 @@
 <script type="text/javascript" src="../../dwr/engine.js"></script>
 <script type="text/javascript" src="../../include/js/autocomplete/jquery.autocomplete.js"></script>
 <script type="text/javascript" src="../../include/js/autocomplete/autompleteVarios.js"></script>
-<script type="text/javascript" src="../../dwr/interface/autocompleteDiversosRemoto.js"></script>
+<script type="text/javascript" src="../../dwr/interface/autocompleteDiversosRemoto.js"> </script>
 <script type="text/javascript" src="../../include/js/toolSam.js"></script>
 <script type="text/javascript" src="lst_req_total.js?x=<%=System.currentTimeMillis()%>"> </script>
 <link rel="stylesheet" href="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.css" type="text/css" />
@@ -123,9 +123,21 @@ a:active {
 	<div class="form-group">
       <label class="control-label col-sm-1" for="email">Beneficiario:</label>
       <div class="col-sm-4">
-        <input type="text" id="txtprestadorservicio" name="txtprestadorservicio" class="form-control input-sm" value="<c:out value='${txtprestadorservicio}'/>"/>
-		<input type="hidden" id="CVE_BENEFI" name="CVE_BENEFI" value="<c:out value='${CVE_BENEFI}'/>" />
-      </div>
+     	
+      
+      	<select class="selectpicker form-control input-sm" data-live-search="true" style="width:100%" id="cboSearch" name="cboSearch" title="Seleccione un Beneficiario...">
+      	<c:forEach items="${listabeneficiario}" var="item" varStatus="status">
+        	      	<option value='<c:out value="${item.CLV_BENEFI}"/>'
+        	      	 	<c:if test='${item.CLV_BENEFI==cboSearch}'>selected</c:if>><c:out value='${item.NCOMERCIA}'/>
+        	      	</option>
+      				  	      	
+        </c:forEach>    
+      
+        <!-- 
+        <option value="0066">MARY VELAZCO BERNAL</option>>
+        -->
+      	 </select>
+	  </div>
        <div class="col-sm-4 col-md-offset-2">
       	<button type="button" class="btn btn-buscar btn-md" name="btnBuscar" id="btnBuscar" onClick="getListaReq()">Buscar</button>
 		<button type="button" class="btn btn-imprimir btn-md"  name="cmdpdf2" id="cmdpdf2">Imprimir...</button>

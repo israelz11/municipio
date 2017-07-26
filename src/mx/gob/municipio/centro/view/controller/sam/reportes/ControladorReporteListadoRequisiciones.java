@@ -97,10 +97,11 @@ public class ControladorReporteListadoRequisiciones extends ControladorBase {
 		
 		List <Map> lista = null;
 		
+		
 		if(cboconOP.equals("1"))
 			lista = gatewayRequisicion.getListaDeRequisicionesPorEjemplo2(unidad, estatus, this.formatoFecha(fechaIni), this.formatoFecha(fechaFin), this.getSesion().getEjercicio(), tipo, verUnidad, numreq, this.getSesion().getIdUsuario(), this.getSesion().getClaveUnidad(), proyecto, partida, tipogto, beneficiario, privilegio, cboconOP);
 		else
-			lista = gatewayRequisicion.getListaDeRequisicionesPorEjemplo(unidad, estatus, this.formatoFecha(fechaIni), this.formatoFecha(fechaFin), this.getSesion().getEjercicio(), tipo, verUnidad, numreq, this.getSesion().getIdUsuario(), this.getSesion().getClaveUnidad(), proyecto, partida, tipogto, beneficiario, privilegio, cboconOP, listadoReq);
+			lista = gatewayRequisicion.getListaDeRequisicionesPorEjemplo(unidad,estatus, this.formatoFecha(fechaIni), this.formatoFecha(fechaFin), this.getSesion().getEjercicio(), tipo, verUnidad, numreq, this.getSesion().getIdUsuario(), this.getSesion().getClaveUnidad(), proyecto, partida, tipogto, beneficiario, privilegio, cboconOP, listadoReq);
 		
 		modelo.put("rs",new JRMapCollectionDataSource(lista));		
 		if(cboconOP.equals("1"))

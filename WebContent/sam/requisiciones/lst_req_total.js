@@ -2,6 +2,8 @@
 var banStatus = false;
 
 $(document).ready(function() {
+	
+		
 	$('#cboFilterStatus').on('changed.bs.select', function (e) {
         
 
@@ -53,21 +55,6 @@ $('#cboFilterStatus').selectpicker('refresh');
 
 });
 
-function getListaReq2(){
-	
-	if($('#cboFilterStatus').selectpicker('val')== null)
-    {
-        alert('No se ha seleccionado ningun Estatus');
-        return false;
-    }
- 	
- 	$('#status').val($('#cboFilterStatus').selectpicker('val').toString());
- 	$('#forma').submit();
-    alert('Los Estatus seleccionados son: ' + $('#cboFilterStatus').selectpicker('val').toString().split(','));	
-    
-}
-
-
 //Checkbox para seleccionar toda la lista.... Abraham Gonzalez 12/07/2016
 $("input[name=todos]").change(function(){
 	$('input[type=chkrequisiciones]').each( function() {			
@@ -87,10 +74,7 @@ $("input[name=todos]").change(function(){
   //$("#fechaInicial").datepicker({showOn: 'button', buttonImage:imagen , buttonImageOnly: true,dateFormat: formatFecha});  
   //$("#fechaFinal").datepicker({showOn: 'button', buttonImage: imagen, buttonImageOnly: true,dateFormat: formatFecha}); 
   //$('#cmdpdf').on('click',function (event){mostrarOpcionPDF();});   
-  getBeneficiarios('txtprestadorservicio','CVE_BENEFI','');
-  $('#ui-datepicker-div').hide();
-  
-  
+ 
    
   // Prompt (login)
   $('#cmdpdf').on('click', function() {
@@ -131,6 +115,8 @@ $("input[name=todos]").change(function(){
       console.log('Login canceled');
     });
   });
+  
+  
 });
 
 
@@ -157,18 +143,6 @@ function mostrarOpcionPDF(){
 			html+='</table>';
 	jWindow(html,'Opciones de Reporte', '','Cerrar',1);
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 //Checkbox para seleccionar toda la lista.... Abraham Gonzalez 12/07/2016
 $("input[name=todos]").change(function(){
@@ -425,18 +399,26 @@ function aperturarRequisiciones(){
 	    jAlert('Es necesario seleccionar por lo menos una Requisicion del listado', 'Advertencia');
 }
 
-//------------------------Filtra el listado segun el estatus seleccionado-----------------------------
+
+/*  
+  	$('#cboSearch').change(function(){
+		alert("Selecccion: "+ $(this).val());
+		//ActulizaListado($(this).val());
+	})
+ 	function ActulizaListado(id){
+		document.location="../../sam/consultas/muestra_dev_op.action?idtipogasto="+id;
+	}
+*/
+//------------------------Filtros del listado de la requisicion para busquedas 26-07-17 -------------------------------------------------------
 function getListaReq(){
-	//var checkStatus2 = [];
-	//$('#cboFilterStatus').selectpicker('val').toString().each(function(){checkStatus2.push($(this).val());});
-	//alert("array que se genero: " +checkStatus2);
-    // $('input[name=status]:checked').each(function() {checkStatus.push($(this).val());});	 
+	
+	
 	 var error="";
 	 var titulo ="Error de validacion";
 	 //if (checkStatus.length==0 )   error="Debe de seleccionar un Estatus<br>";
 	 $('#cboFilterStatus').selectpicker('val');
-	 alert("Status seleccionados: " +$('#cboFilterStatus').selectpicker('val').toString().split(','));
-	 if($('#txtprestadorservicio').attr('value')=='') $('#CVE_BENEFI').attr('value', '0');
+	 $('#cboSearch').change('val');
+	 alert("Selecccion: "+ $('#cboSearch').val());
 	 if ($('#fechaInicial').attr('value')=="" && $('#fechaFinal').attr('value')!="" || $('#fechaInicial').attr('value')!="" && $('#fechaFinal').attr('value')=="")  error+="El rango de fechas no es valido<br>";
 	 //	var s = 'lst_pedidos.action?idUnidad='+$('#cbodependencia').attr('value')+"&fechaInicial="+$('#fechaInicial').attr('value')+"&fechaFinal="+$('#fechaFinal').attr('value')+"&status="+checkStatus+"&tipo_gto="+$('#cbotipogasto').attr('value');
 	 //	document.location = s;

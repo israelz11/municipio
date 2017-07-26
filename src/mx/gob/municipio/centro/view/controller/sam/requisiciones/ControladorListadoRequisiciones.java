@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
+import mx.gob.municipio.centro.model.gateways.sam.GatewayBeneficiario;
 import mx.gob.municipio.centro.model.gateways.sam.GatewayOrdenDePagos;
 import mx.gob.municipio.centro.model.gateways.sam.GatewayPlanArbit;
 import mx.gob.municipio.centro.model.gateways.sam.GatewayRequisicion;
@@ -34,6 +35,9 @@ public class ControladorListadoRequisiciones extends ControladorBase {
 	public ControladorListadoRequisiciones(){}
 	private static Logger log = Logger.getLogger(ControladorListadoRequisiciones.class.getName());
 		
+	@Autowired
+	private GatewayBeneficiario gatewayBeneficiario;
+	
 	@Autowired
 	private GatewayUnidadAdm gatewayUnidadAdm;
 	
@@ -57,8 +61,9 @@ public class ControladorListadoRequisiciones extends ControladorBase {
 		String listadoReq=request.getParameter("txtlistado");
 		String proyecto=request.getParameter("txtproyecto");
 		String partida=request.getParameter("txtpartida");
-		String clv_benefi=request.getParameter("CVE_BENEFI");
-		String beneficiario=request.getParameter("txtprestadorservicio");
+		//String clv_benefi=request.getParameter("CVE_BENEFI");//listabeneficiario
+		//String beneficiario=request.getParameter("txtprestadorservicio");//beneficiario
+		String beneficiario=request.getParameter("cboSearch");//beneficiario
 		String tipogto=request.getParameter("cbotipogasto")==null ? "0" : request.getParameter("cbotipogasto");
 		String unidad=request.getParameter("dependencia")==null ?this.getSesion().getClaveUnidad() : request.getParameter("dependencia");
 		String cboconOP = request.getParameter("cboconOP");
@@ -82,6 +87,7 @@ public class ControladorListadoRequisiciones extends ControladorBase {
 		String fechaFin=request.getParameter("fechaFinal");
 		String verUnidad=request.getParameter("verUnidad");
 		String listar=request.getParameter("chklistar");
+		String clv_benefi= request.getParameter("cboSearch");
 		Integer tipo = request.getParameter("cbotipo") != null ?  request.getParameter("cbotipo").equals("")? null :  Integer.parseInt(request.getParameter("cbotipo")) : null  ;
 		modelo.put("idUnidad",unidad);
 		modelo.put("cve_pers",this.getSesion().getIdUsuario());
@@ -92,7 +98,7 @@ public class ControladorListadoRequisiciones extends ControladorBase {
 		modelo.put("cbotipogasto", tipogto);
 		modelo.put("txtlistado", listadoReq);
 		modelo.put("cboconOP", cboconOP);
-		modelo.put("txtprestadorservicio", beneficiario);
+		modelo.put("beneficiario", beneficiario);
 		modelo.put("CVE_BENEFI", clv_benefi);
 		modelo.put("txtrequisicion", numreq);
 		modelo.put("txtproyecto", proyecto);
@@ -101,9 +107,10 @@ public class ControladorListadoRequisiciones extends ControladorBase {
 		modelo.put("fechaFinal",fechaFin);
 		modelo.put("verUnidad",verUnidad);
 		modelo.put("chklistar", listar);
+		modelo.put("listabeneficiario",gatewayBeneficiario.getBeneficiariosTodos(0));
 		if(listar==null||listar.equals(""))
 			listadoReq = "";
-		List <Map> lista = this.getRequisicionesUnidadPorEjemplo(unidad, estatus, fechaIni,fechaFin, this.getSesion().getEjercicio(), tipo, verUnidad, numreq, proyecto, partida, tipogto, clv_benefi, privilegio, cboconOP, listadoReq);
+		List <Map> lista = this.getRequisicionesUnidadPorEjemplo(unidad, estatus,fechaIni,fechaFin, this.getSesion().getEjercicio(), tipo, verUnidad, numreq, proyecto, partida, tipogto, clv_benefi, privilegio, cboconOP, listadoReq);
 		modelo.put("CONTADOR", lista.size());
 		modelo.put("requisicionesUnidad", lista);				
 	    return "sam/requisiciones/lst_req_total.jsp";
