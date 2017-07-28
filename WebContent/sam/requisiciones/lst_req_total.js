@@ -3,7 +3,7 @@ var banStatus = false;
 
 $(document).ready(function() {
 	
-		
+	
 	$('#cboFilterStatus').on('changed.bs.select', function (e) {
         
 
@@ -48,7 +48,6 @@ if($('#cboFilterStatus').selectpicker('val')== null)
 alert('Los Estatus seleccionados son: ' + $('#cboFilterStatus').selectpicker('val').toString().split(','));
 });    
 
-
 $('#cmdClean').on('click', function(e){
 $('#cboFilterStatus').selectpicker('deselectAll');
 $('#cboFilterStatus').selectpicker('refresh');
@@ -65,17 +64,29 @@ $("input[name=todos]").change(function(){
 		}
 	});
 });
+
+//-----------Ravision del filtrado por fechas en el listado de requisiciones.............
 	
-	// Launch TipTip tooltip
-  //$('.tiptip a.button, .tiptip button').tipTip();
+		
+		$('#fechaInicial').datetimepicker({
+			format: 'DD/MM/YYYY'
+			
+		});
+			
+		$('#fechaFinal').datetimepicker({
+			format: 'DD/MM/YYYY',
+		    useCurrent: false //Important! See issue #1075
+		});
+		$("#fechaInicial").on("dp.change", function (e) {
+		    $('#fechaFinal').data("DateTimePicker").minDate(e.date);
+		});
+		$("#fechaFinal").on("dp.change", function (e) {
+		    $('#fechaInicial').data("DateTimePicker").maxDate(e.date);
+		});
+
+		
   $('#todos').click( function (event){ $('input[name=chkrequisiciones]').attr('checked', this.checked); });//Para seleccionar todos los checkbox Abraham Gonzalez 12/07/2016
-  var imagen="../../imagenes/cal.gif";	
-  var formatFecha="dd/mm/yy";	
-  //$("#fechaInicial").datepicker({showOn: 'button', buttonImage:imagen , buttonImageOnly: true,dateFormat: formatFecha});  
-  //$("#fechaFinal").datepicker({showOn: 'button', buttonImage: imagen, buttonImageOnly: true,dateFormat: formatFecha}); 
-  //$('#cmdpdf').on('click',function (event){mostrarOpcionPDF();});   
- 
-   
+    
   // Prompt (login)
   $('#cmdpdf').on('click', function() {
     $.alertable.prompt('Login to continue', {
@@ -115,11 +126,8 @@ $("input[name=todos]").change(function(){
       console.log('Login canceled');
     });
   });
-  
-  
+  	
 });
-
-
 
 //IMPRIME EL LISTADO DE LAS REQUISICIONES
 function mostrarOpcionPDF(){
@@ -400,32 +408,26 @@ function aperturarRequisiciones(){
 }
 
 
-/*  
-  	$('#cboSearch').change(function(){
-		alert("Selecccion: "+ $(this).val());
-		//ActulizaListado($(this).val());
-	})
- 	function ActulizaListado(id){
-		document.location="../../sam/consultas/muestra_dev_op.action?idtipogasto="+id;
-	}
-*/
-//------------------------Filtros del listado de la requisicion para busquedas 26-07-17 -------------------------------------------------------
+//------------------------Filtros del listado de la requisicion para buscar desdel el btnbuscar 26-07-17 -------------------------------------------------------
 function getListaReq(){
 	
 	
 	 var error="";
 	 var titulo ="Error de validacion";
-	 //if (checkStatus.length==0 )   error="Debe de seleccionar un Estatus<br>";
+	
 	 $('#cboFilterStatus').selectpicker('val');
 	 $('#cboSearch').change('val');
-	 alert("Selecccion: "+ $('#cboSearch').val());
+	 //alert("Selecccion: "+ $('#cboSearch').val());
+	 alert("Desde: " + $('#fechaInicial').val() + "  hasta:   " +$('#fechaFinal').val());
 	 if ($('#fechaInicial').attr('value')=="" && $('#fechaFinal').attr('value')!="" || $('#fechaInicial').attr('value')!="" && $('#fechaFinal').attr('value')=="")  error+="El rango de fechas no es valido<br>";
-	 //	var s = 'lst_pedidos.action?idUnidad='+$('#cbodependencia').attr('value')+"&fechaInicial="+$('#fechaInicial').attr('value')+"&fechaFinal="+$('#fechaFinal').attr('value')+"&status="+checkStatus+"&tipo_gto="+$('#cbotipogasto').attr('value');
-	 //	document.location = s;
-if (error=="")
-	$("#forma").submit();
-else
-  jAlert(error,titulo);
+	
+     if (error=="")
+    	 $("#forma").submit();
+	 else
+		 jAlert(error,titulo);
+     
+ 	 $(":text").val("");
+
 }
 
 function getRequisicion(claveReq)   {

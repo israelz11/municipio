@@ -11,17 +11,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <link rel="stylesheet" href="../../include/css/bootstrap-3.3.7.css" type="text/css">
+<link rel="stylesheet" href="../../include/css/bootstrap-select.css" type="text/css">
 <link rel="stylesheet" href="../../include/css/bootstrap2.css" type="text/css">
 <link rel="stylesheet" href="../../include/css/jquery.alertable.css" type="text/css">
 <link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css">
-<link rel="stylesheet" href="../../include/css/bootstrap-select.css" type="text/css">
-<script type="text/javascript" src="../../include/js/jquery-2.2.1.min.js"></script>
+
+
+
+<script type="text/javascript" src="../../include/js/jquery-2.1.3.min.js"></script>
 <script type="text/javascript" src="../../include/js/bootstrap-3.3.7.js"></script>
 <script type="text/javascript" src="../../include/js/bootstrap-select.js"></script>
 <script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>
 <script type="text/javascript" src="../../include/js/jquery.alertable.min.js"></script>
 <script type="text/javascript" src="../../include/js/jquery.alerts.js"></script>
-<link rel="stylesheet" href="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.min.js" type="text/css" />
+<script type="text/javascript" src="../../include/js/jquery-ui-1.12.1.js"></script>
 <script type="text/javascript" src="../../dwr/interface/controladorListadoRequisicionesRemoto.js"> </script>
 <script type="text/javascript" src="../../dwr/engine.js"></script>
 <script type="text/javascript" src="../../include/js/autocomplete/jquery.autocomplete.js"></script>
@@ -31,6 +34,10 @@
 <script type="text/javascript" src="lst_req_total.js?x=<%=System.currentTimeMillis()%>"> </script>
 <link rel="stylesheet" href="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.css" type="text/css" />
 <link rel="stylesheet" href="../../include/js/autocomplete/jquery.autocomplete.css" type="text/css" />
+
+<script type="text/javascript" src="../../include/css/bootstrap-datetimepicker-master/js/moment-with-locales-2.9.0.js"></script>
+<link rel="stylesheet" href="../../include/css/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker-4.15.35.css" type="text/css">
+<script type="text/javascript" src="../../include/css/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker-4.15.35.js"></script>
 
 
 <style type="text/css">
@@ -47,6 +54,9 @@ a:active {
 	text-decoration: none;
 }
 </style>
+<script type="text/javascript">
+
+</script>
 </head>
 <body  >
 <form  action="lst_req_total.action" class="form-horizontal" method="post" id="forma" name="forma">
@@ -126,7 +136,7 @@ a:active {
      	
       
       	<select class="selectpicker form-control input-sm" data-live-search="true" style="width:100%" id="cboSearch" name="cboSearch" title="Seleccione un Beneficiario...">
-      	<c:forEach items="${listabeneficiario}" var="item" varStatus="status">
+      	<c:forEach items="${clv_benefi}" var="item" varStatus="status">
         	      	<option value='<c:out value="${item.CLV_BENEFI}"/>'
         	      	 	<c:if test='${item.CLV_BENEFI==cboSearch}'>selected</c:if>><c:out value='${item.NCOMERCIA}'/>
         	      	</option>
@@ -180,61 +190,7 @@ a:active {
 	      </div>
 	</div> 
 </div>
-<!-- Large modal -->
-
-<div class="center"><button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-primary center-block">Click Me</button></div>
-
-
-<!-- line modal -->
-<div class="modal fade" id="squarespaceModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-	<div class="modal-content">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-			<h3 class="modal-title" id="lineModalLabel">My Modal</h3>
-		</div>
-		<div class="modal-body">
-			
-            <!-- content goes here -->
-			<form>
-              <div class="form-group">
-                <label for="exampleInputEmail1">Email address</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
-              </div>
-              <div class="form-group">
-                <label for="exampleInputPassword1">Password</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-              </div>
-              <div class="form-group">
-                <label for="exampleInputFile">File input</label>
-                <input type="file" id="exampleInputFile">
-                <p class="help-block">Example block-level help text here.</p>
-              </div>
-              <div class="checkbox">
-                <label>
-                  <input type="checkbox"> Check me out
-                </label>
-              </div>
-              <button type="submit" class="btn btn-default">Submit</button>
-            </form>
-
-		</div>
-		<div class="modal-footer">
-			<div class="btn-group btn-group-justified" role="group" aria-label="group button">
-				<div class="btn-group" role="group">
-					<button type="button" class="btn btn-default" data-dismiss="modal"  role="button">Close</button>
-				</div>
-				<div class="btn-group btn-delete hidden" role="group">
-					<button type="button" id="delImage" class="btn btn-default btn-hover-red" data-dismiss="modal"  role="button">Delete</button>
-				</div>
-				<div class="btn-group" role="group">
-					<button type="button" id="saveImage" class="btn btn-default btn-hover-green" data-action="save" role="button">Save</button>
-				</div>
-			</div>
-		</div>
-	</div>
-  </div>
-</div>  
+ 
 <!-- table table-hover table table-condensed table-striped -->
 <div class="container-fluid">
 <table width="95%" class="table table-hover table-sm" align="center" id="listaRequisiciones" cellpadding="0" cellspacing="0">

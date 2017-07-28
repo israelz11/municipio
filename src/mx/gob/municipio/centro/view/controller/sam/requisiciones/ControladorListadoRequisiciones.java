@@ -61,9 +61,10 @@ public class ControladorListadoRequisiciones extends ControladorBase {
 		String listadoReq=request.getParameter("txtlistado");
 		String proyecto=request.getParameter("txtproyecto");
 		String partida=request.getParameter("txtpartida");
-		//String clv_benefi=request.getParameter("CVE_BENEFI");//listabeneficiario
-		//String beneficiario=request.getParameter("txtprestadorservicio");//beneficiario
+	
+		String clv_benefi= request.getParameter("cboSearch");
 		String beneficiario=request.getParameter("cboSearch");//beneficiario
+		
 		String tipogto=request.getParameter("cbotipogasto")==null ? "0" : request.getParameter("cbotipogasto");
 		String unidad=request.getParameter("dependencia")==null ?this.getSesion().getClaveUnidad() : request.getParameter("dependencia");
 		String cboconOP = request.getParameter("cboconOP");
@@ -87,7 +88,7 @@ public class ControladorListadoRequisiciones extends ControladorBase {
 		String fechaFin=request.getParameter("fechaFinal");
 		String verUnidad=request.getParameter("verUnidad");
 		String listar=request.getParameter("chklistar");
-		String clv_benefi= request.getParameter("cboSearch");
+		
 		Integer tipo = request.getParameter("cbotipo") != null ?  request.getParameter("cbotipo").equals("")? null :  Integer.parseInt(request.getParameter("cbotipo")) : null  ;
 		modelo.put("idUnidad",unidad);
 		modelo.put("cve_pers",this.getSesion().getIdUsuario());
@@ -98,8 +99,7 @@ public class ControladorListadoRequisiciones extends ControladorBase {
 		modelo.put("cbotipogasto", tipogto);
 		modelo.put("txtlistado", listadoReq);
 		modelo.put("cboconOP", cboconOP);
-		modelo.put("beneficiario", beneficiario);
-		modelo.put("CVE_BENEFI", clv_benefi);
+	
 		modelo.put("txtrequisicion", numreq);
 		modelo.put("txtproyecto", proyecto);
 		modelo.put("txtpartida", partida);
@@ -107,13 +107,21 @@ public class ControladorListadoRequisiciones extends ControladorBase {
 		modelo.put("fechaFinal",fechaFin);
 		modelo.put("verUnidad",verUnidad);
 		modelo.put("chklistar", listar);
-		modelo.put("listabeneficiario",gatewayBeneficiario.getBeneficiariosTodos(0));
+		modelo.put("clv_benefi",gatewayBeneficiario.getBeneficiariosTodos(0));
+		
+		
+		//modelo.put("CVE_BENEFI", clv_benefi);
 		if(listar==null||listar.equals(""))
 			listadoReq = "";
-		List <Map> lista = this.getRequisicionesUnidadPorEjemplo(unidad, estatus,fechaIni,fechaFin, this.getSesion().getEjercicio(), tipo, verUnidad, numreq, proyecto, partida, tipogto, clv_benefi, privilegio, cboconOP, listadoReq);
+		
+		List <Map> lista = this.getRequisicionesUnidadPorEjemplo(unidad, estatus,fechaIni,fechaFin, this.getSesion().getEjercicio(), tipo, verUnidad, numreq, proyecto, partida, tipogto,beneficiario, privilegio, cboconOP, listadoReq);
 		modelo.put("CONTADOR", lista.size());
 		modelo.put("requisicionesUnidad", lista);				
 	    return "sam/requisiciones/lst_req_total.jsp";
+	}
+	@ModelAttribute("beneficiarios")
+	public List<Map>getBeneficiarios(){
+		return gatewayBeneficiario.getListaBeneficiarios();
 	}
 	
 	@ModelAttribute("tipodeGasto")
@@ -126,7 +134,7 @@ public class ControladorListadoRequisiciones extends ControladorBase {
     	return gatewayUnidadAdm.getUnidadAdmTodos();	
     }
 	//Genera el ArrayList del listado de Requisiciones	
-    public List<Map> getRequisicionesUnidadPorEjemplo(String unidad , String  estatus,String fechaInicial,String fechaFinal,Integer ejercicio, Integer tipo, String  verUnidad, String numreq, String proyecto, String clv_partid, String tipogto, String beneficiario, boolean privilegio, String cboconOP, String listadoReq){
+    public List<Map> getRequisicionesUnidadPorEjemplo(String unidad , String  estatus,String fechaInicial,String fechaFinal,Integer ejercicio, Integer tipo, String  verUnidad, String numreq, String proyecto, String clv_partid, String tipogto,  String beneficiario, boolean privilegio, String cboconOP, String listadoReq){
     	return  gatewayRequisicion.getListaDeRequisicionesPorEjemplo(unidad, estatus, this.formatoFecha(fechaInicial), this.formatoFecha(fechaFinal), ejercicio, tipo, verUnidad, numreq, this.getSesion().getIdUsuario(), this.getSesion().getClaveUnidad(), proyecto, clv_partid, tipogto, beneficiario, privilegio, cboconOP, listadoReq);	
     }
     

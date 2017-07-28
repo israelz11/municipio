@@ -215,7 +215,7 @@ public class GatewayRequisicion  extends BaseGateway {
 	
 	/*Metodo que genera el listado de requisiciones y busca mendiante los parametros*/
 	public List<Map> getListaDeRequisicionesPorEjemplo(String unidad,String  estatus , Date fInicial, Date fFinal , Integer ejercicio, Integer tipo, String  verUnidad, String numreq, Integer idUsuario, String unidad_usuario, String proyecto, String clv_partid, String tipogto, String beneficiario, boolean privilegio, String cboconOP, String listadoReq){
-		Map parametros =  new HashMap<String,Object>();
+		Map<String, Object> parametros =  new HashMap<String,Object>();
 		/*Asignacion de parametros*/
 		parametros.put("unidad", unidad);
 		parametros.put("fechaInicial", fInicial);
@@ -270,7 +270,8 @@ public class GatewayRequisicion  extends BaseGateway {
 		}
 		
 		if(proyecto!=null&&!proyecto.equals(""))
-			sql+= " AND C.N_PROGRAMA LIKE '%"+proyecto+"%'";
+			sql+= " AND C.ID_PROYECTO LIKE '%"+proyecto+"%'";
+		
 		if(clv_partid!=null&&!clv_partid.equals(""))
 			sql+= " AND R.CLV_PARTID LIKE '%"+clv_partid+"%'";
 		
@@ -280,7 +281,7 @@ public class GatewayRequisicion  extends BaseGateway {
 		if(beneficiario!=null&&!beneficiario.equals(""))
 			if(!beneficiario.equals("0")&&!beneficiario.equals(""))
 				sql+= " AND B.CLV_BENEFI =:beneficiario";
-	
+		
 		if (estatus.contains("9")) //STATUS = TODOS
 			estatus = "0,1,2,4,5 ";
 		
