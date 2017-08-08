@@ -1,68 +1,25 @@
  var checkPresupuesto = new Array();
  var ID_PED = 0;
-/**
-*Al iniciar la pagina carga los eventos a los controles del formulario
-*/
-$(document).ready(function() {  
-	// Launch TipTip tooltip
-		$('.tiptip a.button, .tiptip button').tipTip();
-	$('#img_vale').qtip({
-               content: '<strong>Muestra listado de Vales</strong>', // Set the tooltip content to the current corner
-               position: {
-                  corner: {
-                     tooltip: 'topMiddle', // Use the corner...
-                     target: 'bottomMiddle' // ...and opposite corner
-                  }
-               },
-              
-               style: {
-                  padding: 5, 
-                  textAlign: 'left',
-                  tip: true, // Give it a speech bubble tip with automatic corner detection
-                  name: 'dark', // Style it according to the preset 'cream' style
-				  width: 150
-               }
-			  
-            });
-	$('#img_presupuesto').qtip({
-               content: '<strong>Muestra listado de Presupuesto Mensual</strong>', // Set the tooltip content to the current corner
-               position: {
-                  corner: {
-                     tooltip: 'topMiddle', // Use the corner...
-                     target: 'bottomMiddle' // ...and opposite corner
-                  }
-               },
-              
-               style: {
-                  padding: 5, 
-                  textAlign: 'left',
-                  tip: true, // Give it a speech bubble tip with automatic corner detection
-                  name: 'dark', // Style it according to the preset 'cream' style
-				  width: 150
-               }
-			  
-            });
-	$('#img_producto').qtip({
-               content: '<strong>Muestra listado de Articulos y Servicios por partidas</strong>', // Set the tooltip content to the current corner
-               position: {
-                  corner: {
-                     tooltip: 'topMiddle', // Use the corner...
-                     target: 'bottomMiddle' // ...and opposite corner
-                  }
-               },
-              
-               style: {
-                  padding: 5, 
-                  textAlign: 'left',
-                  tip: true, // Give it a speech bubble tip with automatic corner detection
-                  name: 'dark', // Style it according to the preset 'cream' style
-				  width: 150
-               }
-			  
-            });
-			
+ 
+$(document).ready(function () {
+	
+	
+	/*Inhabilita todos los divs*/	
+	$('#div_os').hide();
+	$('#div_os_vehiculo').hide();
+	$('#div_os_prestador').hide();
+	$('#div_os_presupuesto').hide();
+	$('#cbomes').attr('disabled',true);
+	
+	$("#tab2primary").hide();
+		
+	$('#cbotipo').on('change',function(event){//El método on asigna uno o más controladores de eventos para los elementos seleccionados.
+		tipoRequisiciones();
+	});
+	
+/*******************************************************************************************************************************************/
 	/*define los eventos para los controles*/
-	$('#txtproyecto').bestupper(); 
+	//$('#txtproyecto').bestupper(); 
 	//$('#cmdnuevorequisicion').click(function (event){nuevaRequisicion();});
 	$('#cmdenviarlotes').click(function(event){mostrarEnviarLotesPedido();});
 	$('#cmdnuevoconcepto').click(function (event){nuevoConcepto();});
@@ -80,21 +37,18 @@ $(document).ready(function() {
 	$('#txtprecioestimado').keypress(function(event){return keyNumbero(event);});	
 	$('#txtproyecto').blur(function(event){__getPresupuesto($('#ID_PROYECTO').attr('value'),$('#txtproyecto').attr('value'),$('#txtpartida').attr('value'), $('#cbomes').attr('value'),  'txtpresupuesto','txtdisponible','');});
 	$('#txtpartida').blur(function(event){__getPresupuesto($('#ID_PROYECTO').attr('value'), $('#txtproyecto').attr('value'),$('#txtpartida').attr('value'), $('#cbomes').attr('value'),  'txtpresupuesto','txtdisponible','');});
-	$('#cbotipo').change(function (event){tipoRequisicion()});
-	$('#img_presupuesto').click(function(event){muestraPresupuesto();});
+
+	$('#cmdpresupuesto').click(function(event){//MUESTRA PRESUPUESTO
+		muestraPresupuesto();
+	});
 	$('#img_producto').click(function(event){muestraProductos();});
 	$('#cmdimportar').click(function(event){muestraImportarLotes();});
 	$('#cmdreenumerar').click(function(event){muestraReenumerar();});
 	$('#img_vale').click(function(event){antesMuestraVales();});
-	 /*Configura los tabuladores*/
-	 $('#tabuladores').tabs();
-	 $('#tabuladores').tabs('enable',0);
-	 $('#tabuladores').tabs('option', 'disabled', [1]);
-	 $("#txtfecha").datepicker({showOn: 'button', buttonImage: '../../imagenes/cal.gif', buttonImageOnly: true,dateFormat: 'dd/mm/yy'});
-	 /*funciones*/
-	 if($('#CVE_REQ').attr('value')==0) tipoRequisicion();
+	
+	
+	getBeneficiarios('txtprestadorservicio','CVE_BENEFI',$('#tipoBeneficiario').attr('value'));
 	 
-	 getBeneficiarios('txtprestadorservicio','CVE_BENEFI',$('#tipoBeneficiario').attr('value'));
 	 getUnidad_Medidas('txtunidadmedida','CVE_UNIDAD_MEDIDA');
 	 mostrarRequisicion($('#CVE_REQ').attr('value'));
 	 getMesRequisicion($('#cbomes').attr('value'));
@@ -102,11 +56,10 @@ $(document).ready(function() {
 	 $('#txtprecioestimado').attr('readonly', '');
 	 $('#fila_contrato').hide();
 	 $('#fila_disponibleVale').hide();
-	 $('.tiptip a.button, .tiptip button').tipTip();
+	 //$('.tiptip a.button, .tiptip button').tipTip();
 	 $('#ui-datepicker-div').hide();
-	 //$("#dialog").dialog({position: ['right','top'], show:'slide',  hide: 'slide' , width: 450, height:100, maxHeight: 150 }); 
+	
 });
-
 function antesMuestraVales(){
 	if($('#cbotipo').val()==7||$('#cbotipo').val()==8) {jAlert('No es posible usar vales para documentos de tipo calendarizados', 'Advertencia'); return false;}
 	muestraVales();
@@ -698,80 +651,6 @@ function nuevoConcepto(){
 	
 }
 
-/*funcion oculta y muestra los tipos de requisiciones*/
-function tipoRequisicion(){
-	var v = $('#cbotipo').attr('value');
-	/*Inhabilita todos los divs*/	
-	$('#div_os').hide();
-	$('#div_os_vehiculo').hide();
-	$('#div_os_prestador').hide();
-	$('#div_os_presupuesto').hide();
-	$('#cbomes').attr('disabled',true);
-	
-	/*Retorna si vale cero*/
-	if(v=='0') return false;
-	switch(v){
-		case '1': /*Para bienes*/
-				$('#div_os_presupuesto').show();
-				$('#div_os').hide();
-		break;
-		case '2': /*Para servicios*/
-				$('#div_os').show();
-				$('#div_os_prestador').show();
-				$('#div_os_presupuesto').show();
-				$('#div_os_prestador').show();
-				$('#div_os_vehiculo').hide();
-		break;
-		case '3': /*Para servicio a vehiculos*/
-				$('#div_os').show();
-				$('#div_os_prestador').show();
-				$('#div_os_presupuesto').show();
-				$('#div_os_prestador').show();
-				$('#div_os_vehiculo').show();
-		break;
-		case '4': /*Para maquinaria pesada*/
-				$('#div_os').show();
-				$('#div_os_prestador').show();
-				$('#div_os_presupuesto').show();
-				$('#div_os_prestador').show();
-				$('#div_os_vehiculo').show();
-		break;
-		case '5': /*Para servicio a bombas*/
-				$('#div_os').show();
-				$('#div_os_prestador').show();
-				$('#div_os_presupuesto').show();
-				$('#div_os_prestador').show();
-				$('#div_os_vehiculo').hide();
-		break;
-		case '6': /*Para paquetes*/
-				$('#div_os_presupuesto').show();
-				$('#div_os').hide();
-				$('#div_os_prestador').hide();
-				$('#div_os_prestador').hide();
-				$('#div_os_vehiculo').hide();
-		break;
-		case '7': /*Para Req. calendarizada*/
-				$('#div_os_presupuesto').show();
-				$('#div_os').hide();
-				$('#div_os_prestador').hide();
-				$('#div_os_prestador').hide();
-				$('#div_os_vehiculo').hide();
-				/*activa el combo de meses*/
-				$('#cbomes').attr('disabled',false);
-		break;
-		case '8': /*Para O.S calendarizada*/
-				$('#div_os').show();
-				$('#div_os_prestador').show();
-				$('#div_os_presupuesto').show();
-				$('#div_os_prestador').show();
-				$('#div_os_vehiculo').hide();
-				/*activa el combo de meses*/
-				$('#cbomes').attr('disabled',false);
-		break;
-	}
-}
-
-
 function getPresupuesto(){
         controladorRequisicion.getPresupuestoReq($('#CVE_REQ').attr('value'), {
         callback:function(items) {
@@ -1068,4 +947,76 @@ function mostrarLotePedido(id_ped_movto){
 				jError("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");          
 			}
 	});
+}
+
+function tipoRequisiciones(){
+	
+	var demovalor2 = $('#cbotipo').val();
+	alert("Opcion seleccionada por cbotipo en val: "+demovalor2);
+	
+	
+	
+	/*Retorna si vale cero*/
+	if(demovalor2=='0') return false;
+	
+	switch(demovalor2){
+	
+		case '1': /*Para bienes*/
+		$('#div_os_presupuesto').show();
+		$('#div_os').hide();
+		break;
+		case '2': /*Para servicios*/
+				$('#div_os').show();
+				$('#div_os_prestador').show();
+				$('#div_os_presupuesto').show();
+				$('#div_os_prestador').show();
+				$('#div_os_vehiculo').hide();
+		break;
+		case '3': /*Para servicio a vehiculos*/
+				$('#div_os').show();
+				$('#div_os_prestador').show();
+				$('#div_os_presupuesto').show();
+				$('#div_os_prestador').show();
+				$('#div_os_vehiculo').show();
+		break;
+		case '4': /*Para maquinaria pesada*/
+				$('#div_os').show();
+				$('#div_os_prestador').show();
+				$('#div_os_presupuesto').show();
+				$('#div_os_prestador').show();
+				$('#div_os_vehiculo').show();
+		break;
+		case '5': /*Para servicio a bombas*/
+				$('#div_os').show();
+				$('#div_os_prestador').show();
+				$('#div_os_presupuesto').show();
+				$('#div_os_prestador').show();
+				$('#div_os_vehiculo').hide();
+		break;
+		case '6': /*Para paquetes*/
+				$('#div_os_presupuesto').show();
+				$('#div_os').hide();
+				$('#div_os_prestador').hide();
+				$('#div_os_prestador').hide();
+				$('#div_os_vehiculo').hide();
+		break;
+		case '7': /*Para Req. calendarizada*/
+				$('#div_os_presupuesto').show();
+				$('#div_os').hide();
+				$('#div_os_prestador').hide();
+				$('#div_os_prestador').hide();
+				$('#div_os_vehiculo').hide();
+				/*activa el combo de meses*/
+				$('#cbomes').attr('disabled',false);
+		break;
+		case '8': /*Para O.S calendarizada*/
+				$('#div_os').show();
+				$('#div_os_prestador').show();
+				$('#div_os_presupuesto').show();
+				$('#div_os_prestador').show();
+				$('#div_os_vehiculo').hide();
+				/*activa el combo de meses*/
+				$('#cbomes').attr('disabled',false);
+		break;
+	}
 }

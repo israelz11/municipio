@@ -629,7 +629,10 @@ th {
 .modal-footer .btn-group:last-child > button {
 	border-right: 0;
 }
-
+/*
+#ocultando div{
+	display:none;
+}*/
 
 }
 /* estilo para el div que se muestra una vez se abre la ventana modal 

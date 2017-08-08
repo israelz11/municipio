@@ -50,7 +50,7 @@
 		},
 		
 		Information: function(message, title, callback) {
-			if( title == null ) title = 'Información';
+			if( title == null ) title = 'Informaciï¿½n';
 			$.alerts._show(title, '\n'+message+'\n\n', null, 'information', function(result) {
 				if( callback ) callback(result);
 			});
@@ -168,9 +168,8 @@
 			
 			if( $.alerts.dialogClass ) $("#popup_container").addClass($.alerts.dialogClass);
 			
-			// IE6 Fix
-			var pos = ($.browser.msie && parseInt($.browser.version) <= 6 ) ? 'absolute' : 'fixed'; 
-			
+			// IE6 Fix Comentado por Abraham
+						
 			$("#popup_container").css({
 				position: pos,
 				zIndex: 99999,

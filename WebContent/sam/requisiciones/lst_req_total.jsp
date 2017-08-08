@@ -70,7 +70,7 @@ a:active {
     
     
     <div class="form-group">
-      <label class="control-label col-sm-1" for="email">Unidad:</label>
+      <label class="control-label col-sm-1" for="dependencia">Unidad:</label>
       <div class="col-sm-4">
         <sec:authorize ifNotGranted="ROLE_Sam_PRIVILEGIOS_VER_TODAS_LAS_UNIDADES">
 			      <c:out value="${nombreUnidad}"/>
@@ -91,14 +91,6 @@ a:active {
 			   		</select>
 			</sec:authorize>
 		</div>
-		<!--
-		<div class="col-md-5 col-md-offset-2">
-			<input type="checkbox" name="status" id="status" class="checkbox-inline" value="0" <c:if test="${fn:contains(status,'0')}" >checked</c:if>>&nbsp;Edición
-			<input type="checkbox" name="status" id="status" class="checkbox-inline"value="1" <c:if test="${fn:contains(status,'1')}" >checked</c:if>>&nbsp;Cerrado
-			<input type="checkbox" name="status" id="status" class="checkbox-inline" value="2" <c:if test="${fn:contains(status,'2')}" >checked</c:if>>&nbsp;En Proceso</td>
-			<input name="status" type="checkbox" id="status" class="checkbox-inline" value="4" <c:if test="${fn:contains(status,'4')}" >checked</c:if>>&nbsp;Canceladas
-	  		<input name="status" type="checkbox" id="status" class="checkbox-inline" value="5" <c:if test="${fn:contains(descripcion_estatus,'finiquitado')}">checked</c:if>>&nbsp;Finiquitadas
-		</div>  -->
 	</div>
 	 <div class="form-group">
       <label class="control-label col-sm-1" for="cbotipogasto">Tipo de gasto:</label>
@@ -113,7 +105,7 @@ a:active {
       			</c:forEach>
     	</select>
       </div>
-      <label for="cboFilterStatus" class="control-label col-md-offset-2 col-sm-1">Seleccione un Estatus</label>
+      <label for="cboFilterStatus" class="control-label col-md-offset-1 col-md-2">Seleccione un Estatus</label>
       <div class="col-sm-2">
 	  	<select class="selectpicker form-control input-sm m-b" name="cboFilterStatus" id="cboFilterStatus" data-live-search="true" multiple data-style="btn-primary">
         	<optgroup label="">
@@ -133,25 +125,19 @@ a:active {
 	<div class="form-group">
       <label class="control-label col-sm-1" for="email">Beneficiario:</label>
       <div class="col-sm-4">
-     	
-      
-      	<select class="selectpicker form-control input-sm" data-live-search="true" style="width:100%" id="cboSearch" name="cboSearch" title="Seleccione un Beneficiario...">
+     	<select class="selectpicker form-control input-sm" data-live-search="true" style="width:100%" id="cboSearch" name="cboSearch" title="Seleccione un Beneficiario...">
       	<c:forEach items="${clv_benefi}" var="item" varStatus="status">
         	      	<option value='<c:out value="${item.CLV_BENEFI}"/>'
         	      	 	<c:if test='${item.CLV_BENEFI==cboSearch}'>selected</c:if>><c:out value='${item.NCOMERCIA}'/>
         	      	</option>
       				  	      	
         </c:forEach>    
-      
-        <!-- 
-        <option value="0066">MARY VELAZCO BERNAL</option>>
-        -->
-      	 </select>
+        </select>
 	  </div>
-       <div class="col-sm-4 col-md-offset-2">
-      	<button type="button" class="btn btn-buscar btn-md" name="btnBuscar" id="btnBuscar" onClick="getListaReq()">Buscar</button>
-		<button type="button" class="btn btn-imprimir btn-md"  name="cmdpdf2" id="cmdpdf2">Imprimir...</button>
+       <div class="col-md-4 col-md-offset-3">
+       		<button type="button" class="btn btn-buscar col-md-4" name="btnBuscar" id="btnBuscar" onClick="getListaReq()">Buscar</button>
       </div>
+      <!--  -->
     </div> 
 	<div class="form-group">
       <label class="control-label col-sm-1" for="email">Fecha:</label>
@@ -161,7 +147,11 @@ a:active {
       <div class="col-sm-2">
       	<input placeholder="Hasta" name="fechaFinal" type="text" id="fechaFinal" class="form-control input-sm" value="<c:out value='${fechaFinal}'/>"  maxlength="10">
       </div>
+       <div class="col-md-4 col-md-offset-3">
+       		<button type="button" class="btn btn-imprimir col-md-4"  name="cmdpdf2" id="cmdpdf2">Imprimir...</button>
+      </div>
     </div> 
+    
 	<div class="form-group">
       <label class="control-label col-sm-1" for="email">Requisicion:</label>
       <div class="col-sm-2">
