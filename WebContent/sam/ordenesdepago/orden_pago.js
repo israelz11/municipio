@@ -12,8 +12,8 @@ $(document).ready(function(){
     }; 
 	
 	$('#forma').submit(function(){
-		$(this).ajaxSubmit(options);
-		return false;
+	$(this).ajaxSubmit(options);
+	return false;
 	});
 	
   $('#importeRetencion').click(function (){
@@ -671,7 +671,9 @@ function buscarOrden( idOrden ) {
 
  function regresar(){
     $('#tabsOrdenesEnca').hide(); 
-	$('#listaOrdenesPendientes').show();		
+	$('#listaOrdenesPendientes').show();
+	$('#DivOPResults').show();	
+	$('#DivHeadDependency').show();	
 	limpiarForma();
 	llenarTablaDeOrdenes();
  }
@@ -713,7 +715,9 @@ function buscarOrden( idOrden ) {
 	$('#cve_op').attr('value','');
 	$('#accion').attr('value','');
     $('#tabsOrdenesEnca').show(); 
+	$('#DivOPResults').hide();
 	$('#listaOrdenesPendientes').hide();
+	$('#DivHeadDependency').hide();
 	getDevenOP();
  }
 /*Fin Listado de ordenes*/

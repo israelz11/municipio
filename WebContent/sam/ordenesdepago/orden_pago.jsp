@@ -45,7 +45,7 @@
 <!--  <link rel="stylesheet" href="../../include/css/css/css3-buttons.css" type="text/css" media="screen">  -->
 <link rel="stylesheet" href="../../include/css/tiptip.css" type="text/css"  media="screen">
 <script src="../../include/css/jquery.tiptip.js"></script>
-<link rel="stylesheet" href="../../include/css/bootstrap-3.3.7.css" type="text/css">
+<link rel="stylesheet" href="../../include/css/bootstrap-3.3.7.css?x=<%=System.currentTimeMillis()%>" type="text/css">
 <script src="../../include/js/bootstrap-3.3.7.js"></script>
 
 <link rel="stylesheet" href="../../include/css/bootstrap2.css" type="text/css"/>
@@ -92,7 +92,8 @@ a:active {
 <input type="hidden" name="id_ordenDetalle" id="id_ordenDetalle">
 
 <h1 class="h1-encabezado">Ordenes de Pago - Captura de Ordenes de Pago</h1>
-<div class="well">
+
+<div id="DivHeadDependency" class="well">
 	<div class="form-group">
 		<label for="cbUnidad" class="control-label col-md-2 col-md-offset-1">Unidad administrativa:</label>
 		<div class="col-md-3">	
@@ -109,13 +110,10 @@ a:active {
           		</select>
         	</sec:authorize>
        </div>
-       <div class="form-group">
-       <div class="col-md-offset-2 col-md-4">
-		<div style="display:">
-          		<!-- <button name="btnNuevaOp" id="btnNuevaOp" onClick="nuevaOp();limpiarForma();" type="button" class="button blue middle"><span class="label" style="width:150px">Nueva Orden de Pago</span></button> -->
-          		<input class="btn btn-info btn-sm" name="btnNuevaOp" id="btnNuevaOp" onClick="nuevaOp();limpiarForma();"  value="Nueva Orden de Pago" style="width:150px" type="button">
-          		<button class="btn btn-cerrar btn-sm" name="btnNuevaOp" id="btnNuevaOp" onClick="nuevaOp();limpiarForma();" value="Nueva Orden" style="width:150px">Nueva Orden de Pago</button>
-          		
+       <div class="col-md-3 form-group">
+       <div class="col-md-10">
+		      <div>
+          		<button class="btn btn-primary" name="btnNuevaOp" id="btnNuevaOp" onClick="nuevaOp();limpiarForma();" value="Nueva Orden" style="width:100%">Nueva Orden de Pago</button>
           </div>
         </div>   
 		</div>
@@ -125,9 +123,9 @@ a:active {
 	<br/>
 
 </div><!-- Cierra el WELL -->
-	<div class="form-gorup">
-		<table border="0" cellpadding="0" cellspacing="0" class="table" width="100%" id="listaOrdenes">
-        <thead class="thead-inverse input-sm">
+	<div id="DivOPResults" class="form-gorup">
+		<table border="0" class="table table-hover" id="listaOrdenes" style="width:100%">
+        <thead>
         <tr>
           <th width="5%" height="20">Numero</th>
           <th width="17%" >Tipo</th>
@@ -151,41 +149,44 @@ a:active {
     <li ><a href="#tabsVal">Vales</a></li>
   </ul>
     <div id="tabsCabe" >
-      <table width="100%" border="0"  align="center" cellpadding="0" cellspacing="0" class="formulario">
-              <tr >
-                <th height="14">&nbsp;</th>
-                <td ></td>
-              </tr>
-              <tr >
-                <th width="14%" height="30">No. Orden:</th>
-                <td width="86%" ><div id="NoOrden">&nbsp;</div></td>
-              </tr>
-              <tr >
-                <th height="30">*Tipo:</th>
-                <td>
-                <div class="styled-select">
-                <select name="xTipo" class="comboBox" id="xTipo"  onChange="cambiarModoDetalle()" style="width:222px">
-                  <c:forEach items="${tipoDocumentosOp}" var="item" varStatus="status">
-                    <option value="<c:out value='${item.ID_TIPO_ORDEN_PAGO}'/>">
-                      <c:out value="${item.DESCRIPCION}"/>
-                      </option>
-                    </c:forEach>
-                  </select>
-                  </div>
-                  </td>
-              </tr>
-        <tr >
-          <th height="30">*Tipo de gasto:</th>
-          <td>
-          <div class="styled-select">
-          <select name="tipoGasto" class="comboBox" id="tipoGasto" style="width:445px">
+      <form class="form-horizontal">
+        <!-- Numero de Orde de Pago -->
+        <div class="form-group">
+          <div class="col-sm-3 control-label">No. Orden:</div>
+          <div class="col-sm-4 form-group">
+            <div id="NoOrden">&nbsp;</div>
+          </div>
+        </div>
+        <!-- Tipo de Orden de Pago -->
+        <div class="form-group">
+          <div class="col-sm-3 control-label">*Tipo:</div>
+          <div class="col-sm-4 form-group">
+              <select name="xTipo" class="form-control" id="xTipo"  onChange="cambiarModoDetalle()" style="width:222px">
+                <c:forEach items="${tipoDocumentosOp}" var="item" varStatus="status">
+                  <option value="<c:out value='${item.ID_TIPO_ORDEN_PAGO}'/>">
+                    <c:out value="${item.DESCRIPCION}"/>
+                    </option>
+                  </c:forEach>
+              </select>
+          </div>
+        </div>
+        <!-- Tipo de Orden de Pago -->
+        <div class="form-group">
+          <div class="col-sm-3 control-label">*Tipo de Gasto:</div>
+          <div class="col-sm-4 form-group">
+              <select name="tipoGasto" class="form-control" id="tipoGasto" style="width:445px">
                   <c:forEach items="${tipoGastos}" var="item" varStatus="status">                  
                     <option value="<c:out value='${item.ID}'/>"><c:out value="${item.RECURSO}"/></option>
                     </c:forEach>
-                  </select>
-          </div>        
-          </td>
-        </tr>
+              </select>
+          </div>
+        </div>
+
+      </form>
+
+
+      <table width="100%" border="0"  align="center" cellpadding="0" cellspacing="0" class="formulario">
+              
         <tr id="fila_contrato">
           <th height="30">Número de Contrato:</th>
           <td  ><input name="txtnumcontrato" disabled  type="text"  class="input" id="txtnumcontrato" value="" maxlength="30" style="width:222px; background:#C0C0C0" onBlur="getProveedor()" />
@@ -245,16 +246,16 @@ a:active {
             <tr>
                 <td><div class="buttons tiptip">
 					<!-- <button name="cmdregresar" id="cmdregresar" onClick="regresar()" title="Volver al inicio para crear nueva Orden de Pago por unidad adm." type="button" class="btn tn-default"><span class="label" style="width:100px">Regresar</span></button> -->
-					<input class="btn btn-info btn-sm" name="cmdregresar" id="cmdregresar" onClick="regresar()"  value="Regresar" style="width:100px" type="button">
+					<input class="btn btn-default" name="cmdregresar" id="cmdregresar" onClick="regresar()"  value="Regresar" style="width:100px" type="button">
                 </div></td>
                 
                 <td><div class="buttons tiptip">
 					<!--<button name="xGrabar" id="xGrabar" onClick="limpiarForma()" title="Limpia valores para continuar con nueva Orden de Pago." type="button" class="btn btn-info"><span class="label" style="width:100px">Nuevo</span></button>-->
-					<input class="btn btn-info btn-sm" name="xGrabar" id="xGrabar"  value="Nuevo" onClick="limpiarForma()"  style="width:100px" type="button">
+					<input class="btn btn-primary" name="xGrabar" id="xGrabar"  value="Nuevo" onClick="limpiarForma()"  style="width:100px" type="button">
                 </div></td>
                 <td><div class="buttons tiptip">
                 		
-                <button class="btn btn-cerrar btn-sm" name="btnCerrar" id="btnCerrar" value="Cerrar" onClick="cerrarOrden()"  style="width:100px">
+                <button class="btn btn-danger" name="btnCerrar" id="btnCerrar" value="Cerrar" onClick="cerrarOrden()"  style="width:100px">
                        	<!-- <span class="glyphicon glyphicon-search"></span> Buscar  -->Cerrar  
                 </button>
 					<!-- <button name="btnCerrar" id="btnCerrar" onClick="cerrarOrden()" title="Cierra para comprometer el importe de la Orden de Pago." type="button" class="btn btn-cerrar"><span class="label" style="width:100px">Cerrar</span></button> -->
