@@ -50,7 +50,7 @@
 </head>
 <body>
 <form name="frmcontraseña" action="" method="get">
-<h1>&nbsp;Requisiciones - Captura de Requisiciones, Ordenes de Trabajo y Ordenes de Servicio</h1>
+<h1 class="h1-encabezado">&nbsp;Requisiciones - Captura de Requisiciones, Ordenes de Trabajo y Ordenes de Servicio</h1>
 
 
 
