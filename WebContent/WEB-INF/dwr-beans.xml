@@ -493,7 +493,6 @@
 			<dwr:include method="eliminarRetenciones" />
 			<dwr:include method="getRetenciones" />
 			<dwr:include method="guardarComprobacionVale" />
-			<dwr:include method="guardarComprobacionVale" />
 			<dwr:include method="getListaVales" />
 			<dwr:include method="getValesDisponibles" />
 			<dwr:include method="eliminarVales" />

@@ -6756,3 +6756,17 @@ button.close {
   }
 }
 /*# sourceMappingURL=bootstrap.css.map */
+
+.control-label
+{
+	font-weight: bold;
+    text-align: right;
+    padding-top: 5px;
+}
+.row {
+	background: inherit;
+}
+.ui-widget-content
+{
+	background: inherit;
+}
