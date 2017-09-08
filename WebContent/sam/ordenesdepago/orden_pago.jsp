@@ -12,10 +12,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-
-
-
-<link href="../../include/css/estilosam.css" rel="stylesheet" type="text/css" />
 <link href="../../include/js/autocomplete/jquery.autocomplete.css" rel="stylesheet" type="text/css" />
 <link type="text/css" href="../../include/css/black-tie/jquery-ui-1.7.3.custom.css" rel="stylesheet" />	
 <link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css">
@@ -46,9 +42,11 @@
 <link rel="stylesheet" href="../../include/css/tiptip.css" type="text/css"  media="screen">
 <script src="../../include/css/jquery.tiptip.js"></script>
 <link rel="stylesheet" href="../../include/css/bootstrap-3.3.7.css?x=<%=System.currentTimeMillis()%>" type="text/css">
-<script src="../../include/js/bootstrap-3.3.7.js"></script>
+<link rel="stylesheet" href="../../include/css/bootstrap2.css?=<%=System.currentTimeMillis()%>" type="text/css"/>
+<link rel="stylesheet" href="../../include/css/style-tabs.css" type="text/css"/>
+<script rel="stylesheet" src="../../include/js/bootstrap-3.3.7.js" type="text/css"></script>
 
-<link rel="stylesheet" href="../../include/css/bootstrap2.css" type="text/css"/>
+
 <link rel="stylesheet" href="../../include/css/sweet-alert.css" type="text/css">
 <script src="../../include/js/sweet-alert.js"></script>
 
@@ -65,6 +63,9 @@ a:hover {
 }
 a:active {
 	text-decoration: none;
+}
+.ui-widget-content{
+  border: none;
 }
 </style>
 </head>
@@ -95,7 +96,7 @@ a:active {
 
 <div id="DivHeadDependency" class="well">
 	<div class="form-group">
-		<label for="cbUnidad" class="control-label col-md-2 col-md-offset-1">Unidad administrativa:</label>
+		<div class="col-sm-2 col-md-offset-1 control-label">Unidad administrativa:</div>
 		<div class="col-md-3">	
 		    <sec:authorize ifNotGranted="ROLE_Sam_PRIVILEGIOS_VER_TODAS_LAS_UNIDADES">
       			<c:out value="${nombreUnidad}"/><input type="hidden" name="cbUnidad" id="cbUnidad" value='<c:out value="${idUnidad}"/>' />
@@ -139,8 +140,113 @@ a:active {
          </tbody>
         </table>
 	</div>    
-<div id="tabsOrdenesEnca"  >
-<div id="tabsOrdenes"  >
+  <div class="col-sm-12">
+    <!-- Tabs para Ordenes de Pago-->
+    <div class="panel with-nav-tabs panel-primary">
+        <div class="panel-heading">
+          <ul class="nav nav-tabs responsive" id="tab_requi" name="tab_requi">
+                <li class="active"><a href="#tabsCabe" data-toggle="tab">Información general</a></li>
+                <li><a href="#tabsCon" data-toggle="tab">Conceptos</a></li>
+                <li><a href="#tabsRet" data-toggle="tab">Retenciones</a></li>
+                <li><a href="#tabsDoc" data-toggle="tab">Anexos</a></li>
+                <li><a href="#tabsVal" data-toggle="tab">Vales</a></li>
+            </ul>
+        </div>
+        <div class="panel-body">
+          <div class="tab-content">
+            <!--Tab Encabezado-->
+              <div class="tab-pane fade in active" id="tabsCabe">
+                  <form class="form-horizontal">
+                    <!-- Numero de Orde de Pago -->
+                    <div class="form-group" style="padding-bottom:15px;padding-top: 10px;">
+                      <div class="col-sm-3 control-label">No. Orden:</div>
+                      <div class="col-sm-9">
+                        <div id="NoOrden">&nbsp;</div>
+                      </div>
+                    </div>
+                    <!-- Tipo de Orden de Pago -->
+                    <div class="form-group">
+                      <div class="col-sm-3 control-label">*Tipo:</div>
+                      <div class="col-sm-9 form-group">
+                          <select name="xTipo" class="form-control" id="xTipo"  onChange="cambiarModoDetalle()" style="width:222px">
+                            <c:forEach items="${tipoDocumentosOp}" var="item" varStatus="status">
+                              <option value="<c:out value='${item.ID_TIPO_ORDEN_PAGO}'/>">
+                                <c:out value="${item.DESCRIPCION}"/>
+                                </option>
+                              </c:forEach>
+                          </select>
+                      </div>
+                    </div>
+                    <!-- Tipo de Orden de Pago -->
+                    <div class="form-group">
+                      <div class="col-sm-3 control-label">*Tipo de Gasto:</div>
+                      <div class="col-sm-9 form-group">
+                          <select name="tipoGasto" class="form-control" id="tipoGasto" style="width:445px">
+                              <c:forEach items="${tipoGastos}" var="item" varStatus="status">                  
+                                <option value="<c:out value='${item.ID}'/>"><c:out value="${item.RECURSO}"/></option>
+                                </c:forEach>
+                          </select>
+                      </div>
+                    </div>
+                    <!-- Contrato -->
+                    <div class="form-group" style="display: none;">
+                      <div class="col-sm-3 control-label">Numero de Contrato:</div>
+                      <div class="col-sm-9 form-group">
+                          <input name="txtnumcontrato" disabled  type="text"  class="input" id="txtnumcontrato" value="" maxlength="30" style="width:222px; background:#C0C0C0" onBlur="getProveedor()" />
+                          <img src="../../imagenes/buscar.png" alt="Mostrar presupuesto" name="img_contrato" width="22" height="22" id="img_contrato" style="cursor:pointer" align="absmiddle"/>
+                          <img src="../../imagenes/cross2.png" id="img_quitar_contrato" width="16" height="16" alt="Quitar contrato" title="Quitar contrato" align="absmiddle" style="cursor:pointer">
+                          <input name="CVE_CONTRATO" type="hidden"  id="CVE_CONTRATO" size="8" maxlength="6" readonly value="0" />
+                          <input name="CLV_PARBIT" type="hidden"  id="CLV_PARBIT" size="8" maxlength="6" readonly value="" />
+                          <input name="CID_PROYECTO" type="hidden"  id="CID_PROYECTO" size="8" maxlength="6" readonly value="" />
+                          <input name="CCLV_PARTID" type="hidden"  id="CCLV_PARTID" size="8" maxlength="6" readonly value="" />
+                          <input name="CCLV_BENEFI" type="hidden"  id="CCLV_BENEFI" size="8" maxlength="6" readonly value="" />
+                      </div>
+                    </div>
+                  <!--Periodo-->
+                  <div class="form-group">
+                      <div class="col-sm-3 control-label">*Periodo:</div>
+                      <div class="col-sm-9 form-group">
+                          <select name="cbomes" class="form-control" id="cbomes" style="width:111px">
+                          <c:forEach items="${meses}" var="item" varStatus="status">
+                            <option value="<c:out value="${item.mes}"/>">
+                            <c:out value="${item.DESCRIPCION}"/>
+                          </c:forEach>
+                        </select>
+                      </div>
+                  </div>
+
+                  <!--Fecha-->
+                  <div class="form-group">
+                      <div class="col-sm-3 control-label">*Fecha:</div>
+                      <div class="col-sm-9 form-group">
+                          <input name="fecha" type="text" class="form-control" id="fecha" value="" style="width:111px" maxlength="10"/>
+                          <input name="fecha2" type="hidden" class="input" id="fecha2" value=<%=new java.util.Date()%> style="width:111px" maxlength="10"/>
+                      </div>
+                  </div>
+
+                  <!--Fecha-->
+                  <div class="form-group">
+                      <div class="col-sm-3 control-label">Genera IVA:</div>
+                      <div class="col-sm-9 form-group">
+                          <input name="xImporteIva"  type="text"  class="form-control" id="xImporteIva" value="0" maxlength="30" onkeypress=" return keyNumbero( event );" style="width:111px" />
+                      </div>
+                  </div>
+
+                  </form>
+              </div>
+
+              <!--Tab Conceptos-->
+              <div class="tab-pane" id="tabsCon">
+
+              </div>
+          </div>
+        </div>
+    </div>
+  </div>
+<!--Fin Tabs-->
+
+<div id="tabsOrdenesEnca">
+<div id="tabsOrdenes">
   <ul>
     <li ><a href="#tabsCabe">Cabecera</a></li>
     <li ><a href="#tabsCon">Conceptos</a> </li>
@@ -149,78 +255,13 @@ a:active {
     <li ><a href="#tabsVal">Vales</a></li>
   </ul>
     <div id="tabsCabe" >
-      <form class="form-horizontal">
-        <!-- Numero de Orde de Pago -->
-        <div class="form-group">
-          <div class="col-sm-3 control-label">No. Orden:</div>
-          <div class="col-sm-4 form-group">
-            <div id="NoOrden">&nbsp;</div>
-          </div>
-        </div>
-        <!-- Tipo de Orden de Pago -->
-        <div class="form-group">
-          <div class="col-sm-3 control-label">*Tipo:</div>
-          <div class="col-sm-4 form-group">
-              <select name="xTipo" class="form-control" id="xTipo"  onChange="cambiarModoDetalle()" style="width:222px">
-                <c:forEach items="${tipoDocumentosOp}" var="item" varStatus="status">
-                  <option value="<c:out value='${item.ID_TIPO_ORDEN_PAGO}'/>">
-                    <c:out value="${item.DESCRIPCION}"/>
-                    </option>
-                  </c:forEach>
-              </select>
-          </div>
-        </div>
-        <!-- Tipo de Orden de Pago -->
-        <div class="form-group">
-          <div class="col-sm-3 control-label">*Tipo de Gasto:</div>
-          <div class="col-sm-4 form-group">
-              <select name="tipoGasto" class="form-control" id="tipoGasto" style="width:445px">
-                  <c:forEach items="${tipoGastos}" var="item" varStatus="status">                  
-                    <option value="<c:out value='${item.ID}'/>"><c:out value="${item.RECURSO}"/></option>
-                    </c:forEach>
-              </select>
-          </div>
-        </div>
-
-      </form>
-
+      
 
       <table width="100%" border="0"  align="center" cellpadding="0" cellspacing="0" class="formulario">
               
-        <tr id="fila_contrato">
-          <th height="30">Número de Contrato:</th>
-          <td  ><input name="txtnumcontrato" disabled  type="text"  class="input" id="txtnumcontrato" value="" maxlength="30" style="width:222px; background:#C0C0C0" onBlur="getProveedor()" />
-            <img src="../../imagenes/buscar.png" alt="Mostrar presupuesto" name="img_contrato" width="22" height="22" id="img_contrato" style="cursor:pointer" align="absmiddle"/>
-            <img src="../../imagenes/cross2.png" id="img_quitar_contrato" width="16" height="16" alt="Quitar contrato" title="Quitar contrato" align="absmiddle" style="cursor:pointer">
-            <input name="CVE_CONTRATO" type="hidden"  id="CVE_CONTRATO" size="8" maxlength="6" readonly value="0" />
-            <input name="CLV_PARBIT" type="hidden"  id="CLV_PARBIT" size="8" maxlength="6" readonly value="" />
-            <input name="CID_PROYECTO" type="hidden"  id="CID_PROYECTO" size="8" maxlength="6" readonly value="" />
-            <input name="CCLV_PARTID" type="hidden"  id="CCLV_PARTID" size="8" maxlength="6" readonly value="" />
-            <input name="CCLV_BENEFI" type="hidden"  id="CCLV_BENEFI" size="8" maxlength="6" readonly value="" />
-            </td>
-        </tr>
-        <tr >
-          <th height="30">*Periodo:</th>
-          <td>
-          <div class="styled-select">
-          <select name="cbomes" class="comboBox" id="cbomes" style="width:111px">
-            <c:forEach items="${meses}" var="item" varStatus="status">
-              <option value="<c:out value="${item.mes}"/>">
-              <c:out value="${item.DESCRIPCION}"/>
-            </c:forEach>
-          </select>
-          </div>
-          </td>
-        </tr>
-        <tr >
-          <th height="30">*Fecha:</th>
-          <td  ><input name="fecha" type="text" class="input" id="fecha" value="" style="width:111px" maxlength="10"/></td>
-          <td  ><input name="fecha2" type="hidden" class="input" id="fecha2" value=<%=new java.util.Date()%> style="width:111px" maxlength="10"/></td>
-        </tr>
-        
         <tr>
           <th height="30">Genera IVA:</th>
-          <td ><input name="xImporteIva"  type="text"  class="input" id="xImporteIva" value="0" maxlength="30" onkeypress=" return keyNumbero( event );" style="width:111px" /></td>
+          <td ></td>
         </tr>
         <tr >
           <th height="30">*Beneficiario:</th>
