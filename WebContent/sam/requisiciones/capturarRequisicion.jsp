@@ -13,14 +13,25 @@
 <link rel="stylesheet" href="../../include/css/bootstrap2.css" type="text/css"/>
 <link rel="stylesheet" href="../../include/css/style-tabs.css" type="text/css"/>
 
+<link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css">
 
 
 <script type="text/javascript" src="../../include/js/jquery-2.1.3.min.js"></script>
 <script type="text/javascript" src="../../include/js/bootstrap-3.3.7.js"></script>
-<script type="text/javascript" src="capturarRequisicion.js?x=<%=System.currentTimeMillis()%>"></script>
 
-<link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css">
-<script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>
+<link rel="stylesheet" href="../../include/css/sweetalert2.css" type="text/css">
+
+<!-- 
+
+<link rel="stylesheet" href="../../include/css/black-tie/jquery-ui-1.7.3.custom.css" type="text/css" />
+<link rel="stylesheet" href="../../include/css/css/css3-buttons.css" type="text/css" media="screen">
+<link rel="stylesheet" href="../../include/css/tiptip.css" type="text/css"  media="screen">
+<script src="../../include/css/jquery.tiptip.js"></script>
+
+<script type="text/javascript" src="../../include/js/jquery.qtip-1.0/jquery.qtip-1.0.0-rc3.min.js"></script>
+<script type="text/javascript" src="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.min.js"></script>
+<script type="text/javascript" src="../../include/js/componentes/componentes.js"></script>
+-->
 <script type="text/javascript" src="../../include/js/autocomplete/jquery.autocomplete.js"></script>
 <script type="text/javascript" src="../../include/js/autocomplete/autompleteVarios.js"></script>
 <script type="text/javascript" src="../../dwr/interface/"> </script>
@@ -28,22 +39,21 @@
 <script type="text/javascript" src="../../dwr/interface/controladorRequisicion.js"> </script>
 <script type="text/javascript" src="../../dwr/interface/controladorProyectoPartida.js"> </script>
 <script type="text/javascript" src="../../dwr/interface/autocompleteDiversosRemoto.js"> </script>   
-<script type="text/javascript" src="../../include/js/componentes/componentes.js"></script>
-<script type="text/javascript" src="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.min.js"></script>
+
+
 <script type="text/javascript" src="../../include/js/jquery.maxlength.js"></script>
 <script type="text/javascript" src="../../include/js/jquery.bestupper.min.js"></script>
 <script type="text/javascript" src="../../include/js/toolSam.js"></script>
-<script type="text/javascript" src="../../include/js/presupuesto/presupuesto.js"></script>
+<script type="text/javascript" src="../../include/js/presupuesto/presupuesto.js?x=<%=System.currentTimeMillis()%>"></script>
 <script type="text/javascript" src="../../include/js/otros/productos.js"></script>
-<link rel="stylesheet" href="../../include/css/black-tie/jquery-ui-1.7.3.custom.css" type="text/css" />
+<script type="text/javascript" src="../../include/js/sweetalert2.js"></script>
+<script type="text/javascript" src="capturarRequisicion.js?x=<%=System.currentTimeMillis()%>"></script>
 <link rel="stylesheet" href="../../include/js/autocomplete/jquery.autocomplete.css" type="text/css" />
+<script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js?x=<%=System.currentTimeMillis()%>"></script>
 
-<link rel="stylesheet" href="../../include/css/css/css3-buttons.css" type="text/css" media="screen">
-<link rel="stylesheet" href="../../include/css/tiptip.css" type="text/css"  media="screen">
-<script src="../../include/css/jquery.tiptip.js"></script>
-
-<script type="text/javascript" src="../../include/js/jquery.qtip-1.0/jquery.qtip-1.0.0-rc3.min.js"></script>
-
+<script type="text/javascript" src="../../include/css/bootstrap-datetimepicker-master/js/moment-with-locales-2.9.0.js"></script>
+<link rel="stylesheet" href="../../include/css/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker-4.15.35.css" type="text/css">
+<script type="text/javascript" src="../../include/css/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker-4.15.35.js"></script>
 
 
 <title>Cambiar contraseña</title>
@@ -60,7 +70,7 @@
 				<div class="col-md-12">
 					<div class="panel with-nav-tabs panel-primary">
 				    	<div class="panel-heading">
-				        	<ul class="nav nav-tabs responsive" id="tab_requi" name="tab_requi">
+				        	<ul class="nav nav-tabs responsive" id="tab_requi">
 				            	<li class="active"><a href="#tab1primary" data-toggle="tab">Información general</a></li>
 				                <li><a href="#tab2primary" data-toggle="tab">Lotes</a></li>
 				            </ul>
@@ -74,9 +84,9 @@
 						            <input type="hidden" id="CVE_REQ" value="<c:out value='${cve_req}'/>"/>
 						            <input type="hidden" id="CVE_CONCURSO" value="" />
 						            <input type="hidden" id="CVE_BENEFI" value="0" />
-						            <input type="hidden" id="MES" />
+						            <input type="hidden" id="MES"/>
 						            <input type="hidden" name="cbodependencia2" id="cbodependencia2" value='<c:out value="${idUnidad}"/>' />
-						            
+						            						            
 						            <div class="form-group row">
 										<label class="control-label col-sm-2" for="cbodependencia">* Unidad administrativa:</label>
 									    <div class="col-sm-5">
@@ -101,7 +111,7 @@
 									<div class="form-group row">
 										      <label class="control-label col-sm-2" for="txtrequisicion">*Requisición No:</label>
 										      <div class="col-sm-2">
-										      	<input placeholder="Requisición" type="text" value="" id="txtrequisicion" class="form-control sm" maxlength="16" onBlur="upperCase(this)"/>
+										      	<input placeholder="Requisición" type="text" value="" id="txtrequisicion" required class="form-control sm" maxlength="16" onBlur="upperCase(this)"/>
 										      </div>
 										      	<label class="control-label col-sm-1" for="txtfecha">*Fecha:</label>
 										      <div class="col-sm-2">
@@ -153,9 +163,9 @@
 											<div class="col-sm-2">
 												<input placeholder="Partida" type="text" id="txtpartida" name="txtpartida" class="form-control sm" maxlength="4"  onKeyPress=" return keyNumbero( event );"/>
 											</div>
-											<label class="control-label col-sm-1" for="cbomes">*Mes:</label>
+											<label class="control-label col-sm-1" for="cbomeses">*Mes:</label>
 											<div class="col-sm-2">
-												<select name="cbomes" class="form-control sm" id="cbomes">
+												<select name="cbomeses" class="form-control sm" id="cbomeses">
 									            	<option value="0">[Seleccione]</option>
 										                <c:forEach items="${mesRequisicion}" var="item" varStatus="status">
 										                <option value="<c:out value='${item.ID_MES}'/>" >
@@ -163,7 +173,7 @@
 									                </option>
 									                </c:forEach>
 									       		 </select>
-									       		 <button type="button" class="btn btn-info" id="cmdpresupuesto" name="cmdpresupuesto" onClick="muestraPresupuesto();">
+									       		 <button type="button" class="btn btn-info" id="cmdpresupuesto" name="cmdpresupuesto" onClick="muestraPresupuesto()">
       												<span class="glyphicon glyphicon-search"></span>
     											 </button>
 											</div>

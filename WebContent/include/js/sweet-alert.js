@@ -563,7 +563,7 @@
     }
 
     // Cancel button
-    modal.setAttribute('data-has-cancel-button', params.showCancelButton);
+    modal.setAttribute('data-has-cancel-button', params.showCancelButton); /*-----------------Ocultar el boton cancelar----------------*/
     if (params.showCancelButton) {
       $cancelBtn.style.display = 'inline-block';
     } else {

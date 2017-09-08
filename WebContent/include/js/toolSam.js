@@ -5,22 +5,6 @@ var row_color = "";
 
 
 
-
-/*funcion para obtener y seleccionar un contratos en los diversos modulos*/
-/*function getcontratoDocumento(numero, clave, tipo_gto, proyecto, clv_partid, clv_benefi){
-	$('#CVE_CONTRATO').attr('value', clave);
-	$('#txtnumcontrato').attr('value', numero);
-	$('#CCLV_PARBIT').attr('value', tipo_gto);
-	$('#CPROYECTO').attr('value', proyecto);
-	$('#CCLV_PARTID').attr('value', clv_partid);
-	$('#CLV_PARBIT').attr('value', tipo_gto);
-	$('#CCLV_BENEFI').attr('value', clv_benefi);
-	$('#img_quitar_contrato').attr('src', '../../imagenes/cross.png');
-	contrato = true;
-	_closeDelay();
-	$('#txtnumcontrato').focus();
-}*/
-
 function mostrarOpcionPDF(cve_op){
 	var html = '<table class="listas" border="0" align="center" cellpadding="1" cellspacing="2" width="405" >'+
 				'  <tr id="x1" onmouseover="color_over(\'x1\')" onmouseout="color_out(\'x1\')"> '+
@@ -52,17 +36,6 @@ function muestraVales(){
 	jWindow('<iframe width="750" height="350" name="ventanaVales" id="ventanaVales" frameborder="0" src="../../sam/consultas/muestra_vales.action?idVale='+$('#CVE_VALE').attr('value')+'&idDependencia='+idDependencia+'&tipo_gto='+tipo_gto+'&clv_benefi='+clv_benefi+'&tipo_doc='+tipo_doc+'"></iframe>','Listado de Vales disponibles', '','Cerrar',1);
 }
 
-/*function muestraValesx(){
-	var idVale = $('#CVE_VALE').attr('value');
-	var tipo_gto = $('#tipoGasto').val();
-	if(typeof tipo_gto=='undefined') tipo_gto ="";
-	if($('#txtproyecto').attr('value')==''||$('#txtpartida').attr('value')=='')
-		$('#ID_PROYECTO').attr('value', '0');
-		idUnidad =0;
-	__listadoPresupuestoVale($('#ID_PROYECTO').attr('value'),$('#txtproyecto').attr('value'),$('#txtpartida').attr('value'), $('#cbomes').attr('value'), $('#tipoGasto').attr('value'), idUnidad, idVale);
-}*/
-
-
 function muestraContratos(){
 	var idDependencia = $('#unidad2').attr('value');
 	var num_contrato = $('#txtnumcontrato').attr('value');
@@ -91,15 +64,59 @@ function removerContrato(){
 	contrato = false;
 }
 
-/*funcion para el cambio de grupo de firmas*/
+
+/*********************************** funcion para el cambio de grupo de firmas 29/08/2017 ************************************************************/
 function cambiarGrupoFirmas(cve_doc, modulo){
-	jWindow('<iframe width="750" height="350" name="grupoFirmas" id="grupoFirmas" frameborder="0" src="../../sam/utilerias/cambiarFirmas.action?modulo='+modulo+'&cve_doc='+cve_doc+'"></iframe>','Cambiar grupo de firmas', '','Cerrar',1);
+	swal({
+		  title: 'Cambiar grupo de firmas',
+		  text: 'Seleccione el nuevo grupo de firma',
+		  html:
+			  '<iframe width="750" height="350" name="grupoFirmas" id="grupoFirmas" frameborder="0" src="../../sam/utilerias/cambiarFirmas.action?modulo='+modulo+'&cve_doc='+cve_doc+'"></iframe>',
+		  width: 800,
+		  padding: 10,
+		  animation: false
+		})
+	/*
+	$.alertable.prompt('Cambiar grupo de firmas ', {
+		
+	    prompt:
+	    	
+			
+	    }).then(function(data) {
+	    	console.log('Alert dismissed',data);
+	    });
+	//jWindow('<iframe width="750" height="350" name="grupoFirmas" id="grupoFirmas" frameborder="0" src="../../sam/utilerias/cambiarFirmas.action?modulo='+modulo+'&cve_doc='+cve_doc+'"></iframe>','Cambiar grupo de firmas', '','Cerrar',1);
+	*/
 }
 
 
 /*funcion para editar los documentos*/
 function abrirDocumento(){
-	jAlert('El modulo se encuentra desarrollado y no esta disponible por el momento', 'Advertencia');
+	//jAlert('El modulo se encuentra desarrollado y no esta disponible por el momento', 'Advertencia');
+	/*swal({
+		  title: 'El modulo no se encuentra desarrollado y no esta disponible por el momento',
+		  type: 'warning',
+		  html: $('<div>')
+		    .addClass('some-class')
+		    .text('Disculpe las molestias.'),
+		  animation: false,
+		  customClass: 'animated tada'
+		})*/
+	swal({
+		  title: 'El modulo no se encuentra desarrollado y no esta disponible por el momento!',
+		  text: 'Por modificaciones de lineamientos de la CONAC.',
+		  type: 'info',
+		  showConfirmButton: false,
+		  timer: 3000
+		}).then(
+		  function () {},
+		  // handling the promise rejection
+		  function (dismiss) {
+		    if (dismiss === 'timer') {
+		      console.log('Cierra a las 3 segundos')
+		    }
+		  }
+		)
 }
 
 
@@ -367,7 +384,7 @@ function _cambiarBeneficiarioRequisicion(cve_doc){
 		});
 	 
 }
-/*function para cambiar el usuario de un documento*/
+/************************************************ function para cambiar el usuario de un documento *********************************************************************************/
 function cambiarUsuarioDocumento(cve_doc, modulo, cve_pers){
 	
 	var smodulo = "";
@@ -385,48 +402,51 @@ function cambiarUsuarioDocumento(cve_doc, modulo, cve_pers){
 			$('input[name=chkrequisiciones]').each(function(){if($(this).val()==cve_doc) {chkNumReq.push($(this).attr('alt')); return false;} });
 			chkReq.push(cve_doc); 
 		}
-		
-		controladorListadoRequisicionesRemoto.getListUsuarios(cve_pers,{
-			callback:function(items) { 
-				if(items!=null) {
-					html = '<table width="500" border="0" cellspacing="0" cellpadding="0">'+
-						  '<tr>'+
-						  '	<td width="474"><span style="font-size:12px"><I><strong>Nota:</strong> Los documentos seleccionados se van a transferir a otro usario, esto puede hacer que deje de visualizarlos en los listados que le corresponden.</span></I></td>'+
-						  ' </tr>'+
-						  '<tr>'+
-								'<td height="20"><strong>'+((chkReq.length==1) ? 'Número de Requisición':'Grupo de Requisiciones:')+'</strong></td>'+
-						 '</tr>'+
-						 '<tr>'+
-								'<td height="20">'+((chkNumReq.length==0) ? 'CVE_REQ: '+cve_doc:chkNumReq)+'</td>'+
-						 '</tr>'+
-						  ' <tr>'+
-						  '<td><strong>Seleccione un usuario de destino:</strong></td>'+
-						  '</tr>'+
-						  '<tr>'+
-							'<td>'+
-							'<select id="cbousuarios" style="width:500px">'+items+
-						'	</select>'+
-						'	</td>'+
-						 ' </tr>'+
-						  '<tr>'+
-							'<td>&nbsp;</td>'+
-						'  </tr>'+
-						 ' <tr>'+
-						'	<td align="center"><input type="button" class="botones" value="Aplicar cambios"   id="cmdaplicar" style="width:100px"/> <input type="button" class="botones" value="Cancelar" id="cmdcancelar" onclick="$.alerts._hide();" style="width:100px"/></td>'+
-						'  </tr>'+
-						'</table>';
-						jWindow(html,'Mover documento a otro usuario', '','',0);
-						$('#cmdaplicar').click(function(event){_cambiarUsuarioRequisicion(chkReq,cve_doc);})
-						
-				}
-				
-			}
-			,
-				errorHandler:function(errorString, exception) { 
-				jError("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");   
-				}       	
-		});
-	}
+		var usuarios =$('#cbodependencia').attr('value');
+		 swal({
+			    title: 'Input with list',
+			    html: '<select id="cbousuarios" style="width:500px"></select>',
+			   
+			    
+			    showCancelButton: true
+			  }).then(function(result) {
+			    if (result) {
+			    	
+			      swal({
+			        type: 'success',
+			        html: 'You entered: <strong>' + result + '</strong>'
+			      });
+			    }
+			  });
+		/*
+		 var myArrayOfThings = [
+		                        { id: 1, name: 'Item 1' },
+		                        { id: 2, name: 'Item 2' },
+		                        { id: 3, name: 'Item 3' }
+		                    ];
+
+		                    var options = {};
+		                    $.map(myArrayOfThings,
+		                        function(o) {
+		                            options[o.id] = o.name;
+		                        });
+
+		                    swal({
+		                        title: 'My Title',
+		                        text: 'Please select an option',
+		                        input: 'select',
+		                        inputOptions: options,
+		                        showCancelButton: true,
+		                        animation: 'slide-from-top',
+		                        inputPlaceholder: 'Please select'
+		                    }).then(function (inputValue) {
+		                        if (inputValue) {
+
+		                            console.log(inputValue);
+
+		                        }
+		                    });*/
+	}/*Cierra el modulo para requisiciones*/
 	
 	if(modulo=='ped'){
 		var chkPed = [];
@@ -684,7 +704,8 @@ function _cambiarUsuarioOrdenPago(chkOp, cve_doc){
 
 
 
-/*funcion para el cambio de fecha y periodo*/
+/************************************** Funcion para el cambio de fecha y periodo ******************************************************************/
+/**************************************Submenu de opciones módulo Requisiciones ********************************************************************/
 function cambiarFechaPeriodo(cve_doc, modulo){
 	var smodulo = "";
 	if(modulo=='req') smodulo = "Requisiciones";
@@ -965,7 +986,8 @@ function _cambiarFechaPeriodoRequisicion(cve_doc){
 	});
 }
 
-/*funcion que sirve para mostrar el submenu de opciones de un asuario*/
+
+/***********************************funcion que sirve para mostrar el submenu de opciones********************************************************/
 function subOpAdm(modulo, cve_doc, cve_pers){
 	var titulo = "";
 	if(modulo=='req') titulo = 'Requisiciones';
@@ -973,7 +995,12 @@ function subOpAdm(modulo, cve_doc, cve_pers){
 	if(modulo=='op') titulo = 'Ordenes de Pago';
 	if(modulo=='val') titulo = 'Vales';
 	if(modulo=='con') titulo = 'Contrato';
-	jWindow('<iframe width="400" height="220" name="subMenuAdmon" id="subMenuAdmon" frameborder="0" src="../../sam/utilerias/sumenuAdmon.action?modulo='+modulo+'&cve_doc='+cve_doc+'&cve_pers='+cve_pers+'"></iframe>','Submenu de opciones módulo '+titulo, '','Cerrar',1);
+	swal({
+	    title: 'Submenu de opciones módulo: '+ titulo,
+	    width: 500,
+	    html:
+	       	'<iframe width="400" height="220" name="subMenuAdmon" id="subMenuAdmon" frameborder="0" src="../../sam/utilerias/sumenuAdmon.action?modulo='+modulo+'&cve_doc='+cve_doc+'&cve_pers='+cve_pers+'"></iframe>', 
+	   })
 }
 
 function ajustesImportes(cve_doc, modulo, num_doc)
@@ -1506,9 +1533,17 @@ function color_out(f){
 	row_color = "";
 }
 
-//funcion para mostrar la bitacora dependiendo el doc.
-function bitacoraDocumento(cve_doc, tipo){	
+//****************************************************** funcion para mostrar la bitacora dependiendo el doc. **************************************************//
+function bitacoraDocumento(cve_doc, tipo){	//Cambios para 24/08/2017
+	/*
 	jWindow('<iframe width="700" height="350" id="ventadaBitacora" frameborder="0" src="../../sam/consultas/muestraBitacora.action?cve_doc='+cve_doc+'&tipo_doc='+tipo+'"></iframe>','Bitacora de Movimientos', '','Cerrar',1);
+	*/
+	swal({
+	    title: 'Bitacora de Movimientos: ',
+	    width: 700,
+	    html:
+	    	'<iframe width="700" height="350" id="ventadaBitacora" frameborder="0" src="../../sam/consultas/muestraBitacora.action?cve_doc='+cve_doc+'&tipo_doc='+tipo+'"></iframe>', 
+	   })
 }
 /**funcion para agregar una fila a una tabla en especifico*/
 function appendNewRow(table, param){
@@ -1640,11 +1675,14 @@ function rellenaCeros(cad, lng){
 	 return result;
 }
 
+//--------------------Revisando por Abraham 23/08/2017----------------------------------
+
 function ShowDelay(titulo, mensaje){
 	 $("#dialog").remove();
 	if(typeof(mensaje)=='undefined'||mensaje=='') mensaje = 'Espere un momento porfavor...';
 	if(titulo=='undefined'||titulo=='') titulo = 'Procesando';
-	jWindow('<strong>&nbsp;<img src="../../imagenes/spinner.gif" width="32" height="32" align="absmiddle" /> '+mensaje+'</strong>', titulo, 0);
+	//jWindow('<strong>&nbsp;<img src="../../imagenes/spinner.gif" width="32" height="32" align="absmiddle" /> '+mensaje+'</strong>', titulo, 0);
+	
 }
 
 

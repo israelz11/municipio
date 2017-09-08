@@ -13,24 +13,23 @@
 <link rel="stylesheet" href="../../include/css/bootstrap-3.3.7.css" type="text/css">
 <link rel="stylesheet" href="../../include/css/bootstrap-select.css" type="text/css">
 <link rel="stylesheet" href="../../include/css/bootstrap2.css" type="text/css">
-<link rel="stylesheet" href="../../include/css/jquery.alertable.css" type="text/css">
-<link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css">
-
+<link rel="stylesheet" href="../../include/css/sweetalert2.css" type="text/css">
 
 
 <script type="text/javascript" src="../../include/js/jquery-2.1.3.min.js"></script>
 <script type="text/javascript" src="../../include/js/bootstrap-3.3.7.js"></script>
 <script type="text/javascript" src="../../include/js/bootstrap-select.js"></script>
-<script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>
-<script type="text/javascript" src="../../include/js/jquery.alertable.min.js"></script>
-<script type="text/javascript" src="../../include/js/jquery.alerts.js"></script>
+
+
+<script type="text/javascript" src="../../include/js/sweetalert2.js"></script>
+
 <script type="text/javascript" src="../../include/js/jquery-ui-1.12.1.js"></script>
 <script type="text/javascript" src="../../dwr/interface/controladorListadoRequisicionesRemoto.js"> </script>
 <script type="text/javascript" src="../../dwr/engine.js"></script>
 <script type="text/javascript" src="../../include/js/autocomplete/jquery.autocomplete.js"></script>
 <script type="text/javascript" src="../../include/js/autocomplete/autompleteVarios.js"></script>
 <script type="text/javascript" src="../../dwr/interface/autocompleteDiversosRemoto.js"> </script>
-<script type="text/javascript" src="../../include/js/toolSam.js"></script>
+<script type="text/javascript" src="../../include/js/toolSam.js?x=<%=System.currentTimeMillis()%>"></script>
 <script type="text/javascript" src="lst_req_total.js?x=<%=System.currentTimeMillis()%>"> </script>
 <link rel="stylesheet" href="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.css" type="text/css" />
 <link rel="stylesheet" href="../../include/js/autocomplete/jquery.autocomplete.css" type="text/css" />
@@ -270,7 +269,7 @@ a:active {
     <div class="container col-xs-1">
         <table width="389" border="0" cellspacing="0" cellpadding="0">
           <tr>
-           <c:if test="${fn:contains(status,'1')||fn:contains(status,'2')}">
+           <c:if test="${fn:contains(status,'1')||fn:contains(status,'2')||fn:contains(status,'9')}">
             <td width="129" bgcolor="#FFFFFF">
             	<input type="button"  class="btn btn-sm btn-warning" value="Aperturar" name="cmdaperturar" id="cmdaperturar" onClick="aperturarRequisiciones()" title="Apertura para edicion los documentos seleccionados" style="width:100px"/>
 				<!--	<button name="cmdaperturar" id="cmdaperturar" onClick="aperturarRequisiciones()" title="Apertura para edicion los documentos seleccionados" type="button" class="btn btn-sm btn-warning" style="width:100px">Aperturar</button>-->

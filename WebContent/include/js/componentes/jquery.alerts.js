@@ -25,7 +25,23 @@
 // is copyright 2008 A Beautiful Site, LLC. 
 //
 (function($) {
-	
+	navigator.sayswho= (function(){
+	    var ua= navigator.userAgent, tem, 
+	    M= ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+	    if(/trident/i.test(M[1])){
+	        tem=  /\brv[ :]+(\d+)/g.exec(ua) || [];
+	        return 'IE '+(tem[1] || '');
+	    }
+	    if(M[1]=== 'Chrome'){
+	        tem= ua.match(/\b(OPR|Edge)\/(\d+)/);
+	        if(tem!= null) return tem.slice(1).join(' ').replace('OPR', 'Opera');
+	    }
+	    M= M[2]? [M[1], M[2]]: [navigator.appName, navigator.appVersion, '-?'];
+	    if((tem= ua.match(/version\/(\d+)/i))!= null) M.splice(1, 1, tem[1]);
+	    return M.join(' ');
+	})();
+
+		console.log(navigator.sayswho);
 	$.alerts = {
 		
 		// These properties can be read/written by accessing $.alerts.propertyName from your scripts at any time
@@ -99,10 +115,10 @@
 				  '</div>');
 			if( $.alerts.dialogClass ) $("#popup_container").addClass($.alerts.dialogClass);
 			// IE6 Fix
-			var pos = ($.browser.msie && parseInt($.browser.version) <= 6 ) ? 'absolute' : 'fixed'; 
+			
 			var botones = "";
 			$("#popup_container").css({
-				position: pos,
+				position: fixed,
 				zIndex: 99999,
 				padding: 0,
 				margin: 0
@@ -168,8 +184,9 @@
 			
 			if( $.alerts.dialogClass ) $("#popup_container").addClass($.alerts.dialogClass);
 			
-			// IE6 Fix Comentado por Abraham
-						
+			// IE6 Fix
+			var pos = 'absolute'; //: 'fixed'; *************************************************************
+			
 			$("#popup_container").css({
 				position: pos,
 				zIndex: 99999,
@@ -320,7 +337,8 @@
 			if( left < 0 ) left = 0;
 			
 			// IE6 fix
-			if( $.browser.msie && parseInt($.browser.version) <= 6 ) top = top + $(window).scrollTop();
+			//if( $.browser.msie && parseInt($.browser.version) <= 11 ) top = top + $(window).scrollTop(); /***********************************************************/
+			top = top + $(window).scrollTop();
 			
 			$("#popup_container").css({
 				top: top + 'px',

@@ -41,7 +41,29 @@ $(document).ready(function() {
 	 $('#ui-datepicker-div').hide();
 	 $('#cbotipocontrato').change(function(event){ValidarTipoContrato();});
 	 ValidarTipoContrato();
+	 
+	 
 });
+function mostrarcerrar(){
+	cmdcerrar.style.display = '';
+}
+
+/****************Para ocultar un boton cuando no exista movimientos en el detalle de la tabla maestra****************************/
+function tabladetalles(){
+	var numFilas = $('#listaConceptos > tbody > tr').length;
+	
+	if (numFilas< 1){
+		//alert ( "hay filas en la tabla!!" );
+		//document.getElementById('#tbotones > tr > td > cmdcerrar').style.display = 'block';
+		alert('El numero de movientos es: ' + numFilas);
+		cmdcerrar.style.visibility  = 'visible'; 
+	}else
+		{
+		cmdcerrar.style.display = 'none'; // No ocupa espacio hidden
+		alert('El numero de movientos es: ' + numFilas);
+		//cmdcerrar.style.visibility  = 'hidden'; // No se ve
+		}
+}
 
 function subirArchivo(){
 	if($('#archivo').attr('value')==''||$('#CVE_CONTRATO').val()==null|| $('#CVE_CONTRATO').val()==0)
@@ -58,6 +80,7 @@ function showResponse(data)  {
  	if(data.mensaje){
 		CloseDelay("Archivo guardado con éxito");
 		mostrarDetallesArchivos();
+		mostrarcerrar()
 		//document.location = "cap_contratos.action?cve_contrato="+$('#CVE_CONTRATO').val();
 		$('#archivo').attr('value','');
 	}
@@ -184,7 +207,18 @@ function muestraPresupuesto(){
 }
 
 function cierraContrato(){
+	
+	
+	
+	$("#cmdcerrar").click(function() {
+		
+	 	
+	 });
+	/*
 	if(!cerrar) {jAlert('Es necesario que exista al menos un concepto de contrato para realizar esta operación','Advertencia'); return false;}
+	
+	
+	
 	var cve_contrato = $('#CVE_CONTRATO').attr('value');
 	jConfirm('¿Confirma que desea cerrar Contrato?', 'Confirmar', function (r){
 				if(r){
@@ -206,7 +240,7 @@ function cierraContrato(){
 								}
 					});
 				}
-			});s
+			});*/
 }
 
 function guardaContrato(){

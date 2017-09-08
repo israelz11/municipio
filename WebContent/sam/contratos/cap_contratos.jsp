@@ -62,7 +62,7 @@ a:active {
 </head>
 
 <body>
-<form name="forma" id="forma" method="post" enctype="multipart/form-data">
+<form name="forma" id="forma"  method="post" enctype="multipart/form-data">
 <input type="hidden" name="clavePedido" id="clavePedido"  value="">
 <h1>&nbsp;Contrato - Captura de Contrato 
   <c:out value='${modelo.NUM_REQ}'/></h1>
@@ -188,7 +188,7 @@ a:active {
                   </tr>
                   <tr>
                     <td width="196">&nbsp;</td>
-                    <td><table width="380" border="0" cellspacing="0" cellpadding="0">
+                    <td><table width="380" id="tbotones" border="0" cellspacing="0" cellpadding="0">
                       <tr>
                         <td><div class="buttons tiptip">
                           <button name="cmdcerrar" id="cmdcerrar" disabled="disabled" title="Cierra para comprometer el Contrato" type="button" class="button red middle"><span class="label" style="width:100px">Cerrar</span></button>

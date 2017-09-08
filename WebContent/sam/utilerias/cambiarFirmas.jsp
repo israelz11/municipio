@@ -9,16 +9,21 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Bitacora de Movimientos</title>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
-<link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css">
+
+<link rel="stylesheet" href="../../include/css/sweet-alert.css" type="text/css"/>
+
 <link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css"/>
 <script type="text/javascript" src="../../include/js/jquery-1.3.2.min.js"></script>
 <script type="text/javascript" src="../../include/js/toolSam.js"></script>
 <script type="text/javascript" src="../../include/js/componentes/componentes.js"></script>
-<script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>
+
+<script type="text/javascript" src="../../include/js/sweet-alert.js"></script>
+
+
 <script type="text/javascript" src="../../dwr/engine.js"> </script>
 <script type="text/javascript" src="../../dwr/interface/controladorCambiarGrupoFirmaRemoto.js"> </script>
 <script language="javascript">
-<!--
+
 function adminFunction(cve_doc, cve_pers, modulo, fn) {
 	switch(fn)
 	{
@@ -33,25 +38,33 @@ function enviar(){
 }
 
 function cambiarFirma(){
-	if($('#grupo').attr('value')=='0'){jAlert('El grupo de firmas seleccionado no es válido', 'Advertencia'); return false;}
-	jConfirm('¿Confirma que desea cambiar el grupo de firma actual del documento?','Confirmar', function(r){
-			if(r){
-				ShowDelay('Cambiando grupo de firmas');
-				controladorCambiarGrupoFirmaRemoto.cambiarGrupo($('#cve_doc').attr('value'), $('#modulo').attr('value'), $('#grupo').attr('value'), {
-					callback: function(items){
-						jWindow('Grupo de firmas cambiados con éxito', 'Información','','',0);
-						setTimeout('enviar();', 1500);
-						
-					},errorHandler:function(errorString, exception) { 
-								   jError("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");    
-								}
-				
-				});
-			}
+	
+	swal({
+		  title: "Estas seguro?",
+		  width: 350,
+		  padding: 100,		  
+		  text: "Proceso de actualizacion, para cambio de firma de un documento!",
+		  type: "warning",
+		  showCancelButton: true,
+		  confirmButtonColor: "#DD6B55",
+		  confirmButtonText: "Si, Cambiar!",
+		  cancelButtonText: "No, Cancelar!",
+		  closeOnConfirm: false,
+		  closeOnCancel: false
+		  
+		},
+		function(isConfirm){
+		  if (isConfirm) {
+		    swal("Cambio de firma!", "Cambiando firma el documento: " + $('#cve_doc').attr('value')+".", "success");
+		    controladorCambiarGrupoFirmaRemoto.cambiarGrupo($('#cve_doc').attr('value'), $('#modulo').attr('value'), $('#grupo').attr('value'));
+		    
+		  } else {
+			    swal("Proceso Cancelado", "Tu documento: "+ $('#cve_doc').attr('value')+ " no se cambio de firma: " , "error");
+		  }
 		});
 }
 
--->
+
 </script>
 
 <style type="text/css">

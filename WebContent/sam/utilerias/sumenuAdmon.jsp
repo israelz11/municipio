@@ -10,15 +10,20 @@
 <title>Bitacora de Movimientos</title>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
 <link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css"/>
-<link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css">
+<link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css"/>
+<link rel="stylesheet" href="../../include/css/sweetalert2.css" type="text/css"/>
+
 <script type="text/javascript" src="../../include/js/jquery-1.3.2.min.js"></script>
 <script type="text/javascript" src="../../include/js/toolSam.js"></script>
 <script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>
+
+<script type="text/javascript" src="../../include/js/sweetalert2.js"></script>
+
 <script type="text/javascript" src="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.min.js"></script>
 <script type="text/javascript" src="../../dwr/interface/controladorListadoRequisicionesRemoto.js"> </script>
 <script type="text/javascript" src="../../dwr/engine.js"></script>
 <script language="javascript">
-<!--
+
 $(document).ready(function() {
 		/*solo si es pedido*/
 		/*if( window.parent.modulo=='Pedidos'){
@@ -58,7 +63,7 @@ function adminFunction(cve_doc, modulo, fn, cve_pers) {
 	}
 }
 
-
+/******************************************************* Cambio de Fechas ********************************************************************/
 function cambiarFecha2(cve_doc, modulo){
 	var smodulo = "";
 	if(modulo=='req') smodulo = "Requisiciones";
@@ -98,11 +103,11 @@ function cambiarFecha2(cve_doc, modulo){
 		});
 	}
 }
-
+/*********************************************/
 function _cambiarFechaIngresoRequisicion(cve_doc){
 	var periodo = $('#cboperiodo').val();
 	var fecha = $('#txtfechaactual').attr('value');
-	
+	alert("demo de cambio en requisicion..........");
 	jConfirm('¿Confirma que desea cambiar la fecha de ingreso del documento actual?','Confirmar', function(r){
 		if(r){
 			_closeDelay();
@@ -121,7 +126,6 @@ function _cambiarFechaIngresoRequisicion(cve_doc){
 }
 
 
--->
 </script>
 
 <style type="text/css">

@@ -84,49 +84,34 @@ $("input[name=todos]").change(function(){
 		    $('#fechaInicial').data("DateTimePicker").maxDate(e.date);
 		});
 
-		
-  $('#todos').click( function (event){ $('input[name=chkrequisiciones]').attr('checked', this.checked); });//Para seleccionar todos los checkbox Abraham Gonzalez 12/07/2016
+	  //Para seleccionar todos los checkbox Abraham Gonzalez 12/07/2016
+	  $('#todos').click( function (event){ $('input[name=chkrequisiciones]').attr('checked', this.checked); });
     
-  // Prompt (login)
-  $('#cmdpdf').on('click', function() {
-    $.alertable.prompt('Login to continue', {
-      prompt:
-      '<input type="text" class="alertable-input" name="username" placeholder="Username">' +
-      '<input type="password" class="alertable-input" name="password" placeholder="Password">' +
-      '<label>' +
-      '<input type="checkbox" name="remember" value="true"> ' +
-      'Remember me' +
-      '</label>'
-    }).then(function(data) {
-      console.log('Login submitted', data);
-    }, function() {
-      console.log('Login canceled');
-    });
-  });
-  
-  // Prompt (login)
-  $('#cmdpdf2').on('click', function() {
-    $.alertable.prompt('Opciones de Reporte', {
-      prompt:
-    	  '<table class="listas" border="0" align="center" cellpadding="1" cellspacing="2" width="405" >'+
-			'  <tr id="x1" onmouseover="color_over(\'x1\')" onmouseout="color_out(\'x1\')"> '+
-			'	<td width="33" height="27" align="center" style="cursor:pointer" onclick="getListadoRequisiciones()"> '+
-			'	  <img src="../../imagenes/pdf.gif"/></td>' +
-			'	<td width="362" height="27" align="left" style="cursor:pointer" onclick="getListadoRequisiciones()">&nbsp;Listado de OS/OT/REQ Nomal en PDF</td> '+
-			'  </tr> '+
-			
-			'  <tr id="x2" onmouseover="color_over(\'x2\')" onmouseout="color_out(\'x2\')" onclick=""> '+
-			'	  <td height="27" align="center"  style="cursor:pointer" onclick="getListadoReqConOp()"><img src="../../imagenes/pdf.gif" /></td> '+
-			'	  <td height="27" align="left" style="cursor:pointer" onclick="getListadoReqConOp()">&nbsp;Listado de OS/OT/REQ con Ordenes de Pago relacionadas en PDF</td> '+
-			'	</tr> '
+	  //---------------------Boton para imprimir el listado de Requisiciones    28-08-17    ------------------------------------------------------------------------
+	  $('#cmdpdf2').on('click', function() {
+		  
 		
-    }).then(function(data) {
-      console.log('Cerrar', data);
-    }, function() {
-      console.log('Login canceled');
-    });
-  });
-  	
+		  swal({
+			    title: 'Opciones de Reporte',
+			    html:
+			    	
+			    	'<table class="listas" border="0" align="center" cellpadding="1" cellspacing="2" width="405" >'+
+					'  <tr id="x1" onmouseover="color_over(\'x1\')" onmouseout="color_out(\'x1\')"> '+
+					'	<td width="33" height="27" align="center" style="cursor:pointer" onclick="getListadoRequisiciones()"> '+
+					'	  <img src="../../imagenes/pdf.gif"/></td>' +
+					'	<td width="362" height="27" align="left" style="cursor:pointer" onclick="getListadoRequisiciones()">&nbsp;Listado de OS/OT/REQ Nomal en PDF</td> '+
+					'  </tr> '+
+					
+					'  <tr id="x2" onmouseover="color_over(\'x2\')" onmouseout="color_out(\'x2\')" onclick=""> '+
+					'	  <td height="27" align="center"  style="cursor:pointer" onclick="getListadoReqConOp()"><img src="../../imagenes/pdf.gif" /></td> '+
+					'	  <td height="27" align="left" style="cursor:pointer" onclick="getListadoReqConOp()">&nbsp;Listado de OS/OT/REQ con Ordenes de Pago relacionadas en PDF</td> '+
+					'	</tr> ' +
+				'</table>'
+			       
+			   
+			  })
+	  });
+	  
 });
 
 //IMPRIME EL LISTADO DE LAS REQUISICIONES
@@ -352,65 +337,117 @@ function cancelarRequisicion(idReq){
 
 }
 
+/***********************************Metodo para cancelar las requisiciones***********************************************************************/
 function cancelacionMultiple(){
 	var checkClaves = [];
     $('input[name=chkrequisiciones]:checked').each(function() { checkClaves.push($(this).val());});	
 	if (checkClaves.length>0){
-	jConfirm('¿Confirma que desea cancelar las Requisiciones seleccionadas?','Confirmar', function(r){
-			if(r){
-					ShowDelay('Cancelando Requisiciónes');
-					 controladorListadoRequisicionesRemoto.cancelarRequisiciones(checkClaves, {
-						callback:function(items) {
-						  if(items==""){ 		
-							  CloseDelay('Requisicion(es) cancelada(s) con exito', 1000, function(){setTimeout('getListaReq();',1000)} );
-							  
-						  }
-							else
-								jError(items, 'Error al cancelar Requisiciones');
-					 } 					   				
-					 ,
-					 errorHandler:function(errorString, exception) { 
-						jError(errorString, 'Error');          
-					 }
-				    });
-			}
-	   },async=false );	 
+		swal({
+			  title: 'Estas seguro?',
+			  text: "El cambio no podra revertirse!",
+			  type: 'warning',
+			  showCancelButton: true,
+			  confirmButtonColor: '#3085d6',
+			  cancelButtonColor: '#d33',
+			  confirmButtonText: 'Si, Cancelar!',
+			  cancelButtonText: 'No, Abortar!',
+			  confirmButtonClass: 'btn btn-success',
+			  cancelButtonClass: 'btn btn-danger',
+			  buttonsStyling: false
+			}).then(function () {
+			  swal(
+			    'Cancelado!',
+			    'Tu requiscion ha sido cancelada con exito.',
+			    'success',
+			    controladorListadoRequisicionesRemoto.cancelarRequisiciones(checkClaves),
+			    getListaReq()
+			  )
+			}, function (dismiss) {
+			  // dismiss can be 'cancel', 'overlay',
+			  // 'close', and 'timer'
+			  if (dismiss === 'cancel') {
+			    swal(
+			      'Abortado',
+			      'Tu requisicion no fue modificada :)',
+			      'error'
+			    )
+			  }
+			})
 	}
 	else 
-			jAlert('Es necesario seleccionar por lo menos una Requisicion del listado', 'Advertencia');
-
+		swal({
+			  title: 'Error!',
+			  text: 'Es necesario seleccionar por lo menos una Requisicion del listado.',
+			  type: 'info',
+			  timer: 2000
+			}).then(
+			  function () {},
+			  // handling the promise rejection
+			  function (dismiss) {
+			    if (dismiss === 'timer') {
+			      console.log('I was closed by the timer')
+			    }
+			  }
+			)
 }
 
-/*Metodo para aperturar las requisiciones*/
+/***********************************Metodo para aperturar las requisiciones***********************************************************************/
+
 function aperturarRequisiciones(){
 	 var checkClaves = [];
      $('input[name=chkrequisiciones]:checked').each(function() { checkClaves.push($(this).val());});	
 	 if (checkClaves.length>0){
-		jConfirm('¿Confirma que desea aparturar la(s) requisicion(es) seleccionada(s)?','Confirmar', function(r){
-			if(r){
-					ShowDelay('Cancelando Requisición(es)','');
-					controladorListadoRequisicionesRemoto.aperturarRequisiciones(checkClaves, {
-						callback:function(items) { 		
-						 	CloseDelay('Requisicion(es) aperturada(s) con exito');
-						 	getListaReq();
-					 } 					   				
-					 ,
-					 errorHandler:function(errorString, exception) { 
-						jError(errorString, 'Error');          
-					 }
-				    });
-			}
-	   },async=false );
-	 
+		 swal({
+			  title: 'Estas seguro?',
+			  text: "¿Confirma que desea aparturar la(s) requisicion(es) seleccionada(s)?",
+			  type: 'warning',
+			  showCancelButton: true,
+			  confirmButtonColor: '#3085d6',
+			  cancelButtonColor: '#d33',
+			  confirmButtonText: 'Si, aperturar!',
+			  cancelButtonText: 'No, cancelar!',
+			  confirmButtonClass: 'btn btn-success',
+			  cancelButtonClass: 'btn btn-danger',
+			  buttonsStyling: false
+			}).then(function () {
+			  swal(
+				  	'Apertura!!',
+				    'La(s) requisicion(es) seleccionada(s) se aperturaron.',
+				    'success',
+				    controladorListadoRequisicionesRemoto.aperturarRequisiciones(checkClaves),
+				    getListaReq()
+			  )
+			}, function (dismiss) {
+				if (dismiss === 'cancel') {
+				    swal(
+					      'Proceso Cancelado',
+					      'Tu requisicion no fue apertura',
+					      'error'
+				    )
+				}
+			})
 	 } 
-	else 
-	    jAlert('Es necesario seleccionar por lo menos una Requisicion del listado', 'Advertencia');
+	else
+		swal({
+			  title: 'Error!',
+			  text: 'Es necesario seleccionar por lo menos una Requisicion del listado.',
+			  type: 'info',
+			  timer: 2000
+			}).then(
+			  function () {},
+			  // handling the promise rejection
+			  function (dismiss) {
+			    if (dismiss === 'timer') {
+			      console.log('I was closed by the timer')
+			    }
+			  }
+			)
+		
 }
 
 
 //------------------------Filtros del listado de la requisicion para buscar desdel el btnbuscar 26-07-17 -------------------------------------------------------
 function getListaReq(){
-	
 	
 	 var error="";
 	 var titulo ="Error de validacion";
@@ -418,7 +455,7 @@ function getListaReq(){
 	 $('#cboFilterStatus').selectpicker('val');
 	 $('#cboSearch').change('val');
 	 //alert("Selecccion: "+ $('#cboSearch').val());
-	 alert("Desde: " + $('#fechaInicial').val() + "  hasta:   " +$('#fechaFinal').val());
+	 //alert("Desde: " + $('#fechaInicial').val() + "  hasta:   " +$('#fechaFinal').val());
 	 if ($('#fechaInicial').attr('value')=="" && $('#fechaFinal').attr('value')!="" || $('#fechaInicial').attr('value')!="" && $('#fechaFinal').attr('value')=="")  error+="El rango de fechas no es valido<br>";
 	
      if (error=="")
@@ -451,6 +488,7 @@ function getConsultaRequisicion(claveReq)   {
 
 //PARAMETRO QUE LLAMA EL REPORTE DEL LISTADO DE LAS REQUISICIONES.................
 function getListadoRequisiciones()   {
+	
 $('#forma').attr('target',"impresionlistado");
 $('#forma').attr('action',"../reportes/rpt_listado_requisiciones.action");
 $('#forma').submit();
@@ -459,7 +497,7 @@ $('#forma').attr('action',"lst_req_total.action");
 }
 
 function editarRequisicion(cve_req, status){
-	ShowDelay('Abriendo Requisición...', '');
+
 	if (status==0) document.location = 'capturarRequisicion.action?cve_req='+cve_req;
 	if(status==1||status==2||status==5) getConsultaRequisicion(cve_req); //document.location = 'consultaRequisicion.action?cve_req='+cve_req+"&accion=0";
 }
@@ -467,5 +505,4 @@ function editarRequisicion(cve_req, status){
 function consultarRequisicion(cve_req){
 	document.location = 'consultaRequisicion.action?cve_req='+cve_req+'&accion=0';
 }
-
 

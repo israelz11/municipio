@@ -213,7 +213,7 @@ public class GatewayRequisicion  extends BaseGateway {
 				" order by  r.cve_req desc   "*/
 	}
 	
-	/*Metodo que genera el listado de requisiciones y busca mendiante los parametros*/
+/********************    Metodo que genera el listado de requisiciones y busca mendiante los parametros *********************************************/
 	public List<Map> getListaDeRequisicionesPorEjemplo(String unidad,String  estatus , Date fInicial, Date fFinal , Integer ejercicio, Integer tipo, String  verUnidad, String numreq, Integer idUsuario, String unidad_usuario, String proyecto, String clv_partid, String tipogto, String beneficiario, boolean privilegio, String cboconOP, String listadoReq){
 		Map<String, Object> parametros =  new HashMap<String,Object>();
 		/*Asignacion de parametros*/
@@ -285,18 +285,27 @@ public class GatewayRequisicion  extends BaseGateway {
 		if (estatus.contains("9")) //STATUS = TODOS
 			estatus = "0,1,2,4,5 ";
 		
+		if (estatus.contains("1")) //STATUS = CERRAD
+			sql+=" AND R.FECHA_FINIQUITADO IS NULL ";
+		
 		return this.getNamedJdbcTemplate().queryForList("SELECT R.CVE_REQ, R.NUM_REQ, R.CVE_PERS, C.ID_PROYECTO, C.N_PROGRAMA, R.CLV_PARTID, R.ID_DEPENDENCIA, R.OBSERVA, R.TIPO, "+
 																"TIPO_REQ = (CASE r.TIPO WHEN 1 THEN 'REQ.' WHEN 2 THEN 'O.S.' WHEN 3 THEN 'O.T.' WHEN 4 THEN 'O.T.M.P.' WHEN 5 THEN 'O.S.BOMBAS' WHEN 6 THEN 'PAQUETE' WHEN 7 THEN 'REQ. CALEN' WHEN 8 THEN 'OS. CALEN' END), "+
 																"R.PERIODO, (SELECT TOP 1 MES FROM MESES WHERE ESTATUS='ACTIVO') AS PERIODO_ACTUAL,  R.STATUS , convert(varchar(10), R.FECHA ,103) AS FECHA, "+
 																"ISNULL((SELECT SUM(CANTIDAD *PRECIO_EST) FROM SAM_REQ_MOVTOS WHERE CVE_REQ = R.CVE_REQ),0) AS IMPORTE, "+
-																"ISNULL((SELECT SUM(cantidad_temp * precio_est ) FROM SAM_REQ_MOVTOS WHERE CVE_REQ = R.CVE_REQ),0) AS IMPORTE2,  S.DESCRIPCION_ESTATUS,R.FECHA_FINIQUITADO "+
-														"FROM SAM_REQUISIC AS R "+
+																"ISNULL((SELECT SUM(cantidad_temp * precio_est ) FROM SAM_REQ_MOVTOS WHERE CVE_REQ = R.CVE_REQ),0) AS IMPORTE2,   (CASE "+
+																"WHEN R.STATUS=1 AND R.FECHA_FINIQUITADO IS NULL THEN 'CERRADO' "+
+																"WHEN R.STATUS=1 AND R.FECHA_FINIQUITADO IS NOT NULL OR R.STATUS=5 THEN 'FINIQUITADO' "+
+																"WHEN R.STATUS=2 THEN 'PROCESO' "+
+																"WHEN R.STATUS=0 THEN 'EDICION' "+
+																"WHEN R.STATUS=4 THEN 'CANCELADO' "+
+																"END) DESCRIPCION_ESTATUS,R.FECHA_FINIQUITADO "+
+																"FROM SAM_REQUISIC AS R "+
 																"INNER JOIN SAM_ESTATUS_REQ AS S ON (S.ID_ESTATUS = R.STATUS) "+
 																"LEFT JOIN CEDULA_TEC AS C ON (C.ID_PROYECTO = R.ID_PROYECTO) "+
 																"LEFT JOIN CAT_RECURSO AS P ON (P.ID = C.ID_RECURSO) "+
 																"LEFT JOIN SAM_ORDEN_TRAB AS OT ON (OT.CVE_REQ = R.CVE_REQ) "+
 																"LEFT JOIN CAT_BENEFI AS B ON (B.CLV_BENEFI = OT.CLV_BENEFI) "+
-														"WHERE R.EJERCICIO =:ejercicio AND R.STATUS IN ("+estatus+") "+sql+" ORDER BY R.FECHA DESC", parametros);
+														"WHERE R.EJERCICIO =:ejercicio  AND R.STATUS IN ("+estatus+") "+sql+" ORDER BY R.FECHA DESC", parametros);
 	}
 	
 	/*Metodo que genera el listado de requisiciones y busca mendiante los parametros*/
@@ -753,7 +762,9 @@ public class GatewayRequisicion  extends BaseGateway {
                 	Date fechaCierre = new Date();
             		fechaCierre = (Date) requisicion.get("FECHA_CIERRE");
             		Calendar c1 = Calendar.getInstance();
-            		if((c1.get(Calendar.MONTH)+1) != ((fechaCierre.getMonth())+1) && !requisicion.get("TIPO").toString().equals("1"))
+            		
+            		/* Validando si la requisicion es anualizada para que permita aperturar.. Abraham Gonzalez 05-09-17*/
+            		if((c1.get(Calendar.MONTH)+1) != ((fechaCierre.getMonth())+1) && !requisicion.get("TIPO").toString().equals("1")&& !requisicion.get("TIPO").toString().equals("7"))
             		{
             			throw new RuntimeException("No se puede aperturar la requisicion "+requisicion.get("NUM_REQ").toString()+" por que el periodo es diferente");
             		}

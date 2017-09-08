@@ -85,17 +85,41 @@ function __limpiarPresupuestoSaldo(ctrl_presupuesto, ctrl_disponible){
 
 /*Listado para el presupuesto del vale 05/03/2012*/
 function __listadoPresupuestoVale(idproyecto, proyecto, partida, mes, tipoGasto, idDependencia, idVale){
-	jWindow('<iframe width="800" height="410" name="consultaPre" id="consultaPre" frameborder="0" src="../../sam/consultas/muestra_presupuesto.action?idproyecto='+idproyecto+'&proyecto='+proyecto+'&partida='+partida+'&mes='+mes+'&tipoGasto='+tipoGasto+'&unidad='+idDependencia+'&idVale='+idVale+'"></iframe>','Informacion Presupuestal del Vale', '','Cerrar ',1);
+	swal({
+	    title: 'Informacion Presupuestal del Vale',
+	    width: 800,
+	    html:
+	       	'<iframe width="800" height="410" name="consultaPre" id="consultaPre" frameborder="0" src="../../sam/consultas/muestra_presupuesto.action?idproyecto='+idproyecto+'&proyecto='+proyecto+'&partida='+partida+'&mes='+mes+'&tipoGasto='+tipoGasto+'&unidad='+idDependencia+'&idVale='+idVale+'"></iframe>', 
+	   })
+	//jWindow('<iframe width="800" height="410" name="consultaPre" id="consultaPre" frameborder="0" src="../../sam/consultas/muestra_presupuesto.action?idproyecto='+idproyecto+'&proyecto='+proyecto+'&partida='+partida+'&mes='+mes+'&tipoGasto='+tipoGasto+'&unidad='+idDependencia+'&idVale='+idVale+'"></iframe>','Informacion Presupuestal del Vale', '','Cerrar ',1);
 }
 
 /*Listado para el presupuesto del contrato 19/05/2013*/
 function __listadoPresupuestoContrato(idproyecto, proyecto, partida, mes, tipoGasto, idDependencia, cve_contrato){
-	jWindow('<iframe width="800" height="410" name="consultaPre" id="consultaPre" frameborder="0" src="../../sam/consultas/muestra_presupuesto.action?idproyecto='+idproyecto+'&proyecto='+proyecto+'&partida='+partida+'&mes='+mes+'&tipoGasto='+tipoGasto+'&unidad='+idDependencia+'&cve_contrato='+cve_contrato+'"></iframe>','Informacion Presupuestal del Contrato', '','Cerrar ',1);
+	swal({
+	    title: 'Informacion Presupuestal del Contrato',
+	    width: 800,
+	    html:
+	       	'<iframe width="800" height="410" name="consultaPre" id="consultaPre" frameborder="0" src="../../sam/consultas/muestra_presupuesto.action?idproyecto='+idproyecto+'&proyecto='+proyecto+'&partida='+partida+'&mes='+mes+'&tipoGasto='+tipoGasto+'&unidad='+idDependencia+'&cve_contrato='+cve_contrato+'"></iframe>', 
+	   })
+	//jWindow('<iframe width="800" height="410" name="consultaPre" id="consultaPre" frameborder="0" src="../../sam/consultas/muestra_presupuesto.action?idproyecto='+idproyecto+'&proyecto='+proyecto+'&partida='+partida+'&mes='+mes+'&tipoGasto='+tipoGasto+'&unidad='+idDependencia+'&cve_contrato='+cve_contrato+'"></iframe>','Informacion Presupuestal del Contrato', '','Cerrar ',1);
 }
 
 function __listadoPresupuesto(idproyecto, proyecto, partida, mes, tipoGasto, idDependencia ){
-	jWindow('<iframe width="800" height="410" name="consultaPre" id="consultaPre" frameborder="0" src="../../sam/consultas/muestra_presupuesto.action?idproyecto='+idproyecto+'&proyecto='+proyecto+'&partida='+partida+'&mes='+mes+'&tipoGasto='+tipoGasto+'&unidad='+idDependencia+'"></iframe>','Informacion Presupuestal', '','Cerrar ',1);
+	//swal({
+	   // title: 'Informacion Presupuestal',
+	    //width: 800,
+	    //html:
+	      // 	'<iframe width="800" height="410" name="consultaPre" id="consultaPre" frameborder="0" src="../../sam/consultas/muestra_presupuesto.action?idproyecto='+idproyecto+'&proyecto='+proyecto+'&partida='+partida+'&mes='+mes+'&tipoGasto='+tipoGasto+'&unidad='+idDependencia+'"></iframe>', 
+	   //})
+	swal({
+		  title: 'Informacion Presupuestal',
+		  width: 800,
+		  html: '<iframe width="800" height="410" name="consultaPre" id="consultaPre" frameborder="0" src="../../sam/consultas/muestra_presupuesto.action?idproyecto='+idproyecto+'&proyecto='+proyecto+'&partida='+partida+'&mes='+mes+'&tipoGasto='+tipoGasto+'&unidad='+idDependencia+'"></iframe>',
+		})
+	//jWindow('<iframe width="800" height="410" name="consultaPre" id="consultaPre" frameborder="0" src="../../sam/consultas/muestra_presupuesto.action?idproyecto='+idproyecto+'&proyecto='+proyecto+'&partida='+partida+'&mes='+mes+'&tipoGasto='+tipoGasto+'&unidad='+idDependencia+'"></iframe>','Informacion Presupuestal', '','Cerrar ',1);
 }
+
 
 /*Devuelve el presupuesto de la pantalla hija*/
 
@@ -106,6 +130,6 @@ function __regresaPresupuesto(ID, proyecto, partida, pre_actual, disponible){
 	$('#txtpartida').attr('value',partida);
 	$('#CLV_PARTID').attr('value',partida);
 	$('#ID_PROYECTO').attr('value',ID);
-	$.alerts._hide();
-	costumFunction();
+	//$.alerts._hide();
+	//costumFunction();
 }

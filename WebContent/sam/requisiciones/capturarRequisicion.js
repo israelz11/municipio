@@ -1,84 +1,164 @@
  var checkPresupuesto = new Array();
  var ID_PED = 0;
- 
-$(document).ready(function () {
-	
+/**
+*Al iniciar la pagina carga los eventos a los controles del formulario
+*/
+$(document).ready(function() {  
 	
 	/*Inhabilita todos los divs*/	
 	$('#div_os').hide();
 	$('#div_os_vehiculo').hide();
 	$('#div_os_prestador').hide();
 	$('#div_os_presupuesto').hide();
-	$('#cbomes').attr('disabled',true);
-	
+	$('#cbomeses').attr('disabled',true);
+			
 	$("#tab2primary").hide();
-		
+	
 	$('#cbotipo').on('change',function(event){//El método on asigna uno o más controladores de eventos para los elementos seleccionados.
 		tipoRequisiciones();
 	});
 	
-/*******************************************************************************************************************************************/
 	/*define los eventos para los controles*/
-	//$('#txtproyecto').bestupper(); 
+	
+	$('#txtproyecto').bestupper(); 
 	//$('#cmdnuevorequisicion').click(function (event){nuevaRequisicion();});
 	$('#cmdenviarlotes').click(function(event){mostrarEnviarLotesPedido();});
 	$('#cmdnuevoconcepto').click(function (event){nuevoConcepto();});
 	$('#cmdguardarequisicion').click(function(event){guardarRequisicionPrincipal();});
 	$('#cmdguardarconcepto').click(function(event){guardarConceptoRequisicion();});
 	$('#cmdcerrar').click(function(event){cerrarRequisicion();});
-	$('#cmdcerrar').attr('disabled',true);
+	$('#cmdcerrar').prop('disabled',true);
 	$('#img_contrato').click(function(event){jInformation('Este modulo se encuentra deshabilitado por el momento','Información');/*muestraContratos();*/});
   	$('#img_quitar_contrato').click(function(event){jInformation('Este modulo se encuentra deshabilitado por el momento','Información');/*removerContrato();funciones();*/});
-	$('#cmdenviarlotes').attr('disabled',true);
-	$('#cmdreenumerar').attr('disabled',true);
-	$('#cmdimportar').attr('disabled',true);
+	$('#cmdenviarlotes').prop('disabled',true);
+	$('#cmdreenumerar').prop('disabled',true);
+	$('#cmdimportar').prop('disabled',true);
 	$('#txtpartida').keypress(function(event){return keyNumbero(event);});
 	$('#txtcantidad').keypress(function(event){return keyNumbero(event);});
 	$('#txtprecioestimado').keypress(function(event){return keyNumbero(event);});	
-	$('#txtproyecto').blur(function(event){__getPresupuesto($('#ID_PROYECTO').attr('value'),$('#txtproyecto').attr('value'),$('#txtpartida').attr('value'), $('#cbomes').attr('value'),  'txtpresupuesto','txtdisponible','');});
-	$('#txtpartida').blur(function(event){__getPresupuesto($('#ID_PROYECTO').attr('value'), $('#txtproyecto').attr('value'),$('#txtpartida').attr('value'), $('#cbomes').attr('value'),  'txtpresupuesto','txtdisponible','');});
-
-	$('#cmdpresupuesto').click(function(event){//MUESTRA PRESUPUESTO
-		muestraPresupuesto();
-	});
+	$('#txtproyecto').blur(function(event){__getPresupuesto($('#ID_PROYECTO').val(),$('#txtproyecto').val(),$('#txtpartida').val(), $('#cbomeses').val(),  'txtpresupuesto','txtdisponible','');});
+	$('#txtpartida').blur(function(event){__getPresupuesto($('#ID_PROYECTO').val(), $('#txtproyecto').val(),$('#txtpartida').val(), $('#cbomeses').val(),  'txtpresupuesto','txtdisponible','');});
+	
+	$('#img_presupuesto').click(function(event){muestraPresupuesto();});
 	$('#img_producto').click(function(event){muestraProductos();});
 	$('#cmdimportar').click(function(event){muestraImportarLotes();});
 	$('#cmdreenumerar').click(function(event){muestraReenumerar();});
 	$('#img_vale').click(function(event){antesMuestraVales();});
-	
-	
-	getBeneficiarios('txtprestadorservicio','CVE_BENEFI',$('#tipoBeneficiario').attr('value'));
+	 /*Configura los tabuladores*/
+	 //$('#tabuladores').tabs();
+	 //$('#tabuladores').tabs('enable',0);
+	 //$('#tabuladores').tabs('option', 'disabled', [1]);
+	 //$("#txtfecha").datepicker({showOn: 'button', buttonImage: '../../imagenes/cal.gif', buttonImageOnly: true,dateFormat: 'dd/mm/yy'});
+	 /*funciones*/
+	 if($('#CVE_REQ').val()==0) tipoRequisiciones();
 	 
-	 getUnidad_Medidas('txtunidadmedida','CVE_UNIDAD_MEDIDA');
-	 mostrarRequisicion($('#CVE_REQ').attr('value'));
-	 getMesRequisicion($('#cbomes').attr('value'));
+	getBeneficiarios('txtprestadorservicio','CVE_BENEFI',$('#tipoBeneficiario').val());
+	getUnidad_Medidas('txtunidadmedida','CVE_UNIDAD_MEDIDA');
+	 mostrarRequisicion($('#CVE_REQ').val());
 	 
-	 $('#txtprecioestimado').attr('readonly', '');
+	 getMesRequisicion($('#cbomeses').val());
+	 
+	 $('#txtprecioestimado').val('readonly', '');
 	 $('#fila_contrato').hide();
 	 $('#fila_disponibleVale').hide();
-	 //$('.tiptip a.button, .tiptip button').tipTip();
-	 $('#ui-datepicker-div').hide();
 	
+	 $('#txtfecha').datetimepicker({
+			format: 'DD/MM/YYYY'
+		});
+	 
 });
+
+function tipoRequisiciones(){
+	
+
+	var tiporequi = $('#cbotipo').val();
+	//alert("Opcion seleccionada por cbotipo en val: "+demovalor2);
+	
+	/*Retorna si vale cero*/
+	if(tiporequi=='0') return false;
+	
+	switch(tiporequi){
+	
+		case '1': /*Para bienes*/
+				$('#div_os_presupuesto').show();
+				$('#div_os').hide();
+		break;
+		case '2': /*Para servicios*/
+				$('#div_os').show();
+				$('#div_os_prestador').show();
+				$('#div_os_presupuesto').show();
+				$('#div_os_prestador').show();
+				$('#div_os_vehiculo').hide();
+		break;
+		case '3': /*Para servicio a vehiculos*/
+				$('#div_os').show();
+				$('#div_os_prestador').show();
+				$('#div_os_presupuesto').show();
+				$('#div_os_prestador').show();
+				$('#div_os_vehiculo').show();
+		break;
+		case '4': /*Para maquinaria pesada*/
+				$('#div_os').show();
+				$('#div_os_prestador').show();
+				$('#div_os_presupuesto').show();
+				$('#div_os_prestador').show();
+				$('#div_os_vehiculo').show();
+		break;
+		case '5': /*Para servicio a bombas*/
+				$('#div_os').show();
+				$('#div_os_prestador').show();
+				$('#div_os_presupuesto').show();
+				$('#div_os_prestador').show();
+				$('#div_os_vehiculo').hide();
+		break;
+		case '6': /*Para paquetes*/
+				$('#div_os_presupuesto').show();
+				$('#div_os').hide();
+				$('#div_os_prestador').hide();
+				$('#div_os_prestador').hide();
+				$('#div_os_vehiculo').hide();
+		break;
+		case '7': /*Para Req. calendarizada*/
+				$('#div_os_presupuesto').show();
+				$('#div_os').hide();
+				$('#div_os_prestador').hide();
+				$('#div_os_prestador').hide();
+				$('#div_os_vehiculo').hide();
+				/*activa el combo de meses*/
+				$('#cbomeses').prop('disabled',false);
+		break;
+		case '8': /*Para O.S calendarizada*/
+				$('#div_os').show();
+				$('#div_os_prestador').show();
+				$('#div_os_presupuesto').show();
+				$('#div_os_prestador').show();
+				$('#div_os_vehiculo').hide();
+				/*activa el combo de meses*/
+				$('#cbomeses').prop('disabled',false);
+		break;
+	}
+}
+
+
 function antesMuestraVales(){
 	if($('#cbotipo').val()==7||$('#cbotipo').val()==8) {jAlert('No es posible usar vales para documentos de tipo calendarizados', 'Advertencia'); return false;}
 	muestraVales();
 }
 
 function comprobarVale(){
-	if($('#txtvale').attr('value')=='') {
-		$('#CVE_VALE').attr('value', '0');
-		$('#txtdisponiblevale').attr('value','');
-		$('#txtcomprobadovale').attr('value','');
+	if($('#txtvale').val()=='') {
+		$('#CVE_VALE').val('0');
+		$('#txtdisponiblevale').val();
+		$('#txtcomprobadovale').val();
 		$('#fila_disponibleVale').hide();
 	}
 }
 
 function getValeDocumento(idVale, num_vale, disponible, comprobado){
-	$('#CVE_VALE').attr('value', idVale);
-	$('#txtvale').attr('value', num_vale);
-	$('#txtdisponiblevale').attr('value', formatNumber(parseFloat(disponible),'$'));
-	$('#txtcomprobadovale').attr('value',  formatNumber(parseFloat(comprobado),'$'));
+	$('#CVE_VALE').val(idVale);
+	$('#txtvale').val(num_vale);
+	$('#txtdisponiblevale').val(formatNumber(parseFloat(disponible),'$'));
+	$('#txtcomprobadovale').val(formatNumber(parseFloat(comprobado),'$'));
 	$('#fila_disponibleVale').show();
 	
 	muestraPresupuesto();
@@ -87,8 +167,8 @@ function getValeDocumento(idVale, num_vale, disponible, comprobado){
 }
 
 function muestraReenumerar(){
-	if($('#cbotipo').attr('value')!=1&&$('#cbotipo').attr('value')!=7) {jAlert('Esta opcion solo esta disponible para Requisiciones', 'Advertencia'); return false;}
-	jWindow('<iframe width="850" height="400" id="ventanaReenumerar" frameborder="0" src="../../sam/requisiciones/reenumerarLotes.action?num_req='+$('#txtrequisicion').attr('value')+'&cve_req='+$('#CVE_REQ').attr('value')+'"></iframe>','Reenumerar consecutivo de lotes', '','Cerrar',1);
+	if($('#cbotipo').val()!=1&&$('#cbotipo').val()!=7) {jAlert('Esta opcion solo esta disponible para Requisiciones', 'Advertencia'); return false;}
+	jWindow('<iframe width="850" height="400" id="ventanaReenumerar" frameborder="0" src="../../sam/requisiciones/reenumerarLotes.action?num_req='+$('#txtrequisicion').val()+'&cve_req='+$('#CVE_REQ').val()+'"></iframe>','Reenumerar consecutivo de lotes', '','Cerrar',1);
 }
 
 function muestraImportarLotes(){
@@ -100,7 +180,7 @@ function muestraImportarLotes(){
 }
 
 function _muestraImportarLotes(){
-	if($('#cbotipo').attr('value')!=1&&$('#cbotipo').attr('value')!=7) {jAlert('Esta opcion solo esta disponible para Requisiciones', 'Advertencia'); return false;}
+	if($('#cbotipo').val()!=1&&$('#cbotipo').val()!=7) {jAlert('Esta opcion solo esta disponible para Requisiciones', 'Advertencia'); return false;}
 	jWindow('<iframe width="850" height="400" id="ventanaImportar" frameborder="0" src="../../sam/requisiciones/muestraImportar.action?'+'"></iframe>','Importar lotes desde una Requisición existente', '','Cerrar',1);
 }
 
@@ -109,7 +189,7 @@ function getBeneficiario(cve_benefi , objeto){
 	//accesar y buscar el beneficiario
 	controladorRequisicion.getBeneficiario(cve_benefi,{
 		  			callback:function(items) { 
-						$('#'+objeto).attr('value',getHTML(items));
+						$('#'+objeto).val(getHTML(items));
 					}
 					,
 					errorHandler:function(errorString, exception){ 
@@ -120,28 +200,28 @@ function getBeneficiario(cve_benefi , objeto){
 }
 
 function funciones(){
-	if($('#CVE_CONTRATO').attr('value')=='') return false;
-	if($('#CVE_CONTRATO').attr('value')!='0'&&$('#CVE_CONTRATO').attr('value')!=''){
-		$('#txtproyecto').attr('value', $('#CPROYECTO').attr('value'));
-		$('#txtpartida').attr('value', $('#CCLV_PARTID').attr('value'));
-		$('#txtproyecto').attr('disabled',true);
-		$('#txtpartida').attr('disabled',true);
-		$('#txtprestadorservicio').attr('disabled', true);
+	if($('#CVE_CONTRATO').val()=='') return false;
+	if($('#CVE_CONTRATO').val()!='0'&&$('#CVE_CONTRATO').attr('value')!=''){
+		$('#txtproyecto').val($('#CPROYECTO').val());
+		$('#txtpartida').val($('#CCLV_PARTID').val());
+		$('#txtproyecto').prop('disabled',true);
+		$('#txtpartida').prop('disabled',true);
+		$('#txtprestadorservicio').prop('disabled', true);
 		//obtener ek nombre del beneficiario
-		getBeneficiario($('#CCLV_BENEFI').attr('value'), 'txtprestadorservicio');
-		$('#CVE_BENEFI').attr('value', $('#CCLV_BENEFI').attr('value'));
-		__getPresupuesto($('#ID_PROYECTO').attr('value'),$('#txtproyecto').attr('value'),$('#txtpartida').attr('value'), $('#cbomes').attr('value'),  'txtpresupuesto','txtdisponible',$('#tipoGasto').attr('value'));
+		getBeneficiario($('#CCLV_BENEFI').val('txtprestadorservicio'));
+		$('#CVE_BENEFI').val($('#CCLV_BENEFI').val());
+		__getPresupuesto($('#ID_PROYECTO').val(),$('#txtproyecto').val(),$('#txtpartida').val(), $('#cbomeses').val(),  'txtpresupuesto','txtdisponible',$('#tipoGasto').val());
 	}
 	else{
-		$('#txtproyecto').attr('value', '');
-		$('#txtpartida').attr('value', '');
-		$('#txtproyecto').attr('disabled',false);
-		$('#txtpartida').attr('disabled',false);
-		$('#txtpresupuesto').attr('value', '');
-		$('#txtdisponible').attr('value', '');
-		$('#txtprestadorservicio').attr('disabled', false);
-		$('#txtprestadorservicio').attr('value','');
-		$('#CVE_BENEFI').attr('value','0');
+		$('#txtproyecto').val('');
+		$('#txtpartida').val('');
+		$('#txtproyecto').prop('disabled',false);
+		$('#txtpartida').prop('disabled',false);
+		$('#txtpresupuesto').val('');
+		$('#txtdisponible').val('');
+		$('#txtprestadorservicio').prop('disabled', false);
+		$('#txtprestadorservicio').val('');
+		$('#CVE_BENEFI').val('0');
 	}
 }
 /*funcion para mostrar la requisiocion*/
@@ -151,39 +231,39 @@ function mostrarRequisicion(cve_req){
 		controladorRequisicion.getLightRequisicion(cve_req, {
 		  			callback:function(items) { 
 					jQuery.each(items,function(i){
-								$('#cbodependencia').attr('value', this.ID_DEPENDENCIA);
-								$('#txtrequisicion').attr('value',this.NUM_REQ);
-								$('#txtfecha').attr('value',getHTML(this.FECHA));
-								$('#txtnotas').attr('value',this.OBSERVA);
-								$('#cbotipo').attr('value',this.TIPO);
-								$('#cbotipo').attr('disabled', true);
+								$('#cbodependencia').val(this.ID_DEPENDENCIA);
+								$('#txtrequisicion').val(this.NUM_REQ);
+								$('#txtfecha').val(getHTML(this.FECHA));
+								$('#txtnotas').val(this.OBSERVA);
+								$('#cbotipo').val(this.TIPO);
+								$('#cbotipo').prop('disabled', true);
 								$('#cbotipo').change();
 								tipoRequisicion();
 								
-								$('#cbomes').attr('disabled',true);
-								$('#cbomes').attr('value',this.PERIODO);
-								$('#txttipobien').attr('value',getHTML(this.VEHICULO));
-								$('#txtmarca').attr('value',getHTML(this.MARCA));
-								$('#txtmodelo').attr('value',getHTML(this.MODELO));
-								$('#txtusuario').attr('value',getHTML(this.USUARIO));
-								$('#txtnuminventario').attr('value',getHTML(this.NUM_INV));
-								$('#txtplacas').attr('value',getHTML(this.PLACAS));
-								$('#txtcolor').attr('value',getHTML(this.COLOR));
-								$('#txtprestadorservicio').attr('value',getHTML(this.NCOMERCIA));
-								$('#CVE_BENEFI').attr('value', getHTML(this.CLV_BENEFI));
-								$('#txtprestadorservicio').attr('value', getHTML(this.PROVEEDOR));
-								$('#CVE_CONCURSO').attr('value', getHTML(this.CVE_CONCURSO));
-								$('#txtnumcontrato').attr('value', getHTML(this.NUM_CONTRATO));
-								$('#CVE_CONTRATO').attr('value', getHTML(this.CVE_CONTRATO));
+								$('#cbomeses').val(true);
+								$('#cbomeses').val(this.PERIODO);
+								$('#txttipobien').val(getHTML(this.VEHICULO));
+								$('#txtmarca').val(getHTML(this.MARCA));
+								$('#txtmodelo').val(getHTML(this.MODELO));
+								$('#txtusuario').val(getHTML(this.USUARIO));
+								$('#txtnuminventario').val(getHTML(this.NUM_INV));
+								$('#txtplacas').val(getHTML(this.PLACAS));
+								$('#txtcolor').val(getHTML(this.COLOR));
+								$('#txtprestadorservicio').val(getHTML(this.NCOMERCIA));
+								$('#CVE_BENEFI').val(getHTML(this.CLV_BENEFI));
+								$('#txtprestadorservicio').val(getHTML(this.PROVEEDOR));
+								$('#CVE_CONCURSO').val(getHTML(this.CVE_CONCURSO));
+								$('#txtnumcontrato').val(getHTML(this.NUM_CONTRATO));
+								$('#CVE_CONTRATO').val(getHTML(this.CVE_CONTRATO));
 								/*Cargar informacion del vale si existe 02/Abr/2012 */
 								if(getHTML(this.CVE_VALE)!=''){
 									//buscar el vale
-									$('#txtvale').attr('value', rellenaCeros(getHTML(this.CVE_VALE.toString()),6));
-									$('#CVE_VALE').attr('value',getHTML(this.CVE_VALE));
-									controladorRequisicion.getListaValesPresupuesto($('#CVE_VALE').attr('value'), $('#CVE_BENEFI').attr('value'), 0, $('#cbodependencia').val(), {
+									$('#txtvale').val(rellenaCeros(getHTML(this.CVE_VALE.toString()),6));
+									$('#CVE_VALE').val(getHTML(this.CVE_VALE));
+									controladorRequisicion.getListaValesPresupuesto($('#CVE_VALE').val(), $('#CVE_BENEFI').val(), 0, $('#cbodependencia').val(), {
 										  callback:function(items){
 											  jQuery.each(items,function(i) {
-												getValeDocumento($('#CVE_VALE').attr('value'), $('#txtvale').attr('value'), this.DISPONIBLE, this.COMPROBADO);
+												getValeDocumento($('#CVE_VALE').val(), $('#txtvale').val(), this.DISPONIBLE, this.COMPROBADO);
 												$('#fila_disponibleVale').show();
 											  });
 										} 		
@@ -195,16 +275,16 @@ function mostrarRequisicion(cve_req){
 									});
 
 								}
-								if($('#CVE_CONTRATO').attr('value')!='0'&&$('#CVE_CONTRATO').attr('value')!='') {
-									$('#img_quitar_contrato').attr('src', '../../imagenes/cross.png');
-									$('#CPROYECTO').attr('value', getHTML(this.CPROYECTO));
-									$('#CCLV_PARTID').attr('value', getHTML(this.CCLV_PARTID));
-									$('#CLV_PARBIT').attr('value', getHTML(this.CLV_PARBIT2));
-									$('#txtproyecto').attr('value', $('#CPROYECTO').attr('value'));
-									$('#txtpartida').attr('value', $('#CCLV_PARTID').attr('value'));
-									$('#txtproyecto').attr('disabled',true);
-									$('#txtpartida').attr('disabled',true);
-									$('#txtprestadorservicio').attr('disabled',true);
+								if($('#CVE_CONTRATO').val()!='0'&&$('#CVE_CONTRATO').val()!='') {
+									$('#img_quitar_contrato').val('src', '../../imagenes/cross.png');
+									$('#CPROYECTO').val(getHTML(this.CPROYECTO));
+									$('#CCLV_PARTID').val(getHTML(this.CCLV_PARTID));
+									$('#CLV_PARBIT').val(getHTML(this.CLV_PARBIT2));
+									$('#txtproyecto').val($('#CPROYECTO').val());
+									$('#txtpartida').val($('#CCLV_PARTID').val());
+									$('#txtproyecto').prop('disabled',true);
+									$('#txtpartida').prop('disabled',true);
+									$('#txtprestadorservicio').prop('disabled',true);
 								}
 								else{
 									$('#img_quitar_contrato').attr('src', '../../imagenes/cross2.png');
@@ -218,16 +298,16 @@ function mostrarRequisicion(cve_req){
 								}
 					
 								/*Activa o Inactiva Boton cerrar requisicion*/
-								if(parseInt(this.STATUS)==0) $('#cmdcerrar').attr('disabled', false);
+								if(parseInt(this.STATUS)==0) $('#cmdcerrar').prop('disabled', false);
 								/*$('#txtconcurso').attr('value',);*/
-								$('#cboarea').attr('value', this.AREA);
-								$('#tabuladores').tabs('enable',1);
+								$('#cboarea').val(this.AREA);
+								$('#tabuladores').tabs('enable',1);/******************** Revisar por los cambio realizados en los tabuladores **************************/
 								mostrarTablaConceptos(cve_req);
-								if($('#cbotipo').attr('value')=='1'||$('#cbotipo').attr('value')=='7'){
-									$('#cmdimportar').attr('disabled',false);
+								if($('#cbotipo').val()=='1'||$('#cbotipo').val()=='7'){
+									$('#cmdimportar').prop('disabled',false);
 								}
 								$('#txtpartida').blur();
-								getMesRequisicion($('#cbomes').attr('value'));
+								getMesRequisicion($('#cbomeses').val());
 								
 								//COMPROBAR QUE LA REQ FUE CERRADA AL MENOS UNA VEZ PARA PERMITIR LA EDICION DEL PRECIO DEL CONCEPTO
 								comprobarCierreEnBitacora();
@@ -262,41 +342,41 @@ function comprobarCierreEnBitacora(){
 }
 /*funcion para mostrar el listado del presupuesto*/
 function muestraPresupuesto(){
-	if($('#txtproyecto').attr('value')==''||$('#txtpartida').attr('value')=='')
-		$('#ID_PROYECTO').attr('value', '0');
+	if($('#txtproyecto').val()==''||$('#txtpartida').attr('value')=='')
+		$('#ID_PROYECTO').val('0');
 		
 		var idUnidad = $('#cbodependencia').val();
 		if(idUnidad==null||idUnidad=="") idUnidad =0;
 		/*Para el presupuesto con vales*/
-	if($('#CVE_VALE').attr('value')!='0'&&$('#CVE_VALE').attr('value')!='')	{
+		if($('#CVE_VALE').val()!='0'&&$('#CVE_VALE').val()!='')	{
 		var tipo_gto = $('#tipoGasto').val();
 		if(typeof(tipo_gto)=='undefined') tipo_gto =0;
-		if($('#txtvale').attr('value')=='') $('#CVE_VALE').attr('value', '');
-		if($('#CVE_VALE').attr('value')==''||$('#CVE_VALE').attr('value')=='0') {jAlert('Es necesario seleccionar un Vale para mostrar su informacion presupuestal', 'Advertencia'); return false;}
+		if($('#txtvale').val()=='') $('#CVE_VALE').val('');
+		if($('#CVE_VALE').val()==''||$('#CVE_VALE').val()=='0') {jAlert('Es necesario seleccionar un Vale para mostrar su informacion presupuestal', 'Advertencia'); return false;}
 		
-		__listadoPresupuestoVale($('#ID_PROYECTO').attr('value'),$('#txtproyecto').attr('value'),$('#txtpartida').attr('value'), $('#cbomes').attr('value'),tipo_gto, 0, $('#CVE_VALE').attr('value'));
+		__listadoPresupuestoVale($('#ID_PROYECTO').val(),$('#txtproyecto').val(),$('#txtpartida').val(), $('#cbomeses').val(),tipo_gto, 0, $('#CVE_VALE').val());
 	}
 	else /*Para presupuesto normal*/
-		__listadoPresupuesto($('#ID_PROYECTO').attr('value'),$('#txtproyecto').attr('value'),$('#txtpartida').attr('value'), $('#cbomes').attr('value'), 0, idUnidad);
+		__listadoPresupuesto($('#ID_PROYECTO').val(),$('#txtproyecto').val(),$('#txtpartida').val(), $('#cbomeses').val(), 0, idUnidad);
 }
 
 /*funcion principal de guardado*/
 function guardarRequisicionPrincipal(){
 	var result = validate();
 	if (result==false) return false;
-	var v = parseInt($('#cbotipo').attr('value'));
-	if($('#txtprestadorservicio').attr('value')==''||$('#txtprestadorservicio').attr('value')=='0') $('#CVE_BENEFI').attr('value', 'NULL');
+	var v = parseInt($('#cbotipo').val());
+	if($('#txtprestadorservicio').val()==''||$('#txtprestadorservicio').val()=='0') $('#CVE_BENEFI').val('NULL');
 	jConfirm('¿Confirma que desea guardar la Requisición?','Confirmar', function(r){
 		if(r){
 		  ShowDelay('Guardando requisición','');
-		  controladorRequisicion.guardarRequisicion($('#ID_PROYECTO').attr('value'),$('#CVE_REQ').attr('value'), $('#CVE_CONTRATO').attr('value'), $('#CVE_VALE').attr('value'), $('#txtrequisicion').attr('value'), $('#cbodependencia').attr('value'), $('#txtfecha').attr('value'), $('#cbotipo').attr('value'),$('#txtnotas').attr('value'), $('#cbomes').attr('value'), '0', $('#txtproyecto').attr('value'), $('#txtpartida').attr('value'),$('#CVE_BENEFI').attr('value'),$('#cboarea').attr('value'), $('#txttipobien').attr('value'),$('#txtmarca').attr('value'), $('#txtmodelo').attr('value'), $('#txtplacas').attr('value'), $('#txtnuminventario').attr('value'), $('#txtcolor').attr('value'), $('#txtusuario').attr('value'), $('#CVE_CONCURSO').attr('value'), {
+		  controladorRequisicion.guardarRequisicion($('#ID_PROYECTO').val(),$('#CVE_REQ').val(), $('#CVE_CONTRATO').val(), $('#CVE_VALE').val(), $('#txtrequisicion').val(), $('#cbodependencia').val(), $('#txtfecha').val(), $('#cbotipo').val(),$('#txtnotas').val(), $('#cbomeses').val(), '0', $('#txtproyecto').val(), $('#txtpartida').val(),$('#CVE_BENEFI').val(),$('#cboarea').val(), $('#txttipobien').val(),$('#txtmarca').val(), $('#txtmodelo').val(), $('#txtplacas').val(), $('#txtnuminventario').val(), $('#txtcolor').val(), $('#txtusuario').val(), $('#CVE_CONCURSO').val(), {
 		  callback:function(items) { 	    
 		  if (items!=null && items!=0 )
 		  {  
-		   		$('#cmdcerrar').attr('disabled',false);
+		   		$('#cmdcerrar').prop('disabled',false);
 				$('#tabuladores').tabs('enable',1);
-				if($('#CVE_REQ').attr('value')==0) $('#tabuladores').tabs('option', 'selected', 1);
-				$('#CVE_REQ').attr('value',items);
+				if($('#CVE_REQ').val()==0) $('#tabuladores').tabs('option', 'selected', 1);
+				$('#CVE_REQ').val(items);
 			  CloseDelay('Requisición guardada con éxito');
 		  }
 		  else 
@@ -317,46 +397,46 @@ function guardarRequisicionPrincipal(){
 function validate(){
 	var existe = false;
 	
-	if($('#cbodependencia').attr('value')==0){jAlert('Es necesario seleccionar la <b>Unidad Administrativa</b>','Error de validacion'); return false;}
-	if ($('#txtrequisicion').attr('value')==''){jAlert('Es necesario escribir el numero de <b>Requisición</b>','Error de validacion'); return false;}
+	if($('#cbodependencia').val()==0){jAlert('Es necesario seleccionar la <b>Unidad Administrativa</b>','Error de validacion'); return false;}
+	if ($('#txtrequisicion').val()==''){jAlert('Es necesario escribir el numero de <b>Requisición</b>','Error de validacion'); return false;}
 	
 	controladorRequisicion.comprobarExistencia($('#txtrequisicion').attr('value'),{callback:function(items){existe = items;}, errorHandler:function(errorString, exception) { jError('Fallo la operacion:<br>Error::'+errorString+'-message::'+exception.message+'-JavaClass::'+exception.javaClassName+'.<br>Consulte a su administrador');}});
-	if(existe==true&&$('#CVE_REQ').attr('value')==0){jError('El numero de requisicion que esta intentando guardar ya existe en el sistema','Error'); return false;}
+	if(existe==true&&$('#CVE_REQ').val()==0){jError('El numero de requisicion que esta intentando guardar ya existe en el sistema','Error'); return false;}
 
-	if($('#txtfecha').attr('value')==''){jAlert('Es necesario escribir una <b>Fecha</b> válida','Error de validación'); return false;}
-	if($('#cbotipo').attr('value')==0){jAlert('Es necesario seleccionar un <b>Tipo</b> de Requisición','Error de validacion'); return false;}
-	if ($('#txtproyecto').attr('value')==''||$('#ID_PROYECTO').attr('value')==''||$('#ID_PROYECTO').attr('value')=='0'){jAlert('Es necesario escribir el <b>Programa</b>','Error de validación'); return false;}
-	if ($('#txtpartida').attr('value')==''){jAlert('Es necesario escribir la <b>Partida</b>','Error de validación'); return false;}
-	if ($('#cbomes').attr('value')==0){jAlert('El <b>Presupuesto</b> no es valido','Error de validación'); return false;}
+	if($('#txtfecha').val()==''){jAlert('Es necesario escribir una <b>Fecha</b> válida','Error de validación'); return false;}
+	if($('#cbotipo').val()==0){jAlert('Es necesario seleccionar un <b>Tipo</b> de Requisición','Error de validacion'); return false;}
+	if ($('#txtproyecto').val()==''||$('#ID_PROYECTO').attr('value')==''||$('#ID_PROYECTO').attr('value')=='0'){jAlert('Es necesario escribir el <b>Programa</b>','Error de validación'); return false;}
+	if ($('#txtpartida').val()==''){jAlert('Es necesario escribir la <b>Partida</b>','Error de validación'); return false;}
+	if ($('#cbomeses').val()==0){jAlert('El <b>Presupuesto</b> no es valido','Error de validación'); return false;}
 }
 
 /*Guarda los conceptos o movimientos de la requisicion*/
 function guardarConceptoRequisicion(){
 	var error="";
  	var titulo ='Advertencia';
-	if($('#cbotipo').attr('value')=='2'||$('#cbotipo').attr('value')=='3'||$('#cbotipo').attr('value')=='4'){
-		if($('#ID_REQ_MOVTO').attr('value')==0&&parseInt($('#TOTAL_CONCEPTOS').attr('value'))>=1) {jAlert('Una Orden de Servicio/Trabajo no puede contener más de un lote</br>','Advertencia'); return false;} 
+	if($('#cbotipo').val()=='2'||$('#cbotipo').val()=='3'||$('#cbotipo').val()=='4'){
+		if($('#ID_REQ_MOVTO').val()==0&&parseInt($('#TOTAL_CONCEPTOS').val())>=1) {jAlert('Una Orden de Servicio/Trabajo no puede contener más de un lote</br>','Advertencia'); return false;} 
 	}
-	if($('#ID_ARTICULO').attr('value')==''||$('#ID_ARTICULO').attr('value')=='0') {jAlert('Es necesario seleccionar un producto válido</br>','Advertencia'); return false;}
-	if($('#txtprecioestimado').attr('value')=='') {jAlert('Es necesario especificar un precio de producto valido</br>', 'Advertencia'); return false;}
-	//if($('txtprecioestimado').attr('value')=='') {jError('Es necesario especificar un precio de producto valido','Error de validacion'); return false;}
-	if($('#CVE_UNIDAD_MEDIDA').attr('value')=='') jAlert('Es necesario especificar la unidad de medida del producto valido</br>','Advertencia');
-	if($('#txtcantidad').attr('value')=='') {jAlert('Es necesario especificar la cantidad de productos</br>', 'Advertencia'); return false;}
-//	if($('#txtdescripcion').attr('value')=='') error += 'Es necesario una descripcion valida</br>';
-	if($('#txtproyecto').attr('value')=='') {jAlert('Es necesario establecer un Programa valido</br>','Advertencia'); return false;}
-	if($('#txtpartida').attr('value')=='') {jAlert('Es necesario establecer una partida valida</br>','Advertencia');}
-	if($('#cbotipo').attr('value')=='2'||$('#cbotipo').attr('value')=='3'||$('#cbotipo').attr('value')=='4'&&$('#cbotipo').attr('value')=='5') {
-			if(parseInt($('#txtcantidad').attr('value'))>1) {jAlert('Una Orden de Servicio/Trabajo no puede contener mas de una cantidad de producto</br>', 'Advertencia'); return false;}
+	if($('#ID_ARTICULO').val()==''||$('#ID_ARTICULO').val()=='0') {jAlert('Es necesario seleccionar un producto válido</br>','Advertencia'); return false;}
+	if($('#txtprecioestimado').val()=='') {jAlert('Es necesario especificar un precio de producto valido</br>', 'Advertencia'); return false;}
+	//if($('txtprecioestimado').val()=='') {jError('Es necesario especificar un precio de producto valido','Error de validacion'); return false;}
+	if($('#CVE_UNIDAD_MEDIDA').val()=='') jAlert('Es necesario especificar la unidad de medida del producto valido</br>','Advertencia');
+	if($('#txtcantidad').val()=='') {jAlert('Es necesario especificar la cantidad de productos</br>', 'Advertencia'); return false;}
+//	if($('#txtdescripcion').val()=='') error += 'Es necesario una descripcion valida</br>';
+	if($('#txtproyecto').val()=='') {jAlert('Es necesario establecer un Programa valido</br>','Advertencia'); return false;}
+	if($('#txtpartida').val()=='') {jAlert('Es necesario establecer una partida valida</br>','Advertencia');}
+	if($('#cbotipo').val()=='2'||$('#cbotipo').val()=='3'||$('#cbotipo').val()=='4'&&$('#cbotipo').val()=='5') {
+			if(parseInt($('#txtcantidad').val())>1) {jAlert('Una Orden de Servicio/Trabajo no puede contener mas de una cantidad de producto</br>', 'Advertencia'); return false;}
 	}
 	
 	/*jConfirm('¿Confirma que desea guardar el lote?','Confirmar',function (r){
 			if(r){*/
 					ShowDelay('Guardando lote','');
-					controladorRequisicion.guardarConcepto($('#CVE_REQ').attr('value'), $('#cbotipo').attr('value'), $('#ID_REQ_MOVTO').attr('value'), $('#REQ_CONS').attr('value'),  $('#ID_ARTICULO').attr('value'), $('#CVE_UNIDAD_MEDIDA').attr('value'),  $('#txtproducto').attr('value'), $('#txtprecioestimado').attr('value'), $('#txtcantidad').attr('value'), $('#txtdescripcion').attr('value'), {
+					controladorRequisicion.guardarConcepto($('#CVE_REQ').val(), $('#cbotipo').val(), $('#ID_REQ_MOVTO').val(), $('#REQ_CONS').val(),  $('#ID_ARTICULO').val(), $('#CVE_UNIDAD_MEDIDA').val(),  $('#txtproducto').val(), $('#txtprecioestimado').val(), $('#txtcantidad').val(), $('#txtdescripcion').val(), {
 		  			callback:function(items) { 
 							if(items) {
 									nuevoConcepto();
-									mostrarTablaConceptos($('#CVE_REQ').attr('value'));
+									mostrarTablaConceptos($('#CVE_REQ').val());
 									CloseDelay('Lote guardado con éxito', function(){ $('#txtproducto').focus();
 										});
 										
@@ -377,7 +457,7 @@ function guardarConceptoRequisicion(){
 function eliminarMovimientos(){
 	 var checkMovimientos = [];
      $('input[name=chkconsecMovimiento]:checked').each(function() { checkMovimientos.push($(this).val());});	
-  	 var cve_req = $('#CVE_REQ').attr('value');
+  	 var cve_req = $('#CVE_REQ').val();
 	 if (checkMovimientos.length>0){
 		jConfirm('¿Confirma que desea eliminar los lotes de la requisición?','Confirmar', function(r){
 				if(r){
@@ -431,7 +511,7 @@ function editarConcepto(ID_REQ_MOVTO){
 }
 /*funcion para mostrar el listado de productos*/
 function muestraProductos(){	
-	__listadoProductos($('#txtproducto').attr('value'), $('#txtpartida').attr('value'));
+	__listadoProductos($('#txtproducto').val(), $('#txtpartida').val());
 }
 
 /*funcion para mostrar el listado de conceptos*/
@@ -439,20 +519,20 @@ function mostrarTablaConceptos(cve_req){
 	var cont =0;
 	var total = 0;
 	ID_PED = 0;
-	$('#TOTAL_CONCEPTOS').attr('value', 0);
+	$('#TOTAL_CONCEPTOS').val(0);
 	quitRow("listasConceptos");
-	$('#cmdenviarlotes').attr('disabled',true);
-	$('#cmdreenumerar').attr('disabled',true);
+	$('#cmdenviarlotes').prop('disabled',true);
+	$('#cmdreenumerar').prop('disabled',true);
 	controladorRequisicion.getConceptosRequisicion(cve_req, {
 						   callback:function(items) { 
 						   		jQuery.each(items,function(i){
 									 cont++;
 									 total+= this.IMPORTE;
-									 $('#TOTAL_CONCEPTOS').attr('value', (parseInt($('#TOTAL_CONCEPTOS').attr('value'))+1)) 
+									 $('#TOTAL_CONCEPTOS').val((parseInt($('#TOTAL_CONCEPTOS').val())+1)) 
 									 $('#IMPORTE_TOTAL').attr('value', total);
 									 pintaTablaConceptos('listasConceptos', this.ID_REQ_MOVTO, this.CVE_REQ, this.REQ_CONS, this.CANTIDAD, this.UNIDAD, this.NOTAS, this.IMPORTE, this.ARTICULO, this.STATUS, this.ID_PED_MOVTO);				   
 									 if(items.length==cont) 
-										 pintarTotalConceptos('listasConceptos', $('#IMPORTE_TOTAL').attr('value'),cont); 
+										 pintarTotalConceptos('listasConceptos', $('#IMPORTE_TOTAL').val(cont)); 
 										
 									 validaTipoDoc();
 								});
@@ -465,19 +545,19 @@ function validaTipoDoc(){
 	switch($('#cbotipo').attr('value'))
 	{
 		case '1':
-			$('#cmdenviarlotes').attr('disabled',false);
-			$('#cmdreenumerar').attr('disabled',false);
-			$('#cmdimportar').attr('disabled',false);
+			$('#cmdenviarlotes').prop('disabled',false);
+			$('#cmdreenumerar').prop('disabled',false);
+			$('#cmdimportar').prop('disabled',false);
 			break;
 		case '7':
-			$('#cmdenviarlotes').attr('disabled',false);
-			$('#cmdreenumerar').attr('disabled',false);
-			$('#cmdimportar').attr('disabled',false);
+			$('#cmdenviarlotes').prop('disabled',false);
+			$('#cmdreenumerar').prop('disabled',false);
+			$('#cmdimportar').prop('disabled',false);
 			break;
 		default:
-			$('#cmdenviarlotes').attr('disabled',true);
-			$('#cmdreenumerar').attr('disabled',true);
-			$('#cmdimportar').attr('disabled',true);
+			$('#cmdenviarlotes').prop('disabled',true);
+			$('#cmdreenumerar').prop('disabled',true);
+			$('#cmdimportar').prop('disabled',true);
 			break;
 	}
 }
@@ -509,7 +589,7 @@ function pintaTablaConceptos(table, ID_REQ_MOVTO, CVE_REQ, CONSECUTIVO, CANTIDAD
 	var htmlBoton = "<img src=\"../../imagenes/calendar_edit.png\" style='cursor: pointer;' alt=\"Modificar anexo "+CONSECUTIVO+"\" width=\"16\" height=\"16\" border=\"0\" onClick=\"mostrarAnexoConcepto("+ID_REQ_MOVTO+","+CONSECUTIVO+")\" >&nbsp;";
     var htmlEdit = "<img src=\"../../imagenes/page_white_edit.png\" style='cursor: pointer;' alt=\"Editar lote "+CONSECUTIVO+"\" width=\"16\" height=\"16\" border=\"0\" onClick=\"editarConcepto("+ID_REQ_MOVTO+")\" >"; 		
 	var htmlEnPedido = "<a href='javascript:getInfoPedido("+ID_PED_MOVTO+")'>Sí</a>";
-	var ban = ($('#cbotipo').attr('value')!=1&&$('#cbotipo').attr('value')!=7) ? "No Aplica": "No";
+	var ban = ($('#cbotipo').val()!=1&&$('#cbotipo').val()!=7) ? "No Aplica": "No";
 	
 	if(ID_PED_MOVTO!=0) ID_PED =  ID_PED_MOVTO; 
 	//if($('#cbotipo').attr('value')!=2) htmlBoton = "";
@@ -533,7 +613,7 @@ function getInfoPedido(ID_PED_MOVTO){
 /*Metodo para cerrar la requisicon*/
 /*Metodo para cerrar la requisicon*/
 function cerrarRequisicion(){
-	if($('#TOTAL_CONCEPTOS').attr('value')=='0') {jAlert('No se puede cerrar la requisición si no existe por lo menos un lote en el detalle','Advertencia'); return false;}
+	if($('#TOTAL_CONCEPTOS').val()=='0') {jAlert('No se puede cerrar la requisición si no existe por lo menos un lote en el detalle','Advertencia'); return false;}
 	if(($('#cbotipo')==7||$('#cbotipo')==8)&&($('#CVE_VALE')!='0'||$('#CVE_VALE')!='')) {jAlert('No es posible cerrar una Requisicion/Orden de Servicio Calendarizada cuando se compromete a travez de un vale','Advertencia'); return false;}
 	jConfirm('¿Confirma que desea cerrar la requisición?','Confirmar', function(r){
 		if(r){
@@ -548,20 +628,20 @@ function cerrarRequisicion(){
 	
 function cerrarRequiFinal(){
 	ShowDelay('Cerrando Requisicion','');
-	controladorRequisicion.cerrarRequisicion($('#CVE_REQ').attr('value'),checkPresupuesto, {
+	controladorRequisicion.cerrarRequisicion($('#CVE_REQ').val(),checkPresupuesto, {
 					callback:function(items){
 						if(!items) 
 							{ 
 								jError('<strong>Imposible cerrar la requisición, esto puede ser debido a causa de las siguientes razones:</strong><br>- La Requisición supera el disponible actual. <br>- El periodo de la Requisición no es válido. <br>- Programa o partida no válidos','Error');
 							}
 						else{
-							$('#cmdcerrar').attr('disabled', true);
+							$('#cmdcerrar').prop('disabled', true);
 							CloseDelay('Requisicion cerrada con exito', function(){
 									//Vincular a mostrar la Requisicion en Solo lectura
 									//document.location = 'consultaRequisicion.action?cve_req='+$('#CVE_REQ').attr('value')+'&accion=false';
 									
 									//Nueva ventada para mostrar el documento PDF
-									showPDFRequisicion($('#CVE_REQ').attr('value'));
+									showPDFRequisicion($('#CVE_REQ').val());
 								});
 								
 						}
@@ -576,18 +656,20 @@ function cerrarRequiFinal(){
 
 /*Metodo para mostrar el documento PDf de la requisicion*/
 function showPDFRequisicion(cve_req){
-	$('#claveRequisicion').attr('value',cve_req);
-	$('#forma').attr('target',"impresion");
+	$('#claveRequisicion').val(cve_req);
+	$('#forma').prop('target',"impresion");
 	$('#forma').submit();
-	$('#forma').attr('target',"");
+	$('#forma').prop('target',"");
 }
 
 /*Metodo para obtener el mes de la requsicion*/
 function getMesRequisicion(mes){
+	
 	if(mes==0){
 		controladorRequisicion.getMesActivo({
 			callback:function(items){
-				$('#cbomes').val(items);
+	
+				$('#cbomeses').val(items);
 			}
 			,
 			errorHandler:function(errorString, exception) { 
@@ -601,33 +683,33 @@ function getMesRequisicion(mes){
 /*funcion para limpiar los datos*/
 function nuevaRequisicion(){
 	/*Reestablece campos ocultos*/
-	$('#MES').attr('value',0);
-	$('#CVE_REQ').attr('value',0);
+	$('#MES').val(0);
+	$('#CVE_REQ').val(0);
 	
 	/*Limpiar los cuadros de texto*/
-	$('#txtrequisicion').attr('value','');
-	$('#txtfecha').attr('value','');
-	$('#txtnotas').attr('value','');
-	$('#txttipobien').attr('value','');
-	$('#txtmarca').attr('value','');
-	$('#txtmodelo').attr('value','');
-	$('#txtusuario').attr('value','');
-	$('#txtnuminventario').attr('value','');
-	$('#txtplacas').attr('value','');
-	$('#txtcolor').attr('value','');
-	$('#txtprestadorservicio').attr('value','');
-	$('#txtconcurso').attr('value','');
-	$('#txtproyecto').attr('value','');
-	$('#txtpartida').attr('value','');
-	$('#txtpresupuesto').attr('value','');
-	$('#txtdisponible').attr('value','');
+	$('#txtrequisicion').val('');
+	$('#txtfecha').val('');
+	$('#txtnotas').val('');
+	$('#txttipobien').val('');
+	$('#txtmarca').val('');
+	$('#txtmodelo').val('');
+	$('#txtusuario').val('');
+	$('#txtnuminventario').val('');
+	$('#txtplacas').val('');
+	$('#txtcolor').val('');
+	$('#txtprestadorservicio').val('');
+	$('#txtconcurso').val('');
+	$('#txtproyecto').val('');
+	$('#txtpartida').val('');
+	$('#txtpresupuesto').val('');
+	$('#txtdisponible').val('');
 	
 	/*Limpiar los combos*/
 	$('#cbodependencia').val(0);
 	$('#cbotipo').val(0);
 	$('#cboarea').val(0);
-	$('#cbomes').val(0);
-	$('#ID_PROYECTO').attr('value',0);
+	$('#cbomeses').val(0);
+	$('#ID_PROYECTO').val(0);
 	/*Funciones especiales*/
 	tipoRequisicion();
 	nuevoConcepto();
@@ -635,28 +717,28 @@ function nuevaRequisicion(){
 
 /*funcion para limpiar los conceptos*/
 function nuevoConcepto(){
-	$('#ID_REQ_MOVTO').attr('value', 0);
-	$('#ID_ARTICULO').attr('value',0);
-	$('#GRUPO').attr('value',0);
-	$('#SUBGRUPO').attr('value',0);
-	$('#CLAVE').attr('value',0);
-	$('#CVE_UNIDAD_MEDIDA').attr('value',0);
-	$('#REQ_CONS').attr('value',0);
+	$('#ID_REQ_MOVTO').val(0);
+	$('#ID_ARTICULO').val(0);
+	$('#GRUPO').val(0);
+	$('#SUBGRUPO').val(0);
+	$('#CLAVE').val(0);
+	$('#CVE_UNIDAD_MEDIDA').val(0);
+	$('#REQ_CONS').val(0);
 	//$('#ID_PROYECTO').attr('value',0);
-	$('#txtproducto').attr('value','');
-	$('#txtprecioestimado').attr('value','');
-	$('#txtunidadmedida').attr('value','');
-	$('#txtcantidad').attr('value','');
-	$('#txtdescripcion').attr('value','');
+	$('#txtproducto').val('');
+	$('#txtprecioestimado').val('');
+	$('#txtunidadmedida').val('');
+	$('#txtcantidad').val('');
+	$('#txtdescripcion').val('');
 	
 }
 
 function getPresupuesto(){
-        controladorRequisicion.getPresupuestoReq($('#CVE_REQ').attr('value'), {
+        controladorRequisicion.getPresupuestoReq($('#CVE_REQ').val(), {
         callback:function(items) {
 		var html = getTabla(items);
 		jWindow(html,'Disponibilidad Presupuestal del Calendario', '','',0);
-			$('#cmdguardarPresupuesto').attr('disabled', 'disabled');
+			$('#cmdguardarPresupuesto').prop('disabled', 'disabled');
 		} 					   				
         ,
         errorHandler:function(errorString, exception) { 
@@ -667,10 +749,10 @@ function getPresupuesto(){
 
 function getTabla(items){
 	var meses=["","ENERO","FEBRERO","MARZO","ABRIL","MAYO","JUNIO","JULIO","AGOSTO","SEPTIEMBRE","OCTUBRE","NOVIEMBRE","DICIEMBRE"];
-	var mesActivo=parseInt($('#cbomes').attr("value"));
+	var mesActivo=parseInt($('#cbomeses').val());
 	var importe=parseFloat(items.importe);
 	var importeDes=0;
-	var tabla ="<table align='center'><tr><td><h1>Presupuesto disponible"+(($('#CVE_CONTRATO').attr('value')!='0'&&$('#CVE_CONTRATO').attr('value')!='') ? " en contrato":"")+"</h1></td></tr></table>";
+	var tabla ="<table align='center'><tr><td><h1>Presupuesto disponible"+(($('#CVE_CONTRATO').val()!='0'&&$('#CVE_CONTRATO').val()!='') ? " en contrato":"")+"</h1></td></tr></table>";
 		tabla +="<input type='hidden' name='importeReq' id='importeReq' value='"+importe+"' >";
 		tabla +="<table border='0' align='center' cellpadding='0' cellspacing='0' class='formulario'>";
 		tabla +="<tr><td colspan='3' height='25'>Total a Precomprometer: <strong>$ "+formatNumber(items.importe)+"</strong><input type='hidden' name='pre' id='t_importe' value='"+items.importe+"'></td></tr>";	
@@ -678,7 +760,7 @@ function getTabla(items){
         
 		for (i=1; i<=12; i++ ){
 			//por si aplica el contrato
-			if($('#CVE_CONTRATO').attr('value')!='0'&&$('#CVE_CONTRATO').attr('value')!=''){
+			if($('#CVE_CONTRATO').val()!='0'&&$('#CVE_CONTRATO').val()!=''){
 				if (i>=mesActivo){
 					var dispo=dispo=(eval("items."+meses[i].substring(0,3)+"PREINI")+eval("items."+meses[i].substring(0,3)+"PREAMP")-eval("items."+meses[i].substring(0,3)+"PRERED")-eval("items."+meses[i].substring(0,3)+"PRECOM")-eval("items."+meses[i].substring(0,3)+"PREREQ")-eval("items."+meses[i].substring(0,3)+"PREEJE")).toFixed(2);
 					//Si hay disponibilidad
@@ -729,7 +811,7 @@ function setDistribuir(importe){
 	total = eval(importe/t);
 	//asignacion de los valores divididos
 	$('INPUT[name=pre]').each(function() {
-			if(eval(total)<=eval($(this).val())) {$('INPUT[name='+$(this).attr('id')+'_importe]').attr('value', total);} else {alert('El disponible del mes es insuficiente al realizar esta operacion'); return false;}
+			if(eval(total)<=eval($(this).val())) {$('INPUT[name='+$(this).val('id')+'_importe]').val(total);} else {alert('El disponible del mes es insuficiente al realizar esta operacion'); return false;}
 	});
 	getTotalPre();
 }
@@ -752,17 +834,17 @@ function getTotalPre(){
 		$('INPUT[id=p_importe]').each(function() {
 				total = eval(total) + eval($(this).val());
 				temp = redondeo(total);
-				if(temp==$('#t_importe').attr('value')){
-					$('#cmdguardarPresupuesto').attr('disabled', false);
+				if(temp==$('#t_importe').val()){
+					$('#cmdguardarPresupuesto').prop('disabled', false);
 				}
 				else{
-					$('#cmdguardarPresupuesto').attr('disabled', true);
+					$('#cmdguardarPresupuesto').prop('disabled', true);
 				}
 				//temp = 0.00;
 		});
 		$('#div_total').html('<strong>$ '+formatNumber(total)+'</strong>');
 
-		if(redondeo(total)>eval($('#t_importe').attr('value'))||total<0){
+		if(redondeo(total)>eval($('#t_importe').val())||total<0){
 			alert('El importe que ha establecido no es válido, vuelva a verificarlo');
 			$('#cmdguardarPresupuesto').attr('disabled', false); 
 		} 
@@ -793,7 +875,7 @@ function getTotalPre(){
 /*Metodo para mostrar enviar lotes a otro pedido*/
 function mostrarEnviarLotesPedido(){
 	var checks = [];
-	var tipo = $('#cbotipo').attr('value');
+	var tipo = $('#cbotipo').val();
 	$('input[id:chkconsecMovimiento]:checked').each(function(){
 			checks.push($(this).val()); 
 		});
@@ -813,8 +895,8 @@ function mostrarEnviarLotesPedido(){
 }
 
 function enviarLotesPedido(){
-	var cve_ped = $('#txtpedido').attr('value');
-	var cve_req = $('#CVE_REQ').attr('value');
+	var cve_ped = $('#txtpedido').val();
+	var cve_req = $('#CVE_REQ').val();
 	if($('#txtpedido').attr('value')==''){jAlert('El número de Pedido escrito no es válido','Advertencia'); return false;}
 	var checks = [];
 	$('input[id:chkconsecMovimiento]:checked').each(function(){
@@ -825,7 +907,7 @@ function enviarLotesPedido(){
 			 callback:function(items){
 				if(items=="")
 					CloseDelay('Lotes exportados con exito', function(){
-							mostrarTablaConceptos($('#CVE_REQ').attr('value'));
+							mostrarTablaConceptos($('#CVE_REQ').val());
 					});
 				else
 					jError(items, 'Error');
@@ -947,76 +1029,4 @@ function mostrarLotePedido(id_ped_movto){
 				jError("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");          
 			}
 	});
-}
-
-function tipoRequisiciones(){
-	
-	var demovalor2 = $('#cbotipo').val();
-	alert("Opcion seleccionada por cbotipo en val: "+demovalor2);
-	
-	
-	
-	/*Retorna si vale cero*/
-	if(demovalor2=='0') return false;
-	
-	switch(demovalor2){
-	
-		case '1': /*Para bienes*/
-		$('#div_os_presupuesto').show();
-		$('#div_os').hide();
-		break;
-		case '2': /*Para servicios*/
-				$('#div_os').show();
-				$('#div_os_prestador').show();
-				$('#div_os_presupuesto').show();
-				$('#div_os_prestador').show();
-				$('#div_os_vehiculo').hide();
-		break;
-		case '3': /*Para servicio a vehiculos*/
-				$('#div_os').show();
-				$('#div_os_prestador').show();
-				$('#div_os_presupuesto').show();
-				$('#div_os_prestador').show();
-				$('#div_os_vehiculo').show();
-		break;
-		case '4': /*Para maquinaria pesada*/
-				$('#div_os').show();
-				$('#div_os_prestador').show();
-				$('#div_os_presupuesto').show();
-				$('#div_os_prestador').show();
-				$('#div_os_vehiculo').show();
-		break;
-		case '5': /*Para servicio a bombas*/
-				$('#div_os').show();
-				$('#div_os_prestador').show();
-				$('#div_os_presupuesto').show();
-				$('#div_os_prestador').show();
-				$('#div_os_vehiculo').hide();
-		break;
-		case '6': /*Para paquetes*/
-				$('#div_os_presupuesto').show();
-				$('#div_os').hide();
-				$('#div_os_prestador').hide();
-				$('#div_os_prestador').hide();
-				$('#div_os_vehiculo').hide();
-		break;
-		case '7': /*Para Req. calendarizada*/
-				$('#div_os_presupuesto').show();
-				$('#div_os').hide();
-				$('#div_os_prestador').hide();
-				$('#div_os_prestador').hide();
-				$('#div_os_vehiculo').hide();
-				/*activa el combo de meses*/
-				$('#cbomes').attr('disabled',false);
-		break;
-		case '8': /*Para O.S calendarizada*/
-				$('#div_os').show();
-				$('#div_os_prestador').show();
-				$('#div_os_presupuesto').show();
-				$('#div_os_prestador').show();
-				$('#div_os_vehiculo').hide();
-				/*activa el combo de meses*/
-				$('#cbomes').attr('disabled',false);
-		break;
-	}
 }

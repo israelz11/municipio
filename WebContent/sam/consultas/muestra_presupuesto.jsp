@@ -9,9 +9,17 @@
 <title>Muestra presupuesto</title>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
 <link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css"/>
-<link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css">
+
+<link rel="stylesheet" href="../../include/css/sweetalert2.css" type="text/css"/>
+
+<!--
+
+-->
 <script type="text/javascript" src="../../include/js/jquery-1.3.2.min.js"></script>
 <script type="text/javascript" src="../../include/js/toolSam.js"></script>
+
+<script type="text/javascript" src="../../include/js/sweetalert2.js"></script>
+<link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css"/>
 <script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>
 <script type="text/javascript" src="../../include/js/jquery.qtip-1.0/jquery.qtip-1.0.0-rc3.min.js"></script>
 <script language="javascript">
