@@ -3,7 +3,7 @@ var ID_DEPENDENCIA=0;
 
 /* Carga inicial del los metodos utilizados */
 $(document).ready(function(){
-	var options = { 
+	/*var options = { 
         beforeSubmit:  showRequest,  
         success:       showResponse, 
         url:       '_subirArchivoAnexoOP.action',
@@ -24,37 +24,38 @@ $(document).ready(function(){
   $('#txtproyecto').bestupper(); 
   $('#tabsOrdenesEnca').hide();
   $("#fecha").datepicker({showOn: 'button', buttonImage: '../../imagenes/cal.gif', buttonImageOnly: true,dateFormat: 'dd/mm/yy'});
-  $('#tabsOrdenes').tabs(
+  /*$('#tabsOrdenes').tabs(
   		{
 			select: function(event, ui) {
 				//comprobarContrato();
 		}
 	});  
 	
-  $('#txtpartida').keypress(function(event){return keyNumbero(event);});
+	*/
+	
+  /*$('#txtpartida').keypress(function(event){return keyNumbero(event);});
   $('#img_presupuesto').click(function(event){muestraPresupuesto();});
-  $('#img_contrato').click(function(event){jInformation('Este modulo se encuentra deshabilitado por el momento','Información');/*muestraContratos();*/});
+  $('#img_contrato').click(function(event){jInformation('Este modulo se encuentra deshabilitado por el momento','Información');});
   $('#img_vale').click(function(event){muestraVales();});
-  $('#img_quitar_contrato').click(function(event){jInformation('Este modulo se encuentra deshabilitado por el momento','Información');/*removerContrato();*/});
+  $('#img_quitar_contrato').click(function(event){jInformation('Este modulo se encuentra deshabilitado por el momento','Información');});
   //$('#img_quitar_vale').click(function(event){removerVale();});
   
   $('#cmdNuevaRetencion').click(function(event){limpiarRetenciones();});
   $('#cmdNuevoAnexo').click(function(event){limpiarAnexos();});
   $('#txtproyecto').blur(function(event){  __getPresupuesto($('#ID_PROYECTO').attr('value'), $('#txtproyecto').attr('value'),$('#txtpartida').attr('value'), $('#cbomes').attr('value'),  'txtpresupuesto','txtdisponible',$('#tipoGasto').attr('value'));});	
   $('#txtpartida').blur(function(event){  __getPresupuesto($('#ID_PROYECTO').attr('value'), $('#txtproyecto').attr('value'),$('#txtpartida').attr('value'), $('#cbomes').attr('value'),  'txtpresupuesto','txtdisponible',$('#tipoGasto').attr('value'));});  
-  getBeneficiarios('xBeneficiario','xClaveBen',$('#tipoBeneficiario').attr('value'));
+  //getBeneficiarios('xBeneficiario','xClaveBen',$('#tipoBeneficiario').attr('value'));
   llenarTablaDeOrdenes(); 
-  
-  
-  /*Buscar orden de pago si se puede editar*/
+
+  /*Buscar orden de pago si se puede editar
   if(($('#cve_op').attr('value')!=''||$('#cve_op').attr('value')!='0')&&($('#accion').attr('value')=='edit')){
 	  buscarOrden($('#cve_op').attr('value'));  
   }
-  $('#tabsOrdenes').tabs('select', 0); 
+  //$('#tabsOrdenes').tabs('select', 0); 
   $('#fila_contrato').hide();
   $('#ui-datepicker-div').hide();
   
-  $('#tipoMovDoc').change(function(event){
+  /*$('#tipoMovDoc').change(function(event){
 	  if($(this).val()=='XML')
 	  	$('#div_archivo').html('<input type="file" class="input-file" id="archivo" name="archivo" style="width:445px" accept="text/xml" />');
 	  else if($(this).val()!='VAR')
@@ -62,7 +63,15 @@ $(document).ready(function(){
 	  else
 	   $('#div_archivo').html('<input type="file" class="input-file" id="archivo" name="archivo" style="width:445px">');
 	});
-	
+*/
+	$('#xTipo').on('change', function(){
+		cambiarModoDetalle();
+	});
+	$('#fecha').datetimepicker({
+		format: 'DD/MM/YYYY',
+		defaultDate: new Date()
+	});
+	$('.selectpicker').selectpicker();
 });
 
 function getcontratoDocumento(num_contrato, cve_contrato, idRecurso, clv_benefi, proyecto, clv_partid, importe)

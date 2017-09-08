@@ -12,44 +12,51 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-<link href="../../include/js/autocomplete/jquery.autocomplete.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../../include/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../../include/js/bootstrap-3.3.7.js"></script>
+<!--<script type="text/javascript" src="../../include/js/jquery-ui-1.12.1.js"></script>-->
+<!--<link href="../../include/js/autocomplete/jquery.autocomplete.css" rel="stylesheet" type="text/css" />
 <link type="text/css" href="../../include/css/black-tie/jquery-ui-1.7.3.custom.css" rel="stylesheet" />	
-<link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css">
+<link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css">-->
 <script type="text/javascript" src="../../dwr/interface/autocompleteDiversosRemoto.js"> </script>
 <script type="text/javascript" src="../../dwr/interface/controladorOrdenPagoRemoto.js"> </script>
 <script type="text/javascript" src="../../dwr/interface/controladorProyectoPartida.js"> </script>
 <script type="text/javascript" src="../../dwr/engine.js"> </script>  
 <script type="text/javascript" src="../../dwr/util.js"> </script>  
+<!--
 <script type="text/javascript" src="../../include/js/jquery-1.3.2.min.js"></script>
 <script type="text/javascript" src="../../include/js/jquery-ui-1.7.3.custom.min.js"></script>
+
 <script type="text/javascript" src="../../include/js/jquery-impromptu.2.3.js"></script>
 <script type="text/javascript" src="../../include/js/jquery.form.js"></script>
-<script type="text/javascript" src="../../include/js/componentes/componentes.js"></script>
 <script type="text/javascript" src="../../include/js/jquery.maxlength.js"></script>
 <script type="text/javascript" src="../../include/js/jquery.bestupper.min.js"></script>
 <script type="text/javascript" src="../../include/js/autocomplete/jquery.autocomplete.js"></script>
 <script type="text/javascript" src="../../include/js/autocomplete/autompleteVarios.js"></script>
 <script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>
+-->
 <script type="text/javascript" src="../../include/js/presupuesto/presupuesto.js"></script>
 <script type="text/javascript" src="orden_pago.js?x=<%=System.currentTimeMillis()%>"></script>
-<script type="text/javascript" src="../../include/js/toolSam.js"></script>
-<script type="text/javascript" src="../../dwr/engine.js"> </script>  
-<script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>
-<link rel="stylesheet" href="../../include/js/autocomplete/jquery.autocomplete.css" type="text/css" />
+<script type="text/javascript" src="../../include/js/toolSam.js"></script> 
+<!--<script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>-->
 
-
-<!--  <link rel="stylesheet" href="../../include/css/css/css3-buttons.css" type="text/css" media="screen">  -->
+<!--  <link rel="stylesheet" href="../../include/css/css/css3-buttons.css" type="text/css" media="screen">  
 <link rel="stylesheet" href="../../include/css/tiptip.css" type="text/css"  media="screen">
-<script src="../../include/css/jquery.tiptip.js"></script>
+<script src="../../include/css/jquery.tiptip.js"></script>-->
 <link rel="stylesheet" href="../../include/css/bootstrap-3.3.7.css?x=<%=System.currentTimeMillis()%>" type="text/css">
 <link rel="stylesheet" href="../../include/css/bootstrap2.css?=<%=System.currentTimeMillis()%>" type="text/css"/>
 <link rel="stylesheet" href="../../include/css/style-tabs.css" type="text/css"/>
-<script rel="stylesheet" src="../../include/js/bootstrap-3.3.7.js" type="text/css"></script>
 
 
-<link rel="stylesheet" href="../../include/css/sweet-alert.css" type="text/css">
+
+<!--<link rel="stylesheet" href="../../include/css/sweet-alert.css" type="text/css">
 <script src="../../include/js/sweet-alert.js"></script>
-
+-->
+<link rel="stylesheet" href="../../include/css/boostrap-select/dist/css/bootstrap-select.css" type="text/css">
+<script type="text/javascript" src="../../include/css/boostrap-select/dist/js/bootstrap-select.js"></script>
+<script type="text/javascript" src="../../include/css/bootstrap-datetimepicker-master/js/moment-with-locales-2.9.0.js"></script>
+<link rel="stylesheet" href="../../include/css/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker-4.15.35.css" type="text/css">
+<script type="text/javascript" src="../../include/css/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker-4.15.35.js"></script>
 
 <style type="text/css">
 a:link {
@@ -123,23 +130,28 @@ a:active {
 	<br/>
 	<br/>
 
-</div><!-- Cierra el WELL -->
-	<div id="DivOPResults" class="form-gorup">
-		<table border="0" class="table table-hover" id="listaOrdenes" style="width:100%">
-        <thead>
-        <tr>
-          <th width="5%" height="20">Numero</th>
-          <th width="17%" >Tipo</th>
-          <th width="10%" >Fecha</th>
-          <th width="49%" >Concepto</th>
-          <th width="16%" >Estado</th>
-          <th width="3%" >Opc.</th>
-        </tr>
-        </thead>
-         <tbody>
-         </tbody>
-        </table>
-	</div>    
+</div>
+
+<!-- Cierra el WELL -->
+  <div class="col-sm-12">
+    <div id="DivOPResults" class="form-gorup">
+      <table border="0" class="table table-hover" id="listaOrdenes" style="width:100%">
+          <thead>
+          <tr>
+            <th width="5%" height="20">Numero</th>
+            <th width="17%" >Tipo</th>
+            <th width="10%" >Fecha</th>
+            <th width="49%" >Concepto</th>
+            <th width="16%" >Estado</th>
+            <th width="3%" >Opc.</th>
+          </tr>
+          </thead>
+          <tbody>
+          </tbody>
+          </table>
+    </div>    
+  </div>
+
   <div class="col-sm-12">
     <!-- Tabs para Ordenes de Pago-->
     <div class="panel with-nav-tabs panel-primary">
@@ -158,34 +170,40 @@ a:active {
               <div class="tab-pane fade in active" id="tabsCabe">
                   <form class="form-horizontal">
                     <!-- Numero de Orde de Pago -->
-                    <div class="form-group" style="padding-bottom:15px;padding-top: 10px;">
-                      <div class="col-sm-3 control-label">No. Orden:</div>
-                      <div class="col-sm-9">
-                        <div id="NoOrden">&nbsp;</div>
+                    <div class="row">
+                      <div class="form-group" style="padding-bottom:15px;padding-top: 10px;">
+                        <div class="control-label col-sm-3">No. Orden:</div>
+                        <div class="col-sm-9">
+                          <div id="NoOrden">&nbsp;</div>
+                        </div>
                       </div>
                     </div>
                     <!-- Tipo de Orden de Pago -->
-                    <div class="form-group">
-                      <div class="col-sm-3 control-label">*Tipo:</div>
-                      <div class="col-sm-9 form-group">
-                          <select name="xTipo" class="form-control" id="xTipo"  onChange="cambiarModoDetalle()" style="width:222px">
-                            <c:forEach items="${tipoDocumentosOp}" var="item" varStatus="status">
-                              <option value="<c:out value='${item.ID_TIPO_ORDEN_PAGO}'/>">
-                                <c:out value="${item.DESCRIPCION}"/>
-                                </option>
-                              </c:forEach>
-                          </select>
-                      </div>
-                    </div>
-                    <!-- Tipo de Orden de Pago -->
-                    <div class="form-group">
-                      <div class="col-sm-3 control-label">*Tipo de Gasto:</div>
-                      <div class="col-sm-9 form-group">
-                          <select name="tipoGasto" class="form-control" id="tipoGasto" style="width:445px">
-                              <c:forEach items="${tipoGastos}" var="item" varStatus="status">                  
-                                <option value="<c:out value='${item.ID}'/>"><c:out value="${item.RECURSO}"/></option>
+                    <div class="row">
+                      <div class="form-group">
+                        <div class="control-label col-sm-3 ">*Tipo:</div>
+                        <div class="col-sm-3 form-group">
+                            <select name="xTipo" class="selectpicker form-control input-sm m-b" id="xTipo" style="width:100%">
+                              <c:forEach items="${tipoDocumentosOp}" var="item" varStatus="status">
+                                <option value="<c:out value='${item.ID_TIPO_ORDEN_PAGO}'/>">
+                                  <c:out value="${item.DESCRIPCION}"/>
+                                  </option>
                                 </c:forEach>
-                          </select>
+                            </select>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Tipo de Gasto-->
+                    <div class="row">
+                      <div class="form-group">
+                        <div class="control-label col-sm-3">*Tipo de Gasto:</div>
+                        <div class="col-sm-6 form-group">
+                            <select name="tipoGasto" class="selectpicker form-control input-sm m-b" data-live-search="true" id="tipoGasto" style="width:100%">
+                                <c:forEach items="${tipoGastos}" var="item" varStatus="status">                  
+                                  <option value="<c:out value='${item.ID}'/>"><c:out value="${item.RECURSO}"/></option>
+                                  </c:forEach>
+                            </select>
+                        </div>
                       </div>
                     </div>
                     <!-- Contrato -->
@@ -203,33 +221,61 @@ a:active {
                       </div>
                     </div>
                   <!--Periodo-->
-                  <div class="form-group">
-                      <div class="col-sm-3 control-label">*Periodo:</div>
-                      <div class="col-sm-9 form-group">
-                          <select name="cbomes" class="form-control" id="cbomes" style="width:111px">
-                          <c:forEach items="${meses}" var="item" varStatus="status">
-                            <option value="<c:out value="${item.mes}"/>">
-                            <c:out value="${item.DESCRIPCION}"/>
-                          </c:forEach>
-                        </select>
-                      </div>
+                  <div class="row">
+                    <div class="form-group">
+                        <div class="control-label col-sm-3">*Periodo Presupuestal:</div>
+                        <div class="form-group col-sm-3">
+                            <select name="cbomes" class="selectpicker form-control input-sm m-b" id="cbomes" style="width:100%">
+                              <c:forEach items="${meses}" var="item" varStatus="status">
+                                <option value="<c:out value="${item.mes}"/>">
+                                <c:out value="${item.DESCRIPCION}"/>
+                              </c:forEach>
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-6">&nbsp;</div>
+                    </div>
                   </div>
-
                   <!--Fecha-->
-                  <div class="form-group">
-                      <div class="col-sm-3 control-label">*Fecha:</div>
-                      <div class="col-sm-9 form-group">
-                          <input name="fecha" type="text" class="form-control" id="fecha" value="" style="width:111px" maxlength="10"/>
+                  <div class="row">
+                    <div class="form-group">
+                        <div class="control-label col-sm-3 ">*Fecha de la OP:</div>
+                        <div class="form-group col-sm-3">
+                          <div class="input-group date">
+                              <input name="fecha" type="text" class="form-control" id="fecha" value="" style="width:100%" maxlength="10"/>
+                              <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                              </span>
+                          </div>
                           <input name="fecha2" type="hidden" class="input" id="fecha2" value=<%=new java.util.Date()%> style="width:111px" maxlength="10"/>
-                      </div>
+                        </div>
+                        <div class="form-group col-sm-6">&nbsp;</div>
+                    </div>
+                  </div>
+                  <!--Generar IVA-->
+                  <div class="row">
+                    <div class="form-group">
+                        <div class="control-label col-sm-3 ">Importe IVA:</div>
+                        <div class="form-group col-sm-3">
+                            <input name="xImporteIva"  type="text"  class="form-control" id="xImporteIva" value="0" maxlength="30" onkeypress=" return keyNumbero( event );" style="width:100%" />
+                        </div>
+                        <div class="form-group col-sm-7">&nbsp;</div>
+                    </div>
                   </div>
 
-                  <!--Fecha-->
-                  <div class="form-group">
-                      <div class="col-sm-3 control-label">Genera IVA:</div>
-                      <div class="col-sm-9 form-group">
-                          <input name="xImporteIva"  type="text"  class="form-control" id="xImporteIva" value="0" maxlength="30" onkeypress=" return keyNumbero( event );" style="width:111px" />
-                      </div>
+                  <!--Beneficiario-->
+                  <div class="row">
+                    <div class="form-group">
+                        <div class="control-label col-sm-3 ">Seleccione un Beneficiario:</div>
+                        <div class="form-group col-sm-6">
+                            <select name="xBeneficiario" class="selectpicker form-control input-sm m-b" id="xBeneficiario" style="width:100%">
+                              <c:forEach items="${Beneficiario}" var="item" varStatus="status">
+                                <option value="<c:out value="${item.mes}"/>">
+                                <c:out value="${item.DESCRIPCION}"/>
+                              </c:forEach>
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-3">&nbsp;</div>
+                    </div>
                   </div>
 
                   </form>
@@ -237,6 +283,10 @@ a:active {
 
               <!--Tab Conceptos-->
               <div class="tab-pane" id="tabsCon">
+                <form class="form-horizontal">
+                  <!--Generar IVA-->
+                  
+                </form>
 
               </div>
           </div>
@@ -259,16 +309,6 @@ a:active {
 
       <table width="100%" border="0"  align="center" cellpadding="0" cellspacing="0" class="formulario">
               
-        <tr>
-          <th height="30">Genera IVA:</th>
-          <td ></td>
-        </tr>
-        <tr >
-          <th height="30">*Beneficiario:</th>
-          <td ><input name="xBeneficiario" id="xBeneficiario"  type="text" class="input" value="" style="width:445px" maxlength="50" />
-              <input name="xClaveBen" type="hidden"  id="xClaveBen" size="8" maxlength="6" readonly value="1225" />
-              <a href="javascript:buscarBeneficiarioEmer();"> <img src="../../imagenes/buscar.png" alt="Bsqueda del Beneficiario" width="22" height="22" border="0" style="display:none" /></a></td>
-        </tr>
         <tr >
           <th height="30">Concurso:</th>
           <td ><input name="xConcurso" type="text"  class="input"   id="xConcurso" value="" style="width:111px" maxlength="30" /></td>
