@@ -125,7 +125,7 @@ public class GatewayRequisicion  extends BaseGateway {
 			cve_req = getNumeroRequisicion(ejercicio)+1;
 			String SQL = "INSERT INTO SAM_REQUISIC (CVE_REQ, NUM_REQ, CVE_CONTRATO, CVE_VALE, EJERCICIO, ID_PROYECTO, CLV_PARTID, ID_DEPENDENCIA, FECHA, TIPO, OBSERVA, FECHA_CAP, FECHA_INGRESO, CVE_PERS, STATUS, COMPROMETE, PERIODO, ANUALIZADA, ID_GRUPO ) " +
 						 "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-			this.getJdbcTemplate().update(SQL, new Object[]{cve_req, num_req, (cve_contrato==0 ? null:cve_contrato), (cve_vale==0 ? null:cve_vale), ejercicio, id_proyecto, partida, cve_unidad, fecha, tipo, notas, fecha_cap, fecha_ingreso, cve_pers, status, 0, mes, anualizada, id_grupo});
+			this.getJdbcTemplate().update(SQL, new Object[]{cve_req, num_req, 0, 0, ejercicio, id_proyecto, partida, cve_unidad, fecha, tipo, notas, fecha_cap, fecha_ingreso, cve_pers, status, 0, mes, anualizada, id_grupo});
 			//Guardar en la bitacora
 			gatewayBitacora.guardarBitacora(gatewayBitacora.NUEVA_REQUISICION, ejercicio, cve_pers, cve_req, num_req, "REQ", fecha, id_proyecto.toString(), partida, null, 0D);
 			return cve_req;
@@ -284,9 +284,21 @@ public class GatewayRequisicion  extends BaseGateway {
 		
 		if (estatus.contains("9")) //STATUS = TODOS
 			estatus = "0,1,2,4,5 ";
+		/*
+		if (estatus.contains("0")) //STATUS = EDICION
+			sql+=" AND R.FECHA_CIERRE IS NULL "; 
 		
-		if (estatus.contains("1")) //STATUS = CERRAD
+		if (estatus.contains("1")) //STATUS = CERRADO
 			sql+=" AND R.FECHA_FINIQUITADO IS NULL ";
+		
+		if (estatus.contains("2")) //STATUS = PROCESO
+			sql+=" AND R.TIPO=1 AND R.FECHA_FINIQUITADO IS NULL";
+		
+		if (estatus.contains("4")) //STATUS = CANCELADO
+			sql+=" AND FECHA_CANCELADO IS NOT NULL ";
+		
+		if (estatus.contains("1,5,2")) //STATUS = FINIQUITADO
+			sql+=" AND R.FECHA_FINIQUITADO IS NOT NULL ";*/
 		
 		return this.getNamedJdbcTemplate().queryForList("SELECT R.CVE_REQ, R.NUM_REQ, R.CVE_PERS, C.ID_PROYECTO, C.N_PROGRAMA, R.CLV_PARTID, R.ID_DEPENDENCIA, R.OBSERVA, R.TIPO, "+
 																"TIPO_REQ = (CASE r.TIPO WHEN 1 THEN 'REQ.' WHEN 2 THEN 'O.S.' WHEN 3 THEN 'O.T.' WHEN 4 THEN 'O.T.M.P.' WHEN 5 THEN 'O.S.BOMBAS' WHEN 6 THEN 'PAQUETE' WHEN 7 THEN 'REQ. CALEN' WHEN 8 THEN 'OS. CALEN' END), "+
@@ -294,7 +306,7 @@ public class GatewayRequisicion  extends BaseGateway {
 																"ISNULL((SELECT SUM(CANTIDAD *PRECIO_EST) FROM SAM_REQ_MOVTOS WHERE CVE_REQ = R.CVE_REQ),0) AS IMPORTE, "+
 																"ISNULL((SELECT SUM(cantidad_temp * precio_est ) FROM SAM_REQ_MOVTOS WHERE CVE_REQ = R.CVE_REQ),0) AS IMPORTE2,   (CASE "+
 																"WHEN R.STATUS=1 AND R.FECHA_FINIQUITADO IS NULL THEN 'CERRADO' "+
-																"WHEN R.STATUS=1 AND R.FECHA_FINIQUITADO IS NOT NULL OR R.STATUS=5 THEN 'FINIQUITADO' "+
+																"WHEN R.STATUS IN (1) AND R.FECHA_FINIQUITADO IS NOT NULL OR R.STATUS IN (5) THEN 'FINIQUITADO' "+
 																"WHEN R.STATUS=2 THEN 'PROCESO' "+
 																"WHEN R.STATUS=0 THEN 'EDICION' "+
 																"WHEN R.STATUS=4 THEN 'CANCELADO' "+

@@ -1,12 +1,19 @@
 var centro =   "text-align:center";
 var derecha =  "text-align:right";
 var izquierda = "text-align:left";
+
 var row_color = "";
 
 
 
 function mostrarOpcionPDF(cve_op){
-	var html = '<table class="listas" border="0" align="center" cellpadding="1" cellspacing="2" width="405" >'+
+	alert("Entro a toolSAM");
+	swal({
+		
+		  title: 'Opciones de Reporte Orden de Pago',
+		  text: 'Seleccione: ',
+		  html:
+			  '<table class="listas" border="0" align="center" cellpadding="1" cellspacing="2" width="405" >'+
 				'  <tr id="x1" onmouseover="color_over(\'x1\')" onmouseout="color_out(\'x1\')"> '+
 				'	<td width="33" height="27" align="center" style="cursor:pointer" onclick="getReporteOP('+cve_op+')"> '+
 				'	  <img src="../../imagenes/pdf.gif"/></td>' +
@@ -16,9 +23,12 @@ function mostrarOpcionPDF(cve_op){
 				'  <tr id="x2" onmouseover="color_over(\'x2\')" onmouseout="color_out(\'x2\')" onclick=""> '+
 				'	  <td height="27" align="center"  style="cursor:pointer" onclick="getAnexosListaOP('+cve_op+')"><img src="../../imagenes/report.png" /></td> '+
 				'	  <td height="27" align="left" style="cursor:pointer" onclick="getAnexosListaOP('+cve_op+')">&nbsp;Listar Anexos de Orden de Pago</td> '+
-				'	</tr> ';
-			html+='</table>';
-	jWindow(html,'Opciones de Reporte Orden de Pago', '','Cerrar',1);
+				'	</tr> '+
+				'</table>',
+		  width: 800,
+		  padding: 10,
+		  animation: false
+		})
 }
 
 function muestraVales(){
@@ -76,32 +86,13 @@ function cambiarGrupoFirmas(cve_doc, modulo){
 		  padding: 10,
 		  animation: false
 		})
-	/*
-	$.alertable.prompt('Cambiar grupo de firmas ', {
-		
-	    prompt:
-	    	
-			
-	    }).then(function(data) {
-	    	console.log('Alert dismissed',data);
-	    });
-	//jWindow('<iframe width="750" height="350" name="grupoFirmas" id="grupoFirmas" frameborder="0" src="../../sam/utilerias/cambiarFirmas.action?modulo='+modulo+'&cve_doc='+cve_doc+'"></iframe>','Cambiar grupo de firmas', '','Cerrar',1);
-	*/
+	
 }
 
 
 /*funcion para editar los documentos*/
 function abrirDocumento(){
-	//jAlert('El modulo se encuentra desarrollado y no esta disponible por el momento', 'Advertencia');
-	/*swal({
-		  title: 'El modulo no se encuentra desarrollado y no esta disponible por el momento',
-		  type: 'warning',
-		  html: $('<div>')
-		    .addClass('some-class')
-		    .text('Disculpe las molestias.'),
-		  animation: false,
-		  customClass: 'animated tada'
-		})*/
+	
 	swal({
 		  title: 'El modulo no se encuentra desarrollado y no esta disponible por el momento!',
 		  text: 'Por modificaciones de lineamientos de la CONAC.',
@@ -403,22 +394,7 @@ function cambiarUsuarioDocumento(cve_doc, modulo, cve_pers){
 			chkReq.push(cve_doc); 
 		}
 		var usuarios =$('#cbodependencia').attr('value');
-		 swal({
-			    title: 'Input with list',
-			    html: '<select id="cbousuarios" style="width:500px"></select>',
-			   
-			    
-			    showCancelButton: true
-			  }).then(function(result) {
-			    if (result) {
-			    	
-			      swal({
-			        type: 'success',
-			        html: 'You entered: <strong>' + result + '</strong>'
-			      });
-			    }
-			  });
-		/*
+		 
 		 var myArrayOfThings = [
 		                        { id: 1, name: 'Item 1' },
 		                        { id: 2, name: 'Item 2' },
@@ -445,7 +421,7 @@ function cambiarUsuarioDocumento(cve_doc, modulo, cve_pers){
 		                            console.log(inputValue);
 
 		                        }
-		                    });*/
+		                    });
 	}/*Cierra el modulo para requisiciones*/
 	
 	if(modulo=='ped'){
@@ -1509,17 +1485,35 @@ function guardarMovimientoContrato(cve_doc, modulo, num_doc)
 	});
 }
 
-/*funcion para mostrar los documetos comprometidos y precomprometidos*/
+/********************* funcion para mostrar los documetos comprometidos y precomprometidos **************************************************************************/
 function mostrarConsultaCompromiso(idproyecto, proyecto, partida, periodo, consulta){
 	if(proyecto==""||partida==""||consulta==""){
+		
 		jAlert('Programa y partida no validos', 'Consulta de documentos Comprometidos y Pre-comprometidos'); return false;
+		
 	}
-	jWindow('<iframe width="680" height="360" id="ventadaCompromisos" frameborder="0" src="../../sam/consultas/muestra_compromisos.action?idproyecto='+idproyecto+'&proyecto='+proyecto+'&partida='+partida+"&periodo="+periodo+'&consulta='+consulta+'"></iframe>','Detalles presupuestales', '','Cerrar',1);
+	
+	//jWindow('<iframe width="680" height="360" id="ventadaCompromisos" frameborder="0" src="../../sam/consultas/muestra_compromisos.action?idproyecto='+idproyecto+'&proyecto='+proyecto+'&partida='+partida+"&periodo="+periodo+'&consulta='+consulta+'"></iframe>','Detalles presupuestales', '','Cerrar',1);
+	swal({
+		  title: 'Detalles presupuestales',
+		  text: 'Seleccione el nuevo grupo de firma',
+		  html:
+			  '<iframe width="680" height="360" id="ventadaCompromisos" frameborder="0" src="../../sam/consultas/muestra_compromisos.action?idproyecto='+idproyecto+'&proyecto='+proyecto+'&partida='+partida+"&periodo="+periodo+'&consulta='+consulta+'"></iframe>',
+		  width: 700,
+		  padding: 10,
+		  animation: false
+	});
+
 }
 
-//Reacciona a la tecla scape para cerrar los dialogos emergentes
+
+
+
+//------------------------- Reacciona a la tecla scape para cerrar los dialogos emergentes ---------------------------------------------
 $(document).keyup(function (event) { 
 	if(event.keyCode==27) $.alerts._hide();
+	//swal.closeModal(esc);
+	
 });
 
 /*funcion para cambiar el color en la entrada a la fila de una tabla*/
@@ -1676,12 +1670,28 @@ function rellenaCeros(cad, lng){
 }
 
 //--------------------Revisando por Abraham 23/08/2017----------------------------------
-
+// SE MUESTRA AL GUARDAR UN CONTRATO................
 function ShowDelay(titulo, mensaje){
-	 $("#dialog").remove();
+	// $("#dialog").remove();
 	if(typeof(mensaje)=='undefined'||mensaje=='') mensaje = 'Espere un momento porfavor...';
 	if(titulo=='undefined'||titulo=='') titulo = 'Procesando';
 	//jWindow('<strong>&nbsp;<img src="../../imagenes/spinner.gif" width="32" height="32" align="absmiddle" /> '+mensaje+'</strong>', titulo, 0);
+	
+	swal({
+		title: titulo ,
+		text: mensaje,
+		//type: 'info',
+		  html:
+			  '<div class="loaderBox">' +
+			  	'<div class="loadAnim">'+
+	          		'<div class="loadeAnim1"></div>'+
+	          		'<div class="loadeAnim2"></div>'+
+	          		'<div class="loadeAnim3"></div>'+
+	          		'</div>'+
+		  	  '</div>',
+		  	showConfirmButton:false
+				  
+		})
 	
 }
 

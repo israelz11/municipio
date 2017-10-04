@@ -701,7 +701,7 @@ body.swal2-iosfix {
   -webkit-animation: animate-x-mark 0.5s;
           animation: animate-x-mark 0.5s; }
 
-@-webkit-keyframes rotate-loading {
+@-webkit-keyframes rotate-loading {     /*Buscar esta rotacion en el jquery para checar quien lo realiza*/
   0% {
     -webkit-transform: rotate(0deg);
             transform: rotate(0deg); }

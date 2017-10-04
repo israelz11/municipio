@@ -8,12 +8,19 @@
 <title>Documentos de los Precompromisos y Compromisos</title>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
 <link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css"/>
-<link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css">
+<!--<link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css"/>
+<script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>
+-->
+<link rel="stylesheet" href="../../include/css/sweetalert2.min.css" type="text/css"/>
+
+
 <script type="text/javascript" src="../../include/js/jquery-1.3.2.min.js"></script>
 <script type="text/javascript" src="../../include/js/toolSam.js"></script>
-<script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>
+
+<script type="text/javascript" src="../../include/js/sweet-alert.min.js"></script>
+
 <script>
-<!--
+
 
 function mostrarOpcionPDF(cve_doc, tipo_doc){
 	if(tipo_doc=='OP')
@@ -31,8 +38,12 @@ function mostrarOpcionPDF(cve_doc, tipo_doc){
 }
 
 function mostrarOPOpciones(cve_op){
-	_closeDelay();
-	var html = '<table class="listas" border="0" align="center" cellpadding="1" cellspacing="2" width="405" >'+
+	swal({
+		
+		  title: 'Opciones de Reporte Orden de Pago',
+		  text: 'Seleccione: ',
+		  html:
+			  '<table class="listas" border="0" align="center" cellpadding="1" cellspacing="2" width="405" >'+
 				'  <tr id="x1" onmouseover="color_over(\'x1\')" onmouseout="color_out(\'x1\')"> '+
 				'	<td width="33" height="27" align="center" style="cursor:pointer" onclick="getReporteOP('+cve_op+')"> '+
 				'	  <img src="../../imagenes/pdf.gif"/></td>' +
@@ -42,14 +53,28 @@ function mostrarOPOpciones(cve_op){
 				'  <tr id="x2" onmouseover="color_over(\'x2\')" onmouseout="color_out(\'x2\')" onclick=""> '+
 				'	  <td height="27" align="center"  style="cursor:pointer" onclick="getAnexosListaOP('+cve_op+')"><img src="../../imagenes/report.png" /></td> '+
 				'	  <td height="27" align="left" style="cursor:pointer" onclick="getAnexosListaOP('+cve_op+')">&nbsp;Listar Anexos de Orden de Pago</td> '+
-				'	</tr> ';
-			html+='</table>';
-	jWindow(html,'Opciones de Reporte Orden de Pago', '','Cerrar',1);
+				'	</tr> '+
+				'</table>',
+		  width: 800,
+		  padding: 10,
+		  animation: false
+		})
+
 }
 
 function getAnexosListaOP(cve_op){
-	_closeDelay();
-	jWindow('<iframe width="550" height="250" name="ventanaArchivosOP" id="ventanaArchivosOP" frameborder="0" src="../../sam/consultas/muestra_anexosOP.action?cve_op='+cve_op+'"></iframe>','Listado de Anexos de OP: '+cve_op, '','Cerrar',1);
+	//_closeDelay();
+	//jWindow('<iframe width="550" height="250" name="ventanaArchivosOP" id="ventanaArchivosOP" frameborder="0" src="../../sam/consultas/muestra_anexosOP.action?cve_op='+cve_op+'"></iframe>','Listado de Anexos de OP: '+cve_op, '','Cerrar',1);
+	
+		swal({
+		  title: 'Listado de Anexos de OP: ' + cve_op, 
+		  text: 'Seleccione el nuevo grupo de firma',
+		  html:
+			  '<iframe width="550" height="250" name="ventanaArchivosOP" id="ventanaArchivosOP" frameborder="0" src="../../sam/consultas/muestra_anexosOP.action?cve_op='+cve_op+'"></iframe>',
+		  width: 800,
+		  padding: 10,
+		  animation: false
+		})
 }
 
 function getReporteOP(CVE_OP) {
@@ -89,7 +114,7 @@ function getReporteVAL(clave)
 	$('#frm').submit();
 }
 
--->
+
 </script>
 <style type="text/css">
 <!--

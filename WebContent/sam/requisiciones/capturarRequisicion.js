@@ -52,8 +52,8 @@ $(document).ready(function() {
 	 /*funciones*/
 	 if($('#CVE_REQ').val()==0) tipoRequisiciones();
 	 
-	getBeneficiarios('txtprestadorservicio','CVE_BENEFI',$('#tipoBeneficiario').val());
-	getUnidad_Medidas('txtunidadmedida','CVE_UNIDAD_MEDIDA');
+	//getBeneficiarios('txtprestadorservicio','CVE_BENEFI',$('#tipoBeneficiario').val());
+	//getUnidad_Medidas('txtunidadmedida','CVE_UNIDAD_MEDIDA');
 	 mostrarRequisicion($('#CVE_REQ').val());
 	 
 	 getMesRequisicion($('#cbomeses').val());
@@ -224,8 +224,9 @@ function funciones(){
 		$('#CVE_BENEFI').val('0');
 	}
 }
-/*funcion para mostrar la requisiocion*/
+/*-------------------------------- funcion para mostrar la requisicion ------------------------------------------------*/
 function mostrarRequisicion(cve_req){
+	alert('demo entro aqui');
 	if(cve_req!=0){
 		ShowDelay('Cargando Requisicion');
 		controladorRequisicion.getLightRequisicion(cve_req, {
@@ -301,7 +302,8 @@ function mostrarRequisicion(cve_req){
 								if(parseInt(this.STATUS)==0) $('#cmdcerrar').prop('disabled', false);
 								/*$('#txtconcurso').attr('value',);*/
 								$('#cboarea').val(this.AREA);
-								$('#tabuladores').tabs('enable',1);/******************** Revisar por los cambio realizados en los tabuladores **************************/
+								//$('#tabuladores').tabs('enable',1);/******************** Revisar por los cambio realizados en los tabuladores **************************/
+								$('.nav-tabs a:first').tab('show');
 								mostrarTablaConceptos(cve_req);
 								if($('#cbotipo').val()=='1'||$('#cbotipo').val()=='7'){
 									$('#cmdimportar').prop('disabled',false);
@@ -360,12 +362,51 @@ function muestraPresupuesto(){
 		__listadoPresupuesto($('#ID_PROYECTO').val(),$('#txtproyecto').val(),$('#txtpartida').val(), $('#cbomeses').val(), 0, idUnidad);
 }
 
-/*funcion principal de guardado*/
+/*funcion principal de guardar la Requisición*/
 function guardarRequisicionPrincipal(){
 	var result = validate();
+	var requiscion=$("#txtrequisicion").val();
 	if (result==false) return false;
+	alert($("#txtrequisicion").val());
 	var v = parseInt($('#cbotipo').val());
 	if($('#txtprestadorservicio').val()==''||$('#txtprestadorservicio').val()=='0') $('#CVE_BENEFI').val('NULL');
+	
+	//swal.clickConfirm()
+	swal.queue([{
+		  title: 'Cerrar requisicion',
+		  text: 'Confirma que desea guardar la Requisición',
+		  confirmButtonText: 'Confirmar',
+		  showLoaderOnConfirm: true,
+		  preConfirm: function () {
+		    return new Promise(function (resolve) {
+		    	controladorRequisicion.guardarRequisicion($('#ID_PROYECTO').val(),$('#CVE_REQ').val(), $('#CVE_CONTRATO').val(), $('#CVE_VALE').val(), $('#txtrequisicion').val(), $('#cbodependencia').val(), $('#txtfecha').val(), $('#cbotipo').val(),$('#txtnotas').val(), $('#cbomeses').val(), '0', $('#txtproyecto').val(), $('#txtpartida').val(),$('#CVE_BENEFI').val(),$('#cboarea').val(), $('#txttipobien').val(),$('#txtmarca').val(), $('#txtmodelo').val(), $('#txtplacas').val(), $('#txtnuminventario').val(), $('#txtcolor').val(), $('#txtusuario').val(), $('#CVE_CONCURSO').val());
+		    	$('#cmdcerrar').attr('disabled',false);
+				//$('#tab2primary').tabs('enable',1);//TypeError: $(...).tabs is not a function
+				if($('#CVE_REQ').attr('value')==0) $('.nav-tabs a:first').tab('show');
+		    	$('.nav-tabs a[href="#tab2primary"]').tab('show')
+				//swal.insertQueueStep("proceso exitoso!....")
+		        resolve()
+		    })
+		  }
+		}]).then(function (resolve) {
+			swal({
+				  title: 'Cerrando',
+				  text: 'Documento cerrado con exito. '+ requiscion, 
+				  timer: 3000,
+				  onOpen: function () {
+				    swal.showLoading()
+				  }
+				}).then(
+				  function () {},
+				  // handling the promise rejection
+				  function (dismiss) {
+				    if (dismiss === 'timer') {
+				      console.log('Cerrado por terminar el tiempo')
+				    }
+				  }
+				)
+		})
+	/*
 	jConfirm('¿Confirma que desea guardar la Requisición?','Confirmar', function(r){
 		if(r){
 		  ShowDelay('Guardando requisición','');
@@ -373,10 +414,10 @@ function guardarRequisicionPrincipal(){
 		  callback:function(items) { 	    
 		  if (items!=null && items!=0 )
 		  {  
-		   		$('#cmdcerrar').prop('disabled',false);
+		   		$('#cmdcerrar').attr('disabled',false);
 				$('#tabuladores').tabs('enable',1);
-				if($('#CVE_REQ').val()==0) $('#tabuladores').tabs('option', 'selected', 1);
-				$('#CVE_REQ').val(items);
+				if($('#CVE_REQ').attr('value')==0) $('#tabuladores').tabs('option', 'selected', 1);
+				$('#CVE_REQ').attr('value',items);
 			  CloseDelay('Requisición guardada con éxito');
 		  }
 		  else 
@@ -389,23 +430,25 @@ function guardarRequisicionPrincipal(){
 		}
 	});
 	}
-	});
+	});*/
 	
 }
 
 /*funcion para validar los datos de la  requisicion antes de guardar*/
 function validate(){
 	var existe = false;
+	var requi = $('#txtrequisicion').val();
+	//swal2-validationerror
 	
 	if($('#cbodependencia').val()==0){jAlert('Es necesario seleccionar la <b>Unidad Administrativa</b>','Error de validacion'); return false;}
-	if ($('#txtrequisicion').val()==''){jAlert('Es necesario escribir el numero de <b>Requisición</b>','Error de validacion'); return false;}
+	//if($('#txtrequisicion').val()==''){swal('Es necesario escribir el numero de <b>Requisición</b>','Error de validacion','error')};
 	
 	controladorRequisicion.comprobarExistencia($('#txtrequisicion').attr('value'),{callback:function(items){existe = items;}, errorHandler:function(errorString, exception) { jError('Fallo la operacion:<br>Error::'+errorString+'-message::'+exception.message+'-JavaClass::'+exception.javaClassName+'.<br>Consulte a su administrador');}});
 	if(existe==true&&$('#CVE_REQ').val()==0){jError('El numero de requisicion que esta intentando guardar ya existe en el sistema','Error'); return false;}
 
 	if($('#txtfecha').val()==''){jAlert('Es necesario escribir una <b>Fecha</b> válida','Error de validación'); return false;}
 	if($('#cbotipo').val()==0){jAlert('Es necesario seleccionar un <b>Tipo</b> de Requisición','Error de validacion'); return false;}
-	if ($('#txtproyecto').val()==''||$('#ID_PROYECTO').attr('value')==''||$('#ID_PROYECTO').attr('value')=='0'){jAlert('Es necesario escribir el <b>Programa</b>','Error de validación'); return false;}
+	//if ($('#txtproyecto').val()==''||$('#ID_PROYECTO').attr('value')==''||$('#ID_PROYECTO').attr('value')=='0'){jAlert('Es necesario escribir el <b>Programa</b>','Error de validación'); return false;}
 	if ($('#txtpartida').val()==''){jAlert('Es necesario escribir la <b>Partida</b>','Error de validación'); return false;}
 	if ($('#cbomeses').val()==0){jAlert('El <b>Presupuesto</b> no es valido','Error de validación'); return false;}
 }
@@ -609,8 +652,7 @@ function getInfoPedido(ID_PED_MOVTO){
 	//jInformation("Este lote se encuentra en el pedido: "+ID_PED_MOVTO,"Información");	
 }
 
-	
-/*Metodo para cerrar la requisicon*/
+
 /*Metodo para cerrar la requisicon*/
 function cerrarRequisicion(){
 	if($('#TOTAL_CONCEPTOS').val()=='0') {jAlert('No se puede cerrar la requisición si no existe por lo menos un lote en el detalle','Advertencia'); return false;}

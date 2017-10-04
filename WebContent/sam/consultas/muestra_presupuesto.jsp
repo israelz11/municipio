@@ -9,21 +9,21 @@
 <title>Muestra presupuesto</title>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
 <link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css"/>
-
+<link rel="stylesheet" href="../../include/css/bootstrap2.css" type="text/css"/>
 <link rel="stylesheet" href="../../include/css/sweetalert2.css" type="text/css"/>
 
 <!--
 
 -->
-<script type="text/javascript" src="../../include/js/jquery-1.3.2.min.js"></script>
-<script type="text/javascript" src="../../include/js/toolSam.js"></script>
+<script type="text/javascript" src="../../include/js/jquery-1.3.2.min.js?x=<%=System.currentTimeMillis()%>"></script>
+<script type="text/javascript" src="../../include/js/toolSam.js?x=<%=System.currentTimeMillis()%>"></script>
 
 <script type="text/javascript" src="../../include/js/sweetalert2.js"></script>
 <link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css"/>
 <script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>
 <script type="text/javascript" src="../../include/js/jquery.qtip-1.0/jquery.qtip-1.0.0-rc3.min.js"></script>
 <script language="javascript">
-<!--
+
 $(document).ready(function() { 
 		var i = $('#hdcont').attr('value');
 		var ban = '<c:out value="${ban}"/>';
@@ -55,7 +55,9 @@ $(document).ready(function() {
 });
 
 function regresaPresupuesto(ID, proyecto, partida, pre_actual, disponible) {
-	window.parent.__regresaPresupuesto(ID, proyecto, partida, pre_actual, disponible);
+	
+	window.parent.__regresaPresupuesto(ID, proyecto, partida, pre_actual, disponible);//Envia la peticion a include/presupesto/presupuesto.js
+	
 }
 
 function buscar(){
@@ -70,7 +72,7 @@ function getPresupuestoPDF(){
 	$('#forma').attr('target',"");
 	$('#forma').attr('action',"rpt_presupuesto_mensual.action");
 }
--->
+
 </script>
 <style type="text/css">
 <!--
@@ -202,9 +204,9 @@ a:active {
         <td height="18" align="center"><c:if test="${ban==null}">
         <input type="hidden" id="hd<c:out value='${cont}'/>" value="<strong style='color:#0080FF'>ID_PROYECTO:</strong> <c:out value='${item.ID_PROYECTO}'/><br><strong style='color:#0080FF'>TIPO DE GASTO:</strong>&nbsp;<c:out value='${item.RECURSO}'/><br><strong style='color:#0080FF'>ACT. INSTITUCIONAL:</strong>&nbsp;<c:out value='${item.ACTIVIDAD_INST}'/><br><strong style='color:#0080FF'>LOCALIDAD:</strong>&nbsp;<c:out value='${item.LOCALIDAD}'/>" />
         <a id="link<c:out value='${cont}'/>" href="javascript:regresaPresupuesto(<c:out value='${item.ID_PROYECTO}'/>,'<c:out value='${item.N_PROGRAMA}'/>','<c:out value='${item.CLV_PARTID}'/>','<c:out value='${item.PREACTUAL}'/>','<c:out value='${item.DISPONIBLE}'/>');">
-        </c:if>
-         <strong><c:out value='${item.N_PROGRAMA}'/>-<c:out value='${item.CLV_PARTID}'/></strong>
-        <c:if test="${ban==null}">
+	        </c:if>
+	         <strong><c:out value='${item.N_PROGRAMA}'/>-<c:out value='${item.CLV_PARTID}'/></strong>
+	        <c:if test="${ban==null}">
         </a>
         </c:if>
         </td>

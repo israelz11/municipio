@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
+import mx.gob.municipio.centro.model.gateways.sam.GatewayBeneficiario;
 import mx.gob.municipio.centro.model.gateways.sam.GatewayBitacora;
 import mx.gob.municipio.centro.model.gateways.sam.GatewayComprobacionesVales;
 import mx.gob.municipio.centro.model.gateways.sam.GatewayDetallesOrdenDePagos;
@@ -49,6 +50,8 @@ public class ControladorOrdenPago extends ControladorBase  {
 	@Autowired
 	private GatewayUnidadAdm gatewayUnidadAdm;
 	
+	@Autowired
+	private GatewayBeneficiario gatewayBeneficiario;
 	
 	@Autowired
 	private GatewayOrdenDePagos gatewayOrdenDePagos;
@@ -82,11 +85,16 @@ public class ControladorOrdenPago extends ControladorBase  {
 	    @SuppressWarnings("unchecked")
 	    @RequestMapping(method = {RequestMethod.GET,RequestMethod.POST})     
 	    public String  handleRequest( Map modelo, HttpServletRequest request ) {
+	    	
+	    	modelo.put("id_op", request.getParameter("id_op"));
 	    	modelo.put("cve_op",request.getParameter("cve_op"));
-	    	modelo.put("accion",request.getParameter("accion"));
+	    	modelo.put("accion",request.getParameter("accion"));  //Revisar para que se usa?
 	    	modelo.put("ejercicio",this.getSesion().getEjercicio());
 	    	modelo.put("idUnidad",this.getSesion().getClaveUnidad());
 	    	modelo.put("nombreUnidad",this.getSesion().getUnidad());
+	    	
+	    	//modelo.put("Beneficiario",gatewayBeneficiario.getBeneficiariosTodos(0));
+	    	//modelo.put("tipoGastos",gatewayPlanArbit.getTipodeGasto());
 	    	modelo.put("meses",gatewayMeses.getTodosMesesEjercicioActivos(getSesion().getEjercicio()));
 	    	modelo.put("tipoDocumentosOp",gatewayTipoOrdenDePagos.getTipoDocumentosUsuario(getSesion().getIdUsuario()));
 	    	if (this.getSesion().getIdGrupo() == null){
@@ -106,16 +114,16 @@ public class ControladorOrdenPago extends ControladorBase  {
 	    	return gatewayPlanArbit.getTipodeGasto();	
 	    }
 	    
+	    @ModelAttribute("Beneficiario")
+		public List<Map>getBeneficiarios(){
+			return gatewayBeneficiario.getListaBeneficiarios();
+		}
+	    
 	    @ModelAttribute("tipoRetenciones")
 	    public List<Map> getTodasTipoRetencionesTodas(){
 	    	return gatewayOrdenDePagos.getTodasTipoRetencionesTodas();	
 	    }
 	   
-	   /* @ModelAttribute("tipoDocumentosOp")
-	    public List getTipoDocumentosTodosOp() {
-	    	return gatewayTipoOrdenDePagos.getTipoOredenesPagosEstatusActivos();
-	    }*/
-	    
 	    @ModelAttribute("tipoDocumentos")
 	    public List getTipoDocumentosTodos() {	   
 	 	   return this.getJdbcTemplate().queryForList("select T_DOCTO, DESCR   from  TIPODOC_OP order by DESCR ");
@@ -372,41 +380,7 @@ public class ControladorOrdenPago extends ControladorBase  {
 			                	for(Map det: movimientos)
 			                		getJdbcTemplate().update("UPDATE SAM_FACTURAS SET CVE_OP =? WHERE CVE_FACTURA =?",new Object[]{idOrden, det.get("CVE_FACTURA")});
 			                }
-			                /*CIERRA DESDE CONTRATOS*/
-			                /*if(tipo==12){
-			                	List<Map> movimientos = gatewayDetallesOrdenDePagos.getDetallesOrdenes(idOrden);
-			                	for(Map det: movimientos)
-			                		getJdbcTemplate().update("UPDATE SAM_FACTURAS SET CVE_OP =? WHERE CVE_FACTURA =?",new Object[]{idOrden, det.get("CVE_FACTURA")});
-			                		
-			                }*/
-			                
-			                /*AQUI CUANDO SE CIERRA ATRAVEZ DEL PRESUPUESTO DE UN VALE 09/03/2012
-			                if(tipo==11){
-			                	BigDecimal importeOP = (BigDecimal) orden.get("IMPORTE");
-			                	
-			                	 List <Map> lst_vales = getJdbcTemplate().queryForList("SELECT DISTINCT CVE_VALE, ISNULL(SUM(MONTO),0) AS MONTO FROM SAM_MOV_OP WHERE CVE_OP=? GROUP BY CVE_VALE", new Object[]{idOrden});
-			                	 for(Map row: lst_vales){
-			                		getJdbcTemplate().update("INSERT INTO SAM_COMP_VALES(CVE_VALE, TIPO_MOV, TIPO_DOC, CVE_DOC, PERIODO, IMPORTE) VALUES(?,?,?,?,?,?)",new Object[]{row.get("CVE_VALE"), "LIBERACION", "OP", idOrden, mes, row.get("MONTO")});
-			                	 }
-
-			                	
-			                }*/
-			                /*SI HAY CONTRATO GENERAR EL MOVIMIENTOTO DE COMPROBACION*/
-			                /*if(orden.get("CVE_CONTRATO")!=null&&contrato_conceptos==false){
-			                	getJdbcTemplate().update("INSERT INTO SAM_COMP_CONTRATO(CVE_CONTRATO, TIPO_MOV, TIPO_DOC, CVE_DOC, PERIODO, IMPORTE) VALUES(?,?,?,?,?,?)", new Object[]{orden.get("CVE_CONTRATO"), "LIBERACION", "OP",idOrden, mes, importe});
-			                }*/
-			                
-			                /*if(orden.get("CVE_CONTRATO")==null&&contrato_conceptos==true){
-			                	
-			                	for(Map row: lstobj)
-		        	    		{
-			                		if(row.get("CVE_REQ")!=null&&tipo==2)
-			                			getJdbcTemplate().update("DELETE FROM SAM_COMP_CONTRATO WHERE CVE_CONTRATO = ? AND CVE_DOC = ? AND TIPO_MOV =? AND TIPO_DOC IN ('OS', 'OT')", new Object[]{cve_contrato_doc, row.get("CVE_REQ"), "LIBERACION"});
-			                		if(row.get("CVE_PED")!=null&&tipo==0)
-			                			getJdbcTemplate().update("DELETE FROM SAM_COMP_CONTRATO WHERE CVE_CONTRATO = ? AND CVE_DOC = ? AND TIPO_MOV =? AND TIPO_DOC = ?", new Object[]{cve_contrato_doc, row.get("CVE_PED"), "LIBERACION", "PED"});
-		        	    		}
-			                	getJdbcTemplate().update("INSERT INTO SAM_COMP_CONTRATO(CVE_CONTRATO, TIPO_MOV, TIPO_DOC, CVE_DOC, PERIODO, IMPORTE) VALUES(?,?,?,?,?,?)", new Object[]{cve_contrato_doc, "LIBERACION", "OP",idOrden, mes, importe});
-			                }*/
+			               
 			                
 			                //GUARDAR EN LA BITACORA
 			                String folio=rellenarCeros(idOrden.toString(),6);
@@ -441,7 +415,7 @@ public class ControladorOrdenPago extends ControladorBase  {
      }	
 }
     
-
+       /*----------------------------------- Carga las ordenes de pago seleccionadas desde el listado de ordenes de pago ----------------------------------------------*/	
 	   public Map getOrden(Long idOrden) {		   
 		   return gatewayOrdenDePagos.getOrden(idOrden);
 	   }
@@ -496,99 +470,7 @@ public class ControladorOrdenPago extends ControladorBase  {
      	 		 //"B.ID_DEPENDENCIA IN(SELECT DISTINCT CLV_UNIADM FROM CEDULA_TEC WHERE ID_PROYECTO IN (SELECT ID_PROYECTO FROM SAM_GRUPO_PROYECTOS WHERE ID_GRUPO_CONFIG IN (SELECT B.ID_GRUPO_CONFIG FROM SAM_GRUPO_CONFIG_USUARIO A RIGHT OUTER JOIN  SAM_GRUPO_CONFIG B ON A.ID_GRUPO_CONFIG = B.ID_GRUPO_CONFIG where b.ESTATUS='ACTIVO' and TIPO='PROYECTO' AND  A.ASIGNADO =0 and ID_USUARIO=:cve_pers))) AND D.CLV_BENEFI = :claveBeneficiario and c.status=1 "
       }
       
-      /*
-       * public void  guardarPedidos( final List<Integer> pedidos, final  Integer idOrden, final  String claveArbit ) {
-		  try {                 
-	            this.getTransactionTemplate().execute(new TransactionCallbackWithoutResult(){
-	                @Override
-	    protected void   doInTransactionWithoutResult(TransactionStatus status) {
-	                	getJdbcTemplate().update("update ord_pago set CLV_PARBIT = ? where CVE_OP= ? ",new Object[]{claveArbit,idOrden});
-	                	getJdbcTemplate().update("update MOV_RETENC set CLV_PARBIT = ? where CVE_OP= ? ",new Object[]{claveArbit,idOrden});
-	                	getJdbcTemplate().update("delete from  ORDENES_PEDIDOS where CVE_OP=? ",new Object[]{idOrden});
-	                	getJdbcTemplate().update("delete from  mov_op where CVE_OP=? ",new Object[]{idOrden});	                	
-	                	String comas="";
-	                	String datos="";
-	                	for (Integer pedido :pedidos){
-	                		getJdbcTemplate().update("insert into ORDENES_PEDIDOS (CVE_OP,CVE_PED) values (?,? ) ",new Object[]{idOrden,pedido});	                		
-	                		datos +=comas+ Integer.toString(pedido);
-	                		comas =",";
-	                	}
-	                	if (pedidos.size()>0)
-	                	  getJdbcTemplate().update( "insert into mov_op (CVE_OP, PROYECTO,CLV_PARTID,MONTO) select "+Integer.toString(idOrden)+",proyecto,clv_partid,sum(total) importe from pedidosTodos where cve_ped in ("+datos+")  group by proyecto,clv_partid ");
-	                  getJdbcTemplate().update("delete from  COMP_VALES  where CVE_OP=? AND CVE_VALE NOT  IN (SELECT A.CVE_VALE FROM COMP_VALES A , VALES_EX B , MOV_OP C WHERE A.CVE_VALE=B.CVE_VALE  AND  B.PROYECTO=C.PROYECTO AND B.CLV_PARTID=C.CLV_PARTID  and c.CVE_OP=? )   ",new Object[]{idOrden,idOrden});
-	                	
-	                } });
-	                } catch (DataAccessException e) {            
-	                    log.info("Los registros tienen relaciones con otras tablas ");	                    
-	                    throw new RuntimeException(e.getMessage(),e);
-	                }	                	                		  	  
-	  }
-       * */
-      
-      public boolean  eliminarDetalle( final List<Integer> detallesOp,final  Integer idOrden ) {
-    	  boolean exito=false;
-		  try {                 
-	            this.getTransactionTemplate().execute(new TransactionCallbackWithoutResult(){
-	                @Override
-	    protected void   doInTransactionWithoutResult(TransactionStatus status) {
-	                	//Verfificar si tiene los privilegios en solo lectura Ordenes de Pago
-	            		if(getPrivilegioEn(getSesion().getIdUsuario(), 114)){
-	            			throw new RuntimeException("No cuenta por los privilegios suficientes para realizar esta operación, solo lectura");
-	            		}
-	            		
-	            		Map Orden = getOrden(Long.parseLong(idOrden.toString()));
-	            		
-	                	for (Integer documento :detallesOp){
-	                		Map detalle = getJdbcTemplate().queryForMap("select ID_PROYECTO, CLV_PARTID, TIPO  from SAM_MOV_OP  where ID_MOV_OP=?  ",new Object []{documento});
-	                		String tipo= (String)detalle.get("TIPO");
-	                		int registroVale= getJdbcTemplate().queryForInt("SELECT     COUNT(*)  FROM      COMP_VALES AS a WHERE     (a.ID_PROYECTO = ?) AND (a.CLV_PARTID = ?) AND (a.CVE_OP = ?)  ",new Object []{detalle.get("ID_PROYECTO"),detalle.get("CLV_PARTID"),idOrden});
-	                	    if (registroVale==0) {
-	                	    	if (tipo.equals("REQUISICION")){
-	                	    		List<Map> ordenesTrabajo=getJdbcTemplate().queryForList("SELECT     A.ID_COMPROBACION, B.CVE_REQ FROM         SAM_OP_COMPROBACIONES A INNER JOIN  SAM_REQUISIC B ON A.CVE_REQ = B.CVE_REQ where b.ID_PROYECTO = ? AND b.CLV_PARTID = ? and A.CVE_OP=? ", new Object []{detalle.get("ID_PROYECTO"),detalle.get("CLV_PARTID"),idOrden});
-	                	    		for (Map det:ordenesTrabajo) {
-	                	    			getJdbcTemplate().update("delete from SAM_OP_COMPROBACIONES where ID_COMPROBACION=? ", new Object []{det.get("ID_COMPROBACION")});
-	                	    			getJdbcTemplate().update("update SAM_REQUISIC set STATUS=? WHERE cve_req=? ", new Object []{gatewayRequisicion.REQ_STATUS_PENDIENTE, det.get("CVE_REQ")});
-	                	    		}
-	                	    	}
-	                	    	if (tipo.equals("PEDIDO")) {
-	                	    		List<Map> pedidos=getJdbcTemplate().queryForList("SELECT     A.ID_COMPROBACION, B.CVE_PED FROM         SAM_OP_COMPROBACIONES AS A INNER JOIN  SAM_PEDIDOS_EX AS B ON A.CVE_PED = B.CVE_PED INNER JOIN "+
-                	    					" SAM_REQUISIC C ON A.CVE_REQ = C.CVE_REQ  where C.ID_PROYECTO = ? AND C.CLV_PARTID = ? and A.CVE_OP=?  ", new Object []{detalle.get("ID_PROYECTO"),detalle.get("CLV_PARTID"),idOrden});	                	    			                	    		
-	                	    		for (Map det:pedidos) {
-	                	    			getJdbcTemplate().update("delete from SAM_OP_COMPROBACIONES where ID_COMPROBACION=? ", new Object []{det.get("ID_COMPROBACION")});
-	                	    			getJdbcTemplate().update("update SAM_PEDIDOS_EX set STATUS=? WHERE CVE_PED=? ", new Object []{gatewayPedidos.PED_STATUS_PENDIENTE,det.get("CVE_PED")});
-	                	    	    }
-
-	                	    	}
-	                	    	if (tipo.equals("LIBRE")) {
-	                	    		
-	                	    	}
-	                	    	
-	                		    gatewayDetallesOrdenDePagos.eliminar(documento, getSesion().getEjercicio(), getSesion().getIdUsuario());
-            	    			getJdbcTemplate().update("UPDATE SAM_ORD_PAGO SET CVE_PED = ? WHERE CVE_OP = ?", new Object[]{null, idOrden});
-                	    		
-	                	    }
-	                	    else
-	                	    	throw new RuntimeException("Los movimientos que desea eliminar ya tienen comprobaciones de vales en la Orden de Pago actual");	
-	                	}
-	                	
-	                	/*Si era de contratos*/
-	                	if(Orden.get("CVE_CONTRATO")!=null)
-	                	{
-	                		if(!Orden.get("CVE_CONTRATO").toString().equals("0"))
-	                			getJdbcTemplate().update("UPDATE SAM_ORD_PAGO SET CVE_CONTRATO =? WHERE CVE_OP =?", new Object[]{null, idOrden});
-	                	}
-	                } });
-	                exito=true;
-	                } catch (DataAccessException e) {            
-	                    log.info("Los registros tienen relaciones con otras tablas "+e.getMessage());	                    
-	                    //throw new RuntimeException(e.getMessage(),e);
-	                }
-	                catch (RuntimeException e) {   
-	                	log.info("Hay vale con relacioneado con los detalles que intenta eliminar "+e.getMessage());
-	                }
-	                return exito;
-	  }  
-      
+         
       
       public boolean  generarDetallesOT( final List<Integer> detallesOT,final  Long idOrden ) {
     	  boolean exito=false;
@@ -681,7 +563,7 @@ public class ControladorOrdenPago extends ControladorBase  {
 	                }
 	                return exito;
 	  }  
-      
+      //CLV_RETENC
       public  boolean guardarRetencion(Integer idRetencion,String  retencion,Double importeRetencion,String cveParbit,Long idOrden){
 	    	//Verfificar si tiene los privilegios en solo lectura Ordenes de Pago
 	  		if(getPrivilegioEn(getSesion().getIdUsuario(), 114)){
@@ -732,6 +614,7 @@ public class ControladorOrdenPago extends ControladorBase  {
     	 gatewayOrdenDePagos.actualizarPrincipalDocumento(idDocumento, tipoMovDoc, numeroDoc, notaDoc, idOrden,  getSesion().getEjercicio(), getSesion().getIdUsuario());
      }
      
+/*------------------ CLASE PARA ELIMINAR DETALLES DE LAS ORDENES DE PAGO ANEXADAS DESDE EL BOTON DE ORDENES DE PAGO EN LOS MOVIMIENTOS DE ORDENES DE PAGO ------------------------*/
      public void  eliminarDocumentos( final List<Integer> documentos,final  Long idOrden, final HttpServletRequest request ) {
 		  try {                 
 			//Verfificar si tiene los privilegios en solo lectura Ordenes de Pago
@@ -748,7 +631,143 @@ public class ControladorOrdenPago extends ControladorBase  {
 	                    log.info("Los registros tienen relaciones con otras tablas ");	                    
 	                    throw new RuntimeException(e.getMessage(),e);
 	                }	                	                		  	  
-	  }     
+	  }    
+     
+/*-------------------------- CLASE QUE SE LLAMA PARA LA ELIMINACION DE LOS DETALLES DE LAS ORDENES DE PAGO CARGADAS DESDE EL BOTON CARGAR FACTURAS ----------*/      
+     public void  eliminarDetalle( final List<Integer> detallesOp,final  Integer idOrden ) {
+    	 
+    	   if(getPrivilegioEn(getSesion().getIdUsuario(), 114)){
+	        	 throw new RuntimeException("No cuenta por los privilegios suficientes para realizar esta operación, solo lectura");
+	         }
+	         Map Orden = getOrden(Long.parseLong(idOrden.toString()));
+	         
+	         for (Integer documento :detallesOp){
+	        		Map detalle = getJdbcTemplate().queryForMap("select ID_PROYECTO, CLV_PARTID, TIPO  from SAM_MOV_OP  where ID_MOV_OP=?  ",new Object []{documento});
+	                String tipo= (String)detalle.get("TIPO");
+	                int registroVale= getJdbcTemplate().queryForInt("SELECT     COUNT(*)  FROM      COMP_VALES AS a WHERE     (a.ID_PROYECTO = ?) AND (a.CLV_PARTID = ?) AND (a.CVE_OP = ?)  ",new Object []{detalle.get("ID_PROYECTO"),detalle.get("CLV_PARTID"),idOrden});
+	                int registroRetenc= getJdbcTemplate().queryForInt("SELECT     COUNT(*)  FROM      MOV_RETENC AS r WHERE ( r.CVE_OP = ? )  ",new Object []{idOrden});
+	                List<Map<String, Object>> lista_retenc=getJdbcTemplate().queryForList("SELECT * FROM MOV_RETENC where CVE_OP=?", new Object[]{idOrden});
+	                
+	                System.out.println("Lista de retenciones: " + lista_retenc);
+	                
+	                getJdbcTemplate().update("delete COMP_VALES WHERE CVE_OP=?", new Object[]{idOrden});
+      			
+      			for (Map<String, Object> clave_reten:lista_retenc){
+      				int idRetencion = Integer.parseInt(clave_reten.get("RETENC").toString());
+      				int ejercicio=0; 
+      				int cve_pers=0;
+      				//gatewayOrdenDePagos.eliminarRetencion(Long.valueOf(idOrden),idRetencion , getSesion().getEjercicio(), getSesion().getIdUsuario());
+      				
+      				String folio=rellenarCeros(idOrden.toString(),6);
+      				this.getJdbcTemplate().update("delete from MOV_RETENC where CVE_OP= ? and RET_CONS=? ", new Object[]{idOrden,idRetencion});
+      				//guarda en la bitacora
+      				gatewayBitacora.guardarBitacora(gatewayBitacora.OP_MOV_ELIMINA_RETENCION, ejercicio, cve_pers,Long.valueOf(idOrden), folio, "OP", null, null, null, "Cons: "+idRetencion, 0D);
+      				
+      				
+      			}
+      	    	gatewayDetallesOrdenDePagos.eliminar(documento, getSesion().getEjercicio(), getSesion().getIdUsuario());}
+    	 //boolean exito=false;
+    	 /*
+    	 try {
+    		//Verfificar si tiene los privilegios en solo lectura Ordenes de Pago
+	       if(getPrivilegioEn(getSesion().getIdUsuario(), 114)){
+	        	 throw new RuntimeException("No cuenta por los privilegios suficientes para realizar esta operación, solo lectura");
+	         }
+	           Map Orden = getOrden(Long.parseLong(idOrden.toString()));
+	         
+	         for (Integer documento :detallesOp){
+	        		Map detalle = getJdbcTemplate().queryForMap("select ID_PROYECTO, CLV_PARTID, TIPO  from SAM_MOV_OP  where ID_MOV_OP=?  ",new Object []{documento});
+	                String tipo= (String)detalle.get("TIPO");
+	                int registroVale= getJdbcTemplate().queryForInt("SELECT     COUNT(*)  FROM      COMP_VALES AS a WHERE     (a.ID_PROYECTO = ?) AND (a.CLV_PARTID = ?) AND (a.CVE_OP = ?)  ",new Object []{detalle.get("ID_PROYECTO"),detalle.get("CLV_PARTID"),idOrden});
+	                int registroRetenc= getJdbcTemplate().queryForInt("SELECT     COUNT(*)  FROM      MOV_RETENC AS r WHERE ( r.CVE_OP = ? )  ",new Object []{idOrden});
+	                List<Map<String, Object>> lista_retenc=getJdbcTemplate().queryForList("SELECT * FROM MOV_RETENC where CVE_OP=?", new Object[]{idOrden});
+	                
+	                System.out.println("Lista de retenciones: " + lista_retenc);
+	                
+	                
+      			}
+      	    	gatewayDetallesOrdenDePagos.eliminar(documento, getSesion().getEjercicio(), getSesion().getIdUsuario());}
+	                if ((registroVale==0) && (registroRetenc==0)){
+            	    	
+                		if (tipo.equals("FACTURAS")){
+                			List<Map>facturas=getJdbcTemplate().queryForList("SELECT * FROM SAM_ORD_PAGO OP INNER JOIN SAM_MOV_OP MOP ON MOP.CVE_OP=OP.CVE_OP  WHERE OP.CVE_OP=? AND OP.STATUS=-1", new Object []{idOrden});
+                	    }
+                		gatewayDetallesOrdenDePagos.eliminar(documento, getSesion().getEjercicio(), getSesion().getIdUsuario());
+       	    			getJdbcTemplate().update("UPDATE SAM_ORD_PAGO SET CVE_PED = ? WHERE CVE_OP = ?", new Object[]{null, idOrden});
+           	    		
+                	}
+                	
+	               if ((registroVale>1) && (registroRetenc>1)){
+	                	
+                		getJdbcTemplate().update("delete COMP_VALES WHERE CVE_OP=?", new Object[]{idOrden});
+      			
+      			for (Map<String, Object> clave_reten:lista_retenc){
+      				int idRetencion = Integer.parseInt(clave_reten.get("RETENC").toString());
+      				gatewayOrdenDePagos.eliminarRetencion(Long.valueOf(idOrden),idRetencion , getSesion().getEjercicio(), getSesion().getIdUsuario());	
+	                }	
+	                else
+	                	throw new RuntimeException("Los movimientos que desea eliminar ya tienen comprobaciones de vales o retenciones en la Orden de Pago actual");	
+        			
+	               
+	         }
+		} catch (Exception e) {
+			log.info("Hay vale relacioneado con los detalles que intenta eliminar en la clase eliminarDetalle :( "+e.getMessage());
+		}*/
+    	 /*
+			 try {                 
+				 this.getTransactionTemplate().execute(new TransactionCallbackWithoutResult(){
+					 @Override
+					 protected void   doInTransactionWithoutResult(TransactionStatus status) {
+						 
+				         
+				         Map Orden = getOrden(Long.parseLong(idOrden.toString()));
+				         
+				         for (Integer documento :detallesOp){
+				        		Map detalle = getJdbcTemplate().queryForMap("select ID_PROYECTO, CLV_PARTID, TIPO  from SAM_MOV_OP  where ID_MOV_OP=?  ",new Object []{documento});
+				                String tipo= (String)detalle.get("TIPO");
+				                //int registroVale= getJdbcTemplate().queryForInt("SELECT     COUNT(*)  FROM      COMP_VALES AS a WHERE     (a.ID_PROYECTO = ?) AND (a.CLV_PARTID = ?) AND (a.CVE_OP = ?)  ",new Object []{detalle.get("ID_PROYECTO"),detalle.get("CLV_PARTID"),idOrden});
+				               // int registroRetenc= getJdbcTemplate().queryForInt("SELECT     COUNT(*)  FROM      MOV_RETENC AS r WHERE ( r.CVE_OP = ? )  ",new Object []{idOrden});
+				                List<Map<String, Object>> lista_retenc=getJdbcTemplate().queryForList("SELECT * FROM MOV_RETENC where CVE_OP=?", new Object[]{idOrden});
+				                
+				                System.out.println("Lista de retenciones: " + lista_retenc);
+				                if ((registroVale==0) && (registroRetenc==0)){
+		                	    	
+			                		if (tipo.equals("FACTURAS")){
+			                			List<Map>facturas=getJdbcTemplate().queryForList("SELECT * FROM SAM_ORD_PAGO OP INNER JOIN SAM_MOV_OP MOP ON MOP.CVE_OP=OP.CVE_OP  WHERE OP.CVE_OP=? AND OP.STATUS=-1", new Object []{idOrden});
+			                	    }
+			                		gatewayDetallesOrdenDePagos.eliminar(documento, getSesion().getEjercicio(), getSesion().getIdUsuario());
+		           	    			getJdbcTemplate().update("UPDATE SAM_ORD_PAGO SET CVE_PED = ? WHERE CVE_OP = ?", new Object[]{null, idOrden});
+		               	    		
+			                	}
+			                	
+				                if ((registroVale==1) && (registroRetenc==1)){
+			                		
+			                			
+				                }	
+				                else
+				                	throw new RuntimeException("Los movimientos que desea eliminar ya tienen comprobaciones de vales o retenciones en la Orden de Pago actual");	
+		            			
+				                getJdbcTemplate().update("delete COMP_VALES WHERE CVE_OP=?", new Object[]{idOrden});
+	                			
+	                			for (Map<String, Object> clave_reten:lista_retenc){
+	                				gatewayOrdenDePagos.eliminarRetencion(Long.valueOf(idOrden),Integer.parseInt(clave_reten.get("RETENC").toString()) , getSesion().getEjercicio(), getSesion().getIdUsuario());
+	                			}
+	                	    	gatewayDetallesOrdenDePagos.eliminar(documento, getSesion().getEjercicio(), getSesion().getIdUsuario());
+				         }
+					 } 
+					 
+				 });
+		                exito=true;
+		     } catch (DataAccessException e) {            
+		                    log.info("Los registros tienen relaciones con otras tablas "+e.getMessage());	                    
+		                    //throw new RuntimeException(e.getMessage(),e);
+		     }catch (RuntimeException e) {   
+		                	log.info("Hay vale relacioneado con los detalles que intenta eliminar en la clase eliminarDetalle :( "+e.getMessage());
+		     }*/
+	               // return exito;
+		 
+     }      
+     
      
      /* Vales */
      public List getValesOrdenes (Long idOrden) {
@@ -794,6 +813,7 @@ public class ControladorOrdenPago extends ControladorBase  {
  		this.gatewayOrdenDePagos.aperturarOrdenes(cveOrdenes, this.getSesion().getEjercicio(), this.getSesion().getIdUsuario());
  	}             
      
+     /*  ------------- Llamada de la funcion de JQuery para la cancelacion de ordenes de Pago -------------------------*/
      public void cancelarOrden(final List<Long> lstcveOrden, final String motivo){
    	  try {     
    		  		final BigDecimal temp_importe = new BigDecimal("0.0");
@@ -861,34 +881,7 @@ public class ControladorOrdenPago extends ControladorBase  {
 		            			throw new RuntimeException("Imposible cancelar la Orden de Pago, ya hay un contrato asignado con un periodo diferente al mes actual, consulte a su administrador del sistema");
 		            		}
 				            	
-				            /*PARA LOS CONTRATOS 25/08/2011*/
-				            /*if (tipo==0){ //Pedidos
-				                getJdbcTemplate().update("update SAM_PEDIDOS_EX set STATUS=1 where  CVE_PED in (select CVE_PED from SAM_OP_COMPROBACIONES where CVE_OP= ? ) ",new Object[]{cveOrden});
-				                /*List <Map> lst_doc = getJdbcTemplate().queryForList("SELECT R.PERIODO, P.TOTAL, (SELECT R.CVE_CONTRATO FROM SAM_PEDIDOS_EX AS P INNER JOIN SAM_REQUISIC AS R ON (R.CVE_REQ = P.CVE_REQ) WHERE P.CVE_PED = C.CVE_PED) AS CVE_CONTRATO_PED, C.CVE_PED FROM SAM_OP_COMPROBACIONES AS C INNER JOIN SAM_ORD_PAGO AS OP ON (OP.CVE_OP = C.CVE_OP) INNER JOIN SAM_REQUISIC AS R ON (R.CVE_REQ = C.CVE_REQ) INNER JOIN SAM_PEDIDOS_EX AS P ON (P.CVE_PED = C.CVE_PED) WHERE C.CVE_OP = ?", new Object[]{cveOrden});
-				                for(Map row: lst_doc)
-					    		{
-				                	if(row.get("CVE_CONTRATO_PED")!=null)
-				                		getJdbcTemplate().update("INSERT INTO SAM_COMP_CONTRATO(CVE_CONTRATO, TIPO_MOV, TIPO_DOC, CVE_DOC, PERIODO, IMPORTE) VALUES(?,?,?,?,?,?) ", new Object[]{row.get("CVE_CONTRATO_PED"), "LIBERACION", "PED", row.get("CVE_PED"), row.get("PERIODO"), row.get("TOTAL")});
-					    		}*/
-				                
-				    		/*}
-				    		if (tipo==2){//Requisiciones    
-				    			String tipo_doc = "";
-				            	getJdbcTemplate().update("update SAM_REQUISIC set STATUS=2  WHERE cve_req in (select CVE_REQ from SAM_OP_COMPROBACIONES where CVE_OP= ? ) ",new Object[]{cveOrden});
-				            	/*List <Map> lst_doc = getJdbcTemplate().queryForList("SELECT R.PERIODO, R.TIPO, (SELECT ISNULL(SUM(CANTIDAD*PRECIO_EST),0) AS N FROM SAM_REQ_MOVTOS AS M WHERE M.CVE_REQ = C.CVE_REQ) AS TOTAL, R.CVE_CONTRATO AS CVE_CONTRATO_REQ, C.CVE_REQ FROM SAM_OP_COMPROBACIONES AS C INNER JOIN SAM_ORD_PAGO AS OP ON (OP.CVE_OP = C.CVE_OP) INNER JOIN SAM_REQUISIC AS R ON (R.CVE_REQ = C.CVE_REQ) WHERE C.CVE_OP = ?", new Object[]{cveOrden});
-				                for(Map row: lst_doc)
-					    		{
-				                	if(row.get("TIPO").equals("2")) tipo_doc = "OS";
-				                	if(row.get("TIPO").equals("3")) tipo_doc = "OT";
-				                	if(row.get("TIPO").equals("4")) tipo_doc = "OT";
-				                	if(row.get("TIPO").equals("5")) tipo_doc = "OS";
-				                	if(row.get("TIPO").equals("6")) tipo_doc = "OS";
-				                	if(row.get("TIPO").equals("8")) tipo_doc = "OS";
-				                	
-				                	if(row.get("CVE_CONTRATO_REQ")!=null)
-				                		getJdbcTemplate().update("INSERT INTO SAM_COMP_CONTRATO(CVE_CONTRATO, TIPO_MOV, TIPO_DOC, CVE_DOC, PERIODO, IMPORTE) VALUES(?,?,?,?,?,?) ", new Object[]{row.get("CVE_CONTRATO_REA"), "LIBERACION", tipo_doc, row.get("CVE_REQ"), row.get("PERIODO"), row.get("TOTAL")});
-					    		}
-				    		}*/
+				           
 				    	
 						getJdbcTemplate().update("update r set r.STATUS=? from SAM_REQUISIC r , SAM_OP_COMPROBACIONES a  WHERE r.cve_req=a.CVE_REQ and a.CVE_OP=? ", new Object []{gatewayRequisicion.REQ_STATUS_PENDIENTE,cveOrden });
 						getJdbcTemplate().update("update r set r.STATUS=? from SAM_PEDIDOS_EX r , SAM_OP_COMPROBACIONES a  WHERE r.CVE_PED=a.CVE_PED and a.CVE_OP=? ", new Object []{gatewayPedidos.PED_STATUS_PENDIENTE,cveOrden});		

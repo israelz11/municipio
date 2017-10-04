@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import mx.gob.municipio.centro.model.gateways.sam.GatewayBeneficiario;
 import mx.gob.municipio.centro.model.gateways.sam.GatewayOrdenDePagos;
 import mx.gob.municipio.centro.model.gateways.sam.GatewayPlanArbit;
 import mx.gob.municipio.centro.model.gateways.sam.GatewayTipoOrdenDePagos;
@@ -29,6 +30,8 @@ public class ControladorListadoOrdenesDePago extends ControladorBase {
 
 	public ControladorListadoOrdenesDePago(){}
 	
+	@Autowired
+	private GatewayBeneficiario gatewayBeneficiario;
 	
 	public final static  int VER_TODAS_LAS_UNIDADES = 25;
 //	final String STATUS_NUEVA="0"; 
@@ -109,6 +112,11 @@ public class ControladorListadoOrdenesDePago extends ControladorBase {
     public List<Map> getCapitulos(){
     	return gatewayUnidadAdm.getCapitulos();	
     }
+	
+	@ModelAttribute("Beneficiario")
+	public List<Map>getBeneficiarios(){
+		return gatewayBeneficiario.getListaBeneficiarios();
+	}
 	
 	@ModelAttribute("unidadesAdmiva")
     public List<Map> getUnidades(){

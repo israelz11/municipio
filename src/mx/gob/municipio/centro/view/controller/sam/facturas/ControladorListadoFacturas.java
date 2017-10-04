@@ -32,32 +32,51 @@ public class ControladorListadoFacturas extends ControladorBase {
 		
 	}
 	
-	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(method = {RequestMethod.GET, RequestMethod.POST})  
 	public String requestGetControlador(Map modelo, HttpServletRequest request, HttpServletResponse response) {
 		boolean privilegio = this.getPrivilegioEn(this.getSesion().getIdUsuario(), VER_TODAS_LAS_UNIDADES);
 		String verUnidad=request.getParameter("verUnidad");
-		String idUnidad=request.getParameter("cbodependencia")==null ?this.getSesion().getClaveUnidad() : request.getParameter("cbodependencia");
+		
 		String estatus=request.getParameter("status")==null ? "0": this.arrayToString(request.getParameterValues("status"),",");
+		String unidad=request.getParameter("dependencia")==null ?this.getSesion().getClaveUnidad() : request.getParameter("dependencia");
+		
+		if(privilegio){
+			if(request.getParameter("dependencia")==null)
+				unidad = "0";
+			if(request.getParameter("dependencia")!=null)
+				unidad = request.getParameter("dependencia");
+		}
+		
+		if(!privilegio){
+			if(request.getParameter("dependencia")==null)
+				unidad = this.getSesion().getClaveUnidad();
+			if(request.getParameter("dependencia")!=null)
+				unidad = request.getParameter("dependencia");
+		}
+		
 		String beneficiario=request.getParameter("txtbeneficiario");
 		String clv_benefi=request.getParameter("clv_benefi");
 		String numped=request.getParameter("txtpedido");
 		String numreq=request.getParameter("txtnumreq");
 		String num_factura=request.getParameter("txtfactura");
 		
+		modelo.put("cbodependencia",unidad);
 		modelo.put("numfactura", num_factura);
 		modelo.put("numped", numped);
 		modelo.put("numreq", numreq);
 		modelo.put("clv_benefi", clv_benefi);
 		modelo.put("estatus", estatus);
-		modelo.put("cbodependencia",idUnidad);
+		modelo.put("idUnidad",unidad);
+		
 		modelo.put("beneficiario", beneficiario);
 		modelo.put("fechaInicial",(request.getParameter("txtfechaInicial")==null ? "": request.getParameter("txtfechaInicial")));
 		modelo.put("fechaFinal",(request.getParameter("txtfechaFinal")==null ? "": request.getParameter("txtfechaFinal")));
 		
 		modelo.put("nombreUnidad",this.getSesion().getUnidad());
 		modelo.put("listadoFacturas",this.gatewayFacturas.getListadoFacturas(modelo));
+		
+		
 		
 		return "sam/facturas/lst_facturas.jsp";
 	}

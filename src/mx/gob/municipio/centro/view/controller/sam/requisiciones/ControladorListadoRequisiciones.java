@@ -43,10 +43,13 @@ public class ControladorListadoRequisiciones extends ControladorBase {
 	
 	@Autowired
 	GatewayRequisicion gatewayRequisicion;
+	
 	@Autowired
 	GatewayOrdenDePagos gatewayOrdenDePagos;
+	
 	@Autowired
 	GatewayMeses gatewayMeses;
+	
 	@Autowired
 	GatewayPlanArbit gatewayPlanArbit;
 	
@@ -67,7 +70,10 @@ public class ControladorListadoRequisiciones extends ControladorBase {
 		
 		String tipogto=request.getParameter("cbotipogasto")==null ? "0" : request.getParameter("cbotipogasto");
 		String unidad=request.getParameter("dependencia")==null ?this.getSesion().getClaveUnidad() : request.getParameter("dependencia");
+		
+		
 		String cboconOP = request.getParameter("cboconOP");
+		
 		if(privilegio){
 			if(request.getParameter("dependencia")==null)
 				unidad = "0";
@@ -112,7 +118,7 @@ public class ControladorListadoRequisiciones extends ControladorBase {
 		
 		//modelo.put("CVE_BENEFI", clv_benefi);
 		if(listar==null||listar.equals(""))
-			listadoReq = "";
+			listadoReq = "";//listaRequisiciones
 		
 		List <Map> lista = this.getRequisicionesUnidadPorEjemplo(unidad, estatus,fechaIni,fechaFin, this.getSesion().getEjercicio(), tipo, verUnidad, numreq, proyecto, partida, tipogto,beneficiario, privilegio, cboconOP, listadoReq);
 		modelo.put("CONTADOR", lista.size());

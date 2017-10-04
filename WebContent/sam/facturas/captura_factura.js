@@ -126,7 +126,8 @@ function muestraPresupuesto(){
 
 	__listadoPresupuesto($('#ID_PROYECTO').attr('value'),$('#txtproyecto').attr('value'),$('#txtpartida').attr('value'), $('#cbomes').attr('value'), 0, idUnidad);
 }
-
+ 
+/*---------------------  Elimina el vale en el listado de la comprobacion del Vale  --------------------------------------*/
  function eliminarVales(){
 	  var checkVales = [];
      $('input[name=chkVale]:checked').each(function() { checkVales.push($(this).val());	 });	 
@@ -237,7 +238,6 @@ function muestraPresupuesto(){
 
 function llenarTablaDeVales() {
 	 quitRow("listasVales");
-	 
 	 controladorFacturasRemoto.getListaVales($('#CVE_FACTURA').val(), {
         callback:function(items) { 		
 		jQuery.each(items,function(i) {
@@ -298,7 +298,29 @@ function llenarTablaDeVales() {
 		},async=false ); 
 	} 
  }
-
+/*
+ function insertaConceptoVale(){
+	 datos= $('#cboproyectocuenta :selected').text().split('-');	 
+	 var proyecto = jQuery.trim($('#cboproyectocuenta').attr('value'));
+	 var clv_partid = jQuery.trim(datos[1]);	 	 
+	 datosVale = $('#cboVales :selected').text().split('>');
+	 var vale = parseInt(jQuery.trim(datosVale[0]));
+	 var importe = $('#txtimporteVale').attr('value');
+	 //var idMovVale = $('#idVale').attr('value');
+	 
+	 controladorFacturasRemoto.insertaConceptoVale(vale,importe,importeVale,proyecto,partida, {
+		  callback:function(items){
+		  lipiarVale();
+		  CloseDelay("Comprobacion de Vale agregada con exito");  
+	} 					   				
+	,
+		errorHandler:function(errorString, exception) { 
+			jError(errorString,'Error');   
+		}
+	 });	
+ }*/
+ 
+ // GRABA EL VALE EN FACTURAS_MOV_VALES
 function guardarVale(){
 	var error="";  
 	if($('#CVE_FACTURA').val()=='' || $('#CVE_FACTURA').val()==0){jAlert('No se puede guardar el Vale hasta que guarde la factura'); return false;}
@@ -318,9 +340,10 @@ function guardarVale(){
 	  
 	controladorFacturasRemoto.guardarComprobacionVale(idMovVale, cve_factura, cve_vale, proyecto, clv_partid, importe, {
 			  callback:function(items){
-				  lipiarVale();
-				  CloseDelay("Comprobacion de Vale agregada con exito");  
-				  llenarTablaDeVales();
+			  lipiarVale();
+			  CloseDelay("Comprobacion de Vale agregada con exito");  
+			  llenarTablaDeVales();
+			  //insertaConceptoVale();
 							 
 		} 					   				
 		,

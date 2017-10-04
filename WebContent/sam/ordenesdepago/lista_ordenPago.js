@@ -2,12 +2,13 @@ $(document).ready(function() {
 	$('.tiptip a.button, .tiptip button').tipTip();
   var imagen="../../imagenes/cal.gif";	
   var formatFecha="dd/mm/yy";	
-  $("#fechaInicial").datepicker({showOn: 'button', buttonImage:imagen , buttonImageOnly: true,dateFormat: formatFecha});  
-  $("#fechaFinal").datepicker({showOn: 'button', buttonImage: imagen, buttonImageOnly: true,dateFormat: formatFecha});   
+  //$("#fechaInicial").datepicker({showOn: 'button', buttonImage:imagen , buttonImageOnly: true,dateFormat: formatFecha});  
+  //$("#fechaFinal").datepicker({showOn: 'button', buttonImage: imagen, buttonImageOnly: true,dateFormat: formatFecha});   
   //$('#cmdmover').click(function(event){moverOrdenpago();}); 
 
 	
-  getBeneficiarios('txtprestadorservicio','CVE_BENEFI','');
+  //getBeneficiarios('txtprestadorservicio','CVE_BENEFI','');
+  //$('#cboFilterStatus').selectpicker('val',CVE_BENEFI);
   $('#ui-datepicker-div').hide();
 });
 
@@ -58,10 +59,13 @@ function getOrden(){
 	 
 	$("#forma").submit();
 }
-
+/*--------------------------------- Manda a cargar la op desde el listado de op -------------------------------------*/
 function editarOP(cve_op){
-	ShowDelay('Abriendo Orden de Pago...', '');
-	document.location = "orden_pago.action?cve_op="+cve_op+"&accion=edit";
+		
+	//ShowDelay('Abriendo Orden de Pago...', '');
+	document.location = 'orden_pago.action?cve_op='+ cve_op + '&accion=edit';
+	//if (status==-1)document.location = "orden_pago.action?cve_op="+cve_op+"&accion=edit";
+	//if(status==0||status==4||status==6) getConsultaOrdenPago(cve_op);
 }
 
 function getReporteOP(clave) {
@@ -139,7 +143,7 @@ function _cancelarOrden(idOrden){
 			}*/
 	   },async=false );	 
 }
-
+/************************************************************* Cancelacion de Ordenes de Pago desde el Listado de Ordenes de Pago */
 function cancelacionMultiple(){
 	var checkClaves = [];
 	$('input[name=chkordenes]:checked').each(function() { checkClaves.push($(this).val());});	

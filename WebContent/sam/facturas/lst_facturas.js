@@ -1,7 +1,11 @@
 
 $(document).ready(function() {
-  var imagen="../../imagenes/cal.gif";	
-  var formatFecha="dd/mm/yy";	
+	
+	var imagen="../../imagenes/cal.gif";	
+	var formatFecha="dd/mm/yy";
+  
+//Para seleccionar todos los checkbox Abraham Gonzalez 12/07/2016
+
   $('#cmdbuscar').click(function(event){iniciarBusqueda();});
   $('#cmdaperturar').click(function(event){aperturarFacturas();});
   $('#cmdcancelar').click(function(event){cancelarFacturas();})
@@ -9,7 +13,16 @@ $(document).ready(function() {
   $("#txtfechaFinal").datepicker({showOn: 'button', buttonImage: imagen, buttonImageOnly: true,dateFormat: formatFecha}); 
   $('#ui-datepicker-div').hide();
   getBeneficiarios('txtbeneficiario','clv_benefi');
+
+  
+  
+  //Para seleccionar todos los checkbox Abraham Gonzalez 12/07/2016
+  $('#checkTodos').click( function (event){ $('input[name=chkfacturas]').attr('checked', this.checked); });
 });
+
+
+
+
 
 function iniciarBusqueda(){
 	if($('#txtbeneficiario').attr('value')=='') $('#clv_benefi').attr('value', '0');
@@ -169,3 +182,4 @@ function getReportePedido(cve_ped)
 	$('#frmreporte').attr('target',"");
 	$('#frmreporte').attr('action',"../reportes/entradas.action");
 }
+

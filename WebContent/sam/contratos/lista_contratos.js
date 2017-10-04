@@ -47,7 +47,7 @@ function getAnexosListaCON(anexo)
 }
 
 function editarCON(cve_contrato){
-	ShowDelay('Abriendo Contrato', '');
+	
 	document.location = "cap_contratos.action?cve_contrato="+cve_contrato;
 }
 

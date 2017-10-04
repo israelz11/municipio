@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import mx.gob.municipio.centro.model.gateways.sam.GatewayFacturas;
 import mx.gob.municipio.centro.model.gateways.sam.GatewayOrdenDePagos;
 import mx.gob.municipio.centro.model.gateways.sam.GatewayUnidadAdm;
+import mx.gob.municipio.centro.model.gateways.sam.GatewayVales;
 import mx.gob.municipio.centro.model.gateways.sam.catalogos.GatewayMeses;
 import mx.gob.municipio.centro.view.bases.ControladorBase;
 
@@ -33,6 +34,9 @@ public class ControladorFacturas extends ControladorBase {
 	
 	@Autowired
 	GatewayUnidadAdm gatewayUnidadAdm;
+	
+	@Autowired
+	GatewayVales gatewayVales;
 	
 	@Autowired 
 	GatewayFacturas gatewayFacturas;
@@ -134,6 +138,7 @@ public class ControladorFacturas extends ControladorBase {
 		gatewayFacturas.guardarComprobacionVale(idMovVale, cve_factura, cve_vale, idProyecto, clv_partid, importe);
 	}
 	
+		
 	public List getListaVales (Long cve_factura) {
 	    	 return gatewayFacturas.getListaVales(cve_factura);
 	}

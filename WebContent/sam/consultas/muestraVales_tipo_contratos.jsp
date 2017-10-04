@@ -56,7 +56,7 @@ function cargar(id_vale,num_vale,clv_benefi, comprobado,por_comprobar){
     <th width="17%" align="center">Por Comprobar</th>
   </tr>
    <c:set var="cont" value="${0}" />
-  <c:forEach items="${listadovales}" var="item" varStatus="status" >
+  <c:forEach items="${listadovales}" var="item" varStatus="status" ><!--Viene de /sam/src/mx/gob/municipio/centro/view/controller/sam/utilerias-- ControladorMuestraValesContratos -->
     <c:set var="cont" value="${cont+1}" /> 
     <tr>
       <td width="18%" height="20" align="center"><a href="javascript:cargar('${item.CVE_VALE}','${item.NUM_VALE}','${item.CLV_BENEFI}','${item.COMPROBADO}', '${item.POR_COMPROBAR}')"><c:out value='${item.NUM_VALE}'/></a></td>

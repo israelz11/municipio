@@ -26,11 +26,11 @@ public class GatewayBeneficiario extends BaseGateway {
 			sql = " where  TIPOBENEFI = :municipio ";
 		if (tipo!=null && tipo ==2 )
 			sql = " where  TIPOBENEFI <> :municipio ";*/
-	    return this.getJdbcTemplate().queryForList("SELECT CLV_BENEFI, NCOMERCIA, RFC, TIPOBENEFI  FROM CAT_BENEFI WHERE STATUS = 1");		
+	    return this.getJdbcTemplate().queryForList("SELECT CLV_BENEFI, NCOMERCIA, RFC, TIPOBENEFI  FROM CAT_BENEFI WHERE STATUS = 1 ORDER BY NCOMERCIA ASC");		
 	}
 	
 	public List<Map> getListaBeneficiarios(){		
-		  return this.getJdbcTemplate().queryForList("SELECT CLV_BENEFI, NCOMERCIA, RFC, TIPOBENEFI  FROM CAT_BENEFI WHERE STATUS = 1 ORDER BY CLV_BENEFI ASC");		
+		  return this.getJdbcTemplate().queryForList("SELECT CLV_BENEFI, NCOMERCIA, RFC, TIPOBENEFI  FROM CAT_BENEFI WHERE STATUS = 1 ORDER BY NCOMERCIA ASC");		
 	}
 	
 	public List<Map> getListadoBeneficiarios(String ncomercia, String rfc, int tipo, String vigencia){

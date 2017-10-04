@@ -37,13 +37,14 @@ public class ControladorTargetSubirArchivoAnexoOP extends ControladorBase {
 		Map m = new HashMap();
 		String json = "";
 		
-		Long cve_op = Long.parseLong(request.getParameter("id_orden").toString());
+		Long cve_op = Long.parseLong(request.getParameter("CveOrdenOP").toString());
 		String idDocumento = request.getParameter("idDocumento");
 		String tipoMovDoc = request.getParameter("tipoMovDoc");
 		String numeroDoc = request.getParameter("numeroDoc");
 		String notaDoc = request.getParameter("notaDoc");
 		
 		m.put("mensaje", false);
+		String ejercicio = request.getParameter("ejercicio");
 		
 		if(getPrivilegioEn(this.getSesion().getIdUsuario(), 114)){
 			throw new RuntimeException("No cuenta por los privilegios suficientes para realizar esta operación, solo lectura");
@@ -55,6 +56,7 @@ public class ControladorTargetSubirArchivoAnexoOP extends ControladorBase {
 		  }
 		  else
 			  gatewayOrdenDePagos.actualizarDocumento(Integer.parseInt(idDocumento.toString()),tipoMovDoc,numeroDoc,notaDoc, cve_op, this.getSesion().getEjercicio(), this.getSesion().getIdUsuario());
+		
 		
 		if (file !=null && file.getSize()> 0 ){
 		  	String nombreArchivo = removeSpecialChar(file.getOriginalFilename());

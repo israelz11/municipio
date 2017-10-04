@@ -206,6 +206,7 @@ function muestraPresupuesto(){
 		__listadoPresupuesto($('#ID_PROYECTO').attr('value'),$('#txtproyecto').attr('value'),$('#txtpartida').attr('value'), $('#cbomes').attr('value'), $('#tipoGasto').val(), idUnidad);
 }
 
+/*------------------------------------ Revisar el cierre del contratos --------------------------------------------------*/
 function cierraContrato(){
 	
 	
@@ -214,7 +215,7 @@ function cierraContrato(){
 		
 	 	
 	 });
-	/*
+	
 	if(!cerrar) {jAlert('Es necesario que exista al menos un concepto de contrato para realizar esta operación','Advertencia'); return false;}
 	
 	
@@ -228,7 +229,7 @@ function cierraContrato(){
 											if(getHTML(items)=="") {
 												CloseDelay('Contrato cerrado con éxito', 2000, function(){
 														$('#cmdcerrar').attr('disabled', true);
-														 //getReporteContrato($('#CVE_CONTRATO').attr('value'));
+														 getReporteContrato($('#CVE_CONTRATO').attr('value'));
 														 document.location='lista_contratos.action';
 													});
 											}
@@ -240,7 +241,7 @@ function cierraContrato(){
 								}
 					});
 				}
-			});*/
+			});
 }
 
 function guardaContrato(){
@@ -417,6 +418,7 @@ function getReportePedido(clavePed) {
 	$('#forma').attr('target',"");
 }
 
+/*------ Retorna los vales desde la vista muestraVales_tipo_contratos para cargarlos desde el presupuesto ------*/
 function getValeDocumento(id_vale,num_vale,clv_benefi, comprobado,por_comprobar){
 	$('#txtdocumento').val(num_vale);
 	$('#CVE_DOC').attr('value', id_vale);

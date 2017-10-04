@@ -124,12 +124,14 @@ function __listadoPresupuesto(idproyecto, proyecto, partida, mes, tipoGasto, idD
 /*Devuelve el presupuesto de la pantalla hija*/
 
 function __regresaPresupuesto(ID, proyecto, partida, pre_actual, disponible){
+	alert("demo llego hasta aqui");
 	$('#txtpresupuesto').attr('value',formatNumber(pre_actual,'$')); 
 	$('#txtdisponible').attr('value',formatNumber(disponible,'$')); 
 	$('#txtproyecto').attr('value',proyecto);
 	$('#txtpartida').attr('value',partida);
 	$('#CLV_PARTID').attr('value',partida);
 	$('#ID_PROYECTO').attr('value',ID);
+	$(".swal2-container.swal2-fade.swal2-shown").remove();
 	//$.alerts._hide();
 	//costumFunction();
 }

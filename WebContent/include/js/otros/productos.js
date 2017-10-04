@@ -1,7 +1,16 @@
 /*Metodo para mostrar el listado de productos*/
 
 function __listadoProductos(producto, partida){
-	jWindow('<iframe width="600" height="400" frameborder="0" src="../../sam/consultas/muestra_productos.action?producto='+producto+'&partida='+partida+'"></iframe>','Catalogo de Productos', '','Cerrar ',1);
+	swal({
+		  title: 'Catálogo de Productos',
+		  text: 'Muestra el catálogo de productos',
+		  html:
+			  '<iframe width="600" height="400" frameborder="0" src="../../sam/consultas/muestra_productos.action?producto='+producto+'&partida='+partida+'"></iframe>',
+		  width: 800,
+		  padding: 10,
+		  animation: false
+		})
+	//jWindow('<iframe width="600" height="400" frameborder="0" src="../../sam/consultas/muestra_productos.action?producto='+producto+'&partida='+partida+'"></iframe>','Catalogo de Productos', '','Cerrar ',1);
 }
 
 /*Devuelve el presupuesto de la pantalla hija*/
