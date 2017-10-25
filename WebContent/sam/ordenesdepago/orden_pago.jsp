@@ -25,11 +25,13 @@
 <script type="text/javascript" src="../../include/js/presupuesto/presupuesto.js"></script>
 <script type="text/javascript" src="orden_pago.js?x=<%=System.currentTimeMillis()%>"></script>
 <script type="text/javascript" src="../../include/js/toolSam.js"></script> 
+<script type="text/javascript" src="../../include/js/fileinput.min.js"></script>
+
 
 <link rel="stylesheet" href="../../include/css/bootstrap-3.3.7.css" type="text/css">
 <link rel="stylesheet" href="../../include/css/bootstrap2.css" type="text/css"/>
 <link rel="stylesheet" href="../../include/css/style-tabs.css" type="text/css"/>
-
+<link rel="stylesheet" href="../../include/css/fileinput.min.css" type="text/css"/>
 
 
 <link rel="stylesheet" href="../../include/css/boostrap-select/dist/css/bootstrap-select.css" type="text/css">
@@ -84,7 +86,7 @@ a:active {
 
 <h1 class="h1-encabezado">Ordenes de Pago - Captura de Ordenes de Pago</h1>
 
-<div id="DivHeadDependency" class="well">
+<div id="listaOrdenesPendientes" class="well">
 	<div class="form-group">
 		<div class="col-sm-2 col-md-offset-1 control-label">Unidad administrativa:</div>
 		<div class="col-md-3">	
@@ -104,7 +106,7 @@ a:active {
        <div class="col-md-3 form-group">
        <div class="col-md-10">
 		      <div>
-          		<button class="btn btn-primary" name="btnNuevaOp" id="btnNuevaOp" onClick="nuevaOp();limpiarForma();" value="Nueva Orden" style="width:100%">Nueva Orden de Pago</button>
+          		<input type="button" class="btn btn-primary" name="btnNuevaOp" id="btnNuevaOp" value="Nueva Orden de Pago" style="width:100%">
           </div>
         </div>   
 		</div>
@@ -118,7 +120,7 @@ a:active {
 <!-- Cierra el WELL -->
   <div class="col-sm-12">
     <div id="DivOPResults" class="form-gorup">
-      <table border="0" class="table table-hover" id="listaOrdenes" style="width:100%">
+      <table border="0" class="listasDetalles table table-hover" id="listaOrdenes" style="width:100%">
           <thead>
           <tr>
             <th width="5%" height="20">Numero</th>
@@ -135,11 +137,12 @@ a:active {
     </div>    
   </div>
 
-  <div class="col-sm-12">
+  <div class="col-sm-12" id="tabsOrdenesEnca">
     <!-- Tabs para Ordenes de Pago-->
+    <div id="tabsOrdenes">
     <div class="panel with-nav-tabs panel-primary">
         <div class="panel-heading">
-          <ul class="nav nav-tabs responsive" id="tab_requi" name="tab_requi">
+          <ul class="nav nav-tabs responsive" id="tabsOrdenesPane" name="tabsOrdenesPane">
                 <li class="active"><a href="#tabsCabe" data-toggle="tab">Información general</a></li>
                 <li><a href="#tabsCon" data-toggle="tab">Conceptos</a></li>
                 <li><a href="#tabsRet" data-toggle="tab">Retenciones</a></li>
@@ -253,7 +256,7 @@ a:active {
                         <div class="control-label col-sm-3 ">Seleccione un Beneficiario:</div>
                         <div class="form-group col-sm-6">
                             <select name="xBeneficiario" class="selectpicker form-control input-sm m-b" data-live-search="true" id="xBeneficiario" style="width:100%">
-                              <c:forEach items="${Beneficiario}" var="item" varStatus="status">
+                              <c:forEach items="${beneficiarios}" var="item" varStatus="status">
                                     <option value='<c:out value="${item.CLV_BENEFI}"/>'
                                     <c:if test='${item.CLV_BENEFI==xBeneficiario}'>selected</c:if>><c:out value='${item.NCOMERCIA}'/>
                               </c:forEach>
@@ -300,17 +303,17 @@ a:active {
                     <div class="form-group">
                         <div class="control-label col-sm-3 "></div>
                         <div class="form-group col-sm-9">
-                            <input class="btn btn-default" name="cmdregresar" id="cmdregresar" onClick="regresar()"  value="Regresar" style="width:100px" type="button">
+                            <input class="btn btn-default" name="cmdregresar" id="cmdregresar" value="Regresar" style="width:100px" type="button">
                             <input class="btn btn-primary" name="xGrabar" id="xGrabar"  value="Nuevo" onClick="limpiarForma()"  style="width:100px" type="button">
                             <input class="btn btn-danger" name="btnCerrar" id="btnCerrar" value="Cerrar" onClick="cerrarOrden()"  style="width:100px" type="button"> 
-                            <input class="btn btn-success" name="btnGrabar" id="btnGrabar"  value="Guardar" onClick="guardar()"  style="width:100px" type="button">
+                            <input class="btn btn-success" name="btnGrabar" id="btnGrabar"  value="Guardar" style="width:100px" type="button">
                         </div>
                         
                     </div>
               </div>
         </form>
           </div> <!--Tab Cabecera-->
-              <!--Tab Conceptos-->
+            <!--Tab Conceptos-->
               <div class="tab-pane" id="tabsCon">
                 <form class="form-horizontal">
                  
@@ -319,7 +322,7 @@ a:active {
 		                <div class="form-group">
 		                    <div class="control-label col-sm-3 "></div>
 		            	    <div class="form-group col-sm-3">
-		                        <input class="btn btn-success" type="button" name="cmdCargarFactura" id="cmdCargarFactura" onClick="getFacturas()" value="Generar a partir de factura..."> 
+		                        <input class="btn btn-primary btn-outline" type="button" name="cmdCargarFactura" id="cmdCargarFactura" onClick="getFacturas()" value="Generar a partir de factura..."> 
                 			</div>
 		                    <div class="form-group col-sm-7">&nbsp;</div>
 		                </div>
@@ -327,7 +330,7 @@ a:active {
 		                                        
                 </form>
                 <div>
-		            <table width="100%" border="0"  align="center" cellpadding="0" cellspacing="0" class="listasDetallesOrdenes table table-hover" id="listasDetallesOrdenes">
+		            <table width="100%" border="0"  align="center" cellpadding="0" cellspacing="0" class="listasDetalles table table-hover" id="listasDetallesOrdenes">
 				        <thead>
 				        <tr >
 				          <th width="3%" height="20"  align="center"><img src="../../imagenes/cross.png" width="16" height="16" onClick="eliminarDetalle()" style='cursor: pointer;'></th>
@@ -345,7 +348,8 @@ a:active {
 				        </table>        
 		            </div>    
               </div> <!--Tab Conceptos-->
-            <div class="tab-pane" id="tabsRet">
+            <!--Tab Retenciones-->
+              <div class="tab-pane" id="tabsRet">
             	<form class="form-horizontal">
             	 	<!--Retencion-->
             	 	<div class="row">
@@ -369,23 +373,23 @@ a:active {
 	                    <div class="form-group">
 	                        <div class="control-label col-sm-3 ">*Importe:</div>
 	                        <div class="form-group col-sm-3">
-	                            <input name="importeRetencion"  type="text" class="form-control" id="importeRetencion" onkeypress=" return keyNumbero( event );">
+	                            <input name="importeRetencion"  type="text" class="form-control" id="importeRetencion" readonly onkeypress=" return keyNumbero( event );">
 	                        </div>
 	                        <div class="form-group col-sm-7">&nbsp;</div>
 	                    </div>
 	              	</div>
 	              	<div class="row">
 	                    <div class="form-group">
-	                        <div class="control-label col-sm-3 ">*Importe:</div>
-	                        <div class="form-group col-sm-3">
-	                            <input type="button" name="cmdNuevaRetencion" id="cmdNuevaRetencion" class="btn btn-info" style="width:150px" value="Nueva Retención">  
-	                            <input type="button" name="cmdNuevaRetencion" id="cmdNuevaRetencion" onClick="guardarRetencion()" class="btn btn-info" style="width:150px" value="Guardar Retención"> 
+	                        <div class="control-label col-sm-3 "></div>
+	                        <div class="form-group col-sm-3" style="display:none;">
+	                            <input type="button" name="cmdNuevaRetencion" id="cmdNuevaRetencion" class="btn btn-primary" style="width:150px" value="Nueva Retención">  
+	                            <input type="button" name="cmdNuevaRetencion" id="cmdNuevaRetencion" onClick="guardarRetencion()" class="btn btn-success" style="width:150px" value="Guardar Retención"> 
 							</div>
 	                        <div class="form-group col-sm-7">&nbsp;</div>
 	                    </div>
 	              	</div>
 	              	<div>
-	              	<table width="100%" border="0"  align="center" cellpadding="0" cellspacing="0" class="table" id="listasRetenciones">
+	              	<table width="100%" border="0"  align="center" cellpadding="0" cellspacing="0" class="listasDetalles table table-hover" id="listasRetenciones">
 			            <thead>
 			              <tr >
 			                <th width="3%" height="20"><img src="../../imagenes/cross.png" width="16" height="16" onClick="eliminarRetencion()" style='cursor: pointer;'></th>
@@ -400,8 +404,8 @@ a:active {
 			        </div>
             	</form>
             </div>
-            
-            <div class="tab-pane" id="tabsDoc">
+            <!--Tab Anexos-->
+              <div class="tab-pane" id="tabsDoc">
             	<form class="form-horizontal" id="frmDoc" name="frmDoc" method="post" enctype="multipart/form-data">
             	<input name="CveOrdenOP" type="hidden"  id="CveOrdenOP" size="8" value="" />
             		<!--Tipo Movimiento-->
@@ -447,6 +451,7 @@ a:active {
 		            		<div class="control-label col-sm-3 ">*Archivo:</div>
 		                    <div class="form-group col-sm-6">
                                 <input type="file" class="input-file" id="archivo" name="archivo" style="width:445px" accept="application/pdf"/>
+                             
 					        </div>
 		                    <div class="form-group col-sm-3">&nbsp;</div>
 		                </div>    
@@ -456,14 +461,14 @@ a:active {
             	 		<div class="form-group">
 		            		<div class="control-label col-sm-3 "></div>
 		                    <div class="form-group col-sm-6">
-                                <input type="button" name="cmdNuevoAnexo" id="cmdNuevoAnexo" onClick="" value="Nuevo Anexo">  
-                        		<input name="BorraOs2" id="BorraOs2" type="button" value="Guardar Anexo">  
+                                <input type="button" class="btn btn-primary" name="cmdNuevoAnexo" id="cmdNuevoAnexo" onClick="" value="Nuevo Anexo">  
+                        		<input name="BorraOs2" class="btn btn-success" id="BorraOs2" type="button" value="Guardar Anexo">  
 					        </div>
 		                    <div class="form-group col-sm-3">&nbsp;</div>
 		                </div>    
                     </div>
                     <div class="form-group">
-                    	<table width="100%" border="0"  align="center" cellpadding="0" cellspacing="0" class="table" id="listasDocumentos">
+                    	<table width="100%" border="0"  align="center" cellpadding="0" cellspacing="0" class="listasDetalles table table-hover" id="listasDocumentos">
 				            <thead>
 				              <tr >
 				                <th width="3%" height="20"  align="center"><img src="../../imagenes/cross.png" alt="" width="16" height="16" onClick="eliminarDocumentos()" style="cursor:pointer"></th>
@@ -482,8 +487,8 @@ a:active {
 			        </div>    
             	</form>
             </div> 
-            
-             <div class="tab-pane" id="tabsVal">
+            <!--Tab Vales-->
+              <div class="tab-pane" id="tabsVal">
             	<form class="form-horizontal">
             		<!--*Proyecto Cuenta:-->
             		<div class="row">
@@ -527,14 +532,14 @@ a:active {
             	 		<div class="form-group">
 		            		<div class="control-label col-sm-3 "></div>
 		                    <div class="form-group col-sm-6">
-                              <input name="cmdNuevoAnexo" id="cmdNuevoAnexo2" class="btn btn-info" onClick="lipiarVale();" type="button" value="Nuevo Vale"> 
-                        	  <input name="BorraOs2" id="BorraOs2" class="btn btn-info" onClick="guardarVale();" type="button" value="Guardar Vale">  
+                              <input name="cmdNuevoAnexo" id="cmdNuevoAnexo2" class="btn btn-primary" onClick="lipiarVale();" type="button" value="Nuevo Vale"> 
+                        	  <input name="BorraOs2" id="BorraOs2" class="btn btn-success" onClick="guardarVale();" type="button" value="Guardar Vale">  
 					        </div>
 		                    <div class="form-group col-sm-3">&nbsp;</div>
 		                </div>    
                     </div> 
                     <div class="form-group">
-                     <table width="100%" border="0" cellpadding="0" cellspacing="0" class="table-hover" id="listasVales">
+                     <table width="100%" border="0" cellpadding="0" cellspacing="0" class="listasDetalles table table-hover" id="listasVales">
 			            <thead>
 			              <tr >
 			                <th width="2%" height="20" style="text-align:left"><img src="../../imagenes/cross.png" alt="" width="16" height="16" onClick="eliminarVales()" style="cursor:pointer"></th>
@@ -556,31 +561,10 @@ a:active {
           </div>
         </div>
     </div>
+   </div>
   </div>
-<!--Fin Tabs-->
-
-<div id="tabsOrdenesEnca">
-<div id="tabsOrdenes">
-  <ul>
-    <li ><a href="#tabsCabe">Cabecera</a></li>
-    <li ><a href="#tabsCon">Conceptos</a> </li>
-    <li ><a href="#tabsRet">Retenciones</a></li>
-    <li ><a href="#tabsDoc">Anexos</a></li>
-    <li ><a href="#tabsVal">Vales</a></li>
-  </ul>
-    <div id="tabsCabe" >
-    </div>
-    <div id="tabsCon">
-    </div>
-    <div id="tabsRet">
-   	</div>
-    <div id="tabsDoc">
-    </div>
-  	<div id="tabsVal">
-    </div>
-  </div><!-- Cierra tabsOrdenes -->
-  </div><!-- Cierra tabsOrdenesEnca -->
-  
+<!--------------------- Fin Tabs ---------------------------->
+ 
 </form>
 </body>
 </html>

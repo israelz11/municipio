@@ -10,11 +10,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css">
 <link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css">
-<link rel="stylesheet" href="../../include/css/sweetalert2.min.css" type="text/css">
-
 <link rel="stylesheet" href="../../include/css/black-tie/jquery-ui-1.7.3.custom.css" type="text/css" />
 <link rel="stylesheet" href="../../include/js/autocomplete/jquery.autocomplete.css" type="text/css" />	
-
+ <link rel="stylesheet" href="../../include/css/sweetalert2.min.css" type="text/css">
 <script type="text/javascript" src="../../include/js/jquery-1.3.2.min.js"></script>
 <script type="text/javascript" src="../../include/js/jquery-impromptu.2.3.js"></script>
 <script type="text/javascript" src="../../include/js/jquery.form.js"></script>
@@ -25,10 +23,7 @@
 <script type="text/javascript" src="../../dwr/util.js"> </script>
 <script type="text/javascript" src="../../dwr/interface/controladorProyectoPartida.js"> </script>
 <script type="text/javascript" src="../../include/js/autocomplete/jquery.autocomplete.js"></script>
-
-<script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js?x=<%=System.currentTimeMillis()%>"></script>
-<script type="text/javascript" src="../../include/js/sweetalert2.min.js?x=<%=System.currentTimeMillis()%>"></script>
-
+<script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>
 <script type="text/javascript" src="../../dwr/interface/autocompleteDiversosRemoto.js"> </script>
 <script type="text/javascript" src="../../include/js/autocomplete/autompleteVarios.js"></script>
 <script type="text/javascript" src="captura_factura.js?x=<%=System.currentTimeMillis()%>"></script>
@@ -37,6 +32,7 @@
 <link rel="stylesheet" href="../../include/css/css/css3-buttons.css" type="text/css" media="screen">
 <link rel="stylesheet" href="../../include/css/tiptip.css" type="text/css"  media="screen">
 <script src="../../include/css/jquery.tiptip.js"></script>
+<script type="text/javascript" src="../../include/js/sweetalert2.min.js"></script>
 <!--<script type="text/javascript" src="../../include/js/jquery.tabs/jquery-1.1.3.1.pack.js"></script>
 <script type="text/javascript" src="../../include/js/jquery.tabs/jquery.history_remote.pack.js"></script>
 <script type="text/javascript" src="../../include/js/jquery.tabs/jquery.tabs.pack.js"></script>-->

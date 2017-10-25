@@ -6,11 +6,6 @@ import java.util.Map;
 
 import mx.gob.municipio.centro.model.bases.BaseGateway;
 
-/**
- * @author lsc. Mauricio Hernandez Leon.
- * @version 1.0
- *
- */
 public class GatewayBeneficiario extends BaseGateway {
 
 	public GatewayBeneficiario(){

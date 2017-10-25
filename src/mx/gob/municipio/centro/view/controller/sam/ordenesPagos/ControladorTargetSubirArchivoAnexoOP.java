@@ -37,7 +37,7 @@ public class ControladorTargetSubirArchivoAnexoOP extends ControladorBase {
 		Map m = new HashMap();
 		String json = "";
 		
-		Long cve_op = Long.parseLong(request.getParameter("CveOrdenOP").toString());
+		Long cve_op = Long.parseLong(request.getParameter("CveOrdenOP"));
 		String idDocumento = request.getParameter("idDocumento");
 		String tipoMovDoc = request.getParameter("tipoMovDoc");
 		String numeroDoc = request.getParameter("numeroDoc");
@@ -47,7 +47,7 @@ public class ControladorTargetSubirArchivoAnexoOP extends ControladorBase {
 		String ejercicio = request.getParameter("ejercicio");
 		
 		if(getPrivilegioEn(this.getSesion().getIdUsuario(), 114)){
-			throw new RuntimeException("No cuenta por los privilegios suficientes para realizar esta operación, solo lectura");
+			throw new RuntimeException("No cuenta por los privilegios suficientes para realizar esta operaciÃ³n, solo lectura");
 		}
 		
 		if (Integer.parseInt(idDocumento.toString()) == 0) {

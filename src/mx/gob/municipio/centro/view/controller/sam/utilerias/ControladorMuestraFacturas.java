@@ -26,7 +26,9 @@ public class ControladorMuestraFacturas extends ControladorBase {
 	@RequestMapping(method = {RequestMethod.GET , RequestMethod.POST} )   
 	public String  requestGetControlador( Map modelo, HttpServletRequest request ) {
 		int  idtipoGasto = Integer.parseInt(request.getParameter("tipoGasto").toString());
+		String id_unidad =request.getParameter("unidad");
 		int  unidad = Integer.parseInt(request.getParameter("unidad").toString());
+		
 		String  claveBeneficiario = request.getParameter("clv_benefi");
 
 		modelo.put("listaFacturas", gatewayFacturas.getListaFacturasOrdenPago(idtipoGasto, unidad, claveBeneficiario, this.getSesion().getIdUsuario()));

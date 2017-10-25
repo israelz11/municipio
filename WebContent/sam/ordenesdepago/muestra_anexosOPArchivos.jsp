@@ -3,13 +3,16 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta charset="utf-8" />
 <title></title>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
-<link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css"/>
+<!--  <link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css"/>/-->
+<link rel="stylesheet" href="../../include/css/bootstrap-3.3.7.css" type="text/css">
+<link rel="stylesheet" href="../../include/css/bootstrap2.css" type="text/css"/>
+<link rel="stylesheet" href="../../include/css/sweetalert2.min.css" type="text/css"/>
 <script type="text/javascript" src="../../include/js/jquery-1.3.2.min.js"></script>
 <script type="text/javascript" src="../../include/js/jquery-impromptu.2.3.js"></script>
 <script type="text/javascript" src="../../include/js/jquery.form.js"></script>
@@ -19,14 +22,18 @@
 <script type="text/javascript" src="../../include/js/autocomplete/autompleteVarios.js"></script>
 <script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>
 <script type="text/javascript" src="../../include/js/toolSam.js"></script>
+<script type="text/javascript" src="../../include/js/sweetalert2.min.js"></script>
+<script type="text/javascript" src="../../include/js/bootstrap-3.3.7.js"></script>
+
 <script type="text/javascript" src="../../dwr/interface/controladorOrdenPagoRemoto.js"> </script>
 <script type="text/javascript" src="../../dwr/engine.js"> </script>  
 <script type="text/javascript" src="../../dwr/util.js"> </script> 
 <script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>
 <link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css">
-<link rel="stylesheet" href="../../include/css/css/css3-buttons.css" type="text/css" media="screen">
-<link rel="stylesheet" href="../../include/css/tiptip.css" type="text/css"  media="screen">
-<script src="../../include/css/jquery.tiptip.js"></script>
+<!--<link rel="stylesheet" href="../../include/css/css/css3-buttons.css" type="text/css" media="screen"/>
+	<link rel="stylesheet" href="../../include/css/tiptip.css" type="text/css"  media="screen">
+	<script src="../../include/css/jquery.tiptip.js"></script> 
+ -->
 <style type="text/css">
 <!--
 body {
@@ -50,7 +57,7 @@ a:active {
 -->
 </style>
 <script language="javascript">
-<!--
+
 $(document).ready(function(){
 	var options = { 
         beforeSubmit:  showRequest,  
@@ -74,9 +81,10 @@ function eliminarRetencion(cons){
 	  checkRetenciones.push(cons);
     // $('input[name=clavesRetencion]:checked').each(function() {checkRetenciones.push($(this).val());	 });	 
  	 
-  	 var idOrden=$('#id_orden').attr('value');
+  	 var idOrden=$('#id_orden').val();
 	 if (checkRetenciones.length > 0 ) {
-		 jConfirm('¿Confirma que desea eliminar la retención?','Eliminar retención', function(r){
+		
+		/* jConfirm('¿Confirma que desea eliminar la retención?','Eliminar retención', function(r){
 			 if(r){
 				 	ShowDelay('Eliminando retencione(s)','');
 					controladorOrdenPagoRemoto.eliminarDocumentos(checkRetenciones,idOrden, {
@@ -90,15 +98,45 @@ function eliminarRetencion(cons){
 					}
 				},async=false );
 			}
-		});
-     	 } else 
-	    jAlert('Es necesario que seleccione un elemento de la lista', 'Advertencia');
+		});*/
+     	 
+	
+	 swal({
+		  title: 'Are you sure?',
+		  text: "You won't be able to revert this!",
+		  type: 'warning',
+		  showCancelButton: true,
+		  confirmButtonColor: '#3085d6',
+		  cancelButtonColor: '#d33',
+		  confirmButtonText: 'Yes, delete it!'
+		}).then(function (r) {
+		  swal(
+		    'Deleted!',
+		    'Your file has been deleted.',
+		    'success'		    
+		  )
+		  if(r){
+			 	ShowDelay('Eliminando retencione(s)','');
+				controladorOrdenPagoRemoto.eliminarDocumentos(checkRetenciones,idOrden, {
+				callback:function(items) { 	
+				   CloseDelay("Retencion(es) eliminada(s) con éxito");
+				   document.location = "muestra_anexosOPArchivos.action?cve_op="+idOrden;
+				} 					   				
+				,
+				errorHandler:function(errorString, exception) { 
+					jError(errorString, 'Error');
+				}
+			},async=false );
+		}
+		})
+	 } else 
+		    jAlert('Es necesario que seleccione un elemento de la lista', 'Advertencia');
 	 }
 
 function limpiarAnexos(){
-	$('#idDocumento').attr('value', '0');
+	$('#idDocumento').val('0');
 	$('#tipoMovDoc').val(0);	
-	$('#numeroDoc').attr('value','');
+	$('#numeroDoc').val('');
 	$('#notaDoc').val('');
 	$('#tipoMovDoc').focus();
 	$('#archivo').val("");
@@ -123,41 +161,41 @@ function showRequest(formData, jqForm, options) {
 } 
  
 function showResponse(data)  { 
-var idOrden=$('#id_orden').attr('value');
+var idOrden=$('#id_orden').val();
  	if(data.mensaje){
 		CloseDelay("Anexo guardado con éxito");
-		$('#archivo').attr('value','');
+		$('#archivo').val('');
 		document.location = "muestra_anexosOPArchivos.action?cve_op="+idOrden;
 		
 	}
 	else{
 		_closeDelay();
-		jError("No se ha podido cargar el archivo, consulte a su administrador", "Error");
+		swal("No se ha podido cargar el archivo, consulte a su administrador", "Error");
 	}
 } 
 
  function guardarDocumento(){
 	 var error="";  
-    if ($('#tipoMovDoc').attr('value')=="") {jAlert('El tipo de documento no es válido'); return false;}
-    if ($('#numeroDoc').attr('value')=="") {jAlert('El número de documento no es válido'); return false;}
+    if ($('#tipoMovDoc').val=="") {jAlert('El tipo de documento no es válido'); return false;}
+    if ($('#numeroDoc').val=="") {jAlert('El número de documento no es válido'); return false;}
 
-	  var idOrden=$('#id_orden').attr('value');
+	  var idOrden=$('#id_orden').val();
 						
-						ShowDelay('Guardando anexo','');
-						controladorOrdenPagoRemoto.guardarDocumento($('#idDocumento').attr('value'),$('#tipoMovDoc').attr('value'),$('#numeroDoc').attr('value'),$('#notaDoc').attr('value'),idOrden,{
-						callback:function(items) { 	 
 						
-						 CloseDelay("Anexos guardados con éxito");	  
-						 document.location = "muestra_anexosOPArchivos.action?cve_op="+idOrden;
-						} 					   				
-						,
-						errorHandler:function(errorString, exception) { 
-							jError(errorString, 'Error');         
-						}
-	  
-	  
-	}); 
-	
+						swal.showLoading();
+						controladorOrdenPagoRemoto.guardarDocumento($('#idDocumento').val(),$('#tipoMovDoc').val(),$('#numeroDoc').val(),$('#notaDoc').val(),idOrden,{
+							callback:function(items) { 	 
+							
+							 //CloseDelay("Anexos guardados con éxito");	
+							 timer:2000;
+							 document.location = "muestra_anexosOPArchivos.action?cve_op="+idOrden;
+							} 					   				
+							,
+							errorHandler:function(errorString, exception) { 
+								swal(errorString, 'Error');         
+							}
+						}); 
+						
 	
  }
  
@@ -189,7 +227,7 @@ var idOrden=$('#id_orden').attr('value');
 function cargarOSOT(num_req, cve_req, clv_benefi, total){
 	window.parent.regresarOSOTFactura(num_req, cve_req, clv_benefi, total);
 }
--->
+
 </script>
 
 </head>
@@ -197,8 +235,8 @@ function cargarOSOT(num_req, cve_req, clv_benefi, total){
 <body>
 <form name="forma" id="forma" method="post" enctype="multipart/form-data">
 <input type="hidden" id="id_orden" name="id_orden" value="${cve_op}" />
-<input type="hidden" id="cve_op" name="cve_op" value="${cve_op}" />
-<input type="hidden" name="idDocumento" id="idDocumento" value="0">
+<input type="hidden" id="CveOrdenOP" name="CveOrdenOP" value="${cve_op}" />
+<input type="hidden" name="idDocumento" id="idDocumento" value="0"/>
 <table class="listas" border="0" align="center" cellpadding="0" cellspacing="0" width="95%">
   <tr bgcolor="#889FC9">
     <td height="21" colspan="6" align="center"><table width="100%" border="0" cellpadding="0" cellspacing="0" class="formulario">
@@ -231,12 +269,12 @@ function cargarOSOT(num_req, cve_req, clv_benefi, total){
         <th width="18%" height="32">&nbsp;</th>
         <td width="82%"><table width="400" border="0" cellspacing="0" cellpadding="0">
           <tr>
-            <td><div class="buttons tiptip">
-              <button name="cmdNuevoAnexo" id="cmdNuevoAnexo" onclick="" type="button" class="button red middle"><span class="label" style="width:150px">Nuevo Anexo</span></button>
-            </div></td>
-            <td><div class="buttons tiptip">
-              <button name="BorraOs2" id="BorraOs2" type="button" class="button blue middle"><span class="label" style="width:150px">Guardar Anexo</span></button>
-            </div></td>
+            <td>
+              <input name="cmdNuevoAnexo" id="cmdNuevoAnexo" onclick="" type="button" class="btn btn-primary" value="Nuevo Anexo" style="width:150px">
+            </td>
+            <td>
+              <input name="BorraOs2" id="BorraOs2" type="button" class="btn btn-success" value="Guardar Anexo" style="width:150px">
+            </td>
           </tr>
         </table></td>
       </tr>

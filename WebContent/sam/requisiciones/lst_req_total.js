@@ -45,7 +45,7 @@ if($('#cboFilterStatus').selectpicker('val')== null)
     return false;
 }
     
-//alert('Los Estatus seleccionados son: ' + $('#cboFilterStatus').selectpicker('val').toString().split(','));
+alert('Los Estatus seleccionados son: ' + $('#cboFilterStatus').selectpicker('val').toString().split(','));
 });    
 
 $('#cmdClean').on('click', function(e){
@@ -53,7 +53,7 @@ $('#cboFilterStatus').selectpicker('deselectAll');
 $('#cboFilterStatus').selectpicker('refresh');
 
 });
-/*
+
 //Checkbox para seleccionar toda la lista.... Abraham Gonzalez 12/07/2016
 $("input[name=todos]").change(function(){
 	$('input[type=chkrequisiciones]').each( function() {			
@@ -63,9 +63,12 @@ $("input[name=todos]").change(function(){
 			this.checked = false;
 		}
 	});
-});*/
+});
 
-//-----------Ravision del filtrado por fechas en el listado de requisiciones.............
+$('#todos').click( function (event){ $('input[name=chkrequisiciones]').attr('checked', this.checked); });
+
+
+//-----------Revision del filtrado por fechas en el listado de requisiciones.............
 	
 		
 		$('#fechaInicial').datetimepicker({
@@ -84,8 +87,7 @@ $("input[name=todos]").change(function(){
 		    $('#fechaInicial').data("DateTimePicker").maxDate(e.date);
 		});
 
-		  //Para seleccionar todos los checkbox Abraham Gonzalez 12/07/2016
-		  $('#todos').click( function (event){ $('input[name=chkrequisiciones]').prop('checked', this.checked); });
+	
     
 	  //---------------------Boton para imprimir el listado de Requisiciones    28-08-17    ------------------------------------------------------------------------
 	  $('#cmdpdf2').on('click', function() {
@@ -136,6 +138,17 @@ function mostrarOpcionPDF(){
 			html+='</table>';
 	jWindow(html,'Opciones de Reporte', '','Cerrar',1);
 }
+
+//Checkbox para seleccionar toda la lista.... Abraham Gonzalez 12/07/2016
+$("input[name=todos]").change(function(){
+	$('input[type=chkrequisiciones]').each( function() {			
+		if($("input[name=todos]:checked").length == 1){
+			this.checked = true;
+		} else {
+			this.checked = false;
+		}
+	});
+});
 
 function reembolsos(cve_req, modulo){
 	controladorListadoRequisicionesRemoto.getReembolsoRequisiciones(cve_req, {
@@ -390,7 +403,6 @@ function aperturarRequisiciones(){
 			  title: 'Estas seguro?',
 			  text: "¿Confirma que desea aparturar la(s) requisicion(es) seleccionada(s)?",
 			  type: 'warning',
-			  timer: 2000,
 			  showCancelButton: true,
 			  confirmButtonColor: '#3085d6',
 			  cancelButtonColor: '#d33',
@@ -403,7 +415,7 @@ function aperturarRequisiciones(){
 			  swal(
 				  	'Apertura!!',
 				    'La(s) requisicion(es) seleccionada(s) se aperturaron.',
-				    'success' + checkClaves , 
+				    'success',
 				    controladorListadoRequisicionesRemoto.aperturarRequisiciones(checkClaves),
 				    getListaReq()
 			  )
@@ -444,7 +456,8 @@ function getListaReq(){
 	
 	 $('#cboFilterStatus').selectpicker('val');
 	 $('#cboSearch').change('val');
-	 
+	 //alert("Selecccion: "+ $('#cboSearch').val());
+	 //alert("Desde: " + $('#fechaInicial').val() + "  hasta:   " +$('#fechaFinal').val());
 	 if ($('#fechaInicial').attr('value')=="" && $('#fechaFinal').attr('value')!="" || $('#fechaInicial').attr('value')!="" && $('#fechaFinal').attr('value')=="")  error+="El rango de fechas no es valido<br>";
 	
      if (error=="")
@@ -466,7 +479,7 @@ function getRequisicion(claveReq)   {
 }
 
 function getConsultaRequisicion(claveReq)   {
-	//_closeDelay();
+	_closeDelay();
 	$('#claveRequisicion').attr('value',claveReq);
 	$('#forma').attr('target',"impresionConsulta");
 	$('#forma').attr('action',"../reportes/rpt_InformeRequisicion.action");
@@ -486,9 +499,7 @@ $('#forma').attr('action',"lst_req_total.action");
 }
 
 function editarRequisicion(cve_req, status){
-	
-	alert('Clave de la requisicion: ' +cve_req);
-	ShowDelay('Abriendo Orden de Pago...', '');
+
 	if (status==0) document.location = 'capturarRequisicion.action?cve_req='+cve_req;
 	if(status==1||status==2||status==5) getConsultaRequisicion(cve_req); //document.location = 'consultaRequisicion.action?cve_req='+cve_req+"&accion=0";
 }

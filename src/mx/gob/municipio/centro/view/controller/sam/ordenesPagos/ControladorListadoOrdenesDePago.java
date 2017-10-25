@@ -30,8 +30,6 @@ public class ControladorListadoOrdenesDePago extends ControladorBase {
 
 	public ControladorListadoOrdenesDePago(){}
 	
-	@Autowired
-	private GatewayBeneficiario gatewayBeneficiario;
 	
 	public final static  int VER_TODAS_LAS_UNIDADES = 25;
 //	final String STATUS_NUEVA="0"; 
@@ -46,6 +44,9 @@ public class ControladorListadoOrdenesDePago extends ControladorBase {
 	@Autowired 
 	GatewayTipoOrdenDePagos gatewayTipoOrdenDePagos;
 	
+	@Autowired
+	private GatewayBeneficiario gatewayBeneficiario;
+	
 	@SuppressWarnings("unchecked")	
 	@RequestMapping(method = {RequestMethod.GET,RequestMethod.POST})  
 	public String  requestGetControlador( Map modelo, HttpServletRequest request ) {
@@ -56,13 +57,15 @@ public class ControladorListadoOrdenesDePago extends ControladorBase {
 		String fechaIni=request.getParameter("fechaInicial");
 		String fechaFin=request.getParameter("fechaFinal");
 		String tipoGasto=request.getParameter("cbotipogasto");
-		String beneficiario=request.getParameter("txtprestadorservicio");
-		String cve_benefi=request.getParameter("CVE_BENEFI");
+		//String beneficiario=request.getParameter("txtprestadorservicio");
+		//String cve_benefi=request.getParameter("CVE_BENEFI");
+		String cve_benefi= request.getParameter("cboprestadorservicio");
+		String beneficiario=request.getParameter("cboprestadorservicio");//beneficiario
 		String tipo=request.getParameter("cbotipo");
 		String numop = request.getParameter("txtnumop");
 		String numped = request.getParameter("txtpedido");
 		
-		//determinar si solo puede filtrar capitulo 5000 en privilegios
+		//determinar si solo puede filtrar capitulo 5000 en  privilegios
 		if(this.getPrivilegioEn(this.getSesion().getIdUsuario(), 113)){
 			modelo.put("cbocapitulo" ,5000);
 		}
@@ -75,6 +78,7 @@ public class ControladorListadoOrdenesDePago extends ControladorBase {
 		}
 		
 		if(!privilegio){
+			
 			if(request.getParameter("cbodependencia")==null)
 				unidad = this.getSesion().getClaveUnidad();
 			if(request.getParameter("cbodependencia")!=null)
@@ -100,6 +104,7 @@ public class ControladorListadoOrdenesDePago extends ControladorBase {
 		modelo.put("tipo_gto",tipoGasto );
 		modelo.put("txtprestadorservicio",beneficiario );
 		modelo.put("CVE_BENEFI",cve_benefi );
+		modelo.put("clv_benefi",gatewayBeneficiario.getBeneficiariosTodos(0));
 		modelo.put("verUnidad",verUnidad);
 		modelo.put("nombreUnidad",this.getSesion().getUnidad());
 		List <Map> lista = this.getListadoOrdenes(unidad, estatus, fechaIni,fechaFin, cve_benefi, this.getSesion().getEjercicio(),tipoGasto,this.getSesion().getIdUsuario(),verUnidad, tipo, numop, numped, privilegio, modelo.get("cbocapitulo").toString());
@@ -113,11 +118,6 @@ public class ControladorListadoOrdenesDePago extends ControladorBase {
     	return gatewayUnidadAdm.getCapitulos();	
     }
 	
-	@ModelAttribute("Beneficiario")
-	public List<Map>getBeneficiarios(){
-		return gatewayBeneficiario.getListaBeneficiarios();
-	}
-	
 	@ModelAttribute("unidadesAdmiva")
     public List<Map> getUnidades(){
     	return gatewayUnidadAdm.getUnidadAdmTodos();	
@@ -128,6 +128,11 @@ public class ControladorListadoOrdenesDePago extends ControladorBase {
     	return gatewayPlanArbit.getTipodeGasto();
     }
 		
+	@ModelAttribute("beneficiarios")
+	public List<Map>getBeneficiarios(){
+		return gatewayBeneficiario.getListaBeneficiarios();
+	}
+	
 	public List <Map>getListadoOrdenes(String unidad, String  estatus , String fechaInicial, String fechaFinal , String clv_benefi, Integer ejercicio, String tipoGasto, Integer idUsuario, String verUnidad, String tipo, String numop, String numped, boolean privilegio, String capitulo){
 		return this.gatewayOrdenDePagos.getListaDeOrdenesPorEjemplo(unidad, estatus , this.formatoFecha(fechaInicial), this.formatoFecha(fechaFinal) , clv_benefi, ejercicio, tipoGasto, idUsuario, verUnidad, tipo, numop, numped, privilegio, capitulo);
 	}	

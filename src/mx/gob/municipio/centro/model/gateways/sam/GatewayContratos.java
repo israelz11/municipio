@@ -89,7 +89,6 @@ public class GatewayContratos extends BaseGateway {
 	
 	public Long guardarContrato(Long cve_contrato, int idDependencia, String num_contrato, String fecha_ini, String fecha_fin, String oficio, String tiempo_entrega, int tipo, String concepto, Double anticipo, int idRecurso, String clv_benefi, Long cve_doc, int ejercicio, int cve_pers, int idGrupo){
 		Date fecha = new Date();
-		
 		if(cve_contrato==0){
 			//verificar si el numero de contrato esta repetido
 			boolean repetido = this.getJdbcTemplate().queryForInt("SELECT COUNT(*) AS N FROM SAM_CONTRATOS WHERE NUM_CONTRATO LIKE '%"+num_contrato+"%' AND STATUS NOT IN (2)")>0;
@@ -99,9 +98,6 @@ public class GatewayContratos extends BaseGateway {
 			cve_contrato = this.getJdbcTemplate().queryForLong("SELECT MAX(CVE_CONTRATO) AS N FROM SAM_CONTRATOS")+1;
 			this.getJdbcTemplate().update("INSERT INTO SAM_CONTRATOS(CVE_CONTRATO, ID_DEPENDENCIA, ID_GRUPO, ID_RECURSO, CLV_BENEFI, CVE_DOC, NUM_CONTRATO, EJERCICIO, ID_TIPO, CVE_PERS, FECHA, FECHA_INICIO, FECHA_TERMINO, OFICIO_AUT, TIEMPO_ENTREGA, DESCRIPCION, ANTICIPO, STATUS) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", new Object[]{cve_contrato, idDependencia, idGrupo, idRecurso, clv_benefi, cve_doc, num_contrato, ejercicio, tipo, cve_pers, fecha, this.formatoFecha(fecha_ini), this.formatoFecha(fecha_fin), oficio, tiempo_entrega, concepto, anticipo, 0});
 			
-			if (tipo==13)
-				this.getJdbcTemplate().update("UPDATE SAM_VALES_EX SET CVE_CONTRATO = ? WHERE CVE_VALE= ?", new Object[]{cve_contrato,cve_doc});
-					
 			cve_contrato = this.getJdbcTemplate().queryForLong("SELECT MAX(CVE_CONTRATO) AS N FROM SAM_CONTRATOS");
 			
 			//Generar el detalle presupuestal del documento si existe
@@ -114,9 +110,6 @@ public class GatewayContratos extends BaseGateway {
 		else{
 			String num = this.rellenarCeros(cve_contrato.toString(), 6);
 			Map Contrato = this.getContrato(cve_contrato);
-			
-			if (tipo==13)
-				this.getJdbcTemplate().update("UPDATE SAM_VALES_EX SET CVE_CONTRATO = ? WHERE CVE_VALE= ?", new Object[]{cve_contrato,cve_doc});
 			
 			this.getJdbcTemplate().update("UPDATE SAM_CONTRATOS SET ID_TIPO = ?, ID_RECURSO=?, CLV_BENEFI=?, CVE_DOC=?, FECHA_INICIO = ?, FECHA_TERMINO = ?, OFICIO_AUT = ?, TIEMPO_ENTREGA = ?, DESCRIPCION = ?, ANTICIPO=? WHERE CVE_CONTRATO = ?", new Object[]{tipo, idRecurso, clv_benefi, cve_doc, this.formatoFecha(fecha_ini), this.formatoFecha(fecha_fin), oficio, tiempo_entrega, concepto, anticipo, cve_contrato});
 			
@@ -194,8 +187,7 @@ public class GatewayContratos extends BaseGateway {
                 		BigDecimal disponibleMes = new BigDecimal(0);
                 		BigDecimal importe = new BigDecimal(0);
                 		
-                		@SuppressWarnings("rawtypes")
-						Map contrato = getContrato(cve_contrato);
+                		Map contrato = getContrato(cve_contrato);
                 		
                 		List<Map> conceptos = getConceptosContratoAgrupados(cve_contrato);
                 		for(Map row:conceptos )
@@ -220,7 +212,6 @@ public class GatewayContratos extends BaseGateway {
 	                					//SI ES CONTRATO DE PEDIDO
 	                					comprometido = (BigDecimal) getJdbcTemplate().queryForObject("SELECT ISNULL(SUM(MONTO),0) FROM VT_COMPROMISOS WHERE TIPO_DOC IN ('PED') AND CONSULTA ='COMPROMETIDO' AND CVE_DOC = ? AND ID_PROYECTO = ? AND CLV_PARTID = ? AND PERIODO = ?", new Object[]{contrato.get("CVE_DOC"), row.get("ID_PROYECTO"), row.get("CLV_PARTID"), row.get("PERIODO")}, BigDecimal.class);
 	                				}
-	                				//
 	                				if(contrato.get("ID_TIPO").toString().equals("13"))
 	                				{
 	                					//SI ES CONTRATO DE VALE
@@ -288,13 +279,9 @@ public class GatewayContratos extends BaseGateway {
                 			getJdbcTemplate().update("UPDATE SAM_CONTRATOS SET STATUS = ?, FECHA_CERRADO =? WHERE CVE_CONTRATO = ?", new Object[]{CON_STATUS_CERRADO, fecha, cve_contrato});
                 			getJdbcTemplate().update("UPDATE SAM_REQUISIC SET STATUS = ?, FECHA_FINIQUITADO =?, MES_FINALIZADO = ?, DIA_FINALIZADO = ? WHERE CVE_REQ = ?",new Object[]{gatewayRequisicion.REQ_STATUS_FINIQUITADA, fecha, fecha.getMonth()+1, fecha.getDay(), contrato.get("CVE_DOC")});
                 			
-                			if(contrato.get("ID_TIPO").toString().equals("7")) //CONTRAO A TRAVEZ DE PEDIDO
+                			if(contrato.get("ID_TIPO").toString().equals("7")) //CONTRATO A TRAVEZ DE PEDIDO
                 			{
                 				getJdbcTemplate().update("UPDATE SAM_PEDIDOS_EX SET STATUS = 5, FECHA_FINIQUITADO =?, MES_FINALIZADO = ?, DIA_FINALIZADO = ? WHERE CVE_PED = ?",new Object[]{fecha, fecha.getMonth()+1, fecha.getDay(), contrato.get("CVE_DOC")});
-                			}
-                			if(contrato.get("ID_TIPO").toString().equals("13")) //CONTRAO A TRAVEZ DE VALES
-                			{
-                				getJdbcTemplate().update("UPDATE SAM_VALES_EX SET CVE_CONTRATO = ? WHERE CVE_VALE = ?",new Object[]{cve_contrato,contrato.get("CVE_DOC")});
                 			}
                 				
                 		    //guardar en bitacora
@@ -766,7 +753,7 @@ public class GatewayContratos extends BaseGateway {
 			System.out.println("El fichero no puede ser borrado");
 	}
 	
-/*----------------  Listado de Vales que muestra el importe del vale para la comprobacion desde la captura de un contrato apartir de vale  -------------------*/
+	
 	public List<Map> getListaValesPresupuesto(Long cve_vale, String clv_benefi, int idRecurso, int tipo_doc, int cve_pers, int idDependencia){
 		String clausula = "";
 		String status = "STATUS IN (4)";
@@ -795,6 +782,7 @@ public class GatewayContratos extends BaseGateway {
 															"	),2) AS COMPROBADO "+
 														"FROM SAM_VALES_EX WHERE "+status+" AND ID_DEPENDENCIA =? "+clausula, new Object[]{idDependencia});
 	}
+	
 	
 	public List<Map> getListaOSContratos(String num_req, int cve_pers, String cve_unidad, String clv_benefi){
 		if(num_req==null) num_req = "";
@@ -845,21 +833,29 @@ public class GatewayContratos extends BaseGateway {
 		@SuppressWarnings("unchecked")
 		public List<Map> getListaValesContratos(String num_vales, int cve_pers, String cve_unidad, String clv_benefi){
 			if(num_vales==null) num_vales = "";
-			if(clv_benefi==null) clv_benefi = "";
+     		if(clv_benefi==null) clv_benefi = "";
+     		    		
+    		//if(tipo_doc!=7) status = "STATUS IN (1,3)";
+    		//if(cve_vale!=0) clausula = " AND CVE_VALE = "+cve_vale+" "+(!clv_benefi.equals("0") ? "AND CLV_BENEFI='"+clv_benefi+"'": "")+" "+(idRecurso!=0? " AND ID_RECURSO = "+idRecurso+"":"") + (tipo_doc==1 ? " AND TIPO='AO'":"");
 			
-			return this.getJdbcTemplate().queryForList("select CT.ID_DEPENDENCIA,(SELECT DEPENDENCIA FROM CAT_DEPENDENCIAS AS D WHERE D.ID=CT.ID_DEPENDENCIA) AS DEPENDENCIA,MV.CVE_VALE,V.NUM_VALE, " +
-														"(SELECT TIPO_VALE FROM SAM_CAT_TIPO_VALE AS T WHERE T.CLAVE_VALE=V.TIPO)AS TIPO,MV.ID_PROYECTO,CT.DECRIPCION,MV.CLV_PARTID,P.PARTIDA, " +
-														"V.CLV_BENEFI,(SELECT NCOMERCIA FROM CAT_BENEFI AS B WHERE B.CLV_BENEFI=V.CLV_BENEFI)AS BENEFICIARIO,MV.IMPORTE, "+
-														"(SELECT ISNULL((SUM(CV.IMPORTE)),0.00)FROM COMP_VALES AS CV WHERE CV.CVE_VALE=MV.CVE_VALE AND CV.ID_PROYECTO=MV.ID_PROYECTO AND CV.CLV_PARTID=MV.CLV_PARTID)COMPROBADO,  "+
-														"ISNULL(SUM(MV.IMPORTE)-(SELECT (SUM(CV.IMPORTE))FROM COMP_VALES AS CV WHERE CV.CVE_VALE=MV.CVE_VALE AND CV.ID_PROYECTO=MV.ID_PROYECTO AND CV.CLV_PARTID=MV.CLV_PARTID),0.00)AS 'POR_COMPROBAR', "+
-														"V.JUSTIF,CONVERT(NVARCHAR, V.FECHA, 103) AS FECHA from SAM_VALES_EX AS V "+
-														"INNER JOIN SAM_MOV_VALES AS MV ON MV.CVE_VALE=V.CVE_VALE "+
-														"INNER JOIN CAT_PARTID AS P ON P.CLV_PARTID=MV.CLV_PARTID "+
-														"INNER JOIN CEDULA_TEC AS CT ON CT.ID_PROYECTO=MV.ID_PROYECTO "+
-														"WHERE V.STATUS IN (4) AND V.ID_DEPENDENCIA = ? "+
-														"AND V.NUM_VALE LIKE '%"+num_vales+"%' " + (!clv_benefi.equals("") ? " AND V.CLV_BENEFI = '"+clv_benefi+"'": "") + 
-														"GROUP BY CT.ID_DEPENDENCIA,MV.CVE_VALE,V.NUM_VALE,V.TIPO,MV.ID_PROYECTO,CT.DECRIPCION, MV.CLV_PARTID,P.PARTIDA,V.CLV_BENEFI,MV.IMPORTE,v.ETIQUETA,V.FECHA,V.JUSTIF "+
-														"HAVING  SUM(MV.IMPORTE)-(SELECT ISNULL((SUM(CV.IMPORTE)),0.00) FROM COMP_VALES AS CV WHERE CV.CVE_VALE=MV.CVE_VALE AND CV.ID_PROYECTO=MV.ID_PROYECTO AND CV.CLV_PARTID=MV.CLV_PARTID)>0"+
-														"ORDER BY MV.CVE_VALE ASC", new Object[]{cve_unidad});
-		}
+			return this.getJdbcTemplate().queryForList("SELECT " +
+						" SAM_VALES_EX.CVE_VALE,SAM_VALES_EX.NUM_VALE,CONVERT(NVARCHAR, SAM_VALES_EX.FECHA, 103) AS FECHA,SAM_VALES_EX.JUSTIF,SAM_VALES_EX.CLV_BENEFI,CAT_BENEFI.NCOMERCIA, " + 
+						" SAM_MOV_VALES.ID_PROYECTO,VPROYECTO.DECRIPCION,CAT_PARTID.CLV_PARTID,CAT_PARTID.PARTIDA,SAM_VALES_EX.ID_RECURSO, " + 
+						" CAT_RECURSO.RECURSO, ISNULL((SAM_MOV_VALES.IMPORTE),0.00)COMPROMISO,ISNULL(SUM(COMP_VALES.IMPORTE),0.00)COMPROBADO,(ISNULL((SAM_MOV_VALES.IMPORTE),0.00)-ISNULL(SUM(COMP_VALES.IMPORTE),0.00))POR_COMPROBAR " +  
+						" FROM SAM_MOV_VALES " + 
+						" INNER JOIN SAM_VALES_EX ON SAM_VALES_EX.CVE_VALE=SAM_MOV_VALES.CVE_VALE " +  
+						" LEFT JOIN COMP_VALES ON (COMP_VALES.CVE_VALE=SAM_VALES_EX.CVE_VALE) AND (COMP_VALES.CLV_PARTID=SAM_MOV_VALES.CLV_PARTID) AND (COMP_VALES.ID_PROYECTO=SAM_MOV_VALES.ID_PROYECTO) " +  
+						" LEFT JOIN CAT_BENEFI ON CAT_BENEFI.CLV_BENEFI=SAM_VALES_EX.CLV_BENEFI  " + 
+						" LEFT JOIN VPROYECTO ON VPROYECTO.ID_PROYECTO=SAM_MOV_VALES.ID_PROYECTO  " + 
+						" LEFT JOIN CAT_PARTID ON (CAT_PARTID.CLV_PARTID = SAM_MOV_VALES.CLV_PARTID)  " + 
+						" LEFT JOIN CAT_RECURSO ON (CAT_RECURSO.ID = SAM_VALES_EX.ID_RECURSO) " + 
+						" LEFT JOIN CONTROL_PAGOS ON CONTROL_PAGOS.DOCUMENTO=SAM_VALES_EX.CVE_VALE AND CONTROL_PAGOS.FECHA_CANCEL IS NULL  AND TIPO_DOC=68 " + 
+						" WHERE SAM_VALES_EX.NUM_VALE LIKE '%"+num_vales+"%' " + (!clv_benefi.equals("") ? " AND CAT_BENEFI.CLV_BENEFI = '"+clv_benefi+"'": "")  +
+						" AND SAM_VALES_EX.ID_DEPENDENCIA =? " +
+						" GROUP BY SAM_VALES_EX.CVE_VALE,SAM_VALES_EX.NUM_VALE,SAM_VALES_EX.FECHA,SAM_VALES_EX.JUSTIF,SAM_VALES_EX.CLV_BENEFI,CAT_BENEFI.NCOMERCIA, " + 
+						" SAM_MOV_VALES.ID_PROYECTO,VPROYECTO.DECRIPCION,CAT_PARTID.CLV_PARTID,CAT_PARTID.PARTIDA,SAM_VALES_EX.ID_RECURSO,SAM_MOV_VALES.IMPORTE, " + 
+						" CAT_RECURSO.RECURSO  " + 
+						" HAVING (ISNULL((SAM_MOV_VALES.IMPORTE),0.00)-ISNULL(SUM(COMP_VALES.IMPORTE),0.00))>0 " + 
+						" ORDER BY SAM_VALES_EX.CVE_VALE", new Object[]{cve_unidad});  
+	}
 }

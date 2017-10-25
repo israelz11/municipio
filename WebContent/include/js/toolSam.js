@@ -6,29 +6,29 @@ var row_color = "";
 
 
 
-function mostrarOpcionPDF(cve_op){
-	alert("Entro a toolSAM");
+function mostrarOpcionPDF(cve_op){//Muestra la opcion de reportes desde el listado de ordenes de pago...
+	
 	swal({
-		
-		  title: 'Opciones de Reporte Orden de Pago',
-		  text: 'Seleccione: ',
+		  title: 'Opciones de Reporte OP #'+cve_op,
+		  type:  'question',
+		  width: 350,
+		  confirmButtonText: 'Cerrar',
 		  html:
-			  '<table class="listas" border="0" align="center" cellpadding="1" cellspacing="2" width="405" >'+
-				'  <tr id="x1" onmouseover="color_over(\'x1\')" onmouseout="color_out(\'x1\')"> '+
+			  '<table class="table table-striped table-hover" border="0" align="center" cellpadding="1" cellspacing="2" width="405" >'+
+				'  <tr> '+
 				'	<td width="33" height="27" align="center" style="cursor:pointer" onclick="getReporteOP('+cve_op+')"> '+
 				'	  <img src="../../imagenes/pdf.gif"/></td>' +
-				'	<td width="362" height="27" align="left" style="cursor:pointer" onclick="getReporteOP('+cve_op+')">&nbsp;Reporte Normal Orden de Pago</td> '+
+				'	<td width="362" height="27" align="left" style="cursor:pointer" onclick="getReporteOP('+cve_op+')">&nbsp;Reporte Normal</td> '+
 				'  </tr> '+
 				
-				'  <tr id="x2" onmouseover="color_over(\'x2\')" onmouseout="color_out(\'x2\')" onclick=""> '+
+				'  <tr> '+
 				'	  <td height="27" align="center"  style="cursor:pointer" onclick="getAnexosListaOP('+cve_op+')"><img src="../../imagenes/report.png" /></td> '+
-				'	  <td height="27" align="left" style="cursor:pointer" onclick="getAnexosListaOP('+cve_op+')">&nbsp;Listar Anexos de Orden de Pago</td> '+
+				'	  <td height="27" align="left" style="cursor:pointer" onclick="getAnexosListaOP('+cve_op+')">&nbsp;Listar Anexos</td> '+
 				'	</tr> '+
-				'</table>',
-		  width: 800,
-		  padding: 10,
-		  animation: false
-		})
+				'</table>', 
+		});
+		$('#swal2-title').css({'font-size':'20px'});
+		
 }
 
 function muestraVales(){
@@ -43,7 +43,15 @@ function muestraVales(){
 	if(typeof(idDependencia)=='undefined') idDependencia =0;
 	
 	if($('#txtvale').attr('value')=='') $('#CVE_VALE').attr('value', 0);
-	jWindow('<iframe width="750" height="350" name="ventanaVales" id="ventanaVales" frameborder="0" src="../../sam/consultas/muestra_vales.action?idVale='+$('#CVE_VALE').attr('value')+'&idDependencia='+idDependencia+'&tipo_gto='+tipo_gto+'&clv_benefi='+clv_benefi+'&tipo_doc='+tipo_doc+'"></iframe>','Listado de Vales disponibles', '','Cerrar',1);
+	swal({
+		  title: 'Listado de Vales disponibles',
+		  html:
+			  '<iframe width="750" height="350" name="ventanaVales" id="ventanaVales" frameborder="0" src="../../sam/consultas/muestra_vales.action?idVale='+$('#CVE_VALE').attr('value')+'&idDependencia='+idDependencia+'&tipo_gto='+tipo_gto+'&clv_benefi='+clv_benefi+'&tipo_doc='+tipo_doc+'"></iframe>',
+		  width: 800,
+		  padding: 10,
+		  animation: false
+		})
+	//jWindow(,'', '','Cerrar',1);
 }
 
 function muestraContratos(){
@@ -52,7 +60,18 @@ function muestraContratos(){
 	var tipo_gto = $('#tipoGasto').val();
 	if(typeof tipo_gto=='undefined') tipo_gto ="";
 	if(typeof idDependencia=='undefined') idDependencia = null;
-	jWindow('<iframe width="800" height="400" name="CONTRATO" id="CONTRATO" frameborder="0" src="../../sam/consultas/muestra_contratos.action?idDependencia='+idDependencia+'&tipo_gto='+tipo_gto+'&num_contrato='+num_contrato+'"></iframe>','Listado de Contratos Disponibles', '','Cerrar',1);
+	
+	//jWindow(','', '','Cerrar',1);
+	swal({
+		  title: 'Listado de Contratos Disponibles',
+		
+		  html:
+			  '<iframe width="800" height="400" name="CONTRATO" id="CONTRATO" frameborder="0" src="../../sam/consultas/muestra_contratos.action?idDependencia='+idDependencia+'&tipo_gto='+tipo_gto+'&num_contrato='+num_contrato+'"></iframe>',
+		  width: 800,
+		  padding: 10,
+		  animation: false
+		})
+	
 }
 
 
@@ -81,7 +100,7 @@ function cambiarGrupoFirmas(cve_doc, modulo){
 		  title: 'Cambiar grupo de firmas',
 		  text: 'Seleccione el nuevo grupo de firma',
 		  html:
-			  '<iframe width="750" height="350" name="grupoFirmas" id="grupoFirmas" frameborder="0" src="../../sam/utilerias/cambiarFirmas.action?modulo='+modulo+'&cve_doc='+cve_doc+'"></iframe>',
+			  '<iframe width="800" height="350" name="grupoFirmas" id="grupoFirmas" frameborder="0" src="../../sam/utilerias/cambiarFirmas.action?modulo='+modulo+'&cve_doc='+cve_doc+'"></iframe>',
 		  width: 800,
 		  padding: 10,
 		  animation: false
@@ -117,7 +136,7 @@ function cambiarBeneficiario(cve_doc, modulo){
 	if(modulo=='req'){
 			controladorListadoRequisicionesRemoto.getBeneficiario(cve_doc,{
 				callback:function(items) { 
-						ShowDelay('Cargando padrón de beneficiarios...','');
+						ShowDelay('Cargando padrÃ³n de beneficiarios...','');
 						if(items==null){
 							beneficiario = ""; clave= "";	
 						}
@@ -126,7 +145,7 @@ function cambiarBeneficiario(cve_doc, modulo){
 						}
 						html ='<table width="400" border="0" cellspacing="0" cellpadding="0" alingn="center">'+
 							 '<tr>'+
-							 '<td height="20"><strong>Requisición:</strong></td>'+
+							 '<td height="20"><strong>RequisiciÃ³n:</strong></td>'+
 							 '</tr>'+
 							 '<tr>'+
 							 '<td height="20">'+items.NUM_REQ+'</td>'+
@@ -151,7 +170,7 @@ function cambiarBeneficiario(cve_doc, modulo){
 				}
 				,
 					errorHandler:function(errorString, exception) { 
-					jError('No se ha podido leer el beneficiario del documento, esta opcion no es valida para las requisiciones - '+errorString,'Error');   
+					swal('No se ha podido leer el beneficiario del documento, esta opcion no es valida para las requisiciones - '+errorString,'Error');   
 					}       	
 			});
 	}
@@ -159,7 +178,7 @@ function cambiarBeneficiario(cve_doc, modulo){
 	if(modulo=='ped'){
 			controladorPedidos.getBeneficiario(cve_doc,{
 				callback:function(items) { 
-						ShowDelay('Cargando padrón de beneficiarios...','');
+						ShowDelay('Cargando padrÃ³n de beneficiarios...','');
 						if(items==null){
 							beneficiario = ""; clave= "";	
 						}
@@ -201,7 +220,7 @@ function cambiarBeneficiario(cve_doc, modulo){
 	if(modulo=='op'){
 			controladorOrdenPagoRemoto.getBeneficiario(cve_doc,{
 				callback:function(items) { 
-						ShowDelay('Cargando padrón de beneficiarios...','');
+						ShowDelay('Cargando padrÃ³n de beneficiarios...','');
 						if(items==null){
 							beneficiario = ""; clave= "";	
 						}
@@ -243,7 +262,7 @@ function cambiarBeneficiario(cve_doc, modulo){
 	if(modulo=='val'){
 			controladorListadoValesRemoto.getBeneficiarioVale(cve_doc,{
 				callback:function(items) { 
-						ShowDelay('Cargando padrón de beneficiarios...','');
+						ShowDelay('Cargando padrÃ³n de beneficiarios...','');
 						if(items==null){
 							beneficiario = ""; clave= "";
 						}
@@ -285,7 +304,7 @@ function cambiarBeneficiario(cve_doc, modulo){
 
 function _cambiarBeneficiarioVale(cve_doc){
 	var cve_benefi = $('#CVE_BENE').attr('value');
-	if(cve_benefi==''){jAlert('Es necesario especificar el nuevo beneficiario para continuar','Alerta'); return false;}	
+	if(cve_benefi==''){swal('Es necesario especificar el nuevo beneficiario para continuar','Alerta'); return false;}	
 	jConfirm('¿Confirma que desea cambiar el beneficiario del documento actual?','Confirmar', function(r){
 			if(r){		
 				ShowDelay('Cambiando beneficiario...', '');
@@ -308,8 +327,8 @@ function _cambiarBeneficiarioVale(cve_doc){
 
 function _cambiarBeneficiarioOrdenPago(cve_doc){
 	var cve_benefi = $('#CVE_BENE').attr('value');
-	if(cve_benefi==''){jAlert('Es necesario especificar el nuevo beneficiario para continuar','Alerta'); return false;}	
-	jConfirm('¿Confirma que desea cambiar el beneficiario del documento actual?','Confirmar', function(r){
+	if(cve_benefi==''){swal('Es necesario especificar el nuevo beneficiario para continuar','Alerta'); return false;}	
+	jConfirm('Â¿Confirma que desea cambiar el beneficiario del documento actual?','Confirmar', function(r){
 			if(r){		
 				ShowDelay('Cambiando beneficiario...', '');
 				controladorOrdenPagoRemoto.cambiarBeneficiario(cve_doc, cve_benefi,{
@@ -331,8 +350,8 @@ function _cambiarBeneficiarioOrdenPago(cve_doc){
 
 function _cambiarBeneficiarioPedidos(cve_doc){
 	var cve_benefi = $('#CVE_BENE').attr('value');
-	if(cve_benefi==''){jAlert('Es necesario especificar el nuevo beneficiario para continuar','Alerta'); return false;}	
-	jConfirm('¿Confirma que desea cambiar el beneficiario del documento actual?','Confirmar', function(r){
+	if(cve_benefi==''){swal('Es necesario especificar el nuevo beneficiario para continuar','Alerta'); return false;}	
+	jConfirm('Â¿Confirma que desea cambiar el beneficiario del documento actual?','Confirmar', function(r){
 			if(r){		
 				ShowDelay('Cambiando beneficiario...', '');
 				controladorPedidos.cambiarBeneficiario(cve_doc, cve_benefi,{
@@ -354,8 +373,8 @@ function _cambiarBeneficiarioPedidos(cve_doc){
 
 function _cambiarBeneficiarioRequisicion(cve_doc){
 	var cve_benefi = $('#CVE_BENE').attr('value');
-	if(cve_benefi==''){jAlert('Es necesario especificar el nuevo beneficiario para continuar','Alerta'); return false;}	
-	jConfirm('¿Confirma que desea cambiar el beneficiario del documento actual?','Confirmar', function(r){
+	if(cve_benefi==''){swal('Es necesario especificar el nuevo beneficiario para continuar','Alerta'); return false;}	
+	jConfirm('Â¿Confirma que desea cambiar el beneficiario del documento actual?','Confirmar', function(r){
 			if(r){		
 				ShowDelay('Cambiando beneficiario...', '');
 				controladorListadoRequisicionesRemoto.cambiarBeneficiario(cve_doc, cve_benefi,{
@@ -393,35 +412,48 @@ function cambiarUsuarioDocumento(cve_doc, modulo, cve_pers){
 			$('input[name=chkrequisiciones]').each(function(){if($(this).val()==cve_doc) {chkNumReq.push($(this).attr('alt')); return false;} });
 			chkReq.push(cve_doc); 
 		}
-		var usuarios =$('#cbodependencia').attr('value');
-		 
-		 var myArrayOfThings = [
-		                        { id: 1, name: 'Item 1' },
-		                        { id: 2, name: 'Item 2' },
-		                        { id: 3, name: 'Item 3' }
-		                    ];
+		
+		controladorListadoRequisicionesRemoto.getListUsuarios(cve_pers,{
+			callback:function(items) { 
+				if(items!=null) {
+					html = '<table width="500" class="table" border="0" cellspacing="0" cellpadding="0">'+
+						  '<tr>'+
+						  '	<td width="474"><span style="font-size:12px"><I><strong>Nota:</strong> Los documentos seleccionados se van a transferir a otro usario, esto puede hacer que deje de visualizarlos en los listados que le corresponden.</span></I></td>'+
+						  ' </tr>'+
+						  '<tr>'+
+								'<td height="20"><strong>'+((chkReq.length==1) ? 'Número de Requisición':'Grupo de Requisiciones:')+'</strong></td>'+
+						 '</tr>'+
+						 '<tr>'+
+								'<td height="20">'+((chkNumReq.length==0) ? 'CVE_REQ: '+cve_doc:chkNumReq)+'</td>'+
+						 '</tr>'+
+						  ' <tr>'+
+						  '<td><strong>Seleccione un usuario de destino:</strong></td>'+
+						  '</tr>'+
+						  '<tr>'+
+							'<td>'+
+							'<select id="cbousuarios" style="width:400px">'+items+
+						'	</select>'+
+						'	</td>'+
+						 ' </tr>'+
+						  '<tr>'+
+							'<td>&nbsp;</td>'+
+						'  </tr>'+
+						 ' <tr>'+
+						'	<td align="center"><input type="button" class="botones" value="Aplicar cambios"   id="cmdaplicar" style="width:100px"/> <input type="button" class="botones" value="cancel" id="cancel" onclick="$.alerts._hide();" style="width:100px"/></td>'+
+						'  </tr>'+
+						'</table>';
+						swal('Mover documento a otro usuari',html,'Mover documento a otro usuario');
+						$('#cmdaplicar').click(function(event){_cambiarUsuarioRequisicion(chkReq,cve_doc);})
+						
+				}
+				
+			}
+			,
+				errorHandler:function(errorString, exception) { 
+				jError("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");   
+				}       	
+		});
 
-		                    var options = {};
-		                    $.map(myArrayOfThings,
-		                        function(o) {
-		                            options[o.id] = o.name;
-		                        });
-
-		                    swal({
-		                        title: 'My Title',
-		                        text: 'Please select an option',
-		                        input: 'select',
-		                        inputOptions: options,
-		                        showCancelButton: true,
-		                        animation: 'slide-from-top',
-		                        inputPlaceholder: 'Please select'
-		                    }).then(function (inputValue) {
-		                        if (inputValue) {
-
-		                            console.log(inputValue);
-
-		                        }
-		                    });
 	}/*Cierra el modulo para requisiciones*/
 	
 	if(modulo=='ped'){
@@ -442,7 +474,7 @@ function cambiarUsuarioDocumento(cve_doc, modulo, cve_pers){
 						  '	<td width="474"><span style="font-size:12px"><I><strong>Nota:</strong> Los documentos seleccionados se van a transferir a otro usario, esto puede hacer que deje de visualizarlos en los listados que le corresponden.</span></I></td>'+
 						  ' </tr>'+
 						  '<tr>'+
-								'<td height="20"><strong>'+((chkPed.length==1) ? 'Número de Pedido':'Grupo de Pedidos:')+'</strong></td>'+
+								'<td height="20"><strong>'+((chkPed.length==1) ? 'NÃºmero de Pedido':'Grupo de Pedidos:')+'</strong></td>'+
 						 '</tr>'+
 						 '<tr>'+
 								'<td height="20">'+((chkNumPed.length==0) ? 'CVE_PED: '+cve_doc:chkNumPed)+'</td>'+
@@ -584,7 +616,7 @@ function cambiarUsuarioDocumento(cve_doc, modulo, cve_pers){
 
 function _cambiarUsuarioVales(chkVal, cve_doc){
 	var cve_pers_dest = $('#cbousuarios').val();
-	if(cve_pers_dest==0){jAlert('Es necesario seleccionar un usuario para realizar esta operación', 'Advertencia'); return false;}
+	if(cve_pers_dest==0){jAlert('Es necesario seleccionar un usuario para realizar esta operaciÃ³n', 'Advertencia'); return false;}
 	jConfirm('¿Confirma que desea mover los Vales seleccionados al usuario especificado?', 'Confirmar', function(r){
 			if(r){		
 				ShowDelay('Moviendo documentos...', '');
@@ -608,7 +640,7 @@ function _cambiarUsuarioVales(chkVal, cve_doc){
 
 function _cambiarUsuarioPedidos(chkPed, cve_doc){
 	var cve_pers_dest = $('#cbousuarios').val();
-	if(cve_pers_dest==0){jAlert('Es necesario seleccionar un usuario para realizar esta operación', 'Advertencia'); return false;}
+	if(cve_pers_dest==0){jAlert('Es necesario seleccionar un usuario para realizar esta operació³n', 'Advertencia'); return false;}
 	jConfirm('¿Confirma que desea mover los Pedidos seleccionados al usuario especificado?', 'Confirmar', function(r){
 			if(r){		
 				ShowDelay('Moviendo documentos...', '');
@@ -628,36 +660,70 @@ function _cambiarUsuarioPedidos(chkPed, cve_doc){
 				});
 			}
 		});
+	
+	
 }
 
 function _cambiarUsuarioRequisicion(chkReq, cve_doc){
 	var cve_pers_dest = $('#cbousuarios').val();
-	if(cve_pers_dest==0){jAlert('Es necesario seleccionar un usuario para realizar esta operación', 'Advertencia'); return false;}
-	jConfirm('¿Confirma que desea mover las Requisiciones seleccionadas al usuario especificado?', 'Confirmar', function(r){
+	var inputOptions = $('#cbousuarios').val();
+	if(cve_pers_dest==0){swal('Es necesario seleccionar un usuario para realizar esta operación', 'Advertencia'); return false;}
+		
+	/*Empieza*/
+	swal({
+		  title: '¿Esta seguro?',
+		  text: "Los cambios no se podran revertir!",
+		  timer: 3000,
+		  type: 'warning',
+		  showCancelButton: true,
+		  confirmButtonColor: '#3085d6',
+		  cancelButtonColor: '#d33',
+		  confirmButtonText: 'Sí, modificar',
+		  cancelButtonText: 'No, cancelar!',
+		  confirmButtonClass: 'btn btn-success',
+		  cancelButtonClass: 'btn btn-danger',
+		  buttonsStyling: false
+		}).then(function (r) {
 			if(r){		
-				ShowDelay('Moviendo documentos...', '');
+				
+				
 				controladorListadoRequisicionesRemoto.moverRequisiciones(chkReq, cve_pers_dest,{
 						callback:function(items) {
 							if(items!=null) {
-								CloseDelay('Se han movido los documentos con exito', 3000, function(){
+								/*swal('Se han movido los documentos con exito', 3000, function(){
 										setTimeout('getListaReq()', 1000);
-									});
+									});*/
+								
+								swal.showLoading()
+								getListaReq()
 							}
 							else
-								jError('La operacion ha fallado al mover los documentos a otro usuario', 'Error inesperado');
+								swal('La operacion ha fallado al mover los documentos a otro usuario', 'Error inesperado');
 						},
 						errorHandler:function(errorString, exception) { 
-						jError("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");   
+						swal("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");   
 			}   
 				});
 			}
-		});
+		  swal('Modificado','Se actualizo el usuario correctamente.','success')
+		}, function (dismiss) {
+		  // dismiss can be 'cancel', 'overlay',
+		  // 'close', and 'timer'
+		  if (dismiss === 'cancel') {
+		    swal(
+		      'Cancelled',
+		      'Your imaginary file is safe :)',
+		      'error'
+		    )
+		  }
+		})
+	/*Termina*/
 }
 
 function _cambiarUsuarioOrdenPago(chkOp, cve_doc){
 	var cve_pers_dest = $('#cbousuarios').val();
-	if(cve_pers_dest==0){jAlert('Es necesario seleccionar un usuario para realizar esta operación', 'Advertencia'); return false;}
-	jConfirm('¿Confirma que desea mover las Ordenes de Pago seleccionadas al usuario especificado?', 'Confirmar', function(r){
+	if(cve_pers_dest==0){jAlert('Es necesario seleccionar un usuario para realizar esta operaciÃ³n', 'Advertencia'); return false;}
+	jConfirm('Â¿Confirma que desea mover las Ordenes de Pago seleccionadas al usuario especificado?', 'Confirmar', function(r){
 			if(r){		
 				ShowDelay('Moviendo documentos...', '');
 				controladorOrdenPagoRemoto.moverOrdenesPago(chkOp, cve_pers_dest,{
@@ -743,7 +809,7 @@ function cambiarFechaPeriodo(cve_doc, modulo){
 						callback:function(items) { 		
 							var html = '<table width="350" border="0" cellspacing="0" cellpadding="0">' +
 							'<tr>'+
-								'<td height="30">Número Pedido:</td>'+
+								'<td height="30">NÃºmero Pedido:</td>'+
 								'<td><strong>'+items.NUM_PED+'</strong></td>'+
 							  '</tr>'+
 							  '<tr>'+
@@ -777,7 +843,7 @@ function cambiarFechaPeriodo(cve_doc, modulo){
 						callback:function(items) { 		
 							var html = '<table width="350" border="0" cellspacing="0" cellpadding="0">' +
 							  '<tr>'+
-								'<td height="30">Número Orden de Pago:</td>'+
+								'<td height="30">NÃºmero Orden de Pago:</td>'+
 								'<td><strong>'+items.NUM_OP+'</strong></td>'+
 							  '</tr>'+
 							  '<tr>'+
@@ -879,12 +945,12 @@ function _cambiarFechaPeriodoVal(cve_doc){
 	var periodo = $('#cboperiodo').val();
 	var fecha = $('#txtfechaactual').attr('value');
 	
-	jConfirm('¿Confirma que desea aplicar los cambios para la fecha y periodo del Vale?','Confirmar', function(r){
+	jConfirm('Â¿Confirma que desea aplicar los cambios para la fecha y periodo del Vale?','Confirmar', function(r){
 		if(r){
 			controladorListadoValesRemoto.cambiarFechaPeriodo(cve_doc, fecha, periodo, {
 						callback:function(items) { 	
 							if(items)
-								CloseDelay('Fecha y periodo cambiados con éxito', 3000, setTimeout('getVale()',1000));
+								CloseDelay('Fecha y periodo cambiados con Ã©xito', 3000, setTimeout('getVale()',1000));
 							else 
 								jError(items, 'Error');
 						} 					   				
@@ -901,12 +967,12 @@ function _cambiarFechaPeriodoOp(cve_doc){
 	var periodo = $('#cboperiodo').val();
 	var fecha = $('#txtfechaactual').attr('value');
 	
-	jConfirm('¿Confirma que desea aplicar los cambios para la fecha y periodo de la Orden de Pago?','Confirmar', function(r){
+	jConfirm('Â¿Confirma que desea aplicar los cambios para la fecha y periodo de la Orden de Pago?','Confirmar', function(r){
 		if(r){
 			controladorOrdenPagoRemoto.cambiarFechaPeriodo(cve_doc, fecha, periodo, {
 						callback:function(items) { 	
 							if(items)
-								CloseDelay('Fecha y periodo cambiados con éxito', 3000, setTimeout('getOrden()',1000));
+								CloseDelay('Fecha y periodo cambiados con Ã©xito', 3000, setTimeout('getOrden()',1000));
 							else 
 								jError(items, 'Error');
 						} 					   				
@@ -922,12 +988,12 @@ function _cambiarFechaPeriodoOp(cve_doc){
 function _cambiarFechaPeriodoPedido(cve_doc){
 	var fecha = $('#txtfechaactual').attr('value');
 
-	jConfirm('¿Confirma que desea aplicar los cambios para la fecha del Pedido?','Confirmar', function(r){
+	jConfirm('Â¿Confirma que desea aplicar los cambios para la fecha del Pedido?','Confirmar', function(r){
 		if(r){
 			controladorPedidos.cambiarFechaPeriodo(cve_doc, fecha, {
 						callback:function(items) { 	
 							if(items)
-								CloseDelay('Fecha cambiada con éxito', 3000, setTimeout('getPedidos()',1000));
+								CloseDelay('Fecha cambiada con Ã©xito', 3000, setTimeout('getPedidos()',1000));
 							else 
 								jError(items, 'Error');
 						} 					   				
@@ -944,12 +1010,12 @@ function _cambiarFechaPeriodoRequisicion(cve_doc){
 	var periodo = $('#cboperiodo').val();
 	var fecha = $('#txtfechaactual').attr('value');
 	
-	jConfirm('¿Confirma que desea aplicar los cambios para la fecha y periodo de la Requisicion?','Confirmar', function(r){
+	jConfirm('Â¿Confirma que desea aplicar los cambios para la fecha y periodo de la Requisicion?','Confirmar', function(r){
 		if(r){
 			controladorListadoRequisicionesRemoto.cambiarFechaPeriodo(cve_doc, fecha, periodo, {
 						callback:function(items) { 	
 							if(items)
-								CloseDelay('Fecha y periodo cambiados con éxito', 3000, setTimeout('getListaReq()',1000));
+								CloseDelay('Fecha y periodo cambiados con Ã©xito', 3000, setTimeout('getListaReq()',1000));
 							else 
 								jError(items, 'Error');
 						} 					   				
@@ -1401,7 +1467,7 @@ function reduccionAmpliacion(cve_doc, modulo, num_doc)
 									partidas.push(this.CLV_PARTID);
 							});
 							html+='</table></div>';
-							jWindow(html,'Reducción y Ampliación de Contrato: '+num_doc, '','Cerrar',1);
+							jWindow(html,'ReducciÃ³n y AmpliaciÃ³n de Contrato: '+num_doc, '','Cerrar',1);
 							
 							$('#cmdGuardarMovCon').click(function(event){
 								if($('#txtimporteMovCon').val()=='')
@@ -1489,7 +1555,7 @@ function guardarMovimientoContrato(cve_doc, modulo, num_doc)
 function mostrarConsultaCompromiso(idproyecto, proyecto, partida, periodo, consulta){
 	if(proyecto==""||partida==""||consulta==""){
 		
-		jAlert('Programa y partida no validos', 'Consulta de documentos Comprometidos y Pre-comprometidos'); return false;
+		swal('Programa y partida no validos', 'Consulta de documentos Comprometidos y Pre-comprometidos'); return false;
 		
 	}
 	
@@ -1553,7 +1619,7 @@ function appendNewRow(table, param){
 	return tabla;
 }
 
-/*Funcion para construit una celda en especifico*/
+/*Funcion para construir una celda en especifico*/
 function Td(texto, estilo, obj, html, colspan ){
 		var cell = document.createElement( "TD" );
 			cell.style.height='20px';
@@ -1676,8 +1742,15 @@ function ShowDelay(titulo, mensaje){
 	if(typeof(mensaje)=='undefined'||mensaje=='') mensaje = 'Espere un momento porfavor...';
 	if(titulo=='undefined'||titulo=='') titulo = 'Procesando';
 	//jWindow('<strong>&nbsp;<img src="../../imagenes/spinner.gif" width="32" height="32" align="absmiddle" /> '+mensaje+'</strong>', titulo, 0);
-	
 	swal({
+		  title: titulo,
+		  text: mensaje,
+		  timer: 5000,
+		  onOpen: function () {
+			swal.showLoading()
+		  }
+	})
+	/*swal({
 		title: titulo ,
 		text: mensaje,
 		//type: 'info',
@@ -1691,7 +1764,7 @@ function ShowDelay(titulo, mensaje){
 		  	  '</div>',
 		  	showConfirmButton:false
 				  
-		})
+		})*/
 	
 }
 
@@ -1733,31 +1806,31 @@ function keyEnter(fn){
 }
 
 
- //Función que crea las notificaciones
+ //FunciÃ³n que crea las notificaciones
    function notify(msg,speed,fadeSpeed,type){
 
        //Borra cualquier mensaje existente
        $('.notify').remove();
 
-       //Si el temporizador para hacer desaparecer el mensaje está
+       //Si el temporizador para hacer desaparecer el mensaje estÃ¡
        //activo, lo desactivamos.
        if (typeof fade != "undefined"){
            clearTimeout(fade);
        }
 
-       //Creamos la notificación con la clase (type) y el texto (msg)
+       //Creamos la notificaciÃ³n con la clase (type) y el texto (msg)
        $('body').append('<div class="notify '+type+'" style="display:none;position:fixed;left:10"><p>'+msg+'</p></div>');
 
-       //Calculamos la altura de la notificación.
+       //Calculamos la altura de la notificaciÃ³n.
        notifyHeight = $('.notify').outerHeight();
 
-       //Creamos la animación en la notificación con la velocidad
+       //Creamos la animaciÃ³n en la notificaciÃ³n con la velocidad
        //que pasamos por el parametro speed
        $('.notify').css('top',-notifyHeight).animate({top:10,opacity:'toggle'},speed);
 	   
 	   _closeDelay();
 
-       //Creamos el temporizador para hacer desaparecer la notificación
+       //Creamos el temporizador para hacer desaparecer la notificaciÃ³n
        //con el tiempo almacenado en el parametro fadeSpeed
        fade = setTimeout(function(){
 

@@ -1,24 +1,80 @@
 $(document).ready(function() {
-	$('.tiptip a.button, .tiptip button').tipTip();
+	
   var imagen="../../imagenes/cal.gif";	
   var formatFecha="dd/mm/yy";	
-  //$("#fechaInicial").datepicker({showOn: 'button', buttonImage:imagen , buttonImageOnly: true,dateFormat: formatFecha});  
-  //$("#fechaFinal").datepicker({showOn: 'button', buttonImage: imagen, buttonImageOnly: true,dateFormat: formatFecha});   
-  //$('#cmdmover').click(function(event){moverOrdenpago();}); 
 
-	
-  //getBeneficiarios('txtprestadorservicio','CVE_BENEFI','');
-  //$('#cboFilterStatus').selectpicker('val',CVE_BENEFI);
   $('#ui-datepicker-div').hide();
+  /*Inicializacion de botones*/
+
+  $('#cmdcancelarm').on('click', function(){
+		cancelacionMultiple();
+	});
+  $('#cmdaperturar2').on('click', function(){
+		aperturarOrden();
+	});
+  $('#btnBuscar').on('click', function(){
+	  getOrden();
+	});
+  $('#cmdpdf').on('click', function(){
+	  getListadoOrdenPago();
+	});
+  
+//Checkbox para seleccionar toda la lista.... 
+  $("input[name=todos]").change(function(){
+  	$('input[type=chkordenes]').each( function() {			
+  		if($("input[name=todos]:checked").length == 1){
+  			this.checked = true;
+  		} else {
+  			this.checked = false;
+  		}
+  	});
+  });
+  //Para seleccionar todos los checkbox Abraham Gonzalez 12/07/2016
+  $('#todos').click( function (event){ $('input[name=chkordenes]').prop('checked', this.checked); });
+  
+//-----------Revision del filtrado por fechas en el listado de requisiciones.............
+	
+	
+	$('#fechaInicial').datetimepicker({
+		format: 'DD/MM/YYYY'
+		
+	});
+		
+	$('#fechaFinal').datetimepicker({
+		format: 'DD/MM/YYYY',
+	    useCurrent: false //Important! See issue #1075
+	});
+	$("#fechaInicial").on("dp.change", function (e) {
+	    $('#fechaFinal').data("DateTimePicker").minDate(e.date);
+	});
+	$("#fechaFinal").on("dp.change", function (e) {
+	    $('#fechaFinal').data("DateTimePicker").maxDate(e.date);
+	});
+
+//Demo se actualizo...
 });
 
 
 function mostrarCargarArchivosOrdenPago(cve_op, num_op){
-	jWindow('<iframe width="750" height="350" name="ventanaArchivosOP" id="ventanaArchivosOP" frameborder="0" src="../../sam/ordenesdepago/muestra_anexosOPArchivos.action?cve_op='+cve_op+'"></iframe>','Archivos de Orden de Pago: '+num_op, '','Cerrar',1);
+	//jWindow('',', '','Cerrar',1);
+	swal({
+		  title: 'Anexos de Orden de pago',
+		  text: 'Archivos de Orden de Pago: '+num_op,
+		  html:
+			  '<iframe width="750" height="350" name="ventanaArchivosOP" id="ventanaArchivosOP" frameborder="0" src="../../sam/ordenesdepago/muestra_anexosOPArchivos.action?cve_op='+cve_op+'"></iframe>',
+		  width: 800,
+		  padding: 10,
+		  animation: false
+		})
 }
 
 function mostrarOpcionPDF(cve_op){
-	var html = '<table class="listas" border="0" align="center" cellpadding="1" cellspacing="2" width="405" >'+
+
+	swal({
+		  title: 'Opciones de Reporte Orden de Pago',
+		  type: 'info',
+		  html:
+			  '<table class="listas" border="0" align="center" cellpadding="1" cellspacing="2" width="405" >'+
 				'  <tr id="x1" onmouseover="color_over(\'x1\')" onmouseout="color_out(\'x1\')"> '+
 				'	<td width="33" height="27" align="center" style="cursor:pointer" onclick="getReporteOP('+cve_op+')"> '+
 				'	  <img src="../../imagenes/pdf.gif"/></td>' +
@@ -28,13 +84,27 @@ function mostrarOpcionPDF(cve_op){
 				'  <tr id="x2" onmouseover="color_over(\'x2\')" onmouseout="color_out(\'x2\')" onclick=""> '+
 				'	  <td height="27" align="center"  style="cursor:pointer" onclick="getAnexosListaOP('+cve_op+')"><img src="../../imagenes/report.png" /></td> '+
 				'	  <td height="27" align="left" style="cursor:pointer" onclick="getAnexosListaOP('+cve_op+')">&nbsp;Listar Anexos de Orden de Pago</td> '+
-				'	</tr> ';
-			html+='</table>';
-	jWindow(html,'Opciones de Reporte Orden de Pago', '','Cerrar',1);
+				'	</tr> ' +
+				'</table>', 
+		  showCloseButton: true,
+		  showCancelButton: true,
+		  focusConfirm: false,
+		  
+		})
+	
 }
 
 function getAnexosListaOP(cve_op){
-	jWindow('<iframe width="750" height="350" name="ventanaArchivosOP" id="ventanaArchivosOP" frameborder="0" src="../../sam/consultas/muestra_anexosOP.action?cve_op='+cve_op+'"></iframe>','Listado de Anexos de OP: '+cve_op, '','Cerrar',1);
+	//jWindow('<iframe width="750" height="350" name="ventanaArchivosOP" id="ventanaArchivosOP" frameborder="0" src="../../sam/consultas/muestra_anexosOP.action?cve_op='+cve_op+'"></iframe>','Listado de Anexos de OP: '+cve_op, '','Cerrar',1);
+	swal({
+		  title: 'ventanaArchivosOP',
+		  text: 'Listado de Anexos de OP: '+cve_op,
+		  html:
+			  '<iframe width="750" height="350" name="ventanaArchivosOP" id="ventanaArchivosOP" frameborder="0" src="../../sam/consultas/muestra_anexosOP.action?cve_op='+cve_op+'"></iframe>',
+		  width: 800,
+		  padding: 10,
+		  animation: false
+		})
 }
 
 function getListadoOrdenPago(){
@@ -53,38 +123,93 @@ function getListadoOrdenPago(){
 function getOrden(){
 	var checkStatus = [];
      $('input[name=status]:checked').each(function() {checkStatus.push($(this).val());});	 
-	 if (checkStatus.length==0 )   {jAlert('Es necesario seleccionar al menos un status de Orden de Pago', 'Advertencia'); return false;}
-	 if ($('#fechaInicial').attr('value')=="" && $('#fechaFinal').attr('value')!="" || $('#fechaInicial').attr('value')!="" && $('#fechaFinal').attr('value')=="")  {jAlert('El rango de fechas no es válido'); return false;}
-	 var s = 'lista_ordenPago.action?idUnidad='+$('#cbodependencia').attr('value')+"&fechaInicial="+$('#fechaInicial').attr('value')+"&fechaFinal="+$('#fechaFinal').attr('value')+"&status="+checkStatus+"&tipo_gto="+$('#cbotipogasto').val();
+	 if (checkStatus.length==0 )   {
+		 swal({
+			  title: 'Error!',
+			  text: 'Es necesario seleccionar al menos un status',
+			  timer: 2000,
+			  showConfirmButton:false,
+			  onOpen: function () {
+			    swal.showLoading()
+			  }
+			}).then(
+			  function () {},
+			  // handling the promise rejection
+			  function (dismiss) {
+			    if (dismiss === 'timer') {
+			      console.log('Tiempo caducado')
+			    }
+			  }
+			)
+		 return false;}
 	 
-	$("#forma").submit();
+	 if ($('#fechaInicial').attr('value')=="" && $('#fechaFinal').attr('value')!="" || $('#fechaInicial').attr('value')!="" && $('#fechaFinal').attr('value')=="")  {
+		 swal('El rango de fechas no es válido'); 
+		 return false;}
+	 swal({
+		  title: 'Buscando',
+		  text: 'En listado de ordenes de pago',
+		  timer: 2000,
+		  onOpen: function () {
+		    swal.showLoading()
+		  }
+		}).then(
+		  function () {},
+		  // handling the promise rejection
+		
+		  function (dismiss) {
+		    if (dismiss === 'timer') {
+		      console.log('I was closed by the timer')
+		      var s = 'lista_ordenPago.action?idUnidad='+$('#cbodependencia').attr('value')+"&fechaInicial="+$('#fechaInicial').attr('value')+"&fechaFinal="+$('#fechaFinal').attr('value')+"&status="+checkStatus+"&tipo_gto="+$('#cbotipogasto').val();
+		      $("#forma").submit()
+		    }
+		  }
+		)
+	;
 }
 /*--------------------------------- Manda a cargar la op desde el listado de op -------------------------------------*/
 function editarOP(cve_op){
 		
-	//ShowDelay('Abriendo Orden de Pago...', '');
-	document.location = 'orden_pago.action?cve_op='+ cve_op + '&accion=edit';
+	//document.location = 'orden_pago.action?cve_op='+ cve_op + '&accion=edit';
 	//if (status==-1)document.location = "orden_pago.action?cve_op="+cve_op+"&accion=edit";
 	//if(status==0||status==4||status==6) getConsultaOrdenPago(cve_op);
+	swal({
+		  title: 'Abriendo Orden de Pago...',
+		  text: 'La Orden de pago para editar es: ' +cve_op,
+		  timer: 2000,
+		  onOpen: function () {
+		    swal.showLoading()
+		  }
+		}).then(
+		  function () {},
+		  // handling the promise rejection
+		  function (dismiss) {
+		    if (dismiss === 'timer') {
+		      console.log('I was closed by the timer')
+		      document.location = 'orden_pago.action?cve_op='+ cve_op + '&accion=edit';
+		    }
+		  }
+		)
 }
 
 function getReporteOP(clave) {
-	_closeDelay();
-	$('#cve_op').attr('value',clave);
-	$('#forma').attr('action',"../reportes/formato_orden_pago.action");
-	$('#forma').attr('target',"impresion");
+	//_closeDelay();
+	$('#cve_op').val(clave);
+	$('#forma').prop('action',"../reportes/formato_orden_pago.action");
+	$('#forma').prop('target',"impresion");
 	$('#forma').submit();
-	$('#forma').attr('target',"");
-	$('#forma').attr('action',"lista_ordenPago.action");
+	$('#forma').prop('target',"");
+	$('#forma').prop('action',"lista_ordenPago.action");
 }
 
 function aperturarOrden(){
 	 var checkClaves = [];
      $('input[name=chkordenes]:checked').each(function() { checkClaves.push($(this).val());});	
 	 if (checkClaves.length>0){
+		 /*
 		jConfirm('¿Confirma que desea aperturar las Ordenes de Pago seleccionadas?','Confirmar', function(r){
 			if(r){
-					ShowDelay('Aperturando Ordenes de Pago','');
+					 swal.showLoading();
 					 controladorOrdenPagoRemoto.aperturarOrdenes(checkClaves, {
 						callback:function(items) { 		
 						  CloseDelay('Ordenes de Pago aperturadas con éxito', 2000, function(){
@@ -94,86 +219,209 @@ function aperturarOrden(){
 					 } 					   				
 					 ,
 					 errorHandler:function(errorString, exception) { 
-						jError(errorString, 'Error');          
+						swal(errorString, 'Error');          
 					 }
 				    });
 			}
-	   },async=false );
+	   },async=false );*/
+		 swal({
+			  title: 'Apertura de Orden de Pago',
+			 
+			  showCancelButton: true,
+			  confirmButtonText: 'Aperturar',
+			  showLoaderOnConfirm: true,
+			  preConfirm: function (r) {
+			    return new Promise(function (resolve, reject) {
+			      setTimeout(function() {
+			    	  if(r){
+							 swal.showLoading();
+							 controladorOrdenPagoRemoto.aperturarOrdenes(checkClaves, {
+								callback:function(items) { 
+								swal.disableLoading()
+								  CloseDelay('Ordenes de Pago aperturadas con éxito', 2000, function(){
+									  		 getOrden();
+									  });
+								  
+							 } 					   				
+							 ,
+							 errorHandler:function(errorString, exception) { 
+								swal(errorString, 'Error');          
+							 }
+						    });
+					}
+			    else {
+			          resolve()
+			        }
+			      }, 2000)
+			    })
+			  },
+			  allowOutsideClick: false
+			 
+			}).then(function (r) {
+			  swal({
+			    type: 'success',
+			    title: 'Orden de pago aperturada con éxito...!',
+			    
+			  })
+			})
 	 
 	 } 
-	else 
-	    jAlert('Es necesario que seleccione por lo menos una Orden de Pago del listado', 'Advertencia');
+	 swal('Es necesario que seleccione por lo menos una Orden de Pago del listado', 'Advertencia');
 }
 
 
+
+
+/*------------------------------ Cancelacion de ordenes de pago ----------------------------------------------------------------------------------------------------*/
 function cancelarOrden(idOrden)
 {
-	
+	var checkClaves = [];
+	checkClaves.push(idOrden);
 	if (idOrden!=0){
-		jWindow('¿Confirma que desea cancelar la orden de pago seleccionada?<br><br><strong>*Escriba el motivo: </strong><br><textarea id="txtmotivo" style="width:500px; height:100px"></textarea><br><br><div align="center"><input style="width:100px" class="botones" value="Aceptar" id="cmdaceptarBoton" type="button">&nbsp;<input style="width:100px" class="botones" value="cancelar" id="popup_cancel" type="button"></div>','Cancelar Orden(es) de Pago' ,"Aceptar", "Cancelar", 0);
-		$('#cmdaceptarBoton').click(function(event){_cancelarOrden(idOrden);});
+		
+		/*Inicia el ciclo*/
+		swal({
+			  title: 'Cancelar Orden(es) de Pago',
+			  text: 'Indique el motivo de cancelación',
+			  input: 'textarea',
+			  inputPlaceholder: 'Motivo de cancelación',
+			  showCancelButton: true,
+			  inputValidator: function (value) {
+			    return new Promise(function (resolve, reject) {
+			      if (value) {
+			        resolve()
+			        
+			      } else {
+			      		reject('Debe escribir un motivo de cancelación')
+			      	
+				  }
+			    })
+			  }
+			}).then(function (text) {	
+				 motivo=text;
+				 /*Inicia*/
+				 swal({
+					  title: 'Estas seguro?',
+					  text: "¿Confirma que desea cancelar la orden de pago?",
+					  type: 'warning',
+					  showCancelButton: true,
+					  confirmButtonColor: '#3085d6',
+					  cancelButtonColor: '#d33',
+					  confirmButtonText: 'Sí, confirmar!',
+					  cancelButtonText: 'No, cancelar!',
+					  confirmButtonClass: 'btn btn-success',
+					  cancelButtonClass: 'btn btn-danger',
+					  buttonsStyling: false
+					}).then(function (r) {
+					  swal('Cancelado!','Tu documento fue cancelado con éxito!','success')
+					  /*clase para cencelacion*/
+							  if(r){
+									swal.showLoading();
+									controladorOrdenPagoRemoto.cancelarOrden(checkClaves, motivo, {
+										callback:function(items) { 
+											getOrden();
+									  
+									 } 					   				
+									,
+									errorHandler:function(errorString, exception) { 
+										
+										swal('Oops...',errorString,'error');
+									}
+								},async=false ); 
+							
+							}
+					  /*cancelacion cirre*/
+					}, function (dismiss) {
+					  // dismiss can be 'cancel', 'overlay',
+					  // 'close', and 'timer'
+					  if (dismiss === 'cancel') {
+					    swal(
+					      'Cancelado',
+					      'El proceso no fue ejecutado',
+					      'error'
+					    )
+					  }
+					})
+				 /*Hasta aqui*/
+			})
+		/*Termina ciclo de cancelacion*/
 	}
 	else
-		jAlert('Es necesario que seleccione por lo menos una Orden de Pago para realizar esta acción', 'Advertencia');
+		swal('Es necesario que seleccione por lo menos una Orden de Pago para realizar esta acción','warning');
 }
 
-function _cancelarOrden(idOrden){
-	var checkClaves = [];
-	var motivo = $('#txtmotivo').val();
-	checkClaves.push(idOrden);
-	if(motivo=="")
-	{
-		jAlert('Es necesario escrtibir un motivo de cancelación', 'Advertencia');
-		return false;		
-	}
-		/*jConfirm('¿Confirma que desea cancelar la Orden de Pago?','Confirmar', function(r){
-			if(r){*/
-				ShowDelay('Cancelando Orden de Pago','');
-					 controladorOrdenPagoRemoto.cancelarOrden(checkClaves, motivo, {
-						callback:function(items) { 		
-						  CloseDelay('La Orden de Pago fue cancelada con éxito', function(){
-								getOrden();
-							}); 
-					 } 					   				
-					 ,
-					 errorHandler:function(errorString, exception) { 
-						jError(errorString, 'Error');      
-					 }
-				   /* });
-			}*/
-	   },async=false );	 
-}
-/************************************************************* Cancelacion de Ordenes de Pago desde el Listado de Ordenes de Pago */
 function cancelacionMultiple(){
 	var checkClaves = [];
-	$('input[name=chkordenes]:checked').each(function() { checkClaves.push($(this).val());});	
-	if (checkClaves.length>0){
-		jWindow('¿Confirma que desea cancelar la(s) ordenes de pago seleccionada(s)?<br><br><strong>*Escriba el motivo: </strong><br><textarea id="txtmotivo" style="width:500px; height:100px"></textarea><br><br><div align="center"><input style="width:100px" class="botones" value="Aceptar" id="cmdaceptarBoton" type="button">&nbsp;<input style="width:100px" class="botones" value="cancelar" id="popup_cancel" type="button"></div>','Cancelar Orden(es) de Pago' ,"Aceptar", "Cancelar", 0);
-		$('#cmdaceptarBoton').click(function(event){_cancelacionMultiple(checkClaves);});
-	}
-	else
-		jAlert('Es necesario que seleccione por lo menos una Orden de Pago para realizar esta acción', 'Advertencia');
-}
-
-function _cancelacionMultiple(checkClaves)
-{
-	var motivo = $('#txtmotivo').val();
-	if(motivo=="")
-	{
-		jAlert('Es necesario escrtibir un motivo de cancelación', 'Advertencia');
-		return false;		
-	}
 	
-	ShowDelay('Cancelando Orden de Pago','');
-	 controladorOrdenPagoRemoto.cancelarOrden(checkClaves,motivo,{
-		callback:function(items) { 		
-			  CloseDelay('Orden de Pago cancelados con éxito', function(){
-						getOrden();
-			  });
-		 } 					   				
-		 ,
-		 errorHandler:function(errorString, exception) { 
-			jError(errorString, 'Error');
-		 }
-	});	 
+	$('input[name=chkordenes]:checked').each(function() { checkClaves.push($(this).val());});	
+
+	if (checkClaves.length>0){
+
+		swal({
+			  title: 'Cancelar Orden(es) de Pago',
+			  text: 'Indique el motivo de cancelación',
+			  input: 'textarea',
+			  inputPlaceholder: 'Motivo de cancelación',
+			  showCancelButton: true,
+			  inputValidator: function (value) {
+			    return new Promise(function (resolve, reject) {
+			      if (value) {
+			        resolve()
+			        
+			      } else {
+			      		reject('Debe escribir un motivo de cancelación')
+			      	
+				  }
+			    })
+			  }
+			}).then(function (text) {	
+				 motivo=text;
+				 /*Inicia*/
+				 swal({
+					  title: 'Estas seguro?',
+					  text: "¿Confirma que desea cancelar la(s) ordenes de pago seleccionada(s)?",
+					  type: 'warning',
+					  showCancelButton: true,
+					  confirmButtonColor: '#3085d6',
+					  cancelButtonColor: '#d33',
+					  confirmButtonText: 'Sí, confirmar!',
+					  cancelButtonText: 'No, cancelar!',
+					  confirmButtonClass: 'btn btn-success',
+					  cancelButtonClass: 'btn btn-danger',
+					  buttonsStyling: false
+					}).then(function (r) {
+					  swal('Cancelado!','Tu documento fue cancelado con éxito!','success')
+					  /*clase para cencelacion*/
+							  if(r){
+									swal.showLoading();
+									controladorOrdenPagoRemoto.cancelarOrden(checkClaves,motivo, {
+									callback:function(items) { 	
+										getOrden();
+									} 					   				
+									,
+									errorHandler:function(errorString, exception) { 
+										
+										swal('Oops...',errorString,'error');
+									}
+								},async=false ); 
+							
+							}
+					  /*cancelacion cirre*/
+					}, function (dismiss) {
+					  // dismiss can be 'cancel', 'overlay',
+					  // 'close', and 'timer'
+					  if (dismiss === 'cancel') {
+					    swal(
+					      'Cancelado',
+					      'El proceso no fue ejecutado',
+					      'error'
+					    )
+					  }
+					})
+				 /*Hasta aqui*/
+			})
+			
+	}//cierre del if principal
+	else
+		swal('Es necesario que seleccione por lo menos una Orden de Pago para realizar esta acción','warning');
 }

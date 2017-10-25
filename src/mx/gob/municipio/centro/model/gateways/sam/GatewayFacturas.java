@@ -18,12 +18,10 @@ import java.util.Map;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.swing.text.html.HTMLEditorKit.Parser;
 
 import mx.gob.municipio.centro.model.bases.BaseGateway;
 import mx.gob.municipio.centro.model.gateways.sam.catalogos.GatewayMeses;
 
-import org.apache.catalina.util.StringParser;
 import org.jfree.util.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -67,6 +65,7 @@ public class GatewayFacturas extends BaseGateway {
 	
 	public Map getPresupuesto(String tipo_doc, Long cve_doc, int ejercicio)
 	{
+		
 		Map documento = new HashMap();
 		int mesActivo =gatewayMeses.getMesActivo(ejercicio);
 		
@@ -84,6 +83,7 @@ public class GatewayFacturas extends BaseGateway {
 	}
 	
 	public String getNombreMes(int mes){
+		
 		String m = "";
 		switch(mes){
 		case 1: m = "Enero";
@@ -168,6 +168,7 @@ public class GatewayFacturas extends BaseGateway {
 	{
 		try
 		{
+			
 			String tipoDocto = "";
 			
 			if(tipo_doc.equals("1")) tipoDocto = "CVE_REQ";
@@ -181,6 +182,7 @@ public class GatewayFacturas extends BaseGateway {
 			if(cve_factura==0)
 			{
 				//Guardar una nueva factura
+				
 				if(tipo_doc.equals("5"))
 				{
 					this.getJdbcTemplate().update("INSERT INTO SAM_FACTURAS(NUM_FACTURA, ID_ENTRADA, CLV_BENEFI, CVE_PERS, ID_TIPO, ID_DEPENDENCIA, NOTAS, EJERCICIO, PERIODO, FECHA, FECHA_DOCUMENTO, SUBTOTAL, IVA, TOTAL, STATUS) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", new Object[]{
@@ -279,42 +281,35 @@ public class GatewayFacturas extends BaseGateway {
 	{
 		try
 		{
-					
-			this.getTransactionTemplate().execute(new TransactionCallbackWithoutResult(){
+			
+    		/*if(getPrivilegioEn(cve_pers, 132)){
+    			throw new RuntimeException("No cuenta por los privilegios suficientes para realiar esta operación");
+    		}*/
+			
+		this.getTransactionTemplate().execute(new TransactionCallbackWithoutResult(){
             @Override
             protected void   doInTransactionWithoutResult(TransactionStatus status) {
 	            	String tipoDocto = "";
 	            	String consulta = "";
 	            	String num_docto="";
-	            	String TIPODOC_T="";
-	            	String CLAVEDOC_T="";
-	            	
 	            	//Map num_devengo =GatewayFacturas.guardarFactura(num_factura); //getOrden(idOrden);
-            		Map factura = getFactura(cve_factura);//{CVE_FACTURA=19458, NUM_FACTURA=DEMO, CVE_REQ=2676, CVE_PED=null, CVE_VALE=null, CVE_CONTRATO=null, ID_TIPO=4, CLV_BENEFI=2018, ID_ENTRADA=0, FOLIO_ENTRADA=null, CVE_OP=null, CVE_PERS=5, NCOMERCIA=CONSORCIO DE CONSULTORES EMPRESARIALES S.C.U., NUM_REQ=DF-OS-007-2017, NUM_PED=null, NUM_VALE=null, NUM_CONTRATO=null, ID_DEPENDENCIA=3, NOTAS=SSSSSSSSSSSSSS, EJERCICIO=2017, PERIODO=6, FECHA=2017-09-15 12:28:59.65, FECHA_DOCUMENTO=15/09/2017, FECHA_CIERRE=null, FECHA_FINALIZADO=null, SUBTOTAL=null, IVA=null, TOTAL=7660607.1400, TOTAL_DOC=9880000.0000, STATUS=0, STATUS_DESC=Edición}
+            		Map factura = getFactura(cve_factura);
             		
-            		List<Map> movimientos = getDetalles(cve_factura);//[{CVE_FACTURA=19458, ID_PROYECTO=148, CLV_PARTID=3311, IMPORTE=7660607.1400, NOTAS=}]
+            		List<Map> movimientos = getDetalles(cve_factura);
             				
             		if(factura.get("CVE_REQ")!=null) {tipoDocto = "CVE_REQ"; consulta = "'O.S', 'O.T', 'REQ'";}
 	    			if(factura.get("CVE_PED")!=null) {tipoDocto = "CVE_PED"; consulta = "'PED'";}
 	    			if(factura.get("CVE_VALE")!=null) {tipoDocto = "CVE_VALE"; consulta = "'VAL'";}
 	    			if(factura.get("CVE_CONTRATO")!=null) {tipoDocto = "CVE_CONTRATO"; consulta = "'CON'";}
 	    			
-	    			if(factura.get("CVE_REQ")!=null) {TIPODOC_T = "43"; }
-	    			if(factura.get("CVE_PED")!=null) {TIPODOC_T = "42";}
-	    			if(factura.get("CVE_VALE")!=null) {TIPODOC_T = "68";}
-	    			if(factura.get("CVE_CONTRATO")!=null) {TIPODOC_T = "44";}
-	    			
-	    			System.out.println(TIPODOC_T);
-	    			
 	    			/*Compromiso del Vale el tipo obras*/
             		BigDecimal comprobadoVale =new BigDecimal(0);
             		
-  /* ---------------- Revision para comprobar vales con facturas tipo contrato, fondo fijo y obras 11-09-2017 por Abraham Gonzalez */
-            		if (factura.get("ID_TIPO").toString().equals("2")||factura.get("ID_TIPO").toString().equals("9")||factura.get("ID_TIPO").toString().equals("1")||factura.get("ID_TIPO").toString().equals("6"))
+            		if (factura.get("ID_TIPO").toString().equals("2")||factura.get("ID_TIPO").toString().equals("6")||factura.get("ID_TIPO").toString().equals("9"))
             			comprobadoVale = (BigDecimal) getJdbcTemplate().queryForObject("SELECT ISNULL(SUM(IMPORTE),0) FROM SAM_FACTURAS_VALES WHERE CVE_FACTURA =?", new Object[]{cve_factura}, BigDecimal.class);
             		
             		//Si es de tipo Obra entonces validar validar el presupuesto de Vales
-        			if (factura.get("ID_TIPO").toString().equals("2"))
+            		if (factura.get("ID_TIPO").toString().equals("2")||factura.get("ID_TIPO").toString().equals("6")||factura.get("ID_TIPO").toString().equals("9"))
         			{
             			List<Map> Vales = getJdbcTemplate().queryForList("SELECT V.CVE_VALE, V.NUM_VALE, M.ID_PROYECTO, M.CLV_PARTID, SUM(F.IMPORTE) AS TOTAL, dbo.getDisponibleDocumento('VAL', V.CVE_VALE, M.ID_PROYECTO, M.CLV_PARTID) AS DISPONIBLE "+
 																				"FROM "+
@@ -334,49 +329,27 @@ public class GatewayFacturas extends BaseGateway {
         			}
             		
             		//Validar el Presupuesto del detalle de facturas
-	    			for(Map movimiento : movimientos) //[{CVE_FACTURA=19458, ID_PROYECTO=148, CLV_PARTID=3311, IMPORTE=7660607.1400, NOTAS=}]
-	    			{ 
+	    			for(Map movimiento : movimientos)
+	    			{
 	            		/*buscar el compometido a devengar*/
-	    				BigDecimal disponibleMes = (BigDecimal) getJdbcTemplate().queryForObject("SELECT dbo.getDisponible(?, ?, ?)", new Object[]{factura.get("PERIODO"), movimiento.get("ID_PROYECTO"), movimiento.get("CLV_PARTID")}, BigDecimal.class);//AQUI ESTA EL IMPORTE QUE DA EN NEGATIVO
+	    				BigDecimal disponibleMes = (BigDecimal) getJdbcTemplate().queryForObject("SELECT dbo.getDisponible(?, ?, ?)", new Object[]{factura.get("PERIODO"), movimiento.get("ID_PROYECTO"), movimiento.get("CLV_PARTID")}, BigDecimal.class);
 	            		BigDecimal comprometidoMes = (BigDecimal) getJdbcTemplate().queryForObject("SELECT dbo.getComprometido(?, ?, ?)", new Object[]{factura.get("PERIODO"), movimiento.get("ID_PROYECTO"), movimiento.get("CLV_PARTID")}, BigDecimal.class);
-	            		
 	            		BigDecimal presupuestoDisponible = new BigDecimal(0);
-	            		BigDecimal importe_devengar = new BigDecimal(0);
 
 	            		/*Compromiso del documento*/
 	            		if(!tipoDocto.equals(""))
-	            		{
 	            			presupuestoDisponible = (BigDecimal) getJdbcTemplate().queryForObject("SELECT MONTO FROM VT_COMPROMISOS WHERE TIPO_DOC IN("+consulta+") AND ID_PROYECTO = ? AND CLV_PARTID = ? AND CONSULTA = 'COMPROMETIDO' AND PERIODO = ? AND CVE_DOC = ?", new Object[]{movimiento.get("ID_PROYECTO"), movimiento.get("CLV_PARTID"), factura.get("PERIODO"), factura.get(tipoDocto)}, BigDecimal.class);
-	            			//Demo para comprobar el importe del docto a devengar no supere el importe por devengar
-	            			
-	            			if (TIPODOC_T.equals("42"))//OS U OT
-	            				importe_devengar= (BigDecimal) getJdbcTemplate().queryForObject("SELECT SUM(FD.IMPORTE)DEVENGADO FROM SAM_FACTURA_DETALLE FD INNER JOIN SAM_FACTURAS F ON F.CVE_FACTURA=FD.CVE_FACTURA WHERE STATUS IN (1,3) AND F.CVE_PED=? AND FD.ID_PROYECTO=? AND FD.CLV_PARTID=?", new Object[]{factura.get("CVE_REQ"), movimiento.get("ID_PROYECTO"), movimiento.get("CLV_PARTID")}, BigDecimal.class);
-	            			 
-	            			if (TIPODOC_T.equals("43"))//OS U OT
-	            				importe_devengar= (BigDecimal) getJdbcTemplate().queryForObject("SELECT SUM(FD.IMPORTE)DEVENGADO FROM SAM_FACTURA_DETALLE FD INNER JOIN SAM_FACTURAS F ON F.CVE_FACTURA=FD.CVE_FACTURA WHERE STATUS IN (1,3) AND F.CVE_REQ=? AND FD.ID_PROYECTO=? AND FD.CLV_PARTID=?", new Object[]{factura.get("CVE_REQ"), movimiento.get("ID_PROYECTO"), movimiento.get("CLV_PARTID")}, BigDecimal.class);
-	            			         
-	            			if (TIPODOC_T.equals("44"))//OS U OT
-	            				importe_devengar= (BigDecimal) getJdbcTemplate().queryForObject("SELECT SUM(FD.IMPORTE)DEVENGADO FROM SAM_FACTURA_DETALLE FD INNER JOIN SAM_FACTURAS F ON F.CVE_FACTURA=FD.CVE_FACTURA WHERE STATUS IN (1,3) AND F.CVE_CONTRATO=? AND FD.ID_PROYECTO=? AND FD.CLV_PARTID=?", new Object[]{factura.get("CVE_REQ"), movimiento.get("ID_PROYECTO"), movimiento.get("CLV_PARTID")}, BigDecimal.class);
-	            			         
-		            		
-	            		}
-	            			else
+	            		else
 	            		{
 	            			//Buscar el disponible del mes para sacar el presupuesto
 	            			presupuestoDisponible = (BigDecimal)getJdbcTemplate().queryForObject("SELECT dbo.getDisponible(?,?,?)", new Object[]{factura.get("PERIODO"), movimiento.get("ID_PROYECTO"), movimiento.get("CLV_PARTID")}, BigDecimal.class);
 	            		}
 	            		
-	            		
-	            		
-	            		
-	            		if(tipoDocto.equals("CVE_REQ") && disponibleMes.doubleValue() < 0)
-	            			throw new RuntimeException("No se puede cerrar la factura, el disponible del mes se encuentra en sobregiro y no es válido para realizar este proceso, consulte al administador");
-	            		
 	            		//Agregado por Israel de la Cruz, 10/09/2016: Impide que se cierre la factrura si el pedido supera el disponible sobregirado del mes
 	            		if(tipoDocto.equals("CVE_PED") && disponibleMes.doubleValue() < 0)
-	            			throw new RuntimeException("No se puede cerrar la factura, el disponible del mes se encuentra en sobregiro y no es válido para realizar este proceso, se le recomienda crear un contrato a travez de pedido para distribuir el saldo en sobregiro del pedido");
+	            			throw new RuntimeException("No se puede cerrar la factura, el disponible del mes se encuentra en sobregiro y no es válido para realizar este proceso, se le recomienda crear un controtaro a travez de pedido para distribuir el saldo en sobregiro del pedido");
 	            		
-	            			presupuestoDisponible = presupuestoDisponible.setScale(2,BigDecimal.ROUND_HALF_UP);
+	            		presupuestoDisponible = presupuestoDisponible.setScale(2,BigDecimal.ROUND_HALF_UP);
 	            		
 	            		boolean presupuesto = false;
 	            		
@@ -400,11 +373,8 @@ public class GatewayFacturas extends BaseGateway {
 		            			/*Revisar que tipo de documento se ha cerrado*/
 		            			Map documento = getJdbcTemplate().queryForMap("SELECT * FROM VT_COMPROMISOS WHERE TIPO_DOC IN("+consulta+") AND ID_PROYECTO = ? AND CLV_PARTID = ? AND CONSULTA = 'COMPROMETIDO' AND PERIODO = ? AND CVE_DOC = ?", new Object[]{movimiento.get("ID_PROYECTO"), movimiento.get("CLV_PARTID"), factura.get("PERIODO"), factura.get(tipoDocto)});
 		            			
-		            			//Map por_devengar=getJdbcTemplate().queryForMap("SELECT F.CVE_REQ,F.CVE_PED,F.CVE_CONTRATO,FD.ID_PROYECTO,FD.CLV_PARTID,SUM(FD.IMPORTE)DEVENGADO FROM SAM_FACTURA_DETALLE FD INNER JOIN SAM_FACTURAS F ON F.CVE_FACTURA=FD.CVE_FACTURA WHERE F.STATUS IN (1,3) GROUP BY F.CVE_REQ,F.CVE_PED,F.CVE_CONTRATO,FD.ID_PROYECTO,FD.ID_PROYECTO,FD.CLV_PARTID");
-
 		            			//VALIDAR SI EL IMPORTE DEL PEDIDO DEVENGADO ES EL TOTAL PARA FINIQUITAR EL PEDIDO//
 		            			if(documento.get("TIPO_DOC").toString().equals("PED")&&(presupuestoDisponible.doubleValue() - Double.parseDouble(factura.get("TOTAL").toString()))<1)
-		            				
 		            				getJdbcTemplate().update("UPDATE SAM_PEDIDOS_EX SET FECHA_FINIQUITADO =?, MES_FINALIZADO=?, DIA_FINALIZADO=? WHERE CVE_PED =?", new Object[]{fecha_finalizado, fecha_finalizado.getMonth()+1, fecha_finalizado.getDay(), documento.get("CVE_DOC")});
 		            			
 		            			if(documento.get("TIPO_DOC").toString().equals("O.S"))
@@ -425,7 +395,13 @@ public class GatewayFacturas extends BaseGateway {
 		            			else if((documento.get("TIPO_DOC").toString().equals("O.T"))&&(presupuestoDisponible.doubleValue() - Double.parseDouble(factura.get("TOTAL").toString()))<=1)
 		            				getJdbcTemplate().update("UPDATE SAM_REQUISIC SET FECHA_FINIQUITADO =?, MES_FINALIZADO=?, DIA_FINALIZADO=? WHERE CVE_REQ =?", new Object[]{fecha_finalizado, fecha_finalizado.getMonth()+1, fecha_finalizado.getDay(), documento.get("CVE_DOC")});
 		            			
+		            			/*if(documento.get("TIPO_DOC").toString().equals("VAL")&&(comprometidoDoc.doubleValue() - Double.parseDouble(factura.get("TOTAL").toString()))<=0)
+		            				getJdbcTemplate().update("UPDATE SAM_VALES_EX SET FECHA_FINIQUITADO =?, MES_FINALIZADO=?, DIA_FINALIZADO=? WHERE CVE_REQ =?", new Object[]{fecha_finalizado, fecha_finalizado.getMonth()+1, fecha_finalizado.getDay(), documento.get("CVE_DOC")});
+		            				*/
 		            			
+		            			//if(documento.get("TIPO_DOC").toString().equals("CON")&&(comprometidoDoc.doubleValue() - Double.parseDouble(factura.get("TOTAL").toString()))<=0)
+		            			//	getJdbcTemplate().update("UPDATE SAM_FACTURAS SET FECHA_FINALIZADO =?, MES_FINALIZADO=?, DIA_FINALIZADO=? WHERE CVE_FACTURA =?", new Object[]{fecha_finalizado, fecha_finalizado.getMonth()+1, fecha_finalizado.getDay(), documento.get("CVE_DOC")});
+
 	            			}
 	            			
 	            			
@@ -434,7 +410,6 @@ public class GatewayFacturas extends BaseGateway {
 	            			throw new RuntimeException("No se puede cerrar la factura, el importe a devengar es mayor al compromiso");
             		
 	            	}
-	    			
 	    			//Validar si se finiquita el contrato al cerrar el devengado
 	    			if(factura.get("CVE_CONTRATO")!=null) {
 	    				BigDecimal presupuestoContrato = (BigDecimal) getJdbcTemplate().queryForObject("SELECT SUM(MONTO) FROM VT_COMPROMISOS WHERE CONSULTA='COMPROMETIDO' AND TIPO_DOC ='CON' AND CVE_DOC = ?", new Object[]{factura.get("CVE_CONTRATO")}, BigDecimal.class);
@@ -445,7 +420,19 @@ public class GatewayFacturas extends BaseGateway {
 	    					getJdbcTemplate().update("UPDATE SAM_CONTRATOS SET FECHA_FINIQUITADO = ? WHERE CVE_CONTRATO =?",new Object[]{new Date(), factura.get("CVE_CONTRATO")});
 	    				}
 	    			}
-	    		    			
+	    			
+//-------------------------------Validar si se finiquita el PEDIDO al cerrar el devengado......................12/05/17
+	    			//if(factura.get("CVE_PED")!=null) {
+	    				//BigDecimal presupuestoPedido = (BigDecimal) getJdbcTemplate().queryForObject("SELECT SUM(MONTO) FROM VT_COMPROMISOS WHERE CONSULTA='COMPROMETIDO' AND TIPO_DOC ='PED' AND CVE_DOC = ?", new Object[]{factura.get("CVE_PED")}, BigDecimal.class);
+	    				//if(Double.parseDouble(factura.get("TOTAL").toString())== presupuestoPedido.doubleValue())
+	    				//{
+	    					//Finiquitar el contrato
+	    				//	Date fecha_finalizado = new Date();
+	    				//	getJdbcTemplate().update("UPDATE SAM_PEDIDOS_EX SET FECHA_FINIQUITADO =?, MES_FINALIZADO=?, DIA_FINALIZADO=? WHERE CVE_PED =?",new Object[]{fecha_finalizado, fecha_finalizado.getMonth()+1, fecha_finalizado.getDay(), factura.get("CVE_DOC")});
+	    				//}
+	    		//	}
+	    			
+	    			
 	    			
 	    			//Cierra la factura
             		Date fecha_finalizado = new Date();
@@ -641,6 +628,7 @@ public class GatewayFacturas extends BaseGateway {
 		
 	}
 	
+	
 	public Map getFactura(Long cve_factura){
 		try
 		{
@@ -758,14 +746,13 @@ public class GatewayFacturas extends BaseGateway {
 		}
 		
 		 this.getTransactionTemplate().execute(new TransactionCallbackWithoutResult(){
-	            @Autowired
-				@Override
+	            @Override
 	            protected void   doInTransactionWithoutResult(TransactionStatus status) {
 	            	for(Long id : idFacturas)
 	            	{
 	            		//recuperar la factura
 	            		Map factura = getFactura(id);
-	            		            		
+	            		
 	            		//Buscar si existe el Super Privilegio para Cancelar Facturas
 	    				boolean privilegio = getPrivilegioEn(cve_pers, 138);
 	    				
@@ -779,7 +766,11 @@ public class GatewayFacturas extends BaseGateway {
 	    			  			throw new RuntimeException("No se puede cancelar la factura "+factura.get("NUM_FACTURA").toString()+", el periodo del documento es diferente al actual, consulte a su administrador");
 	    			  		}
 	            		
-	            			            		
+	            		/*if(getJdbcTemplate().queryForInt("SELECT COUNT(*) FROM SAM_FACTURAS WHERE CVE_FACTURA =? AND STATUS>0 AND PERIODO<>?", new Object[]{id, gatewayMeses.getMesActivo(ejercicio)})>0&&privilegio==false){
+	            			Map m = getJdbcTemplate().queryForMap("SELECT NUM_FACTURA FROM SAM_FACTURAS WHERE CVE_FACTURA =?", new Object[]{id});
+	            			throw new RuntimeException("Imposible cancelar la factura "+m.get("NUM_FACTURA").toString()+", el periodo ya no es válido, consulte a su administrador del sistema");
+	            		}*/
+	            		
 	            		/*Verificar si tienen orden de pago e impedir si asi fuera*/
 	            		if(tieneOrdenPago(id)){
 	            			Map m = getJdbcTemplate().queryForMap("SELECT NUM_FACTURA FROM SAM_FACTURAS WHERE CVE_FACTURA =?", new Object[]{id});
@@ -788,31 +779,23 @@ public class GatewayFacturas extends BaseGateway {
 	            		
 	            		if(factura.get("CVE_REQ")!=null)
 	            			getJdbcTemplate().update("UPDATE SAM_REQUISIC SET FECHA_FINIQUITADO = ?, MES_FINALIZADO=?, DIA_FINALIZADO=? WHERE CVE_REQ = ?", new Object[]{null, null, null, factura.get("CVE_REQ")});
+	            		
 	            		if(factura.get("CVE_PED")!=null)
 	            			getJdbcTemplate().update("UPDATE SAM_PEDIDOS_EX SET FECHA_FINIQUITADO = ?, MES_FINALIZADO=?, DIA_FINALIZADO=? WHERE CVE_PED = ?", new Object[]{null, null, null, factura.get("CVE_PED")});
-	            		/*if(factura.get("CVE_VALE")!=null)
-	            			getJdbcTemplate().update("UPDATE SAM_VALES_EX SET FECHA_FINIQUITADO = ? WHERE CVE_VALE = ?", new Object[]{null, factura.get("CVE_VALE")});*/
+	            		
+	            		if(factura.get("CVE_VALE")!=null)
+	            			getJdbcTemplate().update("UPDATE SAM_VALES_EX SET FECHA_FINIQUITADO = ? WHERE CVE_VALE = ?", new Object[]{null, factura.get("CVE_VALE")});
+	            		
 	            		if(factura.get("CVE_CONTRATO")!=null)
 	            			getJdbcTemplate().update("UPDATE SAM_CONTRATOS SET FECHA_FINIQUITADO = ? WHERE CVE_CONTRATO = ?", new Object[]{null, factura.get("CVE_CONTRATO")});
 	            		
 	            		
-						//Si factura = Edicion no poner fecha de Cancelado
+	            		//Si factura = Edicion no poner fecha de Cancelado
 	            		//Si factura es diferente de Edicion entnces poner fecha de cancelado
-	            		boolean convale = false;
-	            		Integer vale = 0,con=0;
-	            		convale=getJdbcTemplate().queryForInt("SELECT COUNT(*) AS N FROM SAM_FACTURAS_VALES AS F WHERE F.CVE_FACTURA = ? ", new Object[]{id})>0;
-	            		if (convale==true){
-	            		
-	            			Map val = getJdbcTemplate().queryForMap("SELECT *  FROM COMP_VALES WHERE CVE_OP =? AND TIPO='OP'", new Object[]{id});
-	            			getJdbcTemplate().update("DELETE COMP_VALES WHERE CVE_OP = ? AND TIPO='FA'", new Object[]{id});
-	            			getJdbcTemplate().update("DELETE CONCEP_VALE WHERE CVE_VALE=? AND CONS_VALE=?", new Object[]{val.get("CVE_VALE"),val.get("CONS_VALE")});
-	            			System.out.println(val);
-	            		}
-	            		
 	            		if(factura.get("STATUS").toString().equals("0"))
 	            			getJdbcTemplate().update("UPDATE SAM_FACTURAS SET STATUS = ?, FECHA_FINALIZADO=?, CVE_OP=? WHERE CVE_FACTURA = ?", new Object[]{2, null, null, id});
-            			else
-		            		getJdbcTemplate().update("UPDATE SAM_FACTURAS SET STATUS = ?, FECHA_CANCELADO =?, FECHA_FINALIZADO=?, CVE_OP=? WHERE CVE_FACTURA = ?", new Object[]{2, new Date(), null, null, id});
+	            		else
+	            			getJdbcTemplate().update("UPDATE SAM_FACTURAS SET STATUS = ?, FECHA_CANCELADO =?, FECHA_FINALIZADO=?, CVE_OP=? WHERE CVE_FACTURA = ?", new Object[]{2, new Date(), null, null, id});
 	            	}
 	            }
 		 });
@@ -1726,82 +1709,58 @@ public class GatewayFacturas extends BaseGateway {
 	      throw new RuntimeException(e.getMessage(),e);
 	    }	   
 	}
-	/*DEMO INGRESADO POR ABRAHAM PARA PROBAR LA ESCRITURA DEL VALE EN CONCEP_VALE*/
-	public void insertaConceptoVale(Integer vale,double importe,double importeVale,int proyecto, String partida){
-		
-		//Busca el siguiente numero de concepto 
-		int cons = (this.getJdbcTemplate().queryForInt("SELECT MAX(CONS_VALE) FROM CONCEP_VALE WHERE CVE_VALE = ?", new Object[]{vale}))+1;
-		this.getJdbcTemplate().update("insert into CONCEP_VALE (CVE_VALE,CONS_VALE,ID_PROYECTO,CLV_PARTID,MES,IMPORTE,DESCONTADO) " +
-				"VALUES (?,?,?,?,Month(GETDATE()),?,?)"
-				, new Object[]{vale,cons, proyecto,partida,importeVale,importe});
-	}
-	
-	/*----------------------------------- Guarda la comprobacion del vale en todas las tablas maestra y sus detalles de comprobacion ----------------------------------------------*/
+//------------------------------------------ Revisar para escribir el comp_vales desde la Facturas -------------------------------------------------//
 	public void guardarComprobacionVale(Long idMovVale, Long cve_factura, Long cve_vale, int idProyecto, String clv_partid, Double importe)
 	{
 		try
 		{
 			Date fecha = new Date();
-			
-			 Calendar calendar = Calendar.getInstance();
-		     calendar.setTime(fecha);
-		     int mes = calendar.get(Calendar.MONTH)+1;
-			
-			int existe=0;
-			int cons = (this.getJdbcTemplate().queryForInt("SELECT MAX(CONS_VALE) FROM CONCEP_VALE WHERE CVE_VALE = ?", new Object[]{cve_vale}))+1;
-			
+			int contv =0;
 			Double disponible = (Double) this.getJdbcTemplate().queryForObject("SELECT TOP 1 (dbo.getDisponibleDocumento('VAL', CVE_VALE, ID_PROYECTO, CLV_PARTID)) AS DISPONIBLE FROM SAM_MOV_VALES WHERE CVE_VALE =? AND ID_PROYECTO=? AND CLV_PARTID=?", new Object[]{cve_vale, idProyecto, clv_partid}, Double.class );
-			
-			//mes =getJdbcTemplate().queryForInt("SELECT MONTH(FECHA)MES FROM SAM_FACTURAS_VALES WHERE CVE_VALE=?", new Object[]{cve_vale});
 			
 			if (importe > disponible)
 				throw new RuntimeException("El importe de la comprobación no debe ser mayor al disponible del Vale actual");
-			
-			Double porcomprobar=disponible-importe;
-			
-			if (idMovVale ==0)//Graba el vale en la tabla sam_factura_vales en la comprobacion -------------------------------------------------------
 				
+			if (idMovVale ==0){
 				this.getJdbcTemplate().update("INSERT INTO SAM_FACTURAS_VALES(CVE_FACTURA, CVE_VALE, ID_PROYECTO, CLV_PARTID, IMPORTE, FECHA) VALUES(?,?,?,?,?,?)", new Object[]{
 					cve_factura,
 					cve_vale,
 					idProyecto,
 					clv_partid,
 					importe,
-					fecha,
-									
+					fecha
 				});
 			
-			existe=getJdbcTemplate().queryForInt("SELECT COUNT(*) FROM SAM_FACTURAS_VALES");
-			
-			if (existe>1)
-				
-				this.getJdbcTemplate().update("INSERT INTO COMP_VALES(CVE_VALE,CONS_VALE,CVE_OP,TIPO,ID_PROYECTO,CLV_PARTID,IMPORTE,IMP_ANTERIOR,IMP_PENDIENTE,FECHA)VALUES(?,?,?,?,?,?,?,?,?,?)", new Object[]{
-						cve_vale,
-						cons,
-						cve_factura,
-						"FA",
-						idProyecto,
-						clv_partid,
-						importe, //Comprobando
-						disponible, //En comprometido
-						porcomprobar,// Por comprobar
-						fecha,
-						
-				});
-			
-			if (existe>1)
-				
-				this.getJdbcTemplate().update("INSERT INTO CONCEP_VALE(CVE_VALE,CONS_VALE,ID_PROYECTO,CLV_PARTID,MES,IMPORTE,DESCONTADO)VALUES(?,?,?,?,?,?,?)", new Object[]{
-						cve_vale,
-						cons,
-						idProyecto,
-						clv_partid,
-						mes,
-						importe,
-						disponible
-				});
-				
-			else 
+    		List <Map> detallesVales = getJdbcTemplate().queryForList("SELECT FV.CVE_FACTURA,FV.CVE_VALE,FV.ID_PROYECTO,FV.CLV_PARTID,FV.IMPORTE IMPORTE " +
+																		"FROM SAM_FACTURAS_VALES FV INNER JOIN SAM_FACTURAS F ON F.CVE_FACTURA=FV.CVE_FACTURA "+
+																		"INNER JOIN SAM_MOV_VALES MV ON MV.CVE_VALE=FV.CVE_VALE AND MV.ID_PROYECTO=FV.ID_PROYECTO AND MV.CLV_PARTID=FV.CLV_PARTID " + 
+																		"INNER JOIN SAM_VALES_EX V ON V.CVE_VALE=MV.CVE_VALE LEFT JOIN SAM_MOV_OP MOP ON MOP.CVE_FACTURA=F.CVE_FACTURA " +
+																		"WHERE V.STATUS=4 AND FV.CVE_FACTURA=? " +
+																		"GROUP BY FV.CVE_FACTURA,FV.CVE_VALE,FV.ID_PROYECTO,FV.CLV_PARTID,FV.IMPORTE,MV.IMPORTE", new Object[]{cve_factura});
+    		for(Map row: detallesVales){
+    			Double IMP_ANTERIOR = (Double) getJdbcTemplate().queryForObject("SELECT MONTO FROM VT_COMPROMISOS WHERE CVE_DOC=? AND TIPO_DOC='VAL'", new Object[]{cve_vale}, Double.class);
+    			String imp=row.get("IMPORTE").toString();//COMPROBADO
+    			Double IMP_PENDIENTE =IMP_ANTERIOR- Double.parseDouble(imp);
+    			System.out.println("Importe del vale: " +IMP_ANTERIOR);
+    			System.out.println("Importe del vale: " +IMP_PENDIENTE);
+    			String formato="MM";
+    			SimpleDateFormat dateFormat = new SimpleDateFormat(formato);
+    			Integer mes= Integer.parseInt(dateFormat.format(new Date()));
+    			contv=getJdbcTemplate().queryForInt( "SELECT COUNT(CONS_VALE) FROM COMP_VALES WHERE CVE_VALE=? ", new Object[]{cve_vale});
+    			contv++;
+    			getJdbcTemplate().update("INSERT INTO COMP_VALES (CVE_VALE, CONS_VALE, CVE_OP, TIPO, ID_PROYECTO, CLV_PARTID, IMPORTE, IMP_ANTERIOR, IMP_PENDIENTE, FECHA) " +
+    					"VALUES (?,?,?,?,?,?,?,?,?,?)"
+    					, new Object[]{row.get("CVE_VALE"), contv, cve_factura, "FA", row.get("ID_PROYECTO"), row.get("CLV_PARTID"), row.get("IMPORTE"), IMP_ANTERIOR,IMP_PENDIENTE, new Date()});
+    			
+    			String folio=rellenarCeros(row.get("MOP.CVE_OP").toString(),6);
+    			//guarda en la bitacora
+    			gatewayBitacora.guardarBitacora(GatewayBitacora.OP_MOV_AGREGO_VALES,Integer.parseInt(row.get("F.EJERCICIO").toString()) , Integer.parseInt(row.get("F.CVE_PERS").toString()), Long.parseLong(row.get("MOP.CVE_OP").toString()), folio, "OP", null, null, null, "Cve_vale: "+cve_vale+ " Cons: "+contv, importe);
+    	    	
+    			getJdbcTemplate().update("INSERT INTO CONCEP_VALE (CVE_VALE, CONS_VALE, ID_PROYECTO, CLV_PARTID,MES, IMPORTE, DESCONTADO) " +
+    					"VALUES (?,?,?,?,?,?,?)"
+    					, new Object[]{row.get("CVE_VALE"), contv, row.get("ID_PROYECTO"), row.get("CLV_PARTID"),mes, IMP_ANTERIOR, row.get("IMPORTE")});
+    		}}
+			/*else 
 				this.getJdbcTemplate().update("UPDATE SAM_FACTURAS_VALES SET CVE_VALE = ?, ID_PROYECTO=?, CLV_PARTID=?, IMPORTE=? WHERE ID_MOVIMIENTO =?", new Object[]{
 						cve_vale,
 						idProyecto,
@@ -1809,6 +1768,11 @@ public class GatewayFacturas extends BaseGateway {
 						importe,
 						idMovVale
 				});
+			Integer clave_factura = getJdbcTemplate().queryForInt("SELECT ID_MOVIMIENTO FROM  SAM_FACTURAS_VALES WHERE ID_MOVIMIENTO =?", new Object[]{idMovVale});
+    		Map vales_fac =getFacturaVALES(clave_factura);
+    		
+    		getJdbcTemplate().update("UPDATE COMP_VALES SET CVE_VALE=?, ID_PROYECTO=?, CLV_PARTID=?, IMPORTE=? WHERE CVE_OP =? AND TIPO='FA'",new Object[]{cve_vale,idProyecto,clv_partid,importe,vales_fac.get("cve_factura")});
+			*/
 		}
 		catch (DataAccessException e) {                     
 		      throw new RuntimeException(e.getMessage(),e);
@@ -1830,30 +1794,45 @@ public class GatewayFacturas extends BaseGateway {
    	 return getJdbcTemplate().queryForList(sql,new Object []{idDependencia, idProyecto, clv_partid});
     }
 	
+	public Map getFacturaVALES(final Integer ID_MOVIMIENTO){
+		try
+		{
+			String sql = "SELECT * FROM SAM_FACTURAS_VALES WHERE ID_MOVIMIENTO=? ";
+			return this.getJdbcTemplate().queryForMap(sql, new Object[]{ID_MOVIMIENTO});
+		}
+		catch(Exception e){
+			throw new RuntimeException(e.getMessage(),e);
+		}
+	}
+	public Map getFacturaCOMPVALES(final Integer ID_MOVIMIENTO){
+		try
+		{
+			String sql = "SELECT * FROM COMP_VALES INNER JOIN SAM_FACTURAS_VALES ON COMP_VALES.CVE_OP=SAM_FACTURAS_VALES.CVE_FACTURA WHERE ID_MOVIMIENTO=? ";
+			return this.getJdbcTemplate().queryForMap(sql, new Object[]{ID_MOVIMIENTO});
+		}
+		catch(Exception e){
+			throw new RuntimeException(e.getMessage(),e);
+		}
+	}
 	
-	/*--------------------------------------- Elima el vale del listado de comprobacion -------------------------------------------------*/
-	/*COMPLETADO POR ABRAHAM GONZALEZ 12-09-17 PARA LOS DETALLES EN LAS TABLAS DE COMPLEMENTO*/
 	public void  eliminarVales( final List<Integer> lstVales, final int cve_pers) {
 		  try { 
-			  
-			  	
+
 	            this.getTransactionTemplate().execute(new TransactionCallbackWithoutResult(){
 	                @Override
-	                protected void   doInTransactionWithoutResult(TransactionStatus status) {	                	
-	                	for (Integer idVale :lstVales) {	                		
-	                		List Vale = getJdbcTemplate().queryForList("SELECT CVE_VALE FROM SAM_FACTURAS_VALES WHERE ID_MOVIMIENTO=?", new Object[]{idVale});
+	                protected void   doInTransactionWithoutResult(TransactionStatus status) {	 
+	                	
+	                	for (Integer idVale :lstVales) {	
 	                		
-	                		int cons = (getJdbcTemplate().queryForInt("SELECT MAX(CONS_VALE) FROM COMP_VALES INNER JOIN SAM_FACTURAS_VALES ON SAM_FACTURAS_VALES.CVE_VALE=COMP_VALES.CVE_VALE WHERE ID_MOVIMIENTO=?", new Object[]{idVale}));
+	                		Integer clave_factura = getJdbcTemplate().queryForInt("SELECT ID_MOVIMIENTO FROM  SAM_FACTURAS_VALES WHERE ID_MOVIMIENTO =?", new Object[]{idVale});
+	                		Map vales_fac =getFacturaVALES(clave_factura);
+	                		Map valesconc_fac =getFacturaCOMPVALES(clave_factura);
 	                		
-	                		getJdbcTemplate().update("DELETE t1 FROM COMP_VALES t1 INNER JOIN SAM_FACTURAS_VALES t2 ON t1.CVE_VALE = t2.CVE_VALE AND ID_MOVIMIENTO=? AND CONS_VALE=?", new Object[]{idVale,cons});
-	                		
-	                		getJdbcTemplate().update("DELETE t1 FROM CONCEP_VALE t1 INNER JOIN SAM_FACTURAS_VALES t2 ON t1.CVE_VALE = t2.CVE_VALE AND  ID_MOVIMIENTO=? AND CONS_VALE=?", new Object[]{idVale,cons});
-	                		
+	                		getJdbcTemplate().update("DELETE FROM CONCEP_VALE WHERE CONS_VALE =? AND CVE_VALE=?",new Object[]{valesconc_fac.get("CONS_VALE"),valesconc_fac.get("CVE_VALE")});
+	                		getJdbcTemplate().update("DELETE FROM COMP_VALES WHERE CVE_OP =? AND TIPO='FA'",new Object[]{vales_fac.get("cve_factura")});
 	                		getJdbcTemplate().update("DELETE FROM SAM_FACTURAS_VALES WHERE ID_MOVIMIENTO =?", new Object[]{idVale});
-	                		
-	                		System.out.println("Registros borrados con exito: " + Vale + "Consecutivo del Vale: " + cons);
-	                		
 	                	}
+	                 	
 	                } 
 	            });
 	          } catch (DataAccessException e) {                        
@@ -1861,7 +1840,6 @@ public class GatewayFacturas extends BaseGateway {
 	         }	                	                		  	  
 	  }
 	
-		
 	public List<Map> getDetallesProyectoPartidaDocumento(Long cve_factura, int ejercicio)
 	{
 		Map factura = this.getFactura(cve_factura);

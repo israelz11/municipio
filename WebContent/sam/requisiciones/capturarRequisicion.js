@@ -14,7 +14,7 @@ $(document).ready(function() {
 			
 	$("#tab2primary").hide();
 	
-	$('#cbotipo').on('change',function(event){//El método on asigna uno o más controladores de eventos para los elementos seleccionados.
+	$('#cbotipo').on('change',function(event){//El metodo on asigna uno o mas controladores de eventos para los elementos seleccionados.
 		tipoRequisiciones();
 	});
 	
@@ -28,8 +28,8 @@ $(document).ready(function() {
 	$('#cmdguardarconcepto').click(function(event){guardarConceptoRequisicion();});
 	$('#cmdcerrar').click(function(event){cerrarRequisicion();});
 	$('#cmdcerrar').prop('disabled',true);
-	$('#img_contrato').click(function(event){jInformation('Este modulo se encuentra deshabilitado por el momento','Información');/*muestraContratos();*/});
-  	$('#img_quitar_contrato').click(function(event){jInformation('Este modulo se encuentra deshabilitado por el momento','Información');/*removerContrato();funciones();*/});
+	$('#img_contrato').click(function(event){jInformation('Este modulo se encuentra deshabilitado por el momento','InformaciÃ³n');/*muestraContratos();*/});
+  	$('#img_quitar_contrato').click(function(event){jInformation('Este modulo se encuentra deshabilitado por el momento','InformaciÃ³n');/*removerContrato();funciones();*/});
 	$('#cmdenviarlotes').prop('disabled',true);
 	$('#cmdreenumerar').prop('disabled',true);
 	$('#cmdimportar').prop('disabled',true);
@@ -173,7 +173,7 @@ function muestraReenumerar(){
 
 function muestraImportarLotes(){
 	if(ID_PED>0) 
-		jAlert('Existen lotes que ya se encuentran relacionados a algún Pedido, si decide importar nuevos lotes estos se reenumerarán automaticamente y se perdera el consecutivo de lote en el Pedido,\n se recomienda borrar los lotes de los Pedidos antes de realizar esta operación','Advertencia', function(){_muestraImportarLotes();});
+		jAlert('Existen lotes que ya se encuentran relacionados a algÃºn Pedido, si decide importar nuevos lotes estos se reenumerarÃ¡n automaticamente y se perdera el consecutivo de lote en el Pedido,\n se recomienda borrar los lotes de los Pedidos antes de realizar esta operaciÃ³n','Advertencia', function(){_muestraImportarLotes();});
 	else 
 		_muestraImportarLotes();
 	
@@ -181,7 +181,7 @@ function muestraImportarLotes(){
 
 function _muestraImportarLotes(){
 	if($('#cbotipo').val()!=1&&$('#cbotipo').val()!=7) {jAlert('Esta opcion solo esta disponible para Requisiciones', 'Advertencia'); return false;}
-	jWindow('<iframe width="850" height="400" id="ventanaImportar" frameborder="0" src="../../sam/requisiciones/muestraImportar.action?'+'"></iframe>','Importar lotes desde una Requisición existente', '','Cerrar',1);
+	jWindow('<iframe width="850" height="400" id="ventanaImportar" frameborder="0" src="../../sam/requisiciones/muestraImportar.action?'+'"></iframe>','Importar lotes desde una RequisiciÃ³n existente', '','Cerrar',1);
 }
 
 function getBeneficiario(cve_benefi , objeto){
@@ -225,8 +225,9 @@ function funciones(){
 	}
 }
 /*-------------------------------- funcion para mostrar la requisicion ------------------------------------------------*/
+/*Muestra la Requisicion en edicion llamada desde el listado de requisiciones....*/
 function mostrarRequisicion(cve_req){
-	alert('demo entro aqui');
+	
 	if(cve_req!=0){
 		ShowDelay('Cargando Requisicion');
 		controladorRequisicion.getLightRequisicion(cve_req, {
@@ -239,7 +240,7 @@ function mostrarRequisicion(cve_req){
 								$('#cbotipo').val(this.TIPO);
 								$('#cbotipo').prop('disabled', true);
 								$('#cbotipo').change();
-								tipoRequisicion();
+								tipoRequisiciones();
 								
 								$('#cbomeses').val(true);
 								$('#cbomeses').val(this.PERIODO);
@@ -283,19 +284,24 @@ function mostrarRequisicion(cve_req){
 									$('#CLV_PARBIT').val(getHTML(this.CLV_PARBIT2));
 									$('#txtproyecto').val($('#CPROYECTO').val());
 									$('#txtpartida').val($('#CCLV_PARTID').val());
-									$('#txtproyecto').prop('disabled',true);
-									$('#txtpartida').prop('disabled',true);
-									$('#txtprestadorservicio').prop('disabled',true);
+									$('#txtproyecto').val(this.N_PROGRAMA);
+									$('#txtpartida').val((this.CLV_PARTID));
+									$('#txtprestadorservicio').prop('disabled',false);
+									//$('#txtproyecto').prop('disabled',true);
+									//$('#txtpartida').prop('disabled',true);
+									//$('#txtprestadorservicio').prop('disabled',true);
+									
 								}
 								else{
-									$('#img_quitar_contrato').attr('src', '../../imagenes/cross2.png');
-									$('#CPROYECTO').attr('value', '');
-									$('#CCLV_PARTID').attr('value', '');
-									$('#CLV_PARBIT').attr('value', '');
-									$('#ID_PROYECTO').attr('value', getHTML(this.ID_PROYECTO));
-									$('#txtproyecto').attr('value',getHTML(this.N_PROGRAMA));
-									$('#txtpartida').attr('value',getHTML(this.CLV_PARTID));
-									$('#txtprestadorservicio').attr('disabled',false);
+									$('#img_quitar_contrato').val('src', '../../imagenes/cross2.png');
+									$('#CPROYECTO').val('');
+									$('#CCLV_PARTID').val('');
+									$('#CLV_PARBIT').val('');
+									$('#ID_PROYECTO').val(getHTML(this.ID_PROYECTO));
+									$('#txtproyecto').val(getHTML(this.N_PROGRAMA));
+									$('#txtpartida').val(getHTML(this.CLV_PARTID));
+									$('#txtprestadorservicio').prop('disabled',false);
+									
 								}
 					
 								/*Activa o Inactiva Boton cerrar requisicion*/
@@ -303,7 +309,10 @@ function mostrarRequisicion(cve_req){
 								/*$('#txtconcurso').attr('value',);*/
 								$('#cboarea').val(this.AREA);
 								//$('#tabuladores').tabs('enable',1);/******************** Revisar por los cambio realizados en los tabuladores **************************/
-								$('.nav-tabs a:first').tab('show');
+								$('.nav-tabs a:first').tab('show');//Al cargar muestra la primer pestaña por default
+								//$('.nav-tabs a:last').tab('show') 
+								//$('.nav-tabs a[href="#tab2primary"]').tab('show')
+								//$('[href="#tab2primary"]').tab('show');
 								mostrarTablaConceptos(cve_req);
 								if($('#cbotipo').val()=='1'||$('#cbotipo').val()=='7'){
 									$('#cmdimportar').prop('disabled',false);
@@ -313,16 +322,17 @@ function mostrarRequisicion(cve_req){
 								
 								//COMPROBAR QUE LA REQ FUE CERRADA AL MENOS UNA VEZ PARA PERMITIR LA EDICION DEL PRECIO DEL CONCEPTO
 								comprobarCierreEnBitacora();
-								_closeDelay();
+								//_closeDelay();
 							});
 						}
 						,
 						errorHandler:function(errorString, exception) { 
-							jError('Fallo la operacion:<br>Error::'+errorString+'-message::'+exception.message+'-JavaClass::'+exception.javaClassName+'.<br><strong>Consulte a su administrador</strong>');   
+							swal('Fallo la operacion:<br>Error::'+errorString+'-message::'+exception.message+'-JavaClass::'+exception.javaClassName+'.<br><strong>Consulte a su administrador</strong>');   
 							return false;
 						}
 					});
 	}
+	
 }
 
 function comprobarCierreEnBitacora(){
@@ -369,7 +379,9 @@ function guardarRequisicionPrincipal(){
 	if (result==false) return false;
 	alert($("#txtrequisicion").val());
 	var v = parseInt($('#cbotipo').val());
-	if($('#txtprestadorservicio').val()==''||$('#txtprestadorservicio').val()=='0') $('#CVE_BENEFI').val('NULL');
+	
+
+	//if($('#txtprestadorservicio').val()==''||$('#txtprestadorservicio').val()=='0') $('#CVE_BENEFI').val('NULL');
 	
 	//swal.clickConfirm()
 	swal.queue([{
@@ -380,11 +392,11 @@ function guardarRequisicionPrincipal(){
 		  preConfirm: function () {
 		    return new Promise(function (resolve) {
 		    	controladorRequisicion.guardarRequisicion($('#ID_PROYECTO').val(),$('#CVE_REQ').val(), $('#CVE_CONTRATO').val(), $('#CVE_VALE').val(), $('#txtrequisicion').val(), $('#cbodependencia').val(), $('#txtfecha').val(), $('#cbotipo').val(),$('#txtnotas').val(), $('#cbomeses').val(), '0', $('#txtproyecto').val(), $('#txtpartida').val(),$('#CVE_BENEFI').val(),$('#cboarea').val(), $('#txttipobien').val(),$('#txtmarca').val(), $('#txtmodelo').val(), $('#txtplacas').val(), $('#txtnuminventario').val(), $('#txtcolor').val(), $('#txtusuario').val(), $('#CVE_CONCURSO').val());
-		    	$('#cmdcerrar').attr('disabled',false);
+		    	$('#cmdcerrar').prop('disabled',false);
 				//$('#tab2primary').tabs('enable',1);//TypeError: $(...).tabs is not a function
 				if($('#CVE_REQ').attr('value')==0) $('.nav-tabs a:first').tab('show');
 		    	$('.nav-tabs a[href="#tab2primary"]').tab('show')
-				//swal.insertQueueStep("proceso exitoso!....")
+				
 		        resolve()
 		    })
 		  }
@@ -407,9 +419,9 @@ function guardarRequisicionPrincipal(){
 				)
 		})
 	/*
-	jConfirm('¿Confirma que desea guardar la Requisición?','Confirmar', function(r){
+	jConfirm('Â¿Confirma que desea guardar la RequisiciÃ³n?','Confirmar', function(r){
 		if(r){
-		  ShowDelay('Guardando requisición','');
+		  ShowDelay('Guardando requisiciÃ³n','');
 		  controladorRequisicion.guardarRequisicion($('#ID_PROYECTO').val(),$('#CVE_REQ').val(), $('#CVE_CONTRATO').val(), $('#CVE_VALE').val(), $('#txtrequisicion').val(), $('#cbodependencia').val(), $('#txtfecha').val(), $('#cbotipo').val(),$('#txtnotas').val(), $('#cbomeses').val(), '0', $('#txtproyecto').val(), $('#txtpartida').val(),$('#CVE_BENEFI').val(),$('#cboarea').val(), $('#txttipobien').val(),$('#txtmarca').val(), $('#txtmodelo').val(), $('#txtplacas').val(), $('#txtnuminventario').val(), $('#txtcolor').val(), $('#txtusuario').val(), $('#CVE_CONCURSO').val(), {
 		  callback:function(items) { 	    
 		  if (items!=null && items!=0 )
@@ -418,10 +430,10 @@ function guardarRequisicionPrincipal(){
 				$('#tabuladores').tabs('enable',1);
 				if($('#CVE_REQ').attr('value')==0) $('#tabuladores').tabs('option', 'selected', 1);
 				$('#CVE_REQ').attr('value',items);
-			  CloseDelay('Requisición guardada con éxito');
+			  CloseDelay('RequisiciÃ³n guardada con Ã©xito');
 		  }
 		  else 
-		  	  jInformation('No se guardo la información No. de Requisición repetido', 'Información');	  
+		  	  jInformation('No se guardo la informaciÃ³n No. de RequisiciÃ³n repetido', 'InformaciÃ³n');	  
 		} 					   				
 		,
 		errorHandler:function(errorString, exception) { 
@@ -441,16 +453,16 @@ function validate(){
 	//swal2-validationerror
 	
 	if($('#cbodependencia').val()==0){jAlert('Es necesario seleccionar la <b>Unidad Administrativa</b>','Error de validacion'); return false;}
-	//if($('#txtrequisicion').val()==''){swal('Es necesario escribir el numero de <b>Requisición</b>','Error de validacion','error')};
+	//if($('#txtrequisicion').val()==''){swal('Es necesario escribir el numero de <b>RequisiciÃ³n</b>','Error de validacion','error')};
 	
 	controladorRequisicion.comprobarExistencia($('#txtrequisicion').attr('value'),{callback:function(items){existe = items;}, errorHandler:function(errorString, exception) { jError('Fallo la operacion:<br>Error::'+errorString+'-message::'+exception.message+'-JavaClass::'+exception.javaClassName+'.<br>Consulte a su administrador');}});
 	if(existe==true&&$('#CVE_REQ').val()==0){jError('El numero de requisicion que esta intentando guardar ya existe en el sistema','Error'); return false;}
 
-	if($('#txtfecha').val()==''){jAlert('Es necesario escribir una <b>Fecha</b> válida','Error de validación'); return false;}
-	if($('#cbotipo').val()==0){jAlert('Es necesario seleccionar un <b>Tipo</b> de Requisición','Error de validacion'); return false;}
-	//if ($('#txtproyecto').val()==''||$('#ID_PROYECTO').attr('value')==''||$('#ID_PROYECTO').attr('value')=='0'){jAlert('Es necesario escribir el <b>Programa</b>','Error de validación'); return false;}
-	if ($('#txtpartida').val()==''){jAlert('Es necesario escribir la <b>Partida</b>','Error de validación'); return false;}
-	if ($('#cbomeses').val()==0){jAlert('El <b>Presupuesto</b> no es valido','Error de validación'); return false;}
+	if($('#txtfecha').val()==''){jAlert('Es necesario escribir una <b>Fecha</b> vÃ¡lida','Error de validaciÃ³n'); return false;}
+	if($('#cbotipo').val()==0){jAlert('Es necesario seleccionar un <b>Tipo</b> de RequisiciÃ³n','Error de validacion'); return false;}
+	//if ($('#txtproyecto').val()==''||$('#ID_PROYECTO').attr('value')==''||$('#ID_PROYECTO').attr('value')=='0'){jAlert('Es necesario escribir el <b>Programa</b>','Error de validaciÃ³n'); return false;}
+	if ($('#txtpartida').val()==''){jAlert('Es necesario escribir la <b>Partida</b>','Error de validaciÃ³n'); return false;}
+	if ($('#cbomeses').val()==0){jAlert('El <b>Presupuesto</b> no es valido','Error de validaciÃ³n'); return false;}
 }
 
 /*Guarda los conceptos o movimientos de la requisicion*/
@@ -458,9 +470,9 @@ function guardarConceptoRequisicion(){
 	var error="";
  	var titulo ='Advertencia';
 	if($('#cbotipo').val()=='2'||$('#cbotipo').val()=='3'||$('#cbotipo').val()=='4'){
-		if($('#ID_REQ_MOVTO').val()==0&&parseInt($('#TOTAL_CONCEPTOS').val())>=1) {jAlert('Una Orden de Servicio/Trabajo no puede contener más de un lote</br>','Advertencia'); return false;} 
+		if($('#ID_REQ_MOVTO').val()==0&&parseInt($('#TOTAL_CONCEPTOS').val())>=1) {jAlert('Una Orden de Servicio/Trabajo no puede contener mÃ¡s de un lote</br>','Advertencia'); return false;} 
 	}
-	if($('#ID_ARTICULO').val()==''||$('#ID_ARTICULO').val()=='0') {jAlert('Es necesario seleccionar un producto válido</br>','Advertencia'); return false;}
+	if($('#ID_ARTICULO').val()==''||$('#ID_ARTICULO').val()=='0') {jAlert('Es necesario seleccionar un producto vÃ¡lido</br>','Advertencia'); return false;}
 	if($('#txtprecioestimado').val()=='') {jAlert('Es necesario especificar un precio de producto valido</br>', 'Advertencia'); return false;}
 	//if($('txtprecioestimado').val()=='') {jError('Es necesario especificar un precio de producto valido','Error de validacion'); return false;}
 	if($('#CVE_UNIDAD_MEDIDA').val()=='') jAlert('Es necesario especificar la unidad de medida del producto valido</br>','Advertencia');
@@ -480,7 +492,7 @@ function guardarConceptoRequisicion(){
 							if(items) {
 									nuevoConcepto();
 									mostrarTablaConceptos($('#CVE_REQ').val());
-									CloseDelay('Lote guardado con éxito', function(){ $('#txtproducto').focus();
+									CloseDelay('Lote guardado con Ã©xito', function(){ $('#txtproducto').focus();
 										});
 										
 								} else jError('No se ha podido guardar el lote', 'Error');
@@ -502,14 +514,14 @@ function eliminarMovimientos(){
      $('input[name=chkconsecMovimiento]:checked').each(function() { checkMovimientos.push($(this).val());});	
   	 var cve_req = $('#CVE_REQ').val();
 	 if (checkMovimientos.length>0){
-		jConfirm('¿Confirma que desea eliminar los lotes de la requisición?','Confirmar', function(r){
+		jConfirm('Â¿Confirma que desea eliminar los lotes de la requisiciÃ³n?','Confirmar', function(r){
 				if(r){
 						ShowDelay('Eliminando lote','');
 						controladorRequisicion.eliminarMovimientoRequisicion(checkMovimientos, cve_req, {
 							callback:function(items) {
 								nuevoConcepto(); 		
 								mostrarTablaConceptos(cve_req);
-								CloseDelay('Lotes eliminados con éxito');	
+								CloseDelay('Lotes eliminados con Ã©xito');	
 						} 					   				
 						,
 						errorHandler:function(errorString, exception) { 
@@ -529,20 +541,20 @@ function editarConcepto(ID_REQ_MOVTO){
 	ShowDelay('Cargando lote','');
 	controladorRequisicion.getConceptoRequisicion(ID_REQ_MOVTO,{
 				callback:function(Map){
-					$('#ID_REQ_MOVTO').attr('value', ID_REQ_MOVTO);
-					$('#ID_ARTICULO').attr('value',Map.ID_ARTICULO);
-					$('#CVE_UNIDAD_MEDIDA').attr('value',Map.CLV_UNIMED);
-					$('#GRUPO').attr('value',Map.GRUPO);
-					$('#SUBGRUPO').attr('value',Map.SUBGRUPO);
-					$('#CLAVE').attr('value',Map.CONSEC);
-					$('#REQ_CONS').attr('value',Map.REQ_CONS);
-					$('#txtproducto').attr('value', Map.PRODUCTO);
-					$('#txtunidadmedida').attr('value', Map.UNIDAD)
-					$('#txtprecioestimado').attr('value', Map.PRECIO_EST);
-					$('#txtcantidad').attr('value', Map.CANTIDAD);
-					$('#txtdescripcion').attr('value', Map.NOTAS);
+					$('#ID_REQ_MOVTO').val(ID_REQ_MOVTO);
+					$('#ID_ARTICULO').val(Map.ID_ARTICULO);
+					$('#CVE_UNIDAD_MEDIDA').val(Map.CLV_UNIMED);
+					$('#GRUPO').val(Map.GRUPO);
+					$('#SUBGRUPO').val(Map.SUBGRUPO);
+					$('#CLAVE').val(Map.CONSEC);
+					$('#REQ_CONS').val(Map.REQ_CONS);
+					$('#txtproducto').val(Map.PRODUCTO);
+					$('#txtunidadmedida').val(Map.UNIDAD)
+					$('#txtprecioestimado').val(Map.PRECIO_EST);
+					$('#txtcantidad').val(Map.CANTIDAD);
+					$('#txtdescripcion').val(Map.NOTAS);
 					$('#txtproducto').focus();
-					_closeDelay();
+					//_closeDelay();
 				}
 				,
 				errorHandler:function(errorString, exception) { 
@@ -572,7 +584,7 @@ function mostrarTablaConceptos(cve_req){
 									 cont++;
 									 total+= this.IMPORTE;
 									 $('#TOTAL_CONCEPTOS').val((parseInt($('#TOTAL_CONCEPTOS').val())+1)) 
-									 $('#IMPORTE_TOTAL').attr('value', total);
+									 $('#IMPORTE_TOTAL').val(total);
 									 pintaTablaConceptos('listasConceptos', this.ID_REQ_MOVTO, this.CVE_REQ, this.REQ_CONS, this.CANTIDAD, this.UNIDAD, this.NOTAS, this.IMPORTE, this.ARTICULO, this.STATUS, this.ID_PED_MOVTO);				   
 									 if(items.length==cont) 
 										 pintarTotalConceptos('listasConceptos', $('#IMPORTE_TOTAL').val(cont)); 
@@ -585,7 +597,7 @@ function mostrarTablaConceptos(cve_req){
 }
 
 function validaTipoDoc(){
-	switch($('#cbotipo').attr('value'))
+	switch($('#cbotipo').val())
 	{
 		case '1':
 			$('#cmdenviarlotes').prop('disabled',false);
@@ -631,7 +643,7 @@ function pintaTablaConceptos(table, ID_REQ_MOVTO, CVE_REQ, CONSECUTIVO, CANTIDAD
 	var htmlCheck = "<input type='checkbox' name='chkconsecMovimiento' id='chkconsecMovimiento' value='"+ID_REQ_MOVTO+"'>";
 	var htmlBoton = "<img src=\"../../imagenes/calendar_edit.png\" style='cursor: pointer;' alt=\"Modificar anexo "+CONSECUTIVO+"\" width=\"16\" height=\"16\" border=\"0\" onClick=\"mostrarAnexoConcepto("+ID_REQ_MOVTO+","+CONSECUTIVO+")\" >&nbsp;";
     var htmlEdit = "<img src=\"../../imagenes/page_white_edit.png\" style='cursor: pointer;' alt=\"Editar lote "+CONSECUTIVO+"\" width=\"16\" height=\"16\" border=\"0\" onClick=\"editarConcepto("+ID_REQ_MOVTO+")\" >"; 		
-	var htmlEnPedido = "<a href='javascript:getInfoPedido("+ID_PED_MOVTO+")'>Sí</a>";
+	var htmlEnPedido = "<a href='javascript:getInfoPedido("+ID_PED_MOVTO+")'>SÃ­</a>";
 	var ban = ($('#cbotipo').val()!=1&&$('#cbotipo').val()!=7) ? "No Aplica": "No";
 	
 	if(ID_PED_MOVTO!=0) ID_PED =  ID_PED_MOVTO; 
@@ -649,23 +661,58 @@ function pintaTablaConceptos(table, ID_REQ_MOVTO, CVE_REQ, CONSECUTIVO, CANTIDAD
  }
 
 function getInfoPedido(ID_PED_MOVTO){
-	//jInformation("Este lote se encuentra en el pedido: "+ID_PED_MOVTO,"Información");	
+	//jInformation("Este lote se encuentra en el pedido: "+ID_PED_MOVTO,"InformaciÃ³n");	
 }
 
 
 /*Metodo para cerrar la requisicon*/
 function cerrarRequisicion(){
-	if($('#TOTAL_CONCEPTOS').val()=='0') {jAlert('No se puede cerrar la requisición si no existe por lo menos un lote en el detalle','Advertencia'); return false;}
-	if(($('#cbotipo')==7||$('#cbotipo')==8)&&($('#CVE_VALE')!='0'||$('#CVE_VALE')!='')) {jAlert('No es posible cerrar una Requisicion/Orden de Servicio Calendarizada cuando se compromete a travez de un vale','Advertencia'); return false;}
-	jConfirm('¿Confirma que desea cerrar la requisición?','Confirmar', function(r){
+	if($('#TOTAL_CONCEPTOS').val()=='0') {jAlert('No se puede cerrar la requisiciÃ³n si no existe por lo menos un lote en el detalle','Advertencia'); return false;}
+	if(($('#cbotipo')==7||$('#cbotipo')==8)&&($('#CVE_VALE')!='0'||$('#CVE_VALE')!='')) {swal('No es posible cerrar una Requisicion/Orden de Servicio Calendarizada cuando se compromete a travez de un vale','Advertencia'); return false;}
+	/*jConfirm('¿Confirma que desea cerrar la requisición?','Confirmar', function(r){
 		if(r){
+				//verificar el periodo en que se esta cerrando
+				if ($("#cbotipo").val()==7||$("#cbotipo").val()==8)
+				  getPresupuesto();
+				 else
+				  cerrarRequiFinal();
+			}
+		});	*/
+	if($('#cbotipo').val()=='2'||$('#cbotipo').val()=='3'||$('#cbotipo').val()=='4'||$('#cbotipo').val()=='8'){
+		var clave_bene=$('#cboSearch').selectpicker('val');
+		
+		if (clave_bene=='') {
+		    	swal({
+		        	  title: 'Error!',
+		        	  text: 'El Beneficiario seleccionado no es válido',
+		        	  type: 'error',
+		        	  confirmButtonText: 'Cool'
+		        	})
+		    
+		    return false;}
+	}
+	swal({
+		  title: '¿Estas seguro?',
+		  text: "Tu cambio no se pordrá revertir!",
+		  type: 'warning',
+		  showCancelButton: true,
+		  confirmButtonColor: '#3085d6',
+		  cancelButtonColor: '#d33',
+		  confirmButtonText: 'Sí, cerrar'
+		}).then(function (r) {
+			if(r){
 				/*verificar el periodo en que se esta cerrando*/
 				if ($("#cbotipo").val()==7||$("#cbotipo").val()==8)
 				  getPresupuesto();
 				 else
 				  cerrarRequiFinal();
 			}
-		});	
+		  swal(
+		    'Cerrar!',
+		    'Tu requisiicion se cerro con exito.',
+		    'success'
+		  )
+		})
 	}
 	
 function cerrarRequiFinal(){
@@ -674,7 +721,7 @@ function cerrarRequiFinal(){
 					callback:function(items){
 						if(!items) 
 							{ 
-								jError('<strong>Imposible cerrar la requisición, esto puede ser debido a causa de las siguientes razones:</strong><br>- La Requisición supera el disponible actual. <br>- El periodo de la Requisición no es válido. <br>- Programa o partida no válidos','Error');
+								jError('<strong>Imposible cerrar la requisiciÃ³n, esto puede ser debido a causa de las siguientes razones:</strong><br>- La RequisiciÃ³n supera el disponible actual. <br>- El periodo de la RequisiciÃ³n no es vÃ¡lido. <br>- Programa o partida no vÃ¡lidos','Error');
 							}
 						else{
 							$('#cmdcerrar').prop('disabled', true);
@@ -837,7 +884,7 @@ function getTabla(items){
 		}
 			
 	tabla +="<tr><td align='left'>&nbsp;</td><td align='left'>&nbsp;</td><td align='left'><div id='div_total'><strong>$0.00&nbsp;</strong></div></td></tr>"
-	tabla +="<tr><td align='center' height='35' colspan='6' ><input name='cmdguardarPresupuesto' id='cmdguardarPresupuesto' type='button' class='botones' onClick='getPresupuestoSelec();' value='Cerrar Requisición' />&nbsp;<input name='btnGuardarPedido' id='cmddistribuir' type='button' class='botones' onClick=\"setDistribuir('"+items.importe+"');\" value='Distribuir' />&nbsp;<input name='btnGuardarPedido' id='cmdcancelar' type='button' class='botones' onClick='_closeDelay();' value='Cancelar' /></td></tr>";
+	tabla +="<tr><td align='center' height='35' colspan='6' ><input name='cmdguardarPresupuesto' id='cmdguardarPresupuesto' type='button' class='botones' onClick='getPresupuestoSelec();' value='Cerrar RequisiciÃ³n' />&nbsp;<input name='btnGuardarPedido' id='cmddistribuir' type='button' class='botones' onClick=\"setDistribuir('"+items.importe+"');\" value='Distribuir' />&nbsp;<input name='btnGuardarPedido' id='cmdcancelar' type='button' class='botones' onClick='_closeDelay();' value='Cancelar' /></td></tr>";
 	return tabla +="</table> ";	
 }
 
@@ -862,7 +909,7 @@ function setDistribuir(importe){
 function validarPre(obj,importe){	
    var  num = parseFloat(obj.value);
    	if (num>importe||num<0 || isNaN(obj.value) || obj.value=="" ) 
-	{ alert("El importe es mayor que el disponible actual del mes en el calendario ó el número no es válido");
+	{ alert("El importe es mayor que el disponible actual del mes en el calendario Ã³ el nÃºmero no es vÃ¡lido");
 	  obj.focus();
 	}else
 	{	
@@ -887,7 +934,7 @@ function getTotalPre(){
 		$('#div_total').html('<strong>$ '+formatNumber(total)+'</strong>');
 
 		if(redondeo(total)>eval($('#t_importe').val())||total<0){
-			alert('El importe que ha establecido no es válido, vuelva a verificarlo');
+			alert('El importe que ha establecido no es vÃ¡lido, vuelva a verificarlo');
 			$('#cmdguardarPresupuesto').attr('disabled', false); 
 		} 
 
@@ -922,7 +969,7 @@ function mostrarEnviarLotesPedido(){
 			checks.push($(this).val()); 
 		});
 	if(checks.length<=0) {jAlert('Es necesario seleccionar por lo menos un lote de listado','Advertencia'); return false;}
-	if(tipo!=1&&tipo!=7) {jAlert('No se puede realizar esta operación en Ordenes de Trabajo/Servicio','Advertencia'); return false;}
+	if(tipo!=1&&tipo!=7) {jAlert('No se puede realizar esta operaciÃ³n en Ordenes de Trabajo/Servicio','Advertencia'); return false;}
 	var html = '<table width="350" border="0" cellspacing="0" cellpadding="0" align="center">' +
 			   '<tr>' +
 			   '<td height="27" align="center"><span class="TextoNegritaTahomaGris">Escriba el n&uacute;mero de pedido:</span>&nbsp; <input type="text" value="" id="txtpedido" onkeypress="return keyNumbero(event);" class="input" maxlength="6"></td>' +
@@ -939,7 +986,7 @@ function mostrarEnviarLotesPedido(){
 function enviarLotesPedido(){
 	var cve_ped = $('#txtpedido').val();
 	var cve_req = $('#CVE_REQ').val();
-	if($('#txtpedido').attr('value')==''){jAlert('El número de Pedido escrito no es válido','Advertencia'); return false;}
+	if($('#txtpedido').attr('value')==''){jAlert('El nÃºmero de Pedido escrito no es vÃ¡lido','Advertencia'); return false;}
 	var checks = [];
 	$('input[id:chkconsecMovimiento]:checked').each(function(){
 			checks.push($(this).val()); 
@@ -969,7 +1016,7 @@ function CargarLotesNuevos(lotes, cve_req){
 				callback:function(items) {
 					if(items) {
 						mostrarTablaConceptos(cve_req);
-						CloseDelay('Lotes importados con éxito');	
+						CloseDelay('Lotes importados con Ã©xito');	
 					}
 					else
 						jError('La operacion ha fallado al importar lotes','Error');
@@ -989,7 +1036,7 @@ function ReenumerarLotesNuevos(idLotes, valLotes, cve_req){
 					cve = cve_req;
 					if(items) {
 						mostrarTablaConceptos(cve_req);
-						CloseDelay('Lotes reenumerados con éxito');	
+						CloseDelay('Lotes reenumerados con Ã©xito');	
 					}
 					else
 						jError('La operacion ha fallado al reenumerar lotes','Error');
@@ -1009,7 +1056,7 @@ function mostrarLotePedido(id_ped_movto){
 					if(items) {
 						var html = '<table class="listas" border="0" align="center" cellpadding="1" cellspacing="2" width="95%">'+
 									'  <tr bgcolor="#889FC9">'+
-									'	<th height="25" colspan="2" align="center">Número de Pedido: <strong>'+items.NUM_PED+'</strong></th>'+
+									'	<th height="25" colspan="2" align="center">NÃºmero de Pedido: <strong>'+items.NUM_PED+'</strong></th>'+
 									'  </tr>'+
 									'	   <tr>'+
 									'		<th width="20%" height="25" align="left">Fecha</th>'+
@@ -1044,8 +1091,8 @@ function mostrarLotePedido(id_ped_movto){
 									'	<th width="6%" height="25" align="left">Lote</th>'+
 									'	<th width="10%" height="20" align="center">Cantidad'+
 									'	<th width="9%" align="center">Unidad</th>'+
-									'	<th width="43%" align="center">Descripción</th>'+
-									'	<th width="11%" align="center">Precio Área</th>'+
+									'	<th width="43%" align="center">DescripciÃ³n</th>'+
+									'	<th width="11%" align="center">Precio Ã�rea</th>'+
 									'	<th width="11%" align="center">Precio Unitario</th>'+
 									'	<th width="10%" align="center">Costo</th>'+
 									'  </tr>'+
@@ -1064,7 +1111,7 @@ function mostrarLotePedido(id_ped_movto){
 						
 					}
 					else
-						jError('La operacion ha fallado al obtener la información de Pedido','Error');
+						jError('La operacion ha fallado al obtener la informaciÃ³n de Pedido','Error');
 			} 					   				
 			,
 			errorHandler:function(errorString, exception) { 

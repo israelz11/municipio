@@ -500,7 +500,6 @@
 			<dwr:include method="agregarMovimiento" />
 			<dwr:include method="getDetallesFactura" />
 			<dwr:include method="eliminarDetalles" />
-			
 			<dwr:include method="cargarDetallePresupuestal" />
 		</dwr:remote>
 	</bean>

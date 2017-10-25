@@ -11,23 +11,23 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
     
-<link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css">
-<link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css">
-<link rel="stylesheet" href="../../include/css/sweetalert2.min.css" type="text/css">
+
+<link rel="stylesheet" href="../../include/css/sweetalert2.min.css" type="text/css"/>
 <link rel="stylesheet" href="../../include/css/bootstrap-3.3.7.css" type="text/css">
 <link rel="stylesheet" href="../../include/css/bootstrap2.css" type="text/css"/>
+<link rel="stylesheet" href="../../include/css/bootstrap-select.css" type="text/css">
 
 <link type="text/css" href="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.css" rel="stylesheet" />	
 <script type="text/javascript" src="../../include/js/jquery-1.9.1.min.js?x=<%=System.currentTimeMillis()%>"></script>
 <script type="text/javascript" src="lista_ordenPago.js?x=<%=System.currentTimeMillis()%>"> </script>
 <script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>
-<script type="text/javascript" src="../../include/js/sweet-alert.min.js"></script>
+<script type="text/javascript" src="../../include/js/sweetalert2.min.js"></script>
 
 <script type="text/javascript" src="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.min.js"></script>
 <script type="text/javascript" src="../../dwr/interface/controladorOrdenPagoRemoto.js"> </script>
 <script type="text/javascript" src="../../dwr/engine.js"></script>
 <script type="text/javascript" src="../../include/js/toolSam.js?x=<%=System.currentTimeMillis()%>"></script>
-<script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>
+
 <script type="text/javascript" src="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.min.js"></script>
 <script type="text/javascript" src="../../include/js/autocomplete/jquery.autocomplete.js"></script>
 <script type="text/javascript" src="../../include/js/autocomplete/autompleteVarios.js"></script>
@@ -35,14 +35,21 @@
 <link rel="stylesheet" href="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.css" type="text/css" />
 <link rel="stylesheet" href="../../include/js/autocomplete/jquery.autocomplete.css" type="text/css" />
 
-<link rel="stylesheet" href="../../include/css/css/css3-buttons.css" type="text/css" media="screen">
-<link rel="stylesheet" href="../../include/css/tiptip.css" type="text/css"  media="screen">
-<script src="../../include/css/jquery.tiptip.js"></script>
+<script type="text/javascript" src="../../include/css/bootstrap-datetimepicker-master/js/moment-with-locales-2.9.0.js"></script>
+<link rel="stylesheet" href="../../include/css/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker-4.15.35.css" type="text/css">
+<script type="text/javascript" src="../../include/css/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker-4.15.35.js"></script>
+<script type="text/javascript" src="../../include/js/bootstrap-select.js"></script>
 
 <script type="text/javascript" src="../../include/js/bootstrap-3.3.7.js"></script>
 
 <!--
-
+//Demo se actualizo...
+<script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>
+<link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css">
+<link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css">
+<script src="../../include/css/jquery.tiptip.js"></script>
+<link rel="stylesheet" href="../../include/css/css/css3-buttons.css" type="text/css" media="screen">
+<link rel="stylesheet" href="../../include/css/tiptip.css" type="text/css"  media="screen">
 <script type="text/javascript" src="../../include/js/jquery.tabs/jquery-1.1.3.1.pack.js"></script>
 <script type="text/javascript" src="../../include/js/jquery.tabs/jquery.history_remote.pack.js"></script>
 <script type="text/javascript" src="../../include/js/jquery.tabs/jquery.tabs.pack.js"></script>-->
@@ -118,20 +125,25 @@ a:active {
           		[<input type="checkbox" name="status" id="status"  value="7" <c:if test="${fn:contains(status,'7')}" >checked</c:if>>&nbsp;Pagada]
           </div>
           <div>
-          	<button name="btnBuscar" id="btnBuscar" onClick="getOrden()" type="button" class="button blue middle"><span class="label" style="width:100px">Buscar</span></button>
-  
-          </div>
+           	<input name="btnBuscar" id="btnBuscar" type="button" class="btn btn-buscar" value="Buscar"/>
+  	      </div>
       	</div> <!-- Tipo de gasto -->
       	<div class="form-group"><!-- Beneficiario -->
           <label for="grupo" class="col-md-2 control-label">Beneficiario:</label>
           <div class="col-md-5">
-   			<input type="text" id="txtprestadorservicio" name="txtprestadorservicio" class="form-control input-sm" value="<c:out value='${txtprestadorservicio}'/>"/>
+   				<select name="cboprestadorservicio" class="selectpicker form-control input-sm" data-live-search="true" data-size="10" title="Seleccione un Beneficiario..." id="cboprestadorservicio" style="width:100%">
+                              <c:forEach items="${beneficiarios}" var="item" varStatus="status">
+                                    <option value='<c:out value="${item.CLV_BENEFI}"/>'
+                                    <c:if test='${item.CLV_BENEFI==cboprestadorservicio}'>selected</c:if>><c:out value='${item.NCOMERCIA}'/>
+                              </c:forEach>
+             	</select>
       		<input type="hidden" id="CVE_BENEFI" name="CVE_BENEFI" value="<c:out value='${CVE_BENEFI}'/>" />
           </div>
           <div class="col-md-offset-2 col-md-1">
-          		<button name="cmdpdf" id="cmdpdf" onClick="getListadoOrdenPago()" title="Mostrar listado en formato PDF" type="button" class="button red middle"><span class="label" style="width:100px">Imprimir PDF</span></button>
+          		<input name="cmdpdf" id="cmdpdf" title="Mostrar listado en formato PDF" type="button" class="btn btn-imprimir" value="Imprimir PDF"/>
           </div>
       	</div> <!-- Beneficiario -->
+      
       	<div class="form-group"><!-- CAPITULO -->
           <label for="grupo" class="col-md-2 control-label">Capitulo:</label>
           <div class="col-md-5">
@@ -172,7 +184,7 @@ a:active {
 	   				<input type="text" name="fechaFinal"  id="fechaFinal" value="${fechaFinal}" size="12"  maxlength="10" class="form-control input-sm" style="width:100px"  id="inputValue" placeholder="Hasta">
 	     	  </div>
 	     	   	<!--<label for="txtpedido" class="col-md-1 control-label">Núm. Pedido:</label>  -->
-	     	  <div class="col-md-6">
+	     	  <!--  <div class="col-md-6">
 	     	  		<label for="cbotipo" class="col-md-2 control-label">Tipo: </label>
 			                <div class="col-md-4">
 			                     <select name="cbotipo" class="form-control input-sm" id="cbotipo">
@@ -184,20 +196,10 @@ a:active {
 								      </c:forEach>
 		    					</select>
 			                </div>
-	     	  </div>		 
+	     	  </div>	-->	 
      	</div> <!-- Num. Pedido -->
       	</sec:authorize>
-      	<div class= "form-group row">
-      		<div class="col-md-12">
-      			<div class="col-md-6">
-      				
-      			</div>
-      			<div class="col-md-6">
-      				
-      			</div>
-      		</div>
-      		
-      	</div>
+      	
     </div> <!-- Cierre del Well -->
     
     
@@ -208,7 +210,8 @@ a:active {
 <table width="95%" class="table table-sm table-hover table-responsive" align="center" id="listaRequisiciones"  cellpadding="0" cellspacing="0">
  <thead>
   <tr>
-    <th width="3%" height="20">&nbsp;</th>
+    
+    <th width="4%"><input type="checkbox" name="todos" id="todos"></th>
     <th width="9%">Número</th>
     <th width="7%">Fecha</th>    
     <th width="42%">Beneficiario</th>
@@ -277,11 +280,11 @@ a:active {
     <td colspan="9" align="left" height="40" style="background-color:#FFF"><table width="269" border="0" cellspacing="0" cellpadding="0">
       <tr>
             <td width="130" bgcolor="#FFFFFF"><div class="buttons tiptip">
-              <button name="cmdaperturar" id="cmdaperturar2" onClick="aperturarOrden()" title="Apertura para edicion los documentos seleccionados" type="button" class="button red middle"><span class="label" style="width:100px">Aperturar</span></button>
+               <input type="button" name="cmdaperturar" id="cmdaperturar2" value="Aperturar" data-toggle="tooltip" title="Apertura para editar los documentos seleccionados" class="btn btn-warning">
             </div></td>
           <sec:authorize ifAllGranted="ROLE_Sam_PRIVILEGIOS_CANCELAR_REQUISICIONES">
             <td width="139" bgcolor="#FFFFFF"><div class="buttons tiptip">
-              <button name="cmdcancelarm" id="cmdcancelarm" onClick="cancelacionMultiple()"  title="Cancela o elimina los documentos seleccionados" type="button" class="button red middle" ><span class="label" style="width:100px">Cancelar</span></button>
+              <input type="button" name="cmdcancelarm" id="cmdcancelarm" type="button" data-toggle="tooltip" title="Cancela los documentos seleccionados" class="btn btn-danger" value="Cancelar" />
             </div></td>
           </sec:authorize>
         </tr>

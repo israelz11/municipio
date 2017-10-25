@@ -2,8 +2,8 @@
 
 function __listadoProductos(producto, partida){
 	swal({
-		  title: 'Catálogo de Productos',
-		  text: 'Muestra el catálogo de productos',
+		  title: 'CatÃ¡logo de Productos',
+		  text: 'Muestra el catÃ¡logo de productos',
 		  html:
 			  '<iframe width="600" height="400" frameborder="0" src="../../sam/consultas/muestra_productos.action?producto='+producto+'&partida='+partida+'"></iframe>',
 		  width: 800,

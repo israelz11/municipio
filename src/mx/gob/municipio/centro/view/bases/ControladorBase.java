@@ -63,7 +63,7 @@ public class ControladorBase {
     
     private Sesion sesion;
     
-    /* M�todos para obtener el context, request, HttpSession de un m�todo del controlador */
+    /* Métodos para obtener el context, request, HttpSession de un método del controlador */
 
 /***********************************************************************************************************/   
 

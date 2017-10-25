@@ -1,9 +1,10 @@
+
+
 var contrato = false;
 var ID_DEPENDENCIA=0;
 
 /* Carga inicial del los metodos utilizados */
 $(document).ready(function(){
-	
 	var options = { 
 	        beforeSubmit:  showRequest,  
 	        success:       showResponse, 
@@ -13,10 +14,22 @@ $(document).ready(function(){
 	    }; 
 		
 		$('#frmDoc').submit(function(){
+	    	$('#CveOrdenOP').val($('#id_orden').val());
 			$(this).ajaxSubmit(options);
 			return false;
 		});
-		
+	/*INICIALIZACION DE BOTONES CAPTURA DE OP*/
+	$('#btnNuevaOp').on('click', function(){
+		nuevaOp();
+		limpiarForma();
+	});
+	$('#cmdregresar').on('click', function(){
+		regresar();
+	});
+	$('#btnGrabar').on('click', function(){
+		guardar();
+	});
+	
 	$('#fecha').datetimepicker({
 		format: 'DD/MM/YYYY',
 		defaultDate: new Date()
@@ -24,26 +37,32 @@ $(document).ready(function(){
 	$('#xTipo').on('change', function(){
 		cambiarModoDetalle();
 	});
-	
+	$('#importeRetencion').on('click', function(){
+		swal('La retención debe capturarse desde el devengado, cancele y recapture....');
+	});
+	importeRetencion
 	$('.selectpicker').selectpicker();
-	
-	
+
 	//$(elemento).val() --Obtener el valor del elemento
 	//$(elemento).val(valor); -- Asignar el del elemento
 	
-	
-	mostrarOrdenPago($('#cve_op').val());
+	$('#tabsOrdenesEnca').hide();
+	llenarTablaDeOrdenes();
 
+	if(($('#cve_op').val()!=''||$('#cve_op').val()!='0')&&($('#accion').val()=='edit')){
+		//alert('accion: ' +($('#accion').val()=='edit') );
+		mostrarOrdenPago($('#cve_op').val());  
+	  }
 	 $('#BorraOs2').click(function(event){guardarAnexos();});
 
 		
 	  //$('#importeRetencion').click(function (){
 		//  alert('La retencion debe ser capturada desde el devengado, favor de cancelar y volver a capturar el devengado');
 	  //});	
-	   $('#cmdNuevaRetencion').click(function(event){limpiarRetenciones();});
-	  $('#cmdNuevoAnexo').click(function(event){limpiarAnexos();});
+	$('#cmdNuevaRetencion').click(function(event){limpiarRetenciones();});
+	$('#cmdNuevoAnexo').click(function(event){limpiarAnexos();});
 	$('#tabsOrdenesEnca').hide();
-	 $('#img_vale').click(function(event){muestraVales();});
+	$('#img_vale').click(function(event){muestraVales();});
 	$('#tipoMovDoc').change(function(event){
 		  if($(this).val()=='XML')
 		  	$('#div_archivo').html('<input type="file" class="input-file" id="archivo" name="archivo" style="width:445px" accept="text/xml" />');
@@ -52,6 +71,10 @@ $(document).ready(function(){
 		  else
 		   $('#div_archivo').html('<input type="file" class="input-file" id="archivo" name="archivo" style="width:445px">');
 		});
+	
+
+	
+	
 });
 
 //---------------------------- Clase para agregar los anexos a la orden de pago -------------------------------------
@@ -68,6 +91,14 @@ function guardarAnexos(){
 		
 }
 
+function limpiarAnexos(){
+	$('#idDocumento').val('0');
+	$('#tipoMovDoc').val(0);	
+	$('#numeroDoc').val('');
+	$('#notaDoc').val('');
+	$('#tipoMovDoc').focus();
+	$('#archivo').val("");
+}
 //---------------------------------------------------------- Guarda los anexos de las ordenes de pago ------------------------------------------------------------------
 function subirArchivo(){
 	ShowDelay('Guardando anexo','');
@@ -120,7 +151,7 @@ function guardarDocumento(){
 						callback:function(items) { 	 
 						llenarTablaDeDocumentos();
 						lipiarDocumento();	    
-						 //CloseDelay("Anexos guardados con éxito");	  
+						 //CloseDelay("Anexos guardados con Ã©xito");	  
 						} 					   				
 						,
 						errorHandler:function(errorString, exception) { 
@@ -129,59 +160,20 @@ function guardarDocumento(){
 	 }); 
 }
 
-/*------------------------- funcion para mostrar la orden de pago llamada desde el listado de orden de pago --------------------------------------------------*/
-function mostrarOrdenPago(idOrden){
-			
-	if(idOrden!=0){
-		//ShowDelay('Cargando Orden de Pago','');
-		controladorOrdenPagoRemoto.getOrden(idOrden,{
-			
-	    callback:function(items) {
-	    	cbUnidad
-	    	//cbomes
-	    	$('#cbUnidad').selectpicker('val',items.ID_DEPENDENCIA);
-	    	$('#id_orden').val(items.CVE_OP);
-	    	$('#NoOrden').text(items.NUM_OP);
-			$('#xBeneficiario').selectpicker('val',items.CLV_BENEFI);	
-			$('#xNota').val(items.NOTA);
-			$('#tipoGasto').selectpicker('val',items.ID_RECURSO);	 
-			$('#xImporteIva').val(items.IMPORTE_IVA);
-			$('#estatus').val(items.STATUS);
-			$('#fecha').val(items.FECHA);
-			$('#xConcurso').val(items.NOTA);
-			if (items.REEMBOLSOF=='S')
-				$('#reembolso').prop('checked',true);
-			/*if ( parseInt($('#xTipo').prop("val")) != 5  ) {
-				 $('#tabsOrdenes').tabs( 'enable' , 4);			  
-			}*/
-			llenarTablaDeDocumentos();
-			llenarTablaDeDetallesOrdenes();
-			llenarTablaDeRetenciones();
-			llenarTablaDeVales();
-			//
-			//cambiarModoDetalle();
-				/*if(items.STATUS==-1){
-					  
-							
-				}
-				else jAlert('La Orden de Pago <strong>'+items.NUM_OP+'</strong> no esta preparada para su edición, verifique su estatus ó vuelva a aperturela y reintente la operación','Advertencia');*/
-	    } 					   				
-	    ,
-	    errorHandler:function(errorString, exception) { 
-	        //jError("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");          
-	}
-	},async=false );
-	}
-		
-		
-}
+function regresar(){
+    $('#tabsOrdenesEnca').hide(); 
+	$('#listaOrdenesPendientes').show();	
+	$('#DivOPResults').show();
+	limpiarForma();
+	llenarTablaDeOrdenes();
+ }
 
 //------------------------ Carga el listado de las facturas que se agregan en el movimiento de la orden de pago ------------------------
 function getFacturas(){
 	
-	var idDependencia = $('#cbUnidad').selectpicker('val');
+	var idDependencia = $('#cbUnidad').val();
 	var idRecurso = $('#tipoGasto').selectpicker('val');
-	alert('Dependencia: ' + idDependencia +'-----------'+ 'Recurso: ' + idRecurso);
+	//alert('Dependencia: ' + idDependencia +'-----------'+ 'Recurso: ' + idRecurso);
 	/*if(idDependencia==0||idDependencia=="") {//jAlert('Es necesario seleccionar la Unidad Administrativa para listar las facturas');
 		swal({
       	  title: 'Error!',
@@ -256,28 +248,28 @@ function editarVale(idVale,vale,importe,proyectoCuenta){
 
 function guardarVale(){
 	var error="";  
-   if ($('#proyectoCuenta').attr('value')==0) {jAlert('El Proyecto/Cuenta no es válido'); return false;}
-   if ($('#claveValeDis').attr('value')==""||$('#claveValeDis').attr('value')==0) {jAlert('El Vale no es válido'); return false;}
-   if ($('#importeVale').attr('value')=="" || parseFloat($('#importeVale').attr('value')==0)) {jAlert('El importe escrito para la comprobación no es válido'); return false;}
+   if ($('#proyectoCuenta').attr('value')==0) {swal('El Proyecto/Cuenta no es válido'); return false;}
+   if ($('#claveValeDis').attr('value')==""||$('#claveValeDis').attr('value')==0) {swal('El Vale no es válido'); return false;}
+   if ($('#importeVale').attr('value')=="" || parseFloat($('#importeVale').attr('value')==0)) {swal('El importe escrito para la comprobaciÃ³n no es vÃ¡lido'); return false;}
 	
 	var temp = $('#claveValeDis :selected').text().replace(',','');
 		temp = temp.replace('$','');
 		temp = temp.replace(' ','');
    var datos= temp.split('-');	 
    var textImporteDisponible = parseFloat((datos[1]).replace(',',''));
-	var imp_anterior = parseFloat($('#importeAntVale').attr('value'));
-	var imp_vale = parseFloat($('#importeVale').attr('value'));
+	var imp_anterior = parseFloat($('#importeAntVale').val());
+	var imp_vale = parseFloat($('#importeVale').val());
 	var imp_total_disp_vale = parseFloat(textImporteDisponible+imp_anterior);
 	//alert("Imp. Vale: "+imp_vale+"\nDisponible: "+textImporteDisponible+"\nDis. Anterior: "+imp_anterior+"\Disponible total Vale: "+imp_total_disp_vale);
-	if (imp_vale>(imp_total_disp_vale)) {jAlert('El importe de comprobación para el Vale no puede ser mayor al disponible actual del Vale'); return false;}
+	if (imp_vale>(imp_total_disp_vale)) {swal('El importe de comprobación para el Vale no puede ser mayor al disponible actual del Vale'); return false;}
 	  datos= $('#proyectoCuenta :selected').text().split('-');	 
-	  var proyecto = $('#proyectoCuenta').attr('value');
+	  var proyecto = $('#proyectoCuenta').val();
 	  var partida = datos[1];	 	 
-	  var idOrden=$('#id_orden').attr('value');
-	  /*jConfirm('¿Confirma que desea guardar la comprobacion de Vale para la Orden de Pago?','Guardar Vale', function(r){
+	  var idOrden=$('#id_orden').val();
+	  /*jConfirm('Â¿Confirma que desea guardar la comprobacion de Vale para la Orden de Pago?','Guardar Vale', function(r){
 			if(r){*/
 				  ShowDelay('Guardando vale','');
-				  controladorOrdenPagoRemoto.guardarVale( $('#idVale').attr('value'),$('#claveValeDis').attr('value'),$('#importeVale').attr('value'),textImporteDisponible,idOrden,proyecto,partida,$('#importeAntVale').attr('value'), {
+				  controladorOrdenPagoRemoto.guardarVale( $('#idVale').val(),$('#claveValeDis').val(),$('#importeVale').val(),textImporteDisponible,idOrden,proyecto,partida,$('#importeAntVale').val(), {
 				  callback:function(items) { 	
 				  if(items==""){
 					  	llenarTablaDeVales();
@@ -318,8 +310,6 @@ function eliminarVales(){
 			controladorOrdenPagoRemoto.eliminarVales(checkVales, idOrden, {
 			callback:function(items) {	
 				llenarTablaDeVales();
-			   //CloseDelay("Los vales se eliminaron con éxito");
-			   
 			} 					   				
 			,
 			errorHandler:function(errorString, exception) { 
@@ -344,8 +334,7 @@ function eliminarVales(){
 				)
 	  	})
 	 } else 
-	    //jAlert('Es necesario que seleccione un elemento de la lista', 'Advertencia');
-	 	swal('Oops...','Es necesario que seleccione un elemento de la lista','warning');
+	    swal('Oops...','Es necesario que seleccione un elemento de la lista','warning');
 }
 
  
@@ -366,25 +355,10 @@ function cargarVales(vale) {
 		   } 					   				
 	       ,
 	       errorHandler:function(errorString, exception) { 
-		   	  swal('Oops...','Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador','warning');
+		   	  swal('Oops 11...','Fallo la operacion:<br>Error:: ' + errorString + '-message:: ' + exception.message + '-JavaClass:: ' + exception.javaClassName + '.<br>Consulte a su administrador','warning');
 	       }
 	},async=false );
-    /*
-	
-    if ($('#proyectoCuenta').val()!=0) {
-		 
-		 controladorOrdenPagoRemoto.getValesDisponibles(proyecto,partida, {
-			   callback:function(items) { 				
-					dwr.util.addOptions('claveValeDis',{ 0:'[Seleccione]'});
-					dwr.util.addOptions('claveValeDis',items,"CVE_VALE", "DATOVALE");
-					$('#claveValeDis').val(vale);
-			   } 					   				
-		       ,
-		       errorHandler:function(errorString, exception) { 
-				//jError("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");
-		    	   swal('Oops...','Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador','warning');
-		       }
-		},async=false ); } */
+    
 }
 
 /*-------------------------------------------------- Terminan las clases de lso Vales ---------------------------------------------------------*/
@@ -437,6 +411,8 @@ function lipiarDocumento(){
 	$('#numeroDoc').attr('value',"");
 	$('#notaDoc').attr('value',"");
 }
+
+
 /*-------------------------- ESTA CLASE ES INUSUAL DADO QUE TODA LA INFORMACION PRESUPUESTAL VIENE DESDE LA FACTURA ------------------------------------------------*/
 function limpiarDetalle() {
 	$('#ID_PROYECTO').val(0);
@@ -460,6 +436,7 @@ function eliminarDocumentos(){
      $('input[name=clavesDocumentos]:checked').each(function() {  checkDocumentos.push($(this).val());	 });	 
 	 if (checkDocumentos.length > 0 ) {
 	 	var idOrden=$('#id_orden').val();
+	 	//var idOrden=$('#cve_orden').val();
 	 	swal({
 			  title: 'Eliminar anexos!',
 			  text: '¿Confirma que desea eliminar los anexos?',
@@ -474,7 +451,7 @@ function eliminarDocumentos(){
 					controladorOrdenPagoRemoto.eliminarDocumentos(checkDocumentos,idOrden, {
 					callback:function(items) { 	
 						llenarTablaDeDocumentos();	
-					   //CloseDelay("Anexos eliminados con éxito");
+					   //CloseDelay("Anexos eliminados con Ã©xito");
 					} 					   				
 					,
 					errorHandler:function(errorString, exception) { 
@@ -532,14 +509,23 @@ function obtiene_fecha() {
 	}
 	
 
-//---------------------- Muestra Listado de Facturas para generar la Orden de Pago -----------------
+//---------------------- Muestra Listado de Facturas para generar la Orden de Pago -----------------//jWindow 
 	function getDevenOP(){
-		jWindow('<iframe width="800" height="400" name="FAC" id="FAC" frameborder="0" src="../../sam/consultas/muestra_dev_op.action?idtipogasto=1"></iframe>','Devengado para la Orden de Pago', '','Cerrar',1);
+		//jWindow('<iframe width="800" height="400" name="FAC" id="FAC" frameborder="0" src="../../sam/consultas/muestra_dev_op.action?idtipogasto=1"></iframe>','Devengado para la Orden de Pago', '','Cerrar',1);
+		swal({
+			  title: 'Devengado para la Orden de Pago',
+			  //text: 'Seleccione el nuevo grupo de firma',
+			  html:
+				  '<iframe width="800" height="400" name="FAC" id="FAC" frameborder="0" src="../../sam/consultas/muestra_dev_op.action?idtipogasto=1"></iframe>',
+			  width: 800,
+			  padding: 10,
+			  animation: false
+			})
 	}	
 	
 //--------------------------------------Generar la Orden de Pago desde una lista de facturas *****------18/05/2017	
 function generarOPS(checkFacturas){
-	 alert ("demos del listado orden pago.js" + checkFacturas);
+	 //alert ("demos del listado orden pago.js" + checkFacturas);
 	
 	 //alert("id unidad" + $('#cbUnidad').val());
 	   controladorOrdenPagoRemoto.geraropxfacturas($('#cbUnidad').val(),checkFacturas,{
@@ -548,27 +534,28 @@ function generarOPS(checkFacturas){
 			} 					   				
 			,
 			errorHandler:function(errorString, exception) { 
-				//jError("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");       
+				swal('Oops 12...','Fallo la operacion:<br>Error:: ' + errorString + '-message:: ' + exception.message + '-JavaClass:: ' + exception.javaClassName + '.<br>Consulte a su administrador','warning');
 			}
 		
 	});
 }
 
-//----------------------------------- Funcion para guardar la Orden de Pago ---------------------------------------------
+//----------------------------------- Funcion para guardar la Orden de Pago Nueva ---------------------------------------------
 
 function guardar() {
    
    var tipo_gto = $('#tipoGasto').selectpicker('val');
-    /*if ($('#fecha').attr('value')=="") {//jAlert('La fecha de la Orden de Pago no es válida'); 
+   
+   /*if ($('#fecha').attr('value')=="") {//jAlert('La fecha de la Orden de Pago no es vÃ¡lida'); 
     	swal({
       	  title: 'Error!',
-      	  text: 'La fecha de la Orden de Pago no es válida',
+      	  text: 'La fecha de la Orden de Pago no es vÃ¡lida',
       	  type: 'error',
       	  confirmButtonText: 'Cool'
       	})
       	return false;};*/
     
-    if ($('#xBeneficiario').selectpicker('val')==null) {/*jAlert('El Beneficiario seleccionado no es válido');*/
+    if ($('#xBeneficiario').selectpicker('val')==null) {
     	swal({
         	  title: 'Error!',
         	  text: 'El Beneficiario seleccionado no es válido',
@@ -577,7 +564,14 @@ function guardar() {
         	})
     
     return false;}
-    if ($('#xNota').attr('value')=="") {jAlert('El concepto de la Orden de Pago no es válido'); return false;}
+    if ($('#xNota').val()=="") {//jAlert('El concepto de la Orden de Pago no es válido');
+    	swal({
+      	  title: 'Error!',
+      	  text: 'El concepto de la Orden de Pago no es válido',
+      	  type: 'error',
+      	  confirmButtonText: 'Cool'
+      	})
+    return false;}
     
    	//Comprobar el tipo de gasto al guardar
   
@@ -588,17 +582,18 @@ function guardar() {
 		  showLoaderOnConfirm: true,
 		  preConfirm: function () {
 		    return new Promise(function (resolve) {
-		    	alert("clave: " +$('#cve_op').val());
-		    	controladorOrdenPagoRemoto.validarTipoGasto(($('#cve_op').val()=='' ? 0:$('#cve_op').val()), tipo_gto, "", {
+		    	
+		    	controladorOrdenPagoRemoto.validarTipoGasto(($('#id_orden').val()=='' ? 0:$('#id_orden').val()), tipo_gto, "", {
 					callback:function(items){
 						if(items=='')
 							_guardarOP();
 						else
-							jError(items,'Error');
+							//jError(items,'Error');
+						swal(items,'error');
 					} 					   				
 					,
 					errorHandler:function(errorString, exception) { 
-						jError(errorString, 'Error');       
+						swal(errorString,'error');
 					}
 		    	});
 		        resolve();
@@ -606,8 +601,8 @@ function guardar() {
 		  }
 		}]).then(function (resolve) {
 			swal({
-				  title: 'Cerrando',
-				  text: 'Documento cerrado con exito. ', 
+				  title: 'Guardando',
+				  text: 'Documento guardado con exito. ', 
 				  timer: 3000,
 				  onOpen: function () {
 				    swal.showLoading()
@@ -626,19 +621,19 @@ function guardar() {
 
 function _guardarOP(){
 		
-		var idOrden=($('#cve_op').val()=='' ? 0:$('#cve_op').val());
+	
+		var idOrden=$('#id_orden').val();
 		var check = $('#reembolso').is(':checked');
 		var temp_check = "";
 		
 		if(check) temp_check = "S"; else temp_check = "N";
 	  	
-		alert("Checando propiedades: " + $('#xBeneficiario').selectpicker('val'));
-		alert("Checando propiedades 2: " + $('#xBeneficiario').selectpicker('val'));
+		//alert('Numero de OP: ' +idOrden );
 	  controladorOrdenPagoRemoto.guardarOrden( idOrden,$('#xTipo').selectpicker('val'),$('#fecha').val(),$('#xBeneficiario').selectpicker('val'),null,temp_check,$('#xConcurso').val(),$('#xNota').val(),$('#estatus').val(),null, $('#xImporteIva').val(),$('#cbUnidad').val(),$('#cbomes').selectpicker('val'),$('#tipoGasto').selectpicker('val'), ($('#CVE_CONTRATO').val()=='' ? 0:$('#CVE_CONTRATO').val()),{
 	  callback:function(items) {
 		  ID_DEPENDENCIA = $('#cbUnidad').attr('value');
-		  $('#id_orden').prop('value',items); 
-		  $('#cve_op').attr('value', items);     
+		  $('#id_orden').val(items); 
+		  $('#cve_op').val(items);     
 		  $('#NoOrden').html(rellenaCeros(items.toString(), 6));
 		  $('#tabsOrdenes').tabs( 'enable' , 1);
 		  $('#tabsOrdenes').tabs( 'enable' , 2);
@@ -655,69 +650,16 @@ function _guardarOP(){
 	}
 },async=false );
 }
-/*
-function buscarOrden( idOrden ) {	
-	
-	alert('demo aqui');	
 
-	ShowDelay('Cargando Orden de Pago','');
-	
-	controladorOrdenPagoRemoto.getOrden(idOrden,{
-    callback:function(items) {
-			if(items.STATUS==-1){
-				_closeDelay();	   
-				
-				
-				
-				llenarTablaDeDetallesOrdenes();
-				llenarTablaDeRetenciones();
-				llenarTablaDeDocumentos();
-				llenarTablaDeVales();
-				cambiarModoDetalle();
-			}
-			else jAlert('La Orden de Pago <strong>'+items.NUM_OP+'</strong> no esta preparada para su edición, verifique su estatus ó vuelva a aperturela y reintente la operación','Advertencia');
-    } 					   				
-    ,
-    errorHandler:function(errorString, exception) { 
-       // jError("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");          
-}
-},async=false );
-}*/
-
-
-// ----------------- Limpia el formulario de la orden de pago ----------------------------------
-function limpiarForma(){
-	$('#id_orden').val('');
-	$('#fecha').val('');
-	$('#xImporteIva').val('');
-	$('#xBeneficiario').selectpicker('refresh');
-	$('#xClaveBen').val('');
-	$('#xConcurso').val('');
-	$('#xNota').val('');
-	$('#NoOrden').text('');
-	//$('#NoFolio').text("");
-	$('#reembolso').prop('checked',false);
-	quitRow("listasDetallesOrdenes");
-	quitRow("listasDocumentos");
-	quitRow("listasRetenciones");
-	$('#tabsOrdenes').tabs('option', 'disabled', [1,2,3,4]);
-	$('#btnCerrar').prop('disabled',true);
-    $('#tipoGasto').selectpicker('refresh');
-	$('#xTipo').selectpicker('refresh');
-	lipiarDocumento();	
-	limpiarRetencion ();
-	removerContrato();
-}
-
-/* ------------------------------------- Mostrar documentos de ordenes de pago al mandar a editar una op ----------------------------------------------*/
+/* ------------------------------------- Mostrar Anexos de ordenes de pago al cargar o editar ----------------------------------------------*/
 // 1.- Entra en la clase de llenarTablaDeDocumentos
 // 2.- Llama la clase pintaDocumentos
 //-------------------------------- Muestra los Documentos anexos de la Orden de Pago----------------------------------
 function llenarTablaDeDocumentos() {
 	
 	 quitRow("listasDocumentos");
+	 //var idOrden=$('#cve_op').val();
 	 var idOrden=$('#id_orden').val();
-	
 	 controladorOrdenPagoRemoto.getDocumentosOrdenes(idOrden, {
        callback:function(items) { 		
 		jQuery.each(items,function(i) {
@@ -726,7 +668,7 @@ function llenarTablaDeDocumentos() {
        } 					   				
        ,
        errorHandler:function(errorString, exception) { 
-		jError("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");          
+    	   swal('Oops 13...','Fallo la operacion:<br>Error:: ' + errorString + '-message:: ' + exception.message + '-JavaClass:: ' + exception.javaClassName + '.<br>Consulte a su administrador','warning');
        }
    },async=false ); 
 }
@@ -758,10 +700,10 @@ function editarDocumento(idDocumento,tipoMovimiento,numero,nota){
 	$('#notaDoc').val(nota);
 } 
 
-/*------------ CARGAR DETALLES DEL DEVENGADO A LA ORDEN DE PAGO SELECCIONADO DESDE EL LISTADO MOSTRADO DE FACTURAS -------------*/
+/*------------ CARGAR DETALLES DEL DEVENGADO A LA ORDEN DE PAGO SELECCIONADO DESDE la LISTA DE FACTURAS -------------*/
 function generarDetallesFactura(checkIDs){
 	var cve_op = $('#id_orden').val();
-	
+	//alert("Numero de Orden de pago: "+ cve_op);
 	if (checkIDs.length > 0 ) {
 		swal({
 			  title: 'Incluir Facturas a la Orden de Pago!',
@@ -799,21 +741,25 @@ function generarDetallesFactura(checkIDs){
 	else
 		swal({
 	      	  title: 'Error!',
-	      	  text: 'Es necesario que seleccione un elemento de la lista para realizar esta operación',
+	      	  text: 'Es necesario que seleccione un elemento de la lista para realizar esta operaciÃ³n',
 	      	  type: 'error',
 	      	  confirmButtonText: 'Cerrar'
 	      	})
-		/*jAlert('Es necesario que seleccione un elemento de la lista para realizar esta operación', 'Advertencia');*/
+		/*jAlert('Es necesario que seleccione un elemento de la lista para realizar esta operaciÃ³n', 'Advertencia');*/
 	
 }
 
-/*Inicio Listado de ordenes*/
+//------------------------------ Inicio Listado de ordenes ------------------------------------------
+//----------------------------- Carga desde el listado de Ordenes de Pago y llama pintaOrdenes() ---------------------------------
 function llenarTablaDeOrdenes() {
 	 quitRow("listaOrdenes");
+	
 	 var tipo=$('#xTipo').selectpicker('val');
-	 var cveUnidad=$('#cbUnidad').selectpicker('val');//cbUnidad ---llenarTablaDeDetallesOrdenes
+	 var cveUnidad=$('#cbUnidad').val();//cbUnidad ---llenarTablaDeDetallesOrdenes
 	 var ejercicio=$('#ejercicio').val();
 	 var estatus=$('#estatus').val();
+	 
+	 //alert("Unidad: " +cveUnidad);
 	controladorOrdenPagoRemoto.getOrdenesTipo(cveUnidad ,ejercicio,estatus, {
        callback:function(items) { 		
 		jQuery.each(items,function(i) {
@@ -822,15 +768,116 @@ function llenarTablaDeOrdenes() {
        } 					   				
        ,
        errorHandler:function(errorString, exception) { 
-		//jError("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");
-    	  /* swal({
- 	      	  title: errorString,
- 	      	  //text: 'Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador',
- 	      	  type: 'error',
- 	      	  confirmButtonText: 'Cerrar'
- 	      	})*/
+    	   swal('Oops 14...','Fallo la operacion:<br>Error:: ' + errorString + '-message:: ' + exception.message + '-JavaClass:: ' + exception.javaClassName + '.<br>Consulte a su administrador','warning');
+    	   
        }
    },async=false ); 
+}
+
+//--------------------- Manda a llamar el listado de Ordenes de Pago desde la Clase mostrarOrdenPago llevando como parametro el id de la orden de pago
+function pintaOrdenes( table, consecutivo,id,numOp,fecha,estatus,nota,tipo){
+ 	var tabla = document.getElementById( table ).tBodies[0];
+ 	var row =   document.createElement( "TR" );    
+    var html = "<img src=\"../../imagenes/page_white_edit.png\" style='cursor: pointer;' alt=\"Editar registro\" width=\"16\" height=\"16\" border=\"0\" onClick='mostrarOrdenPago("+id+")' >"; 	
+	row.appendChild( Td(numOp,izquierda) );
+	row.appendChild( Td(tipo,izquierda) );
+	row.appendChild( Td(fecha,centro) );
+	row.appendChild( Td(nota,izquierda));
+	row.appendChild( Td(estatus) );
+	row.appendChild( Td("",centro,"",html) );
+	tabla.appendChild( row );
+ } 
+
+/*------------------------- funcion para mostrar la orden de pago llamada desde el listado de orden de pago --------------------------------------------------*/
+function mostrarOrdenPago(idOrden){
+	
+	if(idOrden!=0){
+		//ShowDelay('Cargando Orden de Pago','');
+		controladorOrdenPagoRemoto.getOrden(idOrden,{
+			
+	    callback:function(items) {
+
+	    	$('#cbUnidad').selectpicker('val',items.ID_DEPENDENCIA);
+	    	$('#id_orden').val(items.CVE_OP);
+	    	$('#CveOrdenOP').val(idOrden);
+	    	$('#NoOrden').text(items.NUM_OP);
+			$('#xBeneficiario').selectpicker('val',items.CLV_BENEFI);	
+			$('#xNota').val(items.NOTA);
+			$('#tipoGasto').selectpicker('val',items.ID_RECURSO);	 
+			$('#xImporteIva').val(items.IMPORTE_IVA);
+			$('#estatus').val(items.STATUS);
+			$('#fecha').val(items.FECHA);
+			$('#xConcurso').val(items.CONCURSO);
+			
+						
+			nuevaOp();
+			if (items.REEMBOLSOF=='S')
+				$('#reembolso').prop('checked',true);
+			
+			llenarTablaDeDetallesOrdenes();
+			llenarTablaDeRetenciones();
+			llenarTablaDeDocumentos();
+			llenarTablaDeVales();
+			
+	    } 					   				
+	    ,
+	    errorHandler:function(errorString, exception) { 
+	    	swal('Oops 6...','Fallo la operacion:<br>Error:: ' + errorString + '-message:: ' + exception.message + '-JavaClass:: ' + exception.javaClassName + '.<br>Consulte a su administrador','warning');
+	}
+	},async=false );
+	}
+}
+
+//---------------- Viene del boton generar nueva op, oculta controles ------------------------------------------------------------------
+function nuevaOp(){
+	$('#cve_op').val('');
+	$('#accion').val('');
+    $('#tabsOrdenesEnca').show(); 
+	$('#listaOrdenesPendientes').hide();
+	$('#DivOPResults').hide();
+	//$('#listaOrdenesPendientes').hide();//DivOPResults	
+    
+	//$("#DivOPResults").css("display", "none");
+	
+	//$("#DivHeadDependency").show();//Muesta el div de la unidad administrativa
+	//$("#DivOPResults").show();
+	//$('#tabsOrdenesEnca').show(); 
+	//$('#DivOPResults').hide();//DivHeadDependency
+	//$('.listaOrdenesPendientes').show();//listaOrdenesPendientes$(".listaOrdenesPendientes").hide();
+	//$('#listaOrdenesPendientes').css('display','block');
+	//listaOrdenesPendientes
+	//$('#DivHeadDependency').hide();//$(".DivHeadDependency").hide();
+	//$("#DivHeadDependency").css("display", "block");
+	//$("#DivOPResults").css("display", "block");
+	//getDevenOP();
+}
+
+//----------------- Limpia el formulario de la orden de pago ----------------------------------
+function limpiarForma(){
+	$('#cve_op').val('');
+	$('#id_orden').val('');
+	$('#fecha').val('');
+	$('#xImporteIva').val('');
+	$('#xBeneficiario').selectpicker('refresh');
+	$('#xClaveBen').val('');
+	$('#xConcurso').val('');
+	$('#xNota').val('');
+	$('#NoOrden').text('');
+	//$('#NoFolio').text("");
+	$('#reembolso').prop('checked',false);
+	quitRow("listasDetallesOrdenes");
+	quitRow("listasDocumentos");
+	quitRow("listasRetenciones");
+	//$('#tab_requi').nav navs-tabs('option', 'disabled', [1,2,3,4]);//demo tab_requi
+	//$("ul.nav li").removeClass('active').addClass('disabledTab');
+	$('.nav-tabs a[href="#tabsCabe"]').tab('show')
+	//$('.nav-tabs a[href="#' + tabs + '"]').tab('hide');
+	$('#btnCerrar').prop('disabled',true);
+    $('#tipoGasto').selectpicker('refresh');
+	$('#xTipo').selectpicker('refresh');
+	lipiarDocumento();	
+	limpiarRetencion ();
+	removerContrato();
 }
 
 /*---------------------------- Inicio de Vales ------------------------------------------*/
@@ -847,12 +894,7 @@ function llenarTablaDeVales() {
 	   } 					   				
         ,
         errorHandler:function(errorString, exception) { 
-		  	/*swal({
-   	      	  title: errorString,
-   	      	  text: 'Fallo la operacion:<br>Error: '+ errorString + '-message: '+exception.message+'-JavaClass: '+exception.javaClassName+'.<br>Consulte a su administrador',
-   	      	  type: 'error',
-   	      	  confirmButtonText: 'Cerrar'
-   	      	})*/
+        	swal('Oops 8...','Fallo la operacion:<br>Error:: ' + errorString + '-message:: ' + exception.message + '-JavaClass:: ' + exception.javaClassName + '.<br>Consulte a su administrador','warning');
         }
     },async=false ); 
  }
@@ -875,6 +917,97 @@ function llenarTablaDeRetenciones() {
 
 }
 
+function cerrarOrden( ) {
+	var tipo_gto = $('#tipoGasto').selectpicker('val');
+	/*jConfirm('¿Confirma que desea cerrar la Orden de Pago?','Cerrar Orden Pago', function(r){
+			if(r){			
+				ShowDelay('Cerrando Orden de Pago','');	
+				controladorOrdenPagoRemoto.validarTipoGasto($('#id_orden').attr('value'), tipo_gto, "x", {
+							callback:function(items){
+								if(items=='')
+									_cerrarOrden();
+								else
+									jError(items,'Advertencia');
+							} 					   				
+							,
+							errorHandler:function(errorString, exception) { 
+								jError(errorString, 'Error'); 
+							}
+						
+			});
+		}
+	});*/
+
+	swal({
+		  title: 'Cerrar Orden de Pago',
+		  text: '¿Confirma que desea cerrar la Orden de Pago?',
+		  type: 'question',
+		  showCancelButton: true,
+		  confirmButtonColor: '#3085d6',
+		  cancelButtonColor: '#d33',
+		  confirmButtonText: 'Si, cerrar'
+		}).then(function (r) {
+			if(r){
+				swal.showLoading('Cerrando la orden de pago');
+				controladorOrdenPagoRemoto.validarTipoGasto($('#id_orden').val(), tipo_gto, "x", {
+					callback:function(items){
+						if(items=='')
+							_cerrarOrden();
+						else
+							swal('Oops...',errorString,'info');
+					} 					   				
+					,
+					errorHandler:function(errorString, exception) { 
+						swal('Oops...',errorString,'error');
+					}
+			},async=false );
+		}
+			swal({
+				  title: 'Confirmacion',
+				  text: 'La orden de pago se cerro correctamente!..',
+				  timer: 2000,
+				  onOpen: function () {
+				    swal.showLoading()
+				  }
+				}).then(
+				  function () {},
+				  // handling the promise rejection
+				  function (dismiss) {
+				    if (dismiss === 'timer') {
+				      console.log('I was closed by the timer')
+				    }
+				  }
+				)
+		})
+}
+
+function _cerrarOrden(){
+	controladorOrdenPagoRemoto.cerrarOrden( $('#id_orden').val(), {
+				callback:function(items) {
+					if (items != "exito")
+							jAlert(items, 'Advertencia');
+					   else {
+						   getReporteOP($('#id_orden').val());
+						   limpiarForma();
+						   $('#btnCerrar').prop('disabled',true);	
+						   CloseDelay("Orden de Pago cerrada con éxito");
+					   }	  
+				} 					   				
+				,
+				errorHandler:function(errorString, exception) { 
+					swal('Oops...',errorString,'error');
+				}
+			
+		});
+}
+function getReporteOP(clave) {
+	$('#cve_op').attr('value',clave);
+	$('#forma').attr('action',"../reportes/formato_orden_pago.action");
+	$('#forma').attr('target',"impresion");
+	$('#forma').submit();
+	$('#forma').attr('target',"");
+	$('#forma').attr('action',"");
+	}
 
 function pintaRetenciones( table, consecutivo,idRetencion,idTipoRetencion,retencion,importe){
  	var tabla = document.getElementById( table ).tBodies[0];
@@ -909,9 +1042,9 @@ function guardarRetencion(){
  	var clv_retencion = $('#retencion').selectpicker('val');
  	
 	var idOrden=$('#id_orden').attr('value');
-   if($('#retencion').selectpicker('val')=="") {jAlert('El tipo de Retención no es válido','Advertencia'); return false;}
-   if($('#importeRetencion').attr('value')=="") {jAlert('El Importe de la Retención no es válido','Advertencia'); return false;}
-	//ShowDelay('Guardando retención','');
+   if($('#retencion').selectpicker('val')=="") {swal('El tipo de Retención no es válido','Advertencia'); return false;}
+   if($('#importeRetencion').attr('value')=="") {swal('El Importe de la Retención no es válido','Advertencia'); return false;}
+	//ShowDelay('Guardando retenciÃ³n','');
     swal.showLoading();
 	controladorOrdenPagoRemoto.guardarRetencion($('#idRetencion').val(),clv_retencion,$('#importeRetencion').val(),cveParbit,idOrden,{
 	callback:function(items) { 	 
@@ -992,7 +1125,8 @@ function llenarTablaDeDetallesOrdenes() {
 	var c =0;
 	var imp_total = 0;
 	 quitRow("listasDetallesOrdenes");
-	 var idOrden=$('#cve_op').val();
+	 //var idOrden=$('#cve_op').val();
+	 var idOrden=$('#id_orden').val();
 	 controladorOrdenPagoRemoto.getDetallesOrdenes(idOrden, {
         callback:function(items) { 		
 		jQuery.each(items,function(i) {
@@ -1004,7 +1138,9 @@ function llenarTablaDeDetallesOrdenes() {
 		getSelectGrados(items);
 		 
 		if (items.length > 0) {
-			$('#tabsOrdenes').tabs( 'enable' , 1);
+			
+			//$('#nav nav-tabs').tabs( 'active' , 1);
+			$('#tabsOrdenesPane a:first').tab('show');
 		    $('#btnCerrar').prop('disabled',false);
 		    $('#tipoGasto').prop('disabled',true);
 			$('#xTipo').prop('disabled',true);
@@ -1017,11 +1153,32 @@ function llenarTablaDeDetallesOrdenes() {
         } 					   				
         ,
         errorHandler:function(errorString, exception) { 
-        	//swal('Oops...','Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador','error');	
+        	swal('Oops 9...','Fallo la operacion:<br>Error:: ' + errorString + '-message:: ' + exception.message + '-JavaClass:: ' + exception.javaClassName + '.<br>Consulte a su administrador','warning');	
         }
     },async=false ); 
 
  }
+function pintarTotalConceptos(tabla, importe_total){
+	var tabla = document.getElementById(tabla).tBodies[0];
+ 	var row =   document.createElement( "TR" );    
+	var htmlEdit = '<strong>'+formatNumber(importe_total, '$')+'</strong>';
+	row.appendChild( Td('',centro,'',''));
+	row.appendChild( Td('',centro,'',''));
+	row.appendChild( Td('',centro,'',''));
+	row.appendChild( Td('',centro,'',''));
+	row.appendChild( Td('',centro,'',''));
+	row.appendChild( Td('',centro,'',''));
+	row.appendChild( Td('',derecha,"",htmlEdit));
+	row.appendChild( Td('',centro,'',''));	
+	tabla.appendChild(row);
+}
+function getSelectGrados(datos) {		
+    lipiarVale();
+	dwr.util.removeAllOptions("proyectoCuenta");
+	dwr.util.addOptions('proyectoCuenta',{ 0:'Seleccione' });
+	dwr.util.addOptions('proyectoCuenta',datos,"ID_PROYECTO", "PROYECTOPARTIDA" );		
+}
+
 function CargarIvaFactura()
 {
 	var cve_op = $('#id_orden').attr('value');
@@ -1035,16 +1192,6 @@ function CargarIvaFactura()
 				jError(errorString, 'Error');
 			}
 	}); 				
-}
-//Manda a generar la nueva Orden de Pago
-function nuevaOp(){
-	$('#cve_op').prop('value','');
-	$('#accion').prop('value','');
-    $('#tabsOrdenesEnca').show(); 
-	$('#DivOPResults').hide();
-	$('#listaOrdenesPendientes').hide();
-	$('#DivHeadDependency').hide();
-	getDevenOP();
 }
 
 /*
@@ -1163,7 +1310,7 @@ function pintaDetallesOrdenes( table, consecutivo,unidad, idproyecto, proyecto,p
 
 //--------------------------------------Generar la Orden de Pago desde una lista de facturas------18/05/2017	
 function generarOPS(checkFacturas){
-	 alert ("demos del listado orden pago.js");
+	 //alert ("demos del listado orden pago.js");
 
 	   controladorOrdenPagoRemoto.geraropxfacturas($('#cbounidad').val(),checkFacturas.toString(),{
 			callback:function(items){
@@ -1171,7 +1318,7 @@ function generarOPS(checkFacturas){
 			} 					   				
 			,
 			errorHandler:function(errorString, exception) { 
-				jError("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");       
+				swal('Oops 10...','Fallo la operacion:<br>Error:: ' + errorString + '-message:: ' + exception.message + '-JavaClass:: ' + exception.javaClassName + '.<br>Consulte a su administrador','warning');
 			}
 		
 	});

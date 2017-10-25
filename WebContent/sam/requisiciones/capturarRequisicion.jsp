@@ -54,13 +54,13 @@
 	<div class="panel with-nav-tabs panel-primary">
 		<div class="panel-heading">
 	 		<ul class="nav nav-tabs responsive" id="tab_requi">
-	 			<li class="active"><a href="#tab1primary" data-toggle="tab">Información general</a></li>
-                <li><a href="#tab2primary" data-toggle="tab">Lotes</a></li>
+	 			<li class="active"><a href="fragment-requisicion" data-toggle="tab">Información general</a></li>
+                <li><a href="#fragment-conceptos" data-toggle="tab">Lotes</a></li>
          	</ul>
 		</div><!--close panel con navtabas-->
 	<div class="panel-body">
-	 	 <div class="tab-content">
-	 	 	<div class="tab-pane fade in active" id="tab1primary">
+	 	<div class="tab-content">
+	 	 	<div class="tab-pane fade in active" id="fragment-requisicion">
 	 	 		<form class="form-horizontal">
 	 	 		 	<div><strong>Nota:</strong> La información marcada con (*) es requerida pestaña 1</div>
            		<!--Unidad administrativa-->
@@ -125,7 +125,7 @@
 						<div class="form-group col-sm-3">&nbsp;</div>
                     </div>
                   </div>
-                <!-- Tipo-->
+                <!-- Tipo
                     <div class="row">
                       <div class="form-group">
                         <div class="control-label col-sm-3 ">*Tipo:</div>
@@ -141,7 +141,7 @@
 						    </select>
                         </div>
                       </div>
-                    </div>  
+                    </div>  -->
                 <!--Notas-->
                   <div class="row">
                     <div class="form-group">
@@ -191,7 +191,7 @@
                     <div class="form-group">
                         <div class="control-label col-sm-3 ">*Programa:</div>
                          <div class="col-sm-2">
-								<input placeholder="Proyecto" type="text" class="form-control sm" name="txtproyecto" required title="Se necesita un número de proyecto" id="txtproyecto" maxlength="4"/>
+								<input placeholder="Proyecto" type="text" class="form-control sm" name="txtproyecto" id="txtproyecto" maxlength="4"/>
 							</div>
 							<label class="control-label col-sm-1" for="txtproyecto">*Partida:</label>
 							<div class="col-sm-2">
@@ -217,11 +217,11 @@
                     <div class="form-group">
                         <div class="control-label col-sm-3 ">Total del Vale:</div>
                       		<div class="col-sm-2">
-								<input type="text" name="txtpresupuesto" id="txtpresupuesto" class="form-control sm" disabled="disabled" />
+								<input type="text" placeholder="txtpresupuesto" name="txtpresupuesto" id="txtpresupuesto" class="form-control sm" disabled="disabled" />
 							</div>
 							<label class="control-label col-sm-1" for="txtfecha">Descontado Vale:</label>
 							<div class="col-sm-2">
-								<input type="text" id="txtcomprobadovale" name="txtcomprobadovale" disabled class="form-control sm" maxlength="4"  onKeyPress=" return keyNumbero( event );"/>
+								<input type="text" placeholder="txtcomprobadovale" id="txtcomprobadovale" name="txtcomprobadovale" disabled class="form-control sm" maxlength="4"  onKeyPress=" return keyNumbero( event );"/>
 							</div>
                     </div>
                   </div>       
@@ -233,11 +233,11 @@
                         <div class="control-label col-sm-3 ">*Placas:</div>
                         <div class="form-group col-sm-5">
                             <div class="col-sm-2">
-								<input type="text" id="txtplacas" maxlength="10" class="form-control sm" style="width:150px" />
+								<input type="text" placeholder="txtplacas" id="txtplacas" maxlength="10" class="form-control sm" style="width:150px" />
 							</div>
 							<label class="control-label col-sm-1" for="txtproyecto">*Color:</label>
 							<div class="col-sm-2">
-								<input type="text" id="txtcolor" maxlength="15" class="form-control sm" style="width:100px" />
+								<input type="text" placeholder="txtcolor" id="txtcolor" maxlength="15" class="form-control sm" style="width:100px" />
 							</div>
 							<label class="control-label col-sm-1" for="cbomeses">*Area:</label>
 							<div class="col-sm-2">
@@ -282,19 +282,17 @@
                   <div class="row">
                     <div class="form-group">
                         <div class="control-label col-sm-3 ">Tipo de bien:</div>
-                        <div class="form-group col-sm-5">
-                            <div class="col-sm-2">
-								<input type="text" placeholder="Tipo de bien" id="txttipobien"  maxlength="15" class="form-control sm" style="width:150px" />
-							</div>
-							<label class="control-label col-sm-1" for="txtproyecto">Marca::</label>
+                        <div class="col-sm-2">
+                           	<input type="text" placeholder="Tipo de bien" id="txttipobien"  maxlength="15" class="form-control sm" style="width:150px"/>
+                           </div>
+							<!-- <label class="control-label col-sm-1" for="txtproyecto">Marca::</label> -->
 							<div class="col-sm-2">
 								<input type="text" placeholder="Marca" id="txtmarca" class="form-control sm" maxlength="15" style="width:100px" />
 							</div>
-							<label class="control-label col-sm-1" for="cbomeses">Modelo:</label>
+							<!-- <label class="control-label col-sm-1" for="cbomeses">Modelo:</label> -->
 							<div class="col-sm-2">
 								<input type="text" placeholder="Modelo" id="txtmodelo" maxlength="20" class="form-control sm" style="width:150px" />
 							</div>
-                        </div>
                      </div>
                   </div> 
                   <!--Usuario, Num. Invent-->
@@ -302,7 +300,7 @@
                     <div class="form-group">
                         <div class="control-label col-sm-3 ">Usuario:</div>
                       		<div class="col-sm-2">
-								<input type="text" placeholder="Usuario" id="txtusuario" maxlength="50" class="form-control sm" style="width:404px" />
+								<input type="text" placeholder="Usuario" id="txtusuario" maxlength="50" class="form-control sm"/>
 							</div>
 							<label class="control-label col-sm-1" for="txtfecha">Num. Invent:</label>
 							<div class="col-sm-2">
@@ -326,8 +324,9 @@
           
 	 	</form><!--form-horizontal-->
 	</div><!--tab1primary-->
-	<div class="tab-pane fade" id="tab2primary">
-		<form class="form-horizontal">
+			<div class="tab-pane fade" id="fragment-conceptos">
+			<div id="div_conceptos">
+				<form class="form-horizontal">
 	 	 			<div><strong>Nota:</strong> La información marcada con (*) es requerida pestaña 2</div>
 	 	 			<input name="ID_REQ_MOVTO" type="hidden" id="ID_REQ_MOVTO" value="0" />
 					<input name="ID_ARTICULO" type="hidden" id="ID_ARTICULO" value="0" />
@@ -365,7 +364,7 @@
 							</div>
                     </div>
                   </div>
-                   <!--Descripción-->
+                <!--Descripción-->
                   <div class="row">
                     <div class="form-group">
                         <div class="control-label col-sm-3 ">*Descripción:&nbsp;</div>
@@ -374,7 +373,7 @@
 							</div>
 					</div>
                   </div>     
-            <!--Nuevo lote-->
+           		<!--Nuevo lote-->
                   <div class="row">
                     <div class="form-group">
                         <div class="control-label col-sm-3 "></div>
@@ -384,7 +383,7 @@
 							</div>
 					</div>
                   </div>         
-	        <!--Botones-->
+	        	<!--Botones-->
                   <div class="row">
                     <div class="form-group">
                         <div class="control-label col-sm-3 "></div>
@@ -410,14 +409,10 @@
 					</div>
                   </div>  
 				</form><!--form tab2primary-->
-	 	 	</div><!--tab2primary-->
-
-			
-			
-                
-
-	 	 </div><!--tab-content-->
-	 </div><!--panel-body-->
+	 	 	</div><!--div_conceptos-->
+	 	 	</div><!--fragment-conceptos-->
+		 </div><!--tab-content-->
+	</div><!--panel-body-->
 	</div><!--Cierra Panel with-nav-->
 </div><!--col-12-->
 

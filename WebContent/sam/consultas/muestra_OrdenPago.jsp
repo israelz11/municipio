@@ -9,7 +9,15 @@
 <title></title>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
 <link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css"/>
-<script type="text/javascript" src="../../include/js/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="../../include/js/jquery-2.1.3.min.js?x=<%=System.currentTimeMillis()%>"></script>
+<script type="text/javascript" src="../../include/js/bootstrap-3.3.7.js"></script>
+<script type="text/javascript" src="../../include/js/sweetalert2.js?x=<%=System.currentTimeMillis()%>"></script>
+
+<link rel="stylesheet" href="../../include/css/bootstrap-3.3.7.css" type="text/css"/>
+<link rel="stylesheet" href="../../include/css/bootstrap2.css" type="text/css"/>
+<link rel="stylesheet" href="../../include/css/sweetalert2.css" type="text/css"/>
+
+
 <script type="text/javascript" src="../../include/js/toolSam.js"></script>
 <style type="text/css">
 <!--
@@ -34,7 +42,7 @@ a:active {
 -->
 </style>
 <script language="javascript">
-<!--
+
 
 function cargarMovimientosOP()
 {	
@@ -51,7 +59,7 @@ function cargarOrdenPago(cve_op, num_op)
 	
 	//document.location = "muestra_OrdenPago.action?cve_op="+cve_ped+"&num_op="+num_ped+"&idDependencia="+<c:out value='${idDependencia}'/>;
 }
--->
+
 </script>
 
 </head>

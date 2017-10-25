@@ -126,13 +126,12 @@ function muestraPresupuesto(){
 
 	__listadoPresupuesto($('#ID_PROYECTO').attr('value'),$('#txtproyecto').attr('value'),$('#txtpartida').attr('value'), $('#cbomes').attr('value'), 0, idUnidad);
 }
- 
-/*---------------------  Elimina el vale en el listado de la comprobacion del Vale  --------------------------------------*/
+
  function eliminarVales(){
 	  var checkVales = [];
      $('input[name=chkVale]:checked').each(function() { checkVales.push($(this).val());	 });	 
 	 if (checkVales.length > 0 ) {
-   	 var idOrden=$('#id_orden').attr('value');
+   	 var idOrden=$('#id_orden').val();
 	 jConfirm('¿Confirma que desea aliminar la comprobación de Vale?', 'Eliminar Vale', function(r){
 		 		ShowDelay('Eliminando vale(s)','');
 				controladorFacturasRemoto.eliminarVales(checkVales, {
@@ -238,6 +237,7 @@ function muestraPresupuesto(){
 
 function llenarTablaDeVales() {
 	 quitRow("listasVales");
+	 
 	 controladorFacturasRemoto.getListaVales($('#CVE_FACTURA').val(), {
         callback:function(items) { 		
 		jQuery.each(items,function(i) {
@@ -266,7 +266,23 @@ function llenarTablaDeVales() {
  }
  
  function editarVale(idVale,cve_vale,importe,proyectoCuenta){
-	$('#idVale').attr('value',idVale);
+	 swal({
+		  title: 'En modificación',
+		  text: 'No se permite editar, elimine el movimiento y capture de nuevo',
+		  timer: 5000,
+		  onOpen: function () {
+		    swal.showLoading()
+		  }
+		}).then(
+		  function () {},
+		  // handling the promise rejection
+		  function (dismiss) {
+		    if (dismiss === 'timer') {
+		      console.log('I was closed by the timer')
+		    }
+		  }
+		)
+	/*$('#idVale').attr('value',idVale);
 	$('#CVE_VALE').attr('value',cve_vale);
 	//$('#cboproyectocuenta').val(proyectoCuenta);
 	$("#cboproyectocuenta option").filter(function() {
@@ -274,7 +290,7 @@ function llenarTablaDeVales() {
 		return (jQuery.trim($(this).text().replace(' ','')).replace(' ', '') )== jQuery.trim(proyectoCuenta); 
 	}).attr('selected', true);
 	$('#txtimporteVale').attr('value',importe);	
-	cargarVales(cve_vale);
+	cargarVales(cve_vale);*/
 	
  } 
  
@@ -298,29 +314,7 @@ function llenarTablaDeVales() {
 		},async=false ); 
 	} 
  }
-/*
- function insertaConceptoVale(){
-	 datos= $('#cboproyectocuenta :selected').text().split('-');	 
-	 var proyecto = jQuery.trim($('#cboproyectocuenta').attr('value'));
-	 var clv_partid = jQuery.trim(datos[1]);	 	 
-	 datosVale = $('#cboVales :selected').text().split('>');
-	 var vale = parseInt(jQuery.trim(datosVale[0]));
-	 var importe = $('#txtimporteVale').attr('value');
-	 //var idMovVale = $('#idVale').attr('value');
-	 
-	 controladorFacturasRemoto.insertaConceptoVale(vale,importe,importeVale,proyecto,partida, {
-		  callback:function(items){
-		  lipiarVale();
-		  CloseDelay("Comprobacion de Vale agregada con exito");  
-	} 					   				
-	,
-		errorHandler:function(errorString, exception) { 
-			jError(errorString,'Error');   
-		}
-	 });	
- }*/
- 
- // GRABA EL VALE EN FACTURAS_MOV_VALES
+
 function guardarVale(){
 	var error="";  
 	if($('#CVE_FACTURA').val()=='' || $('#CVE_FACTURA').val()==0){jAlert('No se puede guardar el Vale hasta que guarde la factura'); return false;}
@@ -340,10 +334,9 @@ function guardarVale(){
 	  
 	controladorFacturasRemoto.guardarComprobacionVale(idMovVale, cve_factura, cve_vale, proyecto, clv_partid, importe, {
 			  callback:function(items){
-			  lipiarVale();
-			  CloseDelay("Comprobacion de Vale agregada con exito");  
-			  llenarTablaDeVales();
-			  //insertaConceptoVale();
+				  lipiarVale();
+				  CloseDelay("Comprobacion de Vale agregada con exito");  
+				  llenarTablaDeVales();
 							 
 		} 					   				
 		,
@@ -718,8 +711,16 @@ function muestraTiposDocumento(){
 		if(typeof(idDependencia)=='undefined') idDependencia =0;
 		
 		if($('#CVE_DOC').attr('value')=='') $('#CVE_DOC').attr('value', 0);
-		jWindow('<iframe width="750" height="350" name="ventanaVales" id="ventanaVales" frameborder="0" src="../../sam/consultas/muestra_contratos.action?cve_contrato='+$('#CVE_DOC').attr('value')+'&idDependencia='+idDependencia+'&num_contrato='+num_docto+'"></iframe>','Listado Contratos', '','Cerrar',1);
-
+		//jWindow('<iframe width="750" height="350" name="ventanaVales" id="ventanaVales" frameborder="0" src="../../sam/consultas/muestra_contratos.action?cve_contrato='+$('#CVE_DOC').attr('value')+'&idDependencia='+idDependencia+'&num_contrato='+num_docto+'"></iframe>','Listado Contratos', '','Cerrar',1);
+		swal({
+			  title: 'Listado Contratos',
+			  text: 'Seleccione el contrato que desea devengar',
+			  html:
+				  '<iframe width="750" height="350" name="ventanaVales" id="ventanaVales" frameborder="0" src="../../sam/consultas/muestra_contratos.action?cve_contrato='+$('#CVE_DOC').attr('value')+'&idDependencia='+idDependencia+'&num_contrato='+num_docto+'"></iframe>',
+			  width: 800,
+			  padding: 10,
+			  animation: false
+			})
 	}
 
 }

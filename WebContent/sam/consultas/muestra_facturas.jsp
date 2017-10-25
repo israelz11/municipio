@@ -43,7 +43,7 @@ function cargarDocumentos(){
 		cont++;
 	});
 	
-		window.parent.generarDetallesFactura(checkID);
+		window.parent.generarDetallesFactura(checkID); //Clase que envia parametros a Ordene_pago.js
 }
 
 </script>

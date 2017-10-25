@@ -24,7 +24,7 @@ function __getPresupuesto(idproyecto, proyecto, partida, mes,  ctrl_presupuesto,
 							$('#txtpartida').attr('value', '');
 							$('#'+ctrl_presupuesto).attr('value', '');
 							$('#'+ctrl_disponible).attr('value', '');
-							jAlert("El programa ó partida especificados no existe ó no tiene privilegios para visualizarlo", "Advertencia");	  
+							jAlert("El programa Ã³ partida especificados no existe Ã³ no tiene privilegios para visualizarlo", "Advertencia");	  
 						}
 							
 					}
@@ -51,7 +51,7 @@ function __getPresupuesto(idproyecto, proyecto, partida, mes,  ctrl_presupuesto,
 							$('#txtpartida').attr('value', '');
 							$('#'+ctrl_presupuesto).attr('value', '');
 							$('#'+ctrl_disponible).attr('value', '');
-							jAlert("El programa ó partida especificados no existe ó no tiene privilegios para visualizarlo - Vales", "Advertencia");	  
+							jAlert("El programa Ã³ partida especificados no existe Ã³ no tiene privilegios para visualizarlo - Vales", "Advertencia");	  
 						}
 							
 					}

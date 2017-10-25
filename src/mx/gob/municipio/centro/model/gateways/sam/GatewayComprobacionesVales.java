@@ -68,7 +68,7 @@ public  String actualizarConceptoPrincipalVale(Integer idVale,Integer vale,doubl
 	
 	//Comprobar que el vale no sobrepasa en lo comprobado al neto de la OP en proyecto y partida
 	if(idOrden!=null){
-		//Correccion agregada en codigo SQL [AND CVE_VALE =?] para filtrar desde lista de anexos de vales en multiples vales
+		//Correccion agregada en codifo SQL [AND CVE_VALE =?] para filtrar desde lista de anexos de vales en multiples vales
 		Double neto_op = (Double) this.getJdbcTemplate().queryForObject("SELECT "+
 																				"ROUND((ISNULL((SELECT SUM(MONTO) FROM SAM_MOV_OP WHERE CVE_OP =  M.CVE_OP AND ID_PROYECTO = M.ID_PROYECTO AND CLV_PARTID = M.CLV_PARTID),0) - "+
 																				"ISNULL((SELECT SUM(IMPORTE) FROM COMP_VALES WHERE CVE_OP = M.CVE_OP AND ID_PROYECTO = M.ID_PROYECTO AND CLV_PARTID = M.CLV_PARTID AND ID_VALE<>ISNULL(?,0)),0)),2) AS NETO "+ 
@@ -117,7 +117,6 @@ public void actualizarConcepto(Integer idVale,double importe, int proyecto, Stri
 			this.getJdbcTemplate().update("update SAM_VALES_EX  set  STATUS=? where   CVE_VALE=?  ", new Object[]{ VAL_ESTATUS_PAGADO,vale});
 	} 
 
-	/*  -------------------      Actualiza los detalles del vale en la tabla concep vale         ------------------------------*/
 	public void actualizarConceptoVale(Integer vale,double importeVale, double importeValeAnte, int proyecto, String partida){	
 		this.getJdbcTemplate().update("update CONCEP_VALE  set  DESCONTADO=DESCONTADO+?-?   where  CONS_VALE=1 AND CVE_VALE=? AND ID_PROYECTO =? AND CLV_PARTID =? "
 				, new Object[]{importeVale,importeValeAnte,vale, proyecto, partida});

@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css">
 <link type="text/css" href="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.css" rel="stylesheet" />
 <link rel="stylesheet" href="../../include/js/autocomplete/jquery.autocomplete.css" type="text/css" />	
-<script type="text/javascript" src="../../include/js/jquery-1.3.2.min.js?x=<%=System.currentTimeMillis()%>"></script>
+<script type="text/javascript" src="../../include/js/jquery-1.3.2.min.js"></script>
 <script type="text/javascript" src="../../include/js/toolSam.js"></script>
 <script type="text/javascript" src="lst_facturas.js?x=<%=System.currentTimeMillis()%>"> </script>
 <script type="text/javascript" src="../../include/js/autocomplete/jquery.autocomplete.js"></script>
@@ -60,17 +60,15 @@ a:active {
     <td colspan="3">
       <sec:authorize ifNotGranted="ROLE_Sam_PRIVILEGIOS_VER_TODAS_LAS_UNIDADES">
         <c:out value="${nombreUnidad}"/>
-        <input type="hidden" id="dependencia" name="dependencia" value="<c:out value='${idUnidad}'/>">
-        <input type="hidden" name="todo" id="todo" value="0">
+        <input type="hidden" id="cbodependencia" name="cbodependencia" value="<c:out value='${cbodependencia}'/>">
         </sec:authorize>
       <sec:authorize ifAllGranted="ROLE_Sam_PRIVILEGIOS_VER_TODAS_LAS_UNIDADES">
-      <input type="hidden" name="todo" id="todo" value="1">
         <div class="styled-select">
-          <select name="dependencia" id="dependencia" style="width:445px">
-              <option value="0" <c:if test='${item.ID==0}'> selected </c:if>>[Todas las Unidades Administrativas]</option>
+          <select name="cbodependencia" id="cbodependencia" style="width:445px">
+            <option value="0">[Todas las Dependencias]</option>
             <c:forEach items="${unidadesAdmiva}" var="item" varStatus="status"> 
               <option value='<c:out value="${item.ID}"/>' 
-                            <c:if test='${item.ID==idUnidad}'> selected </c:if>>
+                            <c:if test='${item.ID==cbodependencia}'> selected </c:if>>
               <c:out value='${item.DEPENDENCIA}'/>
               </option>
               </c:forEach>
@@ -122,7 +120,7 @@ a:active {
 <table width="95%" border="0" cellpadding="0" cellspacing="0" class="listas" align="center" id="listaDocumentos">
  <thead>
   <tr>
-    <th width="3%" height="20"><input type="checkbox" name="checkTodos" id="checkTodos"></th>
+    <th width="4%"><input type="checkbox" name="todos" id="todos"></th>
     <th width="9%">Num. Factura</th>
     <th width="7%">Pedido</th>
     <th width="7%">Requisicóon</th>
@@ -189,7 +187,8 @@ a:active {
  	      </sec:authorize>
  	    </tr>
  	  </table>
-      </tr>
+    
+    </tr>
   </tbody>  
 </table>
 </form>

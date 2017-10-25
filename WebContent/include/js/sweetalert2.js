@@ -1624,7 +1624,7 @@ sweetAlert.clickCancel = function () {
 };
 
 /*********************************************************************************************************************************
- * 						Show spinner instead of Confirm button and disable Cancel button	 //Mostrar el spinner en lugar del botón Confirmar y desactivar el botón Cancelar									 *	
+ * 						Show spinner instead of Confirm button and disable Cancel button	 //Mostrar el spinner en lugar del botÃ³n Confirmar y desactivar el botÃ³n Cancelar									 *	
  *********************************************************************************************************************************/
 sweetAlert.showLoading = sweetAlert.enableLoading = function () {
   var modal = getModal();
