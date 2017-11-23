@@ -121,11 +121,15 @@ public class GatewayRequisicion  extends BaseGateway {
 		Date fecha_ingreso = new Date();
 		//comprobar la disponibilidad del numero de requisicion
 		boolean c = comprobarExistencia(num_req);
+		
+			
 		if(!c){
+			
 			cve_req = getNumeroRequisicion(ejercicio)+1;
+			System.out.println("Demo de impresion" +cve_req);
 			String SQL = "INSERT INTO SAM_REQUISIC (CVE_REQ, NUM_REQ, CVE_CONTRATO, CVE_VALE, EJERCICIO, ID_PROYECTO, CLV_PARTID, ID_DEPENDENCIA, FECHA, TIPO, OBSERVA, FECHA_CAP, FECHA_INGRESO, CVE_PERS, STATUS, COMPROMETE, PERIODO, ANUALIZADA, ID_GRUPO ) " +
 						 "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-			this.getJdbcTemplate().update(SQL, new Object[]{cve_req, num_req, (cve_contrato==0 ? null:cve_contrato), (cve_vale==0 ? null:cve_vale), ejercicio, id_proyecto, partida, cve_unidad, fecha, tipo, notas, fecha_cap, fecha_ingreso, cve_pers, status, 0, mes, anualizada, id_grupo});
+			this.getJdbcTemplate().update(SQL, new Object[]{cve_req, num_req, (cve_contrato==0 ? null:cve_contrato),(cve_vale==0 ? null:cve_vale), ejercicio, id_proyecto, partida, cve_unidad, fecha, tipo, notas, fecha_cap, fecha_ingreso, cve_pers, status, 0,mes, anualizada, id_grupo});
 			//Guardar en la bitacora
 			gatewayBitacora.guardarBitacora(gatewayBitacora.NUEVA_REQUISICION, ejercicio, cve_pers, cve_req, num_req, "REQ", fecha, id_proyecto.toString(), partida, null, 0D);
 			return cve_req;
@@ -907,7 +911,7 @@ public class GatewayRequisicion  extends BaseGateway {
 							if (requisicion.get("TIPO").equals("6")) tipo_doc = "OS";
 							if (requisicion.get("TIPO").equals("7")) tipo_doc = "REQ";
 							if (requisicion.get("TIPO").equals("8")) tipo_doc = "OS";
-		    	    		getJdbcTemplate().update("DELETE FROM SAM_COMP_CONTRATO WHERE CVE_DOC = ? AND TIPO_DOC = ? AND TIPO_MOV =?", new Object[]{cve_req, tipo_doc,"LIBERACION"});
+		    	    		getJdbcTemplate().update("DELETE FROM SAM_COMP_CONTRATO WHERE CVE_CONTRATO = ? AND TIPO_DOC = ? AND TIPO_MOV =?", new Object[]{cve_req, tipo_doc,"LIBERACION"});
 		    	    	}
 		    	    	
 			        	descomprometerReq(cve_req, Integer.parseInt(requisicion.get("EJERCICIO").toString()), requisicion.get("ID_PROYECTO").toString(),requisicion.get("CLV_PARTID").toString());

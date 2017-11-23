@@ -96,6 +96,7 @@ default-lazy-init="true" >
  <bean id="gatewayWebServicePresupuesto" class="mx.gob.municipio.centro.model.gateways.sam.webservices.GatewayWebServicePresupuesto"></bean>
  <bean id="gatewayWebServicePeriodos" class="mx.gob.municipio.centro.model.gateways.sam.webservices.GatewayWebServicePeriodos"></bean>
  <bean id="gatewayFacturas" class="mx.gob.municipio.centro.model.gateways.sam.GatewayFacturas"></bean>
+ <bean id="gatewayReportePresupestoDisp" class="mx.gob.municipio.centro.model.gateways.sam.GatewayReportePresupestoDisp"></bean>
   
   <bean id="dataSourceAlmacen" class="org.springframework.jndi.JndiObjectFactoryBean">
    <property name="jndiName">

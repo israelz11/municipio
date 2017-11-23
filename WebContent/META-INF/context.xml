@@ -2,13 +2,13 @@
 <Context path="/sam">
 	<Resource name="jdbc/siam" auth="Container" type="javax.sql.DataSource"
 		maxActive="100" maxIdle="30" maxWait="10000" username="sa"
-		password="123456" driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
-		url="jdbc:sqlserver://localhost:1433;databaseName=siam2017">
+		password="Supervisor2013" driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
+		url="jdbc:sqlserver://P74:1433;databaseName=siam2017">
 	</Resource>
 	<Resource name="jdbc/almacen" auth="Container" type="javax.sql.DataSource"
 		maxActive="100" maxIdle="30" maxWait="10000" username="sa"
-		password="123456" driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
-		url="jdbc:sqlserver://localhost:1433;databaseName=almacen2017">
+		password="Supervisor2013" driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
+		url="jdbc:sqlserver://P74:1433;databaseName=almacen2017">
 	</Resource>
 	<Resource name="jdbc/correspondencia" auth="Container" type="javax.sql.DataSource"
 		maxActive="100" maxIdle="30" maxWait="10000" username="siam13"

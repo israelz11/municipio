@@ -1291,6 +1291,8 @@ public boolean cambiarFechaOrdenPago(Long cve_op, String fechaNueva, int ejercic
 	            	
 	            	
 	            	int numAnexo = getJdbcTemplate().queryForInt("SELECT MAX(ANX_CONS) FROM SAM_OP_ANEXOS WHERE CVE_OP = ?", new Object[]{cve_op});
+	            	/*if(0==0)
+	            		throw new RuntimeException("La operacion no puede continuar por proceso de pruebas");*/
 	            	
 	            	for(Long cve_factura: cve_facturas){
 	            		
@@ -1315,7 +1317,7 @@ public boolean cambiarFechaOrdenPago(Long cve_op, String fechaNueva, int ejercic
 	            		
 	            		
 	            		//Guarda los movimiento de la factura en la OP
-	            		
+	            		//Conceptos de la Orden de Pago
 	            		for(Map detalleFac: facturaMovtos)
 	            		{
 		            		getJdbcTemplate().update("INSERT INTO SAM_MOV_OP(CVE_OP, ID_PROYECTO, CLV_PARTID, CVE_FACTURA, NOTA, TIPO, MONTO) VALUES(?,?,?,?,?,?,?)", new Object[]{cve_op, detalleFac.get("ID_PROYECTO"), detalleFac.get("CLV_PARTID"), cve_factura, "Soporta la factura No. "+factura.get("NUM_FACTURA"), "FACTURA", detalleFac.get("IMPORTE")});
@@ -1329,9 +1331,14 @@ public boolean cambiarFechaOrdenPago(Long cve_op, String fechaNueva, int ejercic
 	            		List <Map> detalles = getJdbcTemplate().queryForList("SELECT *FROM SAM_FACTURA_MOV_RETENC WHERE CVE_FACTURA =?", new Object[]{cve_factura});
 	            		for(Map row: detalles){
 	            			cont++;
+	            			String folio=rellenarCeros(cve_op.toString(),6);
 	            			getJdbcTemplate().update("INSERT INTO MOV_RETENC (CVE_OP, RET_CONS, CLV_RETENC, IMPORTE, PAGADO) " +
 	            					"VALUES (?,?,?,?,?)"
 	            					, new Object[]{cve_op, (cont), row.get("CLV_RETENC"), row.get("IMPORTE"), 0});
+	            			//guarda en la bitacora
+	            			BigDecimal bd=(BigDecimal) row.get("IMPORTE"); 
+	            			Double impretenc =bd.doubleValue();
+	            			gatewayBitacora.guardarBitacora(gatewayBitacora.OP_MOV_AGREGO_RETENCIONES, ejercicio, cve_pers, cve_op, folio, "OP", null, null, null, "Clv_Retenc: "+row.get("CLV_RETENC")+ " Cons: "+cont, impretenc);
 	            		}
 	            		
 	            		/*Guarda los archivos de la factura en la OP siempre y cuando la factura tenga archivos*/
@@ -1345,14 +1352,20 @@ public boolean cambiarFechaOrdenPago(Long cve_op, String fechaNueva, int ejercic
 	            		}
 	            		
 	            		      			            		
-	            		/*Guardar las comprobaciones de vale de la Factura en la Orden de Pago si existen*/
-	            		int vale= getJdbcTemplate().queryForInt( "SELECT FV.CVE_VALE FROM SAM_FACTURAS_VALES FV INNER JOIN SAM_FACTURAS F ON F.CVE_FACTURA=FV.CVE_FACTURA WHERE F.CVE_FACTURA=? ", new Object[]{cve_factura});
-	            		int contv =0;
-	            		int fact=0;
-	            		Float IMP_PENDIENTE =0F;
-	            		List <Map> detallesVales = getJdbcTemplate().queryForList("SELECT FV.CVE_FACTURA,FV.CVE_VALE,FV.ID_PROYECTO,FV.CLV_PARTID,ISNULL(FV.IMPORTE,0.00) IMPORTE, MOP.CVE_OP, " +
+	            		/* Guardar las comprobaciones de vale de la Factura en la Orden de Pago si existen */
+	            		/*Vales de la Orden de pago*/
+	            		if(getJdbcTemplate().queryForInt("SELECT COUNT(*) FROM SAM_FACTURAS_VALES WHERE CVE_FACTURA =?", new Object[]{cve_factura})>0)
+	            		{
+		            		int vale = getJdbcTemplate().queryForInt( "SELECT CVE_VALE FROM SAM_FACTURAS_VALES FV WHERE FV.CVE_FACTURA=? ", new Object[]{cve_factura});
+		            		int contv =0;
+		            		int contconcep_vale,fact=0;
+		            		Float IMP_PENDIENTE =0F;
+		            		String formato="MM";
+		        			SimpleDateFormat dateFormat = new SimpleDateFormat(formato);
+		            		Integer mes= Integer.parseInt(dateFormat.format(new Date()));
+		            		
+		            		List <Map> detallesVales = getJdbcTemplate().queryForList("SELECT FV.CVE_FACTURA,FV.CVE_VALE,FV.ID_PROYECTO,FV.CLV_PARTID,ISNULL(FV.IMPORTE,0.00) IMPORTE, MOP.CVE_OP, " +
 																				  "ISNULL(MV.IMPORTE- (SELECT ISNULL(SUM(FV.IMPORTE),0.00)COMPROBADO FROM SAM_FACTURAS_VALES FV INNER JOIN SAM_FACTURAS F ON F.CVE_FACTURA=FV.CVE_FACTURA WHERE FV.CVE_VALE=? AND F.STATUS IN (3)),0.00) IMP_ANTERIOR " +
-																				  //"ISNULL(MV.IMPORTE- (SELECT ISNULL(SUM(FV.IMPORTE),0.00)COMPROBADO FROM SAM_FACTURAS_VALES FV INNER JOIN SAM_FACTURAS F ON F.CVE_FACTURA=FV.CVE_FACTURA WHERE FV.CVE_VALE=? AND F.STATUS IN (1,3)),0.00) IMP_PENDIENTE " +
 																				  "FROM SAM_FACTURAS_VALES FV " +
 																				  "INNER JOIN SAM_FACTURAS F ON F.CVE_FACTURA=FV.CVE_FACTURA " + 
 																				  "INNER JOIN SAM_MOV_VALES MV ON MV.CVE_VALE=FV.CVE_VALE AND MV.ID_PROYECTO=FV.ID_PROYECTO AND MV.CLV_PARTID=FV.CLV_PARTID " + 
@@ -1361,28 +1374,36 @@ public boolean cambiarFechaOrdenPago(Long cve_op, String fechaNueva, int ejercic
 																				  "WHERE F.STATUS IN (1,3) AND V.STATUS=4 AND FV.CVE_FACTURA=? AND MOP.CVE_OP=? "+
 																				  "GROUP BY FV.CVE_FACTURA,FV.CVE_VALE,FV.ID_PROYECTO,FV.CLV_PARTID,FV.IMPORTE,MV.IMPORTE,MOP.CVE_OP", new Object[]{vale,cve_factura,cve_op});
 	            		
-	            		for(Map row: detallesVales){
+	            			for(Map row: detallesVales){
 	            			
-	            			contv=getJdbcTemplate().queryForInt( "SELECT COUNT(CONS_VALE) FROM COMP_VALES WHERE CVE_VALE=? ", new Object[]{vale});
-	            			
-	            			if (contv==0){
-	            				
-	            				String imp =row.get("IMPORTE").toString(); //COMPROBANDO
-		            			String impant=row.get("IMP_ANTERIOR").toString(); //COMPROBADO
-		            			IMP_PENDIENTE=Float.parseFloat(impant)-Float.parseFloat(imp);
-		            			contv++;
-		            			getJdbcTemplate().update("INSERT INTO COMP_VALES (CVE_VALE, CONS_VALE, CVE_OP, TIPO, ID_PROYECTO, CLV_PARTID, IMPORTE, IMP_ANTERIOR, IMP_PENDIENTE, FECHA) " +
-	            					"VALUES (?,?,?,?,?,?,?,?,?,?)"
-	            					, new Object[]{row.get("CVE_VALE"), contv, cve_op, "OP", row.get("ID_PROYECTO"), row.get("CLV_PARTID"), row.get("IMPORTE"), row.get("IMP_ANTERIOR"),IMP_PENDIENTE, new Date()});
-	            			}
-	            			else
-	            				
-	            					
-	            				getJdbcTemplate().update("UPDATE COMP_VALES SET TIPO='OP', CVE_OP=?  WHERE CVE_OP=? AND TIPO='FA'", new Object[]{cve_op,cve_factura});
+		            			contv=getJdbcTemplate().queryForInt( "SELECT COUNT(CONS_VALE) FROM COMP_VALES WHERE CVE_VALE=? ", new Object[]{vale});
+		            			//if(getJdbcTemplate().queryForInt("SELECT COUNT(*) FROM SAM_FACTURAS_ARCHIVOS WHERE CVE_FACTURA =?", new Object[]{cve_factura})>0){
+		            			//}
+		            			contconcep_vale =getJdbcTemplate().queryForInt("SELECT COUNT(CONS_VALE) FROM CONCEP_VALE WHERE CVE_VALE=? AND CONS_VALE=?",new Object[]{vale,row.get("CONS_VALE")});
+		            			if (contconcep_vale==0){
+		            				getJdbcTemplate().update("INSERT INTO CONCEP_VALE (CVE_VALE, CONS_VALE, ID_PROYECTO, CLV_PARTID,MES, IMPORTE, DESCONTADO) " +
+		                					"VALUES (?,?,?,?,?,?,?)"
+		                					, new Object[]{row.get("CVE_VALE"), contv, row.get("ID_PROYECTO"), row.get("CLV_PARTID"),mes, row.get("IMP_ANTERIOR"), row.get("IMPORTE")});
+		            			}
+		            			if (contv==0){
+		            				
+		            				String imp =row.get("IMPORTE").toString(); //COMPROBANDO
+			            			String impant=row.get("IMP_ANTERIOR").toString(); //COMPROBADO
+			            			IMP_PENDIENTE=Float.parseFloat(impant)-Float.parseFloat(imp);
+			            			contv++;
+			            			getJdbcTemplate().update("INSERT INTO COMP_VALES (CVE_VALE, CONS_VALE, CVE_OP, TIPO, ID_PROYECTO, CLV_PARTID, IMPORTE, IMP_ANTERIOR, IMP_PENDIENTE, FECHA) " +
+		            					"VALUES (?,?,?,?,?,?,?,?,?,?)"
+		            					, new Object[]{row.get("CVE_VALE"), contv, cve_op, "OP", row.get("ID_PROYECTO"), row.get("CLV_PARTID"), row.get("IMPORTE"), row.get("IMP_ANTERIOR"),IMP_PENDIENTE, new Date()});
+		            			}
+		            			else
+		            				
+		            					
+		            				getJdbcTemplate().update("UPDATE COMP_VALES SET TIPO='OP', CVE_OP=?  WHERE CVE_OP=? AND TIPO='FA'", new Object[]{cve_op,cve_factura});
+	            		    }
 	            		}
-	            	}
 	       
-	            	
+	            		
+	            	}
 	            } 
 	        });
 			

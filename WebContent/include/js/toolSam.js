@@ -129,14 +129,14 @@ function abrirDocumento(){
 		)
 }
 
-
+/* -------------------------------------  Clase para el cambio del beneficiario ------------------------------------------------*/
 function cambiarBeneficiario(cve_doc, modulo){
 	var beneficiario="";
 	var clave="";
 	if(modulo=='req'){
 			controladorListadoRequisicionesRemoto.getBeneficiario(cve_doc,{
 				callback:function(items) { 
-						ShowDelay('Cargando padrÃ³n de beneficiarios...','');
+						ShowDelay('Cargando padron de beneficiarios...','');
 						if(items==null){
 							beneficiario = ""; clave= "";	
 						}
@@ -145,7 +145,7 @@ function cambiarBeneficiario(cve_doc, modulo){
 						}
 						html ='<table width="400" border="0" cellspacing="0" cellpadding="0" alingn="center">'+
 							 '<tr>'+
-							 '<td height="20"><strong>RequisiciÃ³n:</strong></td>'+
+							 '<td height="20"><strong>Requisición:</strong></td>'+
 							 '</tr>'+
 							 '<tr>'+
 							 '<td height="20">'+items.NUM_REQ+'</td>'+
@@ -163,8 +163,8 @@ function cambiarBeneficiario(cve_doc, modulo){
 							 '<td align="center"><input type="button" class="botones" value="Aplicar cambios"   id="cmdaplicar" style="width:100px"/> <input type="button" class="botones" value="Cancelar" id="cmdcancelar" onclick="$.alerts._hide();" style="width:100px"/></td>'+
 							 '</tr>'+
 							 '</table>';
-							_closeDelay();
-							jWindow(html,'Cambio de beneficiario', '','',0);
+							//_closeDelay();
+							swal(html,'Cambio de beneficiario', '','',0);
 							$('#cmdaplicar').click(function(event){_cambiarBeneficiarioRequisicion(cve_doc);})
 							getBeneficiarios('txtbeneficiario','CVE_BENE',''); 
 				}
@@ -178,7 +178,7 @@ function cambiarBeneficiario(cve_doc, modulo){
 	if(modulo=='ped'){
 			controladorPedidos.getBeneficiario(cve_doc,{
 				callback:function(items) { 
-						ShowDelay('Cargando padrÃ³n de beneficiarios...','');
+						ShowDelay('Cargando padrón de beneficiarios...','');
 						if(items==null){
 							beneficiario = ""; clave= "";	
 						}
@@ -205,14 +205,14 @@ function cambiarBeneficiario(cve_doc, modulo){
 							 '<td align="center"><input type="button" class="botones" value="Aplicar cambios"   id="cmdaplicar" style="width:100px"/> <input type="button" class="botones" value="Cancelar" id="cmdcancelar" onclick="$.alerts._hide();" style="width:100px"/></td>'+
 							 '</tr>'+
 							 '</table>';
-							_closeDelay();
+							//_closeDelay();
 							jWindow(html,'Cambio de beneficiario', '','',0);
 							$('#cmdaplicar').click(function(event){_cambiarBeneficiarioPedidos(cve_doc);})
 							getBeneficiarios('txtbeneficiario','CVE_BENE',''); 
 				}
 				,
 					errorHandler:function(errorString, exception) { 
-					jError("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");   
+					swal("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");   
 					}       	
 			});
 	}
@@ -220,7 +220,7 @@ function cambiarBeneficiario(cve_doc, modulo){
 	if(modulo=='op'){
 			controladorOrdenPagoRemoto.getBeneficiario(cve_doc,{
 				callback:function(items) { 
-						ShowDelay('Cargando padrÃ³n de beneficiarios...','');
+						ShowDelay('Cargando padrón de beneficiarios...','');
 						if(items==null){
 							beneficiario = ""; clave= "";	
 						}
@@ -247,14 +247,14 @@ function cambiarBeneficiario(cve_doc, modulo){
 							 '<td align="center"><input type="button" class="botones" value="Aplicar cambios"   id="cmdaplicar" style="width:100px"/> <input type="button" class="botones" value="Cancelar" id="cmdcancelar" onclick="$.alerts._hide();" style="width:100px"/></td>'+
 							 '</tr>'+
 							 '</table>';
-							_closeDelay();
+							//_closeDelay();
 							jWindow(html,'Cambio de beneficiario', '','',0);
 							$('#cmdaplicar').click(function(event){_cambiarBeneficiarioOrdenPago(cve_doc);})
 							getBeneficiarios('txtbeneficiario','CVE_BENE',''); 
 				}
 				,
 					errorHandler:function(errorString, exception) { 
-					jError("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");   
+					swal("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");   
 					}       	
 			});
 	}
@@ -296,7 +296,7 @@ function cambiarBeneficiario(cve_doc, modulo){
 				}
 				,
 					errorHandler:function(errorString, exception) { 
-					jError("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");   
+					swal("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");   
 					}       	
 			});
 	}
@@ -318,7 +318,7 @@ function _cambiarBeneficiarioVale(cve_doc){
 							
 						},
 						errorHandler:function(errorString, exception) { 
-						jError(errorString, 'Error');   
+						swal(errorString, 'Error');   
 					}   
 				});
 			}
@@ -326,9 +326,9 @@ function _cambiarBeneficiarioVale(cve_doc){
 }
 
 function _cambiarBeneficiarioOrdenPago(cve_doc){
-	var cve_benefi = $('#CVE_BENE').attr('value');
+	var cve_benefi = $('#CVE_BENE').val();
 	if(cve_benefi==''){swal('Es necesario especificar el nuevo beneficiario para continuar','Alerta'); return false;}	
-	jConfirm('Â¿Confirma que desea cambiar el beneficiario del documento actual?','Confirmar', function(r){
+	jConfirm('¿Confirma que desea cambiar el beneficiario del documento actual?','Confirmar', function(r){
 			if(r){		
 				ShowDelay('Cambiando beneficiario...', '');
 				controladorOrdenPagoRemoto.cambiarBeneficiario(cve_doc, cve_benefi,{
@@ -341,7 +341,7 @@ function _cambiarBeneficiarioOrdenPago(cve_doc){
 							
 						},
 						errorHandler:function(errorString, exception) { 
-						jError(errorString, 'Error');   
+						swal(errorString, 'Error');   
 					}   
 				});
 			}
@@ -351,7 +351,7 @@ function _cambiarBeneficiarioOrdenPago(cve_doc){
 function _cambiarBeneficiarioPedidos(cve_doc){
 	var cve_benefi = $('#CVE_BENE').attr('value');
 	if(cve_benefi==''){swal('Es necesario especificar el nuevo beneficiario para continuar','Alerta'); return false;}	
-	jConfirm('Â¿Confirma que desea cambiar el beneficiario del documento actual?','Confirmar', function(r){
+	jConfirm('¿Confirma que desea cambiar el beneficiario del documento actual?','Confirmar', function(r){
 			if(r){		
 				ShowDelay('Cambiando beneficiario...', '');
 				controladorPedidos.cambiarBeneficiario(cve_doc, cve_benefi,{
@@ -364,7 +364,7 @@ function _cambiarBeneficiarioPedidos(cve_doc){
 							
 						},
 						errorHandler:function(errorString, exception) { 
-						jError(errorString, 'Error');   
+						swal(errorString, 'Error');   
 					}   
 				});
 			}
@@ -372,9 +372,9 @@ function _cambiarBeneficiarioPedidos(cve_doc){
 }
 
 function _cambiarBeneficiarioRequisicion(cve_doc){
-	var cve_benefi = $('#CVE_BENE').attr('value');
+	var cve_benefi = $('#CVE_BENE').val();
 	if(cve_benefi==''){swal('Es necesario especificar el nuevo beneficiario para continuar','Alerta'); return false;}	
-	jConfirm('Â¿Confirma que desea cambiar el beneficiario del documento actual?','Confirmar', function(r){
+	jConfirm('¿Confirma que desea cambiar el beneficiario del documento actual?','Confirmar', function(r){
 			if(r){		
 				ShowDelay('Cambiando beneficiario...', '');
 				controladorListadoRequisicionesRemoto.cambiarBeneficiario(cve_doc, cve_benefi,{
@@ -387,7 +387,7 @@ function _cambiarBeneficiarioRequisicion(cve_doc){
 							
 						},
 						errorHandler:function(errorString, exception) { 
-						jError(errorString, 'Error');   
+						swal(errorString, 'Error');   
 					}   
 				});
 			}
@@ -442,7 +442,7 @@ function cambiarUsuarioDocumento(cve_doc, modulo, cve_pers){
 						'	<td align="center"><input type="button" class="botones" value="Aplicar cambios"   id="cmdaplicar" style="width:100px"/> <input type="button" class="botones" value="cancel" id="cancel" onclick="$.alerts._hide();" style="width:100px"/></td>'+
 						'  </tr>'+
 						'</table>';
-						swal('Mover documento a otro usuari',html,'Mover documento a otro usuario');
+						swal('Mover documento a otro usuario',html,'Mover documento a otro usuario');
 						$('#cmdaplicar').click(function(event){_cambiarUsuarioRequisicion(chkReq,cve_doc);})
 						
 				}
@@ -450,7 +450,7 @@ function cambiarUsuarioDocumento(cve_doc, modulo, cve_pers){
 			}
 			,
 				errorHandler:function(errorString, exception) { 
-				jError("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");   
+				swal("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");   
 				}       	
 		});
 
@@ -547,7 +547,7 @@ function cambiarUsuarioDocumento(cve_doc, modulo, cve_pers){
 						'	<td align="center"><input type="button" class="botones" value="Aplicar cambios"   id="cmdaplicar" style="width:100px"/> <input type="button" class="botones" value="Cancelar" id="cmdcancelar" onclick="$.alerts._hide();" style="width:100px"/></td>'+
 						'  </tr>'+
 						'</table>';
-						jWindow(html,'Mover documento a otro usuario', '','',0);
+						swal(html,'Mover documento a otro usuario', '','',0);
 						$('#cmdaplicar').click(function(event){_cambiarUsuarioOrdenPago(chkOp,cve_doc);})
 
 				}
@@ -555,7 +555,7 @@ function cambiarUsuarioDocumento(cve_doc, modulo, cve_pers){
 			}
 			,
 				errorHandler:function(errorString, exception) { 
-				jError("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");   
+				swal("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");   
 				}       	
 		});
 	}
@@ -1040,6 +1040,7 @@ function subOpAdm(modulo, cve_doc, cve_pers){
 	swal({
 	    title: 'Submenu de opciones módulo: '+ titulo,
 	    width: 500,
+	    confirmButtonText: 'Cerrar',
 	    html:
 	       	'<iframe width="400" height="220" name="subMenuAdmon" id="subMenuAdmon" frameborder="0" src="../../sam/utilerias/sumenuAdmon.action?modulo='+modulo+'&cve_doc='+cve_doc+'&cve_pers='+cve_pers+'"></iframe>', 
 	   })

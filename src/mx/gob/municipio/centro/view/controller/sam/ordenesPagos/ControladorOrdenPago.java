@@ -165,6 +165,7 @@ public class ControladorOrdenPago extends ControladorBase  {
 	            		}*/
 		            		
 		               	mensaje="exito"; 	
+		               	               	
 		               	BigDecimal importe = new BigDecimal("0.0");
 		                Boolean tienenPresupuesto = null;
 		                Map orden =gatewayOrdenDePagos.getOrden(idOrden);
@@ -422,6 +423,7 @@ public class ControladorOrdenPago extends ControladorBase  {
 			                
 			                //GUARDAR EN LA BITACORA
 			                String folio=rellenarCeros(idOrden.toString(),6);
+			                
 			                Map pre = gatewayOrdenDePagos.getProyectoPartidaOP(idOrden);
 			                gatewayBitacora.guardarBitacora(gatewayBitacora.OP_CERRAR, getSesion().getEjercicio(), getSesion().getIdUsuario(), idOrden, folio, "OP", (Date) orden.get("V_FECHA"), pre.get("ID_PROYECTO").toString(), pre.get("CLV_PARTID").toString(), null, importe.doubleValue());
 		                }
@@ -431,7 +433,8 @@ public class ControladorOrdenPago extends ControladorBase  {
 		                } 
 		                });
 		       return mensaje;     
-             } catch (DataAccessException e) {            
+             } catch (DataAccessException e) {   
+            	 
                  log.info("Error,Problemas con la aprobacion del documento ");	                    
                  throw new RuntimeException(e.getMessage(),e);
              }	    	
@@ -491,11 +494,17 @@ public class ControladorOrdenPago extends ControladorBase  {
       
       
       public List getOTPorUnidad(String idtipoGasto,String unidad ,String claveBeneficiario) {
+    	  
     	  Map parametros =  new HashMap<String,Object>();
+    	  
     	  Integer cve_pers = this.getSesion().getIdUsuario();
+    	  
     	  parametros.put("cve_pers", cve_pers);
+    	  
     	  parametros.put("unidad", unidad);
+    	  
     	  parametros.put("idtipoGasto", idtipoGasto);
+    	  
     	  parametros.put("claveBeneficiario", claveBeneficiario);    	  
      	 return this.getNamedJdbcTemplate().queryForList("SELECT  B.CLV_PARBIT, A.DESC_TGASTO, C.N_PROGRAMA, C.CLV_PARTID, C.NUM_REQ,  "+
      			 " C.CVE_REQ, C.OBSERVA , isnull ( (select sum (cantidad * precio_est ) from req_movtos where cve_req=C.cve_req  ),0) IMPORTE "+ 
@@ -508,21 +517,24 @@ public class ControladorOrdenPago extends ControladorBase  {
      	 		 //"B.ID_DEPENDENCIA IN(SELECT DISTINCT CLV_UNIADM FROM CEDULA_TEC WHERE ID_PROYECTO IN (SELECT ID_PROYECTO FROM SAM_GRUPO_PROYECTOS WHERE ID_GRUPO_CONFIG IN (SELECT B.ID_GRUPO_CONFIG FROM SAM_GRUPO_CONFIG_USUARIO A RIGHT OUTER JOIN  SAM_GRUPO_CONFIG B ON A.ID_GRUPO_CONFIG = B.ID_GRUPO_CONFIG where b.ESTATUS='ACTIVO' and TIPO='PROYECTO' AND  A.ASIGNADO =0 and ID_USUARIO=:cve_pers))) AND D.CLV_BENEFI = :claveBeneficiario and c.status=1 "
       }
       
-            
-      public boolean  eliminarDetalle( final List<Integer> detallesOp,final  Integer idOrden ) {
+ /*---------------------------- Eliminiar conceptos desde la orden pago cuando esta agregado el moviemineto de una factura como movimiento de la orden de pago*/           
+      public boolean  eliminarDetalle( final List<Integer> detallesOp,final  Long idOrden ) {
     	  boolean exito=false;
 		  try {                 
 	            this.getTransactionTemplate().execute(new TransactionCallbackWithoutResult(){
 	                @Override
 	    protected void   doInTransactionWithoutResult(TransactionStatus status) {
+	                	
 	                	//Verfificar si tiene los privilegios en solo lectura Ordenes de Pago
-	            		if(getPrivilegioEn(getSesion().getIdUsuario(), 114)){
+	            		
+	                	if(getPrivilegioEn(getSesion().getIdUsuario(), 114)){
 	            			throw new RuntimeException("No cuenta por los privilegios suficientes para realizar esta operación, solo lectura");
 	            		}
 	            		
 	            		Map Orden = getOrden(Long.parseLong(idOrden.toString()));
 	            		
 	                	for (Integer documento :detallesOp){
+	                		
 	                		Map detalle = getJdbcTemplate().queryForMap("select ID_PROYECTO, CLV_PARTID, TIPO,CVE_FACTURA  from SAM_MOV_OP  where ID_MOV_OP=?  ",new Object []{documento});
 	                		String tipo= (String)detalle.get("TIPO");
 	                		List<Map> CompVales = new ArrayList<Map>(); 
@@ -538,10 +550,8 @@ public class ControladorOrdenPago extends ControladorBase  {
 	                		//Eliminar los vales de COMP_VALE
 	                		for (Map v : CompVales)
 	                		{
-	                			getJdbcTemplate().update("DELETE FROM CONCEP_VALE WHERE CVE_VALE=? AND CONS_VALE=?", new Object [] {v.get("CVE_VALE"),v.get("CONS_VALE")});
-	                			//getJdbcTemplate().update("DELETE FROM COMP_VALES WHERE CVE_OP=? AND CVE_VALE =?", new Object [] {idOrden,v.get("CVE_VALE")} );
+	                			//getJdbcTemplate().update("DELETE FROM CONCEP_VALE WHERE CVE_VALE=? AND CONS_VALE=?", new Object [] {v.get("CVE_VALE"),v.get("CONS_VALE")});
 	                			getJdbcTemplate().update("UPDATE COMP_VALES SET TIPO='FA', CVE_OP=?  WHERE CVE_OP=? AND CVE_VALE=? AND CONS_VALE=?", new Object[]{detalle.get("CVE_FACTURA"),idOrden,v.get("CVE_VALE"),v.get("CONS_VALE")});
-	                			
 	                		}
 	                	                		
 	                		//Buscar todas las retenciones de la factura
@@ -556,11 +566,21 @@ public class ControladorOrdenPago extends ControladorBase  {
 	                		//Eliminar las retenciones de MOV_RETENC
 	                		for (Map r : CollectionRetenc)
 	                		{
+	                			//Map OrdenPago = getJdbcTemplate().queryForMap("SELECT * FROM SAM_ORD_PAGO WHERE CVE_OP =?", new Object[]{idOrden});
+	                			Integer ejercicio =getJdbcTemplate().queryForInt("SELECT EJERCICIO FROM SAM_ORD_PAGO WHERE CVE_OP =?", new Object[]{idOrden});
+	                			Integer cve_pers = getSesion().getIdUsuario();
+	                			
 	                	 		getJdbcTemplate().update("DELETE FROM MOV_RETENC WHERE CVE_OP=? AND CLV_RETENC=?", new Object [] {idOrden,r.get("CLV_RETENC")});
+	                	 		
+	                	 		String folio=rellenarCeros(idOrden.toString(),6);
+	                	 		
+	                	 		//guarda en la bitacora
+	                	 		gatewayBitacora.guardarBitacora(gatewayBitacora.OP_MOV_ELIMINA_RETENCION, ejercicio, cve_pers, idOrden, folio, "OP", null, null, null, "Cons: "+r.get("RET_CONS"), 0D);
 	                		}
 	               
 	                		//Buscar todas los archivos de la factura
 	                		List<Map> Archivos = new ArrayList<Map>();
+	                		
 	                		List<Map> ArchivosF = getJdbcTemplate().queryForList("SELECT * FROM SAM_FACTURAS_ARCHIVOS WHERE CVE_FACTURA = ?", new Object[]{detalle.get("CVE_FACTURA")});
 	                		for (Map archivo : ArchivosF)
 	                		{
@@ -568,15 +588,16 @@ public class ControladorOrdenPago extends ControladorBase  {
 	                			List<Map> Temp = getJdbcTemplate().queryForList("SELECT * FROM SAM_OP_ANEXOS WHERE CVE_OP = ? AND FILENAME LIKE '%"+archivo.get("NOMBRE")+"%'", new Object[]{idOrden});
 	                			Archivos.addAll(Temp);
 	                		}
+	                		
 	                		//Eliminar las retenciones de MOV_RETENC
+	                		
 	                		for (Map a : Archivos)
 	                		{
 	                			getJdbcTemplate().update("DELETE FROM SAM_OP_ANEXOS WHERE CVE_OP=? AND ANX_CONS LIKE '%"+a.get("ANX_CONS")+"%'", new Object [] {idOrden});
 	                		}
 	                		
 	                		getJdbcTemplate().update("delete from SAM_MOV_OP where ID_MOV_OP= ?", new Object[]{documento});
-	                		//gatewayDetallesOrdenDePagos.eliminar(documento, getSesion().getEjercicio(), getSesion().getIdUsuario());
-        	    			
+	                	        	    			
 	                	}
 	                	
 	                	
@@ -638,6 +659,7 @@ public class ControladorOrdenPago extends ControladorBase  {
 	                }
 	                return exito;
 	  }    
+      
       
       public boolean  generarDetallesPedidosParcial( final Long cve_ped, final  Long idOrden, final Double importe_op  ) {
     	  boolean exito=false;
@@ -1015,6 +1037,7 @@ public class ControladorOrdenPago extends ControladorBase  {
     }
     
 //---------------------------------- Clase que carga las facturas desde la lista en las OP ---------------------- //
+    
     public String guardarFacturasEnOrdenPago(final Long cve_op, final Long[] cve_facturas){
     	return gatewayOrdenDePagos.guardarFacturasEnOrdenPago(cve_op, cve_facturas, this.getSesion().getEjercicio(), this.getSesion().getIdUsuario());
     }

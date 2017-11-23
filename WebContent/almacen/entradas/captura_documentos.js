@@ -143,7 +143,7 @@ function guardarCantidadDetalles(){
 		controladorEntradasDocumentosRemoto.guardarCantidadDetalles($('#ID_ENTRADA').attr('value'),ids, cantidad, subtotal, descuento, iva, tipoIva,{
 			  callback:function(items){
 							//CargarDetalles($('#ID_ENTRADA').attr('value'));
-							 CloseDelay('Detalles guardados con éxito', function(){document.location='captura_documentos.action?id_entrada='+$('#ID_ENTRADA').attr('value');});
+							 CloseDelay('Detalles guardados con ï¿½xito', function(){document.location='captura_documentos.action?id_entrada='+$('#ID_ENTRADA').attr('value');});
 							 
 		} 					   				
 		,
@@ -205,7 +205,7 @@ function Redirect(id_entrada){
 /*funcion para cerrar el documento*/
 function cerrarDocumento(){
 	if(cont==0) { jError('Imposible cerrar la entrada si no se han cargado por lo menos un lote de Pedido','Error'); return false;}
-	jConfirm('¿Confirma que desea cerrar la entrada de almacen actual?','Cerrar', function(r){
+	jConfirm('ï¿½Confirma que desea cerrar la entrada de almacen actual?','Cerrar', function(r){
 				if(r){
 						  controladorEntradasDocumentosRemoto.cerrarEntradaDocumento($('#ID_ENTRADA').attr('value'),{
 						  callback:function(items){ 	    
@@ -216,7 +216,7 @@ function cerrarDocumento(){
 									$('#cmdguardar').attr('disabled',true);
 									$('#cmdguardardetalle').attr('disabled',true);
 									CargarDetalles($('#ID_ENTRADA').attr('value'));
-									CloseDelay('Entrada cerrada con éxito');
+									CloseDelay('Entrada cerrada con ï¿½xito');
 									Redirect($('#ID_ENTRADA').attr('value'));
 									
 										  
@@ -252,7 +252,7 @@ function guardarDetalles(){
 						  if(items==false) 
 						  	jError('Error inesperado al guardar el detalle del documento actual','Ha ocurrido un problema'); 
 						  else
-						  	CloseDelay('Detalles guardados con éxito');	  
+						  	CloseDelay('Detalles guardados con ï¿½xito');	  
 						} 					   				
 						,
 						errorHandler:function(errorString, exception) { 
@@ -277,7 +277,7 @@ function eliminarConceptos(){
 						callback:function(items) { 	
 						limpiarConceptos();
 						CargarDetalles($('#ID_ENTRADA').attr('value'));
-						CloseDelay('Conceptos eliminados con éxito');
+						CloseDelay('Conceptos eliminados con ï¿½xito');
 					 } 					   				
 					 ,
 					 errorHandler:function(errorString, exception) { 
@@ -313,12 +313,21 @@ function muestraPedidos(){
 	var tipo = $('#cbotipodocumento').val();
 	
 	if(idDependencia==0||idDependencia=="") {jAlert('Es necesario seleccionar la Unidad Administrativa para listar los Pedidos'); return false;}
-	jWindow('<iframe width="650" height="400" name="consultaPedido" id="consultaPedido" frameborder="0" src="../consultas/muestra_pedidos.action?idDependencia='+idDependencia+'"></iframe>','Listado de Pedidos disponibles', '','Cerrar ',1);
+	swal({
+		  title: 'Listado de Pedidos disponibles',
+		  text: 'Seleccione la factura que desea comprobar',
+		  html:
+			  '<iframe width="650" height="400" name="consultaPedido" id="consultaPedido" frameborder="0" src="../consultas/muestra_pedidos.action?idDependencia='+idDependencia+'"></iframe>',
+		  width: 800,
+		  padding: 10,
+		  animation: false
+		})
+	
 }
 
 /*funcion para mostrar el listado de productos*/
 function muestraProductos(){	
-	if($('#txtpartida').attr('value')=='') {jAlert('Es necesario especificar la partida para mostrar el listado de artículos'); return;}
+	if($('#txtpartida').attr('value')=='') {jAlert('Es necesario especificar la partida para mostrar el listado de artï¿½culos'); return;}
 	__listadoProductos($('#txtproducto').attr('value'), $('#txtpartida').attr('value'));
 }
 
@@ -383,7 +392,7 @@ function __regresaPedido(num, id, id_proyecto, programa, clv_partid, clv_benefi,
 function guardarDocumento(){
 	var v = validar();
 	if(v) return false;
-	jConfirm('¿Confirma que desea guardar el documento?','Guardar documento', function(r){
+	jConfirm('ï¿½Confirma que desea guardar el documento?','Guardar documento', function(r){
 				if(r){
 						var id_entrada = $('#ID_ENTRADA').attr('value');
 						var id_almacen = $('#cboalmacen').attr('value');
@@ -492,7 +501,7 @@ function CargarDetalles(id_entrada)
 						cont++;
 						if(this.CANTIDAD_PED>0) pintaTablaDetalles('listasConceptos', this);
 						if(items.length==cont){getTotales();}
-						if(items.length==cont&&$('#cbotipoentrada').val()=='2'&&this.CANTIDAD==0) jAlert('Las cantidades de los lotes aun no se han guardado, pulse el botón <strong>Guardar cambios</strong> cuando haya terminado de asignarlas', 'Advertencia');
+						if(items.length==cont&&$('#cbotipoentrada').val()=='2'&&this.CANTIDAD==0) jAlert('Las cantidades de los lotes aun no se han guardado, pulse el botï¿½n <strong>Guardar cambios</strong> cuando haya terminado de asignarlas', 'Advertencia');
 					});
 			    },
 				errorHandler:function(errorString, exception) { 

@@ -118,6 +118,18 @@ a:active {
     <td >&nbsp;</td>
   </tr>
   <tr >
+     <th height="25" >Proyecto:</th>
+    <td height="25" colspan="3" ><table width="575" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td width="425"><input name="txtproyecto" type="text" id="txtproyecto" maxlength="50" style="width:150px" class="input" value="<c:out value='${txtproyecto}'/>"></td>
+        <td width="60"><strong>Partida:</strong></td>
+        <td width="183"><input name="txtpartida" class="input" type="text" id="txtpartida" maxlength="50" style="width:150px" value="<c:out value='${txtpartida}'/>"></td>
+        <td width="98">&nbsp;</td>
+      </tr>
+    </table></td>
+    <td height="25" >&nbsp;</td> </tr>
+  </tr>
+  <tr >
     <th height="30" >Por fecha de :
     <td><strong>
     <input name="fechaInicial" type="text" id="fechaInicial" value="${fechaInicial}" size="12"maxlength="10">

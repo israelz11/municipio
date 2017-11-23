@@ -80,6 +80,7 @@ function cancelarEntradas(){
 	    jAlert('Es necesario seleccionar por lo menos una Entrada del listado', 'Advertencia');
 }
 
+
 function iniciarBusqueda(){
 	if($('#txtbeneficiario').attr('value')=='') $('#ID_PROVEEDOR').attr('value', '0');
 	if($('#txtfechaInicial').attr('value')!=''&&$('#txtfechaFinal').attr('value')==''||$('#txtfechaFinal').attr('value')!=''&&$('#txtfechaInicial').attr('value')=='') {jAlert('El rango de fecha seleccioando para la busqueda no es valido', 'Advertencia'); return false;}

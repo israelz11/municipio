@@ -15,6 +15,11 @@ $(document).ready(function() {
   $("#fechaDeposito").datepicker({showOn: 'button', buttonImage: '../../imagenes/cal.gif', buttonImageOnly: true,dateFormat: 'dd/mm/yy'});
   $('#cbovales').change(function(event){cargarDatosVale();});
   ocultarFilas();
+  /*
+  $('#xGrabar').onClick(functio){
+	  
+  });
+  */
 });
 
 function cargarDatosVale(){
@@ -89,10 +94,9 @@ function guardarRembolso(){
 	if($('#cbovales').attr('value')==''){jAlert('','Advertencia');}
 	//alert(''+redondeo(parseFloat($('#importe').attr('value'))+parseFloat(totalDesco)));
 	if ($('#importe').attr('value')!="" && redondeo(parseFloat($('#importe').attr('value'))+parseFloat(totalDesco)) > totalVale) {jAlert('El Importe a descontar no puede ser mayor al disponible', 'Advertencia');return false;}
-	
+	/*
 	jConfirm('¿Confirma que desea guardar el Reembolo Liquido?','Confirmar', function(r){
 			if(r){
-					alert($('#importe').attr('value'));
 					ShowDelay('Guardando Vale de Reembolso','');
 					controladorReembolsosLiquidosValesRemoto.guardarComprobacion($('#cve_val').attr('value'),$('#importe').attr('value'),$('#importeAnte').attr('value'), datos[0], datos[1],$('#fecha').attr('value'),$('#fechaDeposito').attr('value'), {
 						 callback:function(items) {				 
@@ -107,12 +111,53 @@ function guardarRembolso(){
 					}
 				 });	
 			}
-	});
+	});*/
+	swal({
+		  title: 'Estas seguro?',
+		  text: "Confirma que desea guardar el Reembolo Liquido",
+		  type: 'warning',
+		  showCancelButton: true,
+		  confirmButtonColor: '#3085d6',
+		  cancelButtonColor: '#d33',
+		  confirmButtonText: 'Si, guardar!'
+		}).then(function (r) {
+		  if (r) {
+			  if(r){
+					ShowDelay('Guardando Vale de Reembolso','');
+					controladorReembolsosLiquidosValesRemoto.guardarComprobacion($('#cve_val').attr('value'),$('#importe').attr('value'),$('#importeAnte').attr('value'), datos[0], datos[1],$('#fecha').attr('value'),$('#fechaDeposito').attr('value'), {
+						 callback:function(items) {				 
+							CloseDelay("Vale Reembolso guardado con éxito",2000, function(){
+								$('#importe').attr('value', '');
+								pintarTablaReembolso(); 	
+								$('#importe').focus();
+							});
+						 }	
+						,errorHandler:function(errorString, exception) { 
+						   jError("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");    
+					}
+				 });	
+			}
+		    swal(
+		      'Guardado!',
+		      'Tu reembolso se guardo con exito.',
+		      'success'
+		    )
+		  }
+		})
 	
 }
 
 function getValesDisponibles(){
-	jWindow('<iframe width="800" height="400" name="VAL" id="VAL" frameborder="0" src="../../sam/consultas/muestra_vales_reembolso.action?&unidad='+$('#unidad').attr('value')+'"></iframe>','Vales Disponibles', '','Cerrar',1);
+	//jWindow('<iframe width="800" height="400" name="VAL" id="VAL" frameborder="0" src="../../sam/consultas/muestra_vales_reembolso.action?&unidad='+$('#unidad').attr('value')+'"></iframe>','Vales Disponibles', '','Cerrar',1);
+	swal({
+		  title: 'Vales Disponibles',
+		  text: 'Vale: '+$('#cve_val').attr('value'),
+		  html:
+			  '<iframe width="800" height="400" name="VAL" id="VAL" frameborder="0" src="../../sam/consultas/muestra_vales_reembolso.action?&unidad='+$('#unidad').attr('value')+'"></iframe>',
+		  width: 800,
+		  padding: 10,
+		  animation: false
+		})
 }
 
 function getListaValeProgramaPart(){
@@ -137,14 +182,14 @@ function getValeProgramaPartida(datos) {
 function getVale(numVale,proyecto,partida,importe,idVale ){
 	$('#proyecto').text(proyecto);
 	$('#partida').text(partida);
-	$('#cve_proyecto').attr('value',proyecto);
-	$('#cve_partida').attr('value',partida);
+	$('#cve_proyecto').val(proyecto);
+	$('#cve_partida').val(partida);
 	$('#importeVale').text(formatNumber(importe,'$ '));
 	$('#comprobado').text('$ 0.00');
 	$('#restante').text('$ 0.00');
 	totalVale=importe;
-	$('#cve_val').attr('value',idVale);
-	$('#noVale').attr('value',numVale);
+	$('#cve_val').val(idVale);
+	$('#noVale').val(numVale);
 	pintarTablaReembolso();
     $.alerts._hide();
 	ocultarFilas();

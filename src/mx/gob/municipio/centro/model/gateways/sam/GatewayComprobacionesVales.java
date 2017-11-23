@@ -27,7 +27,7 @@ public class GatewayComprobacionesVales extends BaseGateway  {
 		
 	}
 	
-	final  int VAL_ESTATUS_COMPROBADO =3;
+	final  int VAL_ESTATUS_COMPROBADO=3;
 	final  int VAL_ESTATUS_PAGADO =4;
 	
 public void insertaVale(Integer idCons,Integer vale,double importe,Long idOrden, String tipo, Date fecha, Date fechaDeposito, int ejercicio, int cve_pers, int proyecto, String clv_partid ){
@@ -41,7 +41,7 @@ public void insertaVale(Integer idCons,Integer vale,double importe,Long idOrden,
 		if(idOrden!=null){
 			String folio=rellenarCeros(idOrden.toString(),6);
 			//guarda en la bitacora
-			gatewayBitacora.guardarBitacora(GatewayBitacora.OP_MOV_AGREGO_VALES, ejercicio, cve_pers, idOrden, folio, "OP", null, null, null, "Cve_vale: "+vale+ " Cons: "+idCons, importe);
+			gatewayBitacora.guardarBitacora(GatewayBitacora.OP_MOV_AGREGO_VALES, ejercicio, cve_pers, null, folio, "OP", null, null, null, "Cve_vale: "+vale+ " Cons: "+idCons, importe);
 		}
 	}
 	catch ( DataAccessException e) {
@@ -64,8 +64,9 @@ public void actualizarVale(Integer idVale,Double importe, int ejercicio, int cve
 	}
 }
 
+//Guardar en la comprobacion de un vale por finanzas
 public  String actualizarConceptoPrincipalVale(Integer idVale,Integer vale,double importe,double importeValeAnte,Long idOrden, int idproyecto, String partida, String tipo,  Date fecha, Date fechaDeposito, int ejercicio, int cve_pers){
-	
+		
 	//Comprobar que el vale no sobrepasa en lo comprobado al neto de la OP en proyecto y partida
 	if(idOrden!=null){
 		//Correccion agregada en codifo SQL [AND CVE_VALE =?] para filtrar desde lista de anexos de vales en multiples vales
@@ -109,10 +110,12 @@ public void actualizarConcepto(Integer idVale,double importe, int proyecto, Stri
 				, new Object[]{vale,cons, proyecto,partida,importeVale,importe});
 	}
 	
+	//COMPRUEBA EN CONCEP_VALE EL VALE TENGA EL CONS_VALE A 1 
 	public void verficaComprobacion(Integer vale){
-		Double importe = (Double)this.getJdbcTemplate().queryForObject("select IMPORTE - DESCONTADO  from  CONCEP_VALE  where CVE_VALE=? and CONS_VALE=1 ",new Object []{vale},Double.class);
+		int cons_Vale=getJdbcTemplate().queryForInt("select count(*) from COMP_VALES where CVE_VALE=?", new Object[]{vale}); //,Integer.class
+		Double importe = (Double)this.getJdbcTemplate().queryForObject("select IMPORTE - DESCONTADO  from  CONCEP_VALE  where CVE_VALE=? and CONS_VALE=? ",new Object []{vale,cons_Vale},Double.class);
 		if (importe.doubleValue()== 0 )
-		   this.getJdbcTemplate().update("update SAM_VALES_EX   set  STATUS=? where   CVE_VALE=? ", new Object[]{ VAL_ESTATUS_COMPROBADO,vale});
+		   this.getJdbcTemplate().update("update SAM_VALES_EX   set  STATUS=? where   CVE_VALE=? ", new Object[]{ VAL_ESTATUS_PAGADO,vale});
 		else
 			this.getJdbcTemplate().update("update SAM_VALES_EX  set  STATUS=? where   CVE_VALE=?  ", new Object[]{ VAL_ESTATUS_PAGADO,vale});
 	} 

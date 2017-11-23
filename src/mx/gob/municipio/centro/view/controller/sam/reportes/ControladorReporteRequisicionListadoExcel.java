@@ -2,10 +2,12 @@ package mx.gob.municipio.centro.view.controller.sam.reportes;
 
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
 import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import mx.gob.municipio.centro.model.gateways.sam.GatewayFirmasDocumentos;
 import mx.gob.municipio.centro.model.gateways.sam.GatewayMovimientosRequisicion;
 import mx.gob.municipio.centro.model.gateways.sam.GatewayProyectoPartidas;
+import mx.gob.municipio.centro.model.gateways.sam.GatewayReportePresupestoDisp;
 import mx.gob.municipio.centro.model.gateways.sam.GatewayRequisicion;
 import mx.gob.municipio.centro.view.bases.ControladorBase;
 
@@ -23,6 +26,7 @@ import mx.gob.municipio.centro.view.bases.ControladorBase;
 @RequestMapping("/sam/reportes/rpt_listado_requisicionesExcel.xls")
 public class ControladorReporteRequisicionListadoExcel extends ControladorBase {
 
+	private static Logger log = Logger.getLogger(ControladorReporteRequisicionListadoExcel.class.getName());
 		public ControladorReporteRequisicionListadoExcel(){
 			
 		}

@@ -1,4 +1,5 @@
- var checkPresupuesto = new Array();
+
+var checkPresupuesto = new Array();
  var ID_PED = 0;
 /**
 *Al iniciar la pagina carga los eventos a los controles del formulario
@@ -12,8 +13,8 @@ $(document).ready(function() {
 	$('#div_os_presupuesto').hide();
 	$('#cbomeses').attr('disabled',true);
 			
-	$("#tab2primary").hide();
-	
+	$('#fragment-conceptos').hide();
+	$('#fila_disponibleVale').hide();
 	$('#cbotipo').on('change',function(event){//El metodo on asigna uno o mas controladores de eventos para los elementos seleccionados.
 		tipoRequisiciones();
 	});
@@ -58,15 +59,15 @@ $(document).ready(function() {
 	 
 	 getMesRequisicion($('#cbomeses').val());
 	 
-	 $('#txtprecioestimado').val('readonly', '');
+	 //$('#txtprecioestimado').val('readonly', '');
 	 $('#fila_contrato').hide();
 	 $('#fila_disponibleVale').hide();
 	
 	 $('#txtfecha').datetimepicker({
 			format: 'DD/MM/YYYY'
 		});
-	 
 });
+
 
 function tipoRequisiciones(){
 	
@@ -257,6 +258,7 @@ function mostrarRequisicion(cve_req){
 								$('#CVE_CONCURSO').val(getHTML(this.CVE_CONCURSO));
 								$('#txtnumcontrato').val(getHTML(this.NUM_CONTRATO));
 								$('#CVE_CONTRATO').val(getHTML(this.CVE_CONTRATO));
+								
 								/*Cargar informacion del vale si existe 02/Abr/2012 */
 								if(getHTML(this.CVE_VALE)!=''){
 									//buscar el vale
@@ -376,6 +378,7 @@ function muestraPresupuesto(){
 function guardarRequisicionPrincipal(){
 	var result = validate();
 	var requiscion=$("#txtrequisicion").val();
+	
 	if (result==false) return false;
 	alert($("#txtrequisicion").val());
 	var v = parseInt($('#cbotipo').val());
@@ -455,31 +458,31 @@ function validate(){
 	if($('#cbodependencia').val()==0){jAlert('Es necesario seleccionar la <b>Unidad Administrativa</b>','Error de validacion'); return false;}
 	//if($('#txtrequisicion').val()==''){swal('Es necesario escribir el numero de <b>RequisiciÃ³n</b>','Error de validacion','error')};
 	
-	controladorRequisicion.comprobarExistencia($('#txtrequisicion').attr('value'),{callback:function(items){existe = items;}, errorHandler:function(errorString, exception) { jError('Fallo la operacion:<br>Error::'+errorString+'-message::'+exception.message+'-JavaClass::'+exception.javaClassName+'.<br>Consulte a su administrador');}});
+	controladorRequisicion.comprobarExistencia($('#txtrequisicion').val(),{callback:function(items){existe = items;}, errorHandler:function(errorString, exception) { swal('Fallo la operacion:<br>Error::'+errorString+'-message::'+exception.message+'-JavaClass::'+exception.javaClassName+'.<br>Consulte a su administrador');}});
 	if(existe==true&&$('#CVE_REQ').val()==0){jError('El numero de requisicion que esta intentando guardar ya existe en el sistema','Error'); return false;}
 
-	if($('#txtfecha').val()==''){jAlert('Es necesario escribir una <b>Fecha</b> vÃ¡lida','Error de validaciÃ³n'); return false;}
-	if($('#cbotipo').val()==0){jAlert('Es necesario seleccionar un <b>Tipo</b> de RequisiciÃ³n','Error de validacion'); return false;}
+	if($('#txtfecha').val()==''){swal('Es necesario escribir una <b>Fecha</b> vÃ¡lida','Error de validaciÃ³n'); return false;}
+	if($('#cbotipo').val()==0){swal('Es necesario seleccionar un <b>Tipo</b> de RequisiciÃ³n','Error de validacion'); return false;}
 	//if ($('#txtproyecto').val()==''||$('#ID_PROYECTO').attr('value')==''||$('#ID_PROYECTO').attr('value')=='0'){jAlert('Es necesario escribir el <b>Programa</b>','Error de validaciÃ³n'); return false;}
-	if ($('#txtpartida').val()==''){jAlert('Es necesario escribir la <b>Partida</b>','Error de validaciÃ³n'); return false;}
-	if ($('#cbomeses').val()==0){jAlert('El <b>Presupuesto</b> no es valido','Error de validaciÃ³n'); return false;}
+	if ($('#txtpartida').val()==''){swal('Es necesario escribir la <b>Partida</b>','Error de validaciÃ³n'); return false;}
+	if ($('#cbomeses').val()==0){swal('El <b>Presupuesto</b> no es valido','Error de validaciÃ³n'); return false;}
 }
 
-/*Guarda los conceptos o movimientos de la requisicion*/
+/*----------------   Guarda los conceptos o movimientos de la requisicion    -------------------------------------*/
 function guardarConceptoRequisicion(){
 	var error="";
  	var titulo ='Advertencia';
 	if($('#cbotipo').val()=='2'||$('#cbotipo').val()=='3'||$('#cbotipo').val()=='4'){
-		if($('#ID_REQ_MOVTO').val()==0&&parseInt($('#TOTAL_CONCEPTOS').val())>=1) {jAlert('Una Orden de Servicio/Trabajo no puede contener mÃ¡s de un lote</br>','Advertencia'); return false;} 
+		if($('#ID_REQ_MOVTO').val()==0&&parseInt($('#TOTAL_CONCEPTOS').val())>=1) {swal('Una Orden de Servicio/Trabajo no puede contener más de un lote</br>','Advertencia'); return false;} 
 	}
 	if($('#ID_ARTICULO').val()==''||$('#ID_ARTICULO').val()=='0') {jAlert('Es necesario seleccionar un producto vÃ¡lido</br>','Advertencia'); return false;}
-	if($('#txtprecioestimado').val()=='') {jAlert('Es necesario especificar un precio de producto valido</br>', 'Advertencia'); return false;}
+	if($('#txtprecioestimado').val()=='') {swal('Es necesario especificar un precio de producto valido</br>', 'Advertencia'); return false;}
 	//if($('txtprecioestimado').val()=='') {jError('Es necesario especificar un precio de producto valido','Error de validacion'); return false;}
-	if($('#CVE_UNIDAD_MEDIDA').val()=='') jAlert('Es necesario especificar la unidad de medida del producto valido</br>','Advertencia');
-	if($('#txtcantidad').val()=='') {jAlert('Es necesario especificar la cantidad de productos</br>', 'Advertencia'); return false;}
+	if($('#CVE_UNIDAD_MEDIDA').val()=='') swal('Es necesario especificar la unidad de medida del producto valido</br>','Advertencia');
+	if($('#txtcantidad').val()=='') {swal('Es necesario especificar la cantidad de productos</br>', 'Advertencia'); return false;}
 //	if($('#txtdescripcion').val()=='') error += 'Es necesario una descripcion valida</br>';
-	if($('#txtproyecto').val()=='') {jAlert('Es necesario establecer un Programa valido</br>','Advertencia'); return false;}
-	if($('#txtpartida').val()=='') {jAlert('Es necesario establecer una partida valida</br>','Advertencia');}
+	if($('#txtproyecto').val()=='') {swal('Es necesario establecer un Programa valido</br>','Advertencia'); return false;}
+	if($('#txtpartida').val()=='') {swal('Es necesario establecer una partida valida</br>','Advertencia');}
 	if($('#cbotipo').val()=='2'||$('#cbotipo').val()=='3'||$('#cbotipo').val()=='4'&&$('#cbotipo').val()=='5') {
 			if(parseInt($('#txtcantidad').val())>1) {jAlert('Una Orden de Servicio/Trabajo no puede contener mas de una cantidad de producto</br>', 'Advertencia'); return false;}
 	}
@@ -492,14 +495,14 @@ function guardarConceptoRequisicion(){
 							if(items) {
 									nuevoConcepto();
 									mostrarTablaConceptos($('#CVE_REQ').val());
-									CloseDelay('Lote guardado con Ã©xito', function(){ $('#txtproducto').focus();
+									CloseDelay('Lote guardado con éxito', function(){ $('#txtproducto').focus();
 										});
 										
-								} else jError('No se ha podido guardar el lote', 'Error');
+								} else swal('No se ha podido guardar el lote', 'Error');
 						}
 						,
 						errorHandler:function(errorString, exception) { 
-							jError('Fallo la operacion:<br>Error::'+errorString+'-message::'+exception.message+'-JavaClass::'+exception.javaClassName+'.<br><strong>Consulte a su administrador</strong>');   
+							swal('Fallo la operacion:<br>Error::'+errorString+'-message::'+exception.message+'-JavaClass::'+exception.javaClassName+'.<br><strong>Consulte a su administrador</strong>');   
 							return false;
 						}
 					});
@@ -508,13 +511,13 @@ function guardarConceptoRequisicion(){
 			});*/
 }
 
-/*funcion para eliminar un movimiebto de a requisicion*/
+/*funcion para eliminar un movimiento de a requisicion*/
 function eliminarMovimientos(){
 	 var checkMovimientos = [];
      $('input[name=chkconsecMovimiento]:checked').each(function() { checkMovimientos.push($(this).val());});	
   	 var cve_req = $('#CVE_REQ').val();
 	 if (checkMovimientos.length>0){
-		jConfirm('Â¿Confirma que desea eliminar los lotes de la requisiciÃ³n?','Confirmar', function(r){
+		jConfirm('¿Confirma que desea eliminar los lotes de la requisiciÃ³n?','Confirmar', function(r){
 				if(r){
 						ShowDelay('Eliminando lote','');
 						controladorRequisicion.eliminarMovimientoRequisicion(checkMovimientos, cve_req, {
@@ -525,7 +528,7 @@ function eliminarMovimientos(){
 						} 					   				
 						,
 						errorHandler:function(errorString, exception) { 
-							jError("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");          
+							swal("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");          
 						}
 					});
 				}
@@ -533,7 +536,7 @@ function eliminarMovimientos(){
 	   });
 	 } 
 	else 
-	    jAlert('Es necesario que seleccione por lo menos un lote del listado', 'Advertencia');
+	    swal('Es necesario que seleccione por lo menos un lote del listado', 'Advertencia');
  }
 	
 /*funcion que permite mostrar los datos del concepto en pantalla para editarlos*/
@@ -558,7 +561,7 @@ function editarConcepto(ID_REQ_MOVTO){
 				}
 				,
 				errorHandler:function(errorString, exception) { 
-				jError('Fallo la operacion:<br>Error::'+errorString+'-message::'+exception.message+'-JavaClass::'+exception.javaClassName+'.<br><strong>Consulte a su administrador</strong>');   
+				swal('Fallo la operacion:<br>Error::'+errorString+'-message::'+exception.message+'-JavaClass::'+exception.javaClassName+'.<br><strong>Consulte a su administrador</strong>');   
 				return false;
 			}
 				
@@ -568,6 +571,7 @@ function editarConcepto(ID_REQ_MOVTO){
 function muestraProductos(){	
 	__listadoProductos($('#txtproducto').val(), $('#txtpartida').val());
 }
+
 
 /*funcion para mostrar el listado de conceptos*/
 function mostrarTablaConceptos(cve_req){
@@ -582,13 +586,13 @@ function mostrarTablaConceptos(cve_req){
 						   callback:function(items) { 
 						   		jQuery.each(items,function(i){
 									 cont++;
+									 
 									 total+= this.IMPORTE;
-									 $('#TOTAL_CONCEPTOS').val((parseInt($('#TOTAL_CONCEPTOS').val())+1)) 
+									 $('#TOTAL_CONCEPTOS').val((parseInt($('#TOTAL_CONCEPTOS').val())+1)); 
 									 $('#IMPORTE_TOTAL').val(total);
 									 pintaTablaConceptos('listasConceptos', this.ID_REQ_MOVTO, this.CVE_REQ, this.REQ_CONS, this.CANTIDAD, this.UNIDAD, this.NOTAS, this.IMPORTE, this.ARTICULO, this.STATUS, this.ID_PED_MOVTO);				   
 									 if(items.length==cont) 
-										 pintarTotalConceptos('listasConceptos', $('#IMPORTE_TOTAL').val(cont)); 
-										
+										 pintarTotalConceptos('listasConceptos', $('#IMPORTE_TOTAL').val(),cont ); 
 									 validaTipoDoc();
 								});
 						   }
@@ -643,7 +647,7 @@ function pintaTablaConceptos(table, ID_REQ_MOVTO, CVE_REQ, CONSECUTIVO, CANTIDAD
 	var htmlCheck = "<input type='checkbox' name='chkconsecMovimiento' id='chkconsecMovimiento' value='"+ID_REQ_MOVTO+"'>";
 	var htmlBoton = "<img src=\"../../imagenes/calendar_edit.png\" style='cursor: pointer;' alt=\"Modificar anexo "+CONSECUTIVO+"\" width=\"16\" height=\"16\" border=\"0\" onClick=\"mostrarAnexoConcepto("+ID_REQ_MOVTO+","+CONSECUTIVO+")\" >&nbsp;";
     var htmlEdit = "<img src=\"../../imagenes/page_white_edit.png\" style='cursor: pointer;' alt=\"Editar lote "+CONSECUTIVO+"\" width=\"16\" height=\"16\" border=\"0\" onClick=\"editarConcepto("+ID_REQ_MOVTO+")\" >"; 		
-	var htmlEnPedido = "<a href='javascript:getInfoPedido("+ID_PED_MOVTO+")'>SÃ­</a>";
+	var htmlEnPedido = "<a href='javascript:getInfoPedido("+ID_PED_MOVTO+")'>Sí­</a>";
 	var ban = ($('#cbotipo').val()!=1&&$('#cbotipo').val()!=7) ? "No Aplica": "No";
 	
 	if(ID_PED_MOVTO!=0) ID_PED =  ID_PED_MOVTO; 
@@ -661,7 +665,7 @@ function pintaTablaConceptos(table, ID_REQ_MOVTO, CVE_REQ, CONSECUTIVO, CANTIDAD
  }
 
 function getInfoPedido(ID_PED_MOVTO){
-	//jInformation("Este lote se encuentra en el pedido: "+ID_PED_MOVTO,"InformaciÃ³n");	
+	swal("Este lote se encuentra en el pedido: "+ID_PED_MOVTO,"Información");	
 }
 
 
@@ -1119,3 +1123,4 @@ function mostrarLotePedido(id_ped_movto){
 			}
 	});
 }
+

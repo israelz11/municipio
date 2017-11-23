@@ -368,7 +368,8 @@ public class GatewayContratos extends BaseGateway {
 			sql += " AND C.ID = '"+modelo.get("tipo_gto").toString()+"'";
 		if(modelo.get("CLV_BENEFI")!="")
 			sql += " AND B.CLV_BENEFI = '"+modelo.get("CLV_BENEFI").toString()+"'";
-			
+		if(modelo.get("txtproyecto")!="")
+			sql += " AND EXISTS (SELECT ID_PROYECTO,CLV_PARTID FROM SAM_COMP_MOV WHERE SAM_COMP_MOV.DOCUMENTO=A.CVE_CONTRATO AND ID_PROYECTO IN ("+modelo.get("txtproyecto")+")AND A.STATUS IN ("+modelo.get("status")+"))";	
 		return this.getJdbcTemplate().queryForList(sql);
 	}
 	

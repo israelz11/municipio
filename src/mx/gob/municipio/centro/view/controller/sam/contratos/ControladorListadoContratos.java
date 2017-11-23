@@ -48,6 +48,8 @@ public class ControladorListadoContratos extends ControladorBase {
 		String tipoGasto=request.getParameter("cbotipogasto");
 		String beneficiario=request.getParameter("txtprestadorservicio");
 		String cve_benefi=request.getParameter("CLV_BENEFI");
+		String txtproyecto=request.getParameter("txtproyecto");
+		String txtpartida=request.getParameter("txtpartida");
 		
 		if(beneficiario==null ||beneficiario.equals("")) cve_benefi = "";
 		String verUnidad=request.getParameter("verUnidad");
@@ -60,6 +62,8 @@ public class ControladorListadoContratos extends ControladorBase {
 		modelo.put("txtprestadorservicio",beneficiario );
 		modelo.put("CLV_BENEFI",cve_benefi );
 		modelo.put("verUnidad",verUnidad);
+		modelo.put("txtproyecto",txtproyecto);
+		modelo.put("txtpartida",txtpartida);
 		modelo.put("nombreUnidad",this.getSesion().getUnidad());
 		Map xmod = new HashMap();
 		xmod.putAll(modelo);

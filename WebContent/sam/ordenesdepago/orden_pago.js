@@ -149,13 +149,13 @@ function guardarDocumento(){
 						//ShowDelay('Guardando anexo','');
 						controladorOrdenPagoRemoto.guardarDocumento($('#idDocumento').val(),$('#tipoMovDoc').selectpicker('val'),$('#numeroDoc').val(),$('#notaDoc').val(),idOrden,{
 						callback:function(items) { 	 
-						llenarTablaDeDocumentos();
-						lipiarDocumento();	    
+							llenarTablaDeDocumentos();
+							lipiarDocumento();	    
 						 //CloseDelay("Anexos guardados con Ã©xito");	  
 						} 					   				
 						,
 						errorHandler:function(errorString, exception) { 
-							jError(errorString, 'Error');         
+							swal(errorString, 'Error');         
 						}
 	 }); 
 }
@@ -201,7 +201,7 @@ function getFacturas(){
 
 
 /*----------------- Limpia la tabla desde el boton Nuevo anexo en la Orden de pago */
-function lipiarVale(){
+function lipiarVale (){
 	$('#idVale').val('');
 	$('#importeVale').val('');
 	$('#claveVale').val('');
@@ -277,13 +277,13 @@ function guardarVale(){
 						CloseDelay("Vale guardado con éxito");	 
 				  }
 				   else{
-					   jError(items,'Error');
+					   swal(items,'Error');
 				   }
 				  
 				} 					   				
 				,
 				errorHandler:function(errorString, exception) { 
-					jError(errorString, 'Error'); 
+					swal(errorString, 'Error'); 
 			}
 		});
 	     
@@ -386,7 +386,11 @@ function eliminarDetalle(){
 								   if (items==true) {
 									   //$('#CVE_CONTRATO').val(0);
 									   limpiarDetalle();
+									   limpiarRetenciones();
+									   limpiarAnexos();
+									   lipiarVale();
 									   llenarTablaDeDetallesOrdenes();	
+									   
 									   CloseDelay("Se eliminaron satisfactoriamente los detalles");
 								   }
 								   else
@@ -412,6 +416,12 @@ function lipiarDocumento(){
 	$('#notaDoc').attr('value',"");
 }
 
+function limpiarRetenciones(){
+	$('#idRetencion').attr('value', '');
+	$('#retencion').val(0);	
+	$('#importeRetencion').attr('value','');
+	$('#retencion').focus();
+}
 
 /*-------------------------- ESTA CLASE ES INUSUAL DADO QUE TODA LA INFORMACION PRESUPUESTAL VIENE DESDE LA FACTURA ------------------------------------------------*/
 function limpiarDetalle() {
@@ -919,24 +929,6 @@ function llenarTablaDeRetenciones() {
 
 function cerrarOrden( ) {
 	var tipo_gto = $('#tipoGasto').selectpicker('val');
-	/*jConfirm('¿Confirma que desea cerrar la Orden de Pago?','Cerrar Orden Pago', function(r){
-			if(r){			
-				ShowDelay('Cerrando Orden de Pago','');	
-				controladorOrdenPagoRemoto.validarTipoGasto($('#id_orden').attr('value'), tipo_gto, "x", {
-							callback:function(items){
-								if(items=='')
-									_cerrarOrden();
-								else
-									jError(items,'Advertencia');
-							} 					   				
-							,
-							errorHandler:function(errorString, exception) { 
-								jError(errorString, 'Error'); 
-							}
-						
-			});
-		}
-	});*/
 
 	swal({
 		  title: 'Cerrar Orden de Pago',

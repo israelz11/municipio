@@ -45,7 +45,8 @@ public class ControladorRequisicion extends ControladorBase {
 	public static int REQ_STATUS_EN_PROCESO = 2;
 	public static int REQ_STATUS_A_REVISAR = 3;
 	public static int REQ_STATUS_CANCELADA = 4;
-	public static int REQ_STATUS_FINIQUITADA = 5;*/
+	public static int REQ_STATUS_FINIQUITADA = 5;
+*/
 	
 	
 	private static Logger log = Logger.getLogger(ControladorRequisicion.class.getName());
@@ -68,6 +69,7 @@ public class ControladorRequisicion extends ControladorBase {
 
 	/*Metodo de errores desactivado*/
 	@SuppressWarnings("unchecked")
+	
 	/*Mapeo para la pagina de donde se recibira los GET*/ 
 	@RequestMapping(method = RequestMethod.GET)  
 	public String  requestGetControlador( Map modelo, HttpServletRequest request) {

@@ -9,24 +9,28 @@
 <title>Muestra presupuesto</title>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
 <link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css">
+<link rel="stylesheet" href="../../include/css/sweetalert2.min.css" type="text/css"/>
 <link href="../../include/js/autocomplete/jquery.autocomplete.css" rel="stylesheet" type="text/css" />
 <link type="text/css" href="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.css" rel="stylesheet" />	
 <link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css">
 <script type="text/javascript" src="../../dwr/interface/controladorReembolsosLiquidosValesRemoto.js"> </script>
 <script type="text/javascript" src="../../dwr/engine.js"> </script>  
 <script type="text/javascript" src="../../dwr/util.js"> </script>  
-<script type="text/javascript" src="../../include/js/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="../../include/js/jquery-1.3.2.min.js?x=<%=System.currentTimeMillis()%>"></script>
 <script type="text/javascript" src="../../include/js/toolSam.js"></script>
 <script type="text/javascript" src="../../include/js/jquery-impromptu.2.3.js"></script>
 <script type="text/javascript" src="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.min.js"></script>
 <script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>
-<script type="text/javascript" src="reembolsos.js"></script>
+<script type="text/javascript" src="reembolsos.js?x=<%=System.currentTimeMillis()%>"></script>
 <script type="text/javascript" src="../../include/js/toolSam.js"></script>
 <script type="text/javascript" src="../../include/js/jquery.maxlength.js"></script>
 <script type="text/javascript" src="../../include/js/jquery.bestupper.min.js"></script>
 <script type="text/javascript" src="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.min.js"></script>
 <link rel="stylesheet" href="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.css" type="text/css" />
 <link rel="stylesheet" href="../../include/js/autocomplete/jquery.autocomplete.css" type="text/css" />
+<link rel="stylesheet" href="../../include/css/sweetalert2.min.css" type="text/css"/>
+
+<script type="text/javascript" src="../../include/js/sweetalert2.min.js"></script>
 <!--<script type="text/javascript" src="../../include/js/jquery.tabs/jquery-1.1.3.1.pack.js"></script>
 <script type="text/javascript" src="../../include/js/jquery.tabs/jquery.history_remote.pack.js"></script>
 <script type="text/javascript" src="../../include/js/jquery.tabs/jquery.tabs.pack.js"></script>-->
@@ -111,7 +115,7 @@
     </tr>
     <tr >
       <th height="30"  >&nbsp;</th>
-      <td ><input name="xGrabar" type="button" class="botones"   onclick="guardarRembolso();" value="Guardar reembolso" style="width:150px"/>
+      <td ><input name="xGrabar" type="button" class="botones" onclick=" guardarRembolso();" value="Guardar reembolso" style="width:150px"/>
       <input name="xGrabar2" type="button" class="botones"   onclick="limpiar();" value="Limpiar" style="width:150px"/></td>
     </tr>
     

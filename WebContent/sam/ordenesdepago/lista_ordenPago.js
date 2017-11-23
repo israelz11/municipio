@@ -159,7 +159,7 @@ function getOrden(){
 		
 		  function (dismiss) {
 		    if (dismiss === 'timer') {
-		      console.log('I was closed by the timer')
+		      console.log('Tiempo caducado')
 		      var s = 'lista_ordenPago.action?idUnidad='+$('#cbodependencia').attr('value')+"&fechaInicial="+$('#fechaInicial').attr('value')+"&fechaFinal="+$('#fechaFinal').attr('value')+"&status="+checkStatus+"&tipo_gto="+$('#cbotipogasto').val();
 		      $("#forma").submit()
 		    }
@@ -204,70 +204,62 @@ function getReporteOP(clave) {
 
 function aperturarOrden(){
 	 var checkClaves = [];
-     $('input[name=chkordenes]:checked').each(function() { checkClaves.push($(this).val());});	
-	 if (checkClaves.length>0){
-		 /*
-		jConfirm('¿Confirma que desea aperturar las Ordenes de Pago seleccionadas?','Confirmar', function(r){
-			if(r){
-					 swal.showLoading();
-					 controladorOrdenPagoRemoto.aperturarOrdenes(checkClaves, {
-						callback:function(items) { 		
-						  CloseDelay('Ordenes de Pago aperturadas con éxito', 2000, function(){
-							  		 getOrden();
-							  });
-						  
-					 } 					   				
-					 ,
-					 errorHandler:function(errorString, exception) { 
-						swal(errorString, 'Error');          
-					 }
-				    });
-			}
-	   },async=false );*/
-		 swal({
-			  title: 'Apertura de Orden de Pago',
-			 
-			  showCancelButton: true,
-			  confirmButtonText: 'Aperturar',
-			  showLoaderOnConfirm: true,
-			  preConfirm: function (r) {
-			    return new Promise(function (resolve, reject) {
-			      setTimeout(function() {
-			    	  if(r){
-							 swal.showLoading();
-							 controladorOrdenPagoRemoto.aperturarOrdenes(checkClaves, {
-								callback:function(items) { 
-								swal.disableLoading()
-								  CloseDelay('Ordenes de Pago aperturadas con éxito', 2000, function(){
-									  		 getOrden();
-									  });
-								  
-							 } 					   				
-							 ,
-							 errorHandler:function(errorString, exception) { 
-								swal(errorString, 'Error');          
-							 }
-						    });
-					}
-			    else {
-			          resolve()
-			        }
-			      }, 2000)
-			    })
-			  },
-			  allowOutsideClick: false
-			 
-			}).then(function (r) {
-			  swal({
-			    type: 'success',
-			    title: 'Orden de pago aperturada con éxito...!',
-			    
-			  })
-			})
-	 
-	 } 
-	 swal('Es necesario que seleccione por lo menos una Orden de Pago del listado', 'Advertencia');
-}
+    $('input[name=chkordenes]:checked').each(function() { checkClaves.push($(this).val());});	
+   
+    if (checkClaves.length>0){
+    	swal({
+		  	  	  title: 'Esta seguro?',
+		  	  	  text: "¿Confirma que desea aparturar la(s) orden(es) de pago(s) seleccionada(s)?",
+		  	  	  type: 'warning',
+		  	  	  showCancelButton: true,
+		  	  	  confirmButtonColor: '#3085d6',
+		  	  	  cancelButtonColor: '#d33',
+		  	  	  confirmButtonText: 'Si, apeturar!'
+  	  	}).then(function (r) {
+		  	  			//swal.showLoading();
+			  			controladorOrdenPagoRemoto.aperturarOrdenes(checkClaves, {
+			  			callback:function(items) {	
+			  						//getOrden();
+			  				
+			  			} 						   				
+			  			,
+			  				errorHandler:function(errorString, exception) { 
+			  					swal('Oops...',errorString,'error');	
+			  				}
+			  			},async=false ); 
+			  	  swal({
+  				  title: 'Confirmacion',
+  				  text: 'Aperturando la(s) orden(s) de pago(s) ' + checkClaves,
+  				  timer: 3000,
+  				  onOpen: function () {
+  				    swal.showLoading()
+  				  }
+  				}).then(
+  				  function () {},
+  				  // handling the promise rejection
+  				  function (dismiss) {
+  				    if (dismiss === 'timer') {
+  				      console.log('I was closed by the timer')
+  				    }
+  				  }
+  				)
+  	  	})
+  	 } else 
+  		swal({
+			  title: 'Error!',
+			  text: 'Es necesario seleccionar por lo menos una Requisicion del listado.',
+			  type: 'info',
+			  timer: 2000
+			}).then(
+			  function () {},
+			  // handling the promise rejection
+			  function (dismiss) {
+			    if (dismiss === 'timer') {
+			      console.log('I was closed by the timer')
+			    }
+			  }
+			)
+ }
 
 
 

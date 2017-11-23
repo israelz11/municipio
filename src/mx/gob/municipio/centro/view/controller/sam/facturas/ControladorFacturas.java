@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import mx.gob.municipio.centro.model.gateways.sam.GatewayBitacora;
 import mx.gob.municipio.centro.model.gateways.sam.GatewayFacturas;
 import mx.gob.municipio.centro.model.gateways.sam.GatewayOrdenDePagos;
 import mx.gob.municipio.centro.model.gateways.sam.GatewayUnidadAdm;
@@ -28,6 +29,9 @@ public class ControladorFacturas extends ControladorBase {
 	
 	@Autowired
 	GatewayUnidadAdm gatewayUnidadAdm;
+	
+	@Autowired
+	private GatewayBitacora gatewayBitacora;
 	
 	@Autowired 
 	GatewayFacturas gatewayFacturas;
@@ -146,6 +150,7 @@ public class ControladorFacturas extends ControladorBase {
     {
 		gatewayFacturas.guardarDetalle(cve_factura, idProyecto, clv_partid, importe, notas);
     }
+	
 	
 	public List<Map> getDetallesFactura(Long cve_factura)
 	{
