@@ -8,13 +8,28 @@
 <head>
 <title>Listado de Pedidos</title>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+
+<link rel="stylesheet" href="../../include/css/bootstrap-3.3.7.css" type="text/css">
+<link rel="stylesheet" href="../../include/css/bootstrap-select.css" type="text/css">
+<link rel="stylesheet" href="../../include/css/bootstrap2.css" type="text/css"/>
+
+<script type="text/javascript" src="../../include/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../../include/js/bootstrap-3.3.7.js"></script>
+<script type="text/javascript" src="../../include/js/bootstrap-select.js"></script>
+<link rel="stylesheet" href="../../include/css/sweetalert2.css" type="text/css">
 <link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css">
+<!--
 <link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css">
 <link type="text/css" href="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.css" rel="stylesheet" />	
 <script type="text/javascript" src="../../include/js/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>
+  -->
+
+
+<script type="text/javascript" src="../../include/js/sweetalert2.js"></script>
 <script type="text/javascript" src="../../include/js/toolSam.js"></script>
 <script type="text/javascript" src="lst_pedidos.js"> </script>
-<script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>
+
 <script type="text/javascript" src="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.min.js"></script>
 <script type="text/javascript" src="../../dwr/interface/controladorPedidos.js"> </script>
 <script type="text/javascript" src="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.min.js"></script>
@@ -23,10 +38,11 @@
 <script type="text/javascript" src="../../dwr/interface/autocompleteDiversosRemoto.js"> </script>
 <script type="text/javascript" src="../../dwr/engine.js"></script>
 <link rel="stylesheet" href="../../include/js/autocomplete/jquery.autocomplete.css" type="text/css" />
-
+<!--  
 <link rel="stylesheet" href="../../include/css/css/css3-buttons.css" type="text/css" media="screen">
 <link rel="stylesheet" href="../../include/css/tiptip.css" type="text/css"  media="screen">
 <script src="../../include/css/jquery.tiptip.js"></script>
+-->
 <style type="text/css">
 <!--
 a:link {
@@ -314,7 +330,7 @@ a:active {
   <c:if test="${empty fecha_finiquitado}">
   	<sec:authorize ifAllGranted="ROLE_Sam_PRIVILEGIOS_CANCELAR_REQUISICIONES">
     	<td width="139" bgcolor="#FFFFFF"><div class="buttons tiptip">
-        	<button name="cmdcancelarm" id="cmdcancelarm2" onClick="cancelarPedidoMultiples()"  title="Cancela o elimina los documentos seleccionados" type="button" class="button red middle" ><span class="label" style="width:100px">Cancelar</span></button>
+        	<button name="cmdcancelarm" id="cmdcancelarm2" title="Cancela o elimina los documentos seleccionados" type="button" class="button red middle" ><span class="label" style="width:100px">Cancelar</span></button>
             </div>
         </td>
     </sec:authorize>

@@ -9,35 +9,89 @@ Fecha      : 21/05/2010
 */
 
 $(document).ready(function() {  
-	 $('#tabuladores').tabs();
-	 $('#tabuladores').tabs('enable',0);
+	
+	$('#municipal').hide();//
+	$('#rlegal').hide();
+	 //$('#tabuladores').tabs();
+	 //$('#tabuladores').tabs('enable',0);
 	 $('#cmdcerrar').click(function (event){window.parent.compruebaVariable();});
   	 $('#cmdguardar').click(function(event){guardar();});
+  	 
+  	$('#fecha_altab').datetimepicker({
+		format: 'DD/MM/YYYY',
+		defaultDate: new Date()
+	});
+  	$('#fecha_bajab').datetimepicker({
+		format: 'DD/MM/YYYY',
+		
+	});
+  	$('#fecha_bajar').datetimepicker({
+		format: 'DD/MM/YYYY',
+	});
+  	
+  	$('#tipo').on('change',function(event){//El metodo on asigna uno o mas controladores de eventos para los elementos seleccionados.
+		DatosBeneficiarios();
+	});
+  	
+  	$('.selectpicker').selectpicker();
 });
 
+function DatosBeneficiarios(){
+	
+	var tipoBeneficiario = $('#tipo').val();
+	/*Retorna si vale cero*/
+	if(tipoBeneficiario=='0') return false;
+	
+	switch(tipoBeneficiario){
+	
+		case '0': /*Municipio*/
+			alert('Municipio');
+			
+		break;
+		case 'MP': /*Municipio*/
+			alert('Municipio');
+			$('#municipal').show();
+			$('#rlegal').hide();
+		break;
+		case 'PF': /*Municipio*/
+			alert('Prestador');
+			$('#municipal').hide();
+			$('#rlegal').hide();
+		break;
+		case 'PM': /*Municipio*/
+			alert('Prestador');
+			$('#municipal').hide();
+			$('#rlegal').show();
+		break;
+	}
+	
+	
+	alert('Selecionaste la opcion: ' + $('#tipo').val());
+}
+
 function limpiar(){
-	 		 $('#idProveedor').attr('value','');
-	 		 $('#clave').attr('value','');			 			 
-			 $('#razonSocial').attr('value','');
-			 $('#responsable').attr('value','');
-			 $('#responsable2').attr('value','');
-			 $('#rfc').attr('value','');
-			 $('#curp').attr('value','');
-			 $('#telefono').attr('value','');
-			 $('#tipo').attr('value','');
-			 $('#calle').attr('value','');
-			 $('#colonia').attr('value','');
-			 $('#ciudad').attr('value','');
-			 $('#estado').attr('value','');
-			 $('#cp').attr('value','');
-			 $('#banco').attr('value','');
-			 $('#idBanco').attr('value','');
-			 $('#noCuenta').attr('value','');
-			 $('#clabeb').attr('value','');
-			 $('#tipoCuenta').attr('value','');
-			 $('#beneficiarioPadre').attr('value','');
-			 $('#idBeneficiarioPadre').attr('value','');
-			 $('#vigencia').attr('checked',true);
+	 		 $('#idProveedor').val('');
+	 		 $('#clave').val('');			 			 
+			 $('#razonSocial').val('');
+			 $('#responsable').val('');
+			 $('#responsable2').val('');
+			 $('#rfc').val('');
+			 $('#curp').val('');
+			 $('#telefono').val('');
+			 $('#tipo').val('');
+			 $('#calle').val('');
+			 $('#colonia').val('');
+			 $('#ciudad').val('');
+			 $('#estado').val('');
+			 $('#cp').val('');
+			 $('#banco').val('');
+			 $('#idBanco').val('');
+			 $('#noCuenta').val('');
+			 $('#clabeb').val('');
+			 $('#tipoCuenta').val('');
+			 $('#beneficiarioPadre').val('');
+			 $('#idBeneficiarioPadre').val('');
+			 $('#vigencia').prop('checked',true);
 			 quitRow("beneficiariosHijos");
 			 $('#tr_hijos').hide();				 
 			 //$('#tipo').attr('value','');
@@ -45,59 +99,62 @@ function limpiar(){
 
 
 function verificarBanco() {
-	if ($('#banco').attr('value')=="") {
+	if ($('#banco').value=="") {
 	   $('#idBanco').attr('value','');
 	   $('#noCuenta').attr('value','');
 	   $('#tipoCuenta').attr('value','');
 	}
 }
+//Implementar la funcion valida.............. 2018
+function valida(){
+	if(clabeb.length<18){
+		alert('La clabe debe contener 18 digitos');
+		return false;
+	}
+}
 
 function guardar(){			
-    var error="";
-	 var clave= $('#idProveedor').attr('value');			 			 
-	 var razonSocial=$('#razonSocial').attr('value');
-	 var responsable=$('#responsable').attr('value');
-	 var responsable2=$('#responsable2').attr('value');
-	 var rfc=$('#rfc').attr('value');
-	 var curp=$('#curp').attr('value');
-	 var telefono=$('#telefono').attr('value');
-	 var tipo=$('#tipo').attr('value');
-	 var calle=$('#calle').attr('value');
-	 var colonia=$('#colonia').attr('value');
-	 var ciudad=$('#ciudad').attr('value');
-	 var estado=$('#estado').attr('value');
-	 var cp=$('#cp').attr('value');
-	 var idBanco=$('#cbobanco').attr('value');
-	 var noCuenta=$('#noCuenta').attr('value');
-	 var clabeb=$('#clabeb').attr('value');
-	 var tipoCuenta=$('#tipoCuenta').attr('value');
-	 var idBeneficiarioPadre=$('#idBeneficiarioPadre').attr('value');			 	 
-	 if ( tipo=="") {jAlert('El Tipo de beneficiario no es válido', 'Advertencia'); return false;}
-	 if(tipo=="PR"){
-		 if ( rfc=="")  {jAlert('El RFC no es válido', 'Advertencia'); return false;}
-		 if ( razonSocial=="")  {jAlert('La Razón Social no es válida', 'Advertencia'); return false;}
-		 if ( responsable=="")  {jAlert('El Responsable no es válido', 'Advertencia'); return false;}
-		 //if ( telefono=="")  {jAlert('El número de telefono no es válido', 'Advertencia'); return false;}
-		 //if (telefono.length!=10)  {jAlert('El número de telefono no es válido', 'Advertencia'); return false;}
-		
-		 if ( calle=="") {jAlert('La Calle no es válida', 'Advertencia'); return false;}
-		 if ( colonia=="")  {jAlert('La Colonia no es válida', 'Advertencia'); return false;}
-		 if ( estado=="")  {jAlert('El Estado no es válido', 'Advertencia'); return false;}
-		 if ( ciudad=="")  {jAlert('La Ciudad no es válida', 'Advertencia'); return false;}
-		 if ( cp=="")  {jAlert('El Codigo postal no es válido', 'Advertencia'); return false;}
-		 //if ( noCuenta=="") {alert('La Cuenta debe ser capturada.', 'Advertencia'); return false;}
-		 if ( clabeb=="") {alert('La Cuenta debe ser capturada.', 'Advertencia'); return false;}
-		 //if ((clabeb).val().length!=18) {alert("La CLABE debe tener 18 digitos", 'Advertencia'); return false;}
-		 //if ( idBanco != "" && $('#noCuenta').attr('value') == ""  )  {jAlert('El Número de cuenta no es válido', 'Advertencia'); return false;}
-		 
-		
+     var error="";
+	 var clave= $('#idProveedor').val();			 			 
+	 var razonSocial=$('#razonSocial').val();
+	 var responsable=$('#responsable').val();
+	 var responsable2=$('#responsable2').val();
+	 var rfc=$('#rfc').val();
+	 var curp=$('#curp').val();
+	 var telefono=$('#telefono').val();
+	 var tipo=$('#tipo').val();
+	 var calle=$('#calle').val();
+	 var colonia=$('#colonia').val();
+	 var ciudad=$('#ciudad').val();
+	 var estado=$('#estado').val();
+	 var cp=$('#cp').val();
+	 var idBanco=$('#cbobanco').val();
+	 var noCuenta=$('#noCuenta').val();
+	 var clabeb=$('#clabeb').val();
+	 var tipoCuenta=$('#tipoCuenta').val();
+	 var idBeneficiarioPadre=$('#idBeneficiarioPadre').val();
+	 //swal('Oops...','Something went wrong!','error') swal('El Tipo de beneficiario no es válido','warning')
+	 if ( tipo=="0") {swal('Oops...','El Tipo de beneficiario no es válido!','warning'); return false;}
+	 
+	 if(tipo=="PM"){
+		 if ( rfc=="")  {swal('','El RFC no es válido','warning'); return false;}
+		 if ( razonSocial=="")  {swal('','La Razón Social no es válida', 'warning'); return false;}
+		 if ( responsable=="")  {swal('','El Responsable no es válido', 'warning'); return false;}
+		 if ( calle=="") {swal('','La Calle no es válida', 'warning'); return false;}
+		 if ( colonia=="")  {swal('','La Colonia no es válida', 'warning'); return false;}
+		 if ( estado=="")  {swal('','El Estado no es válido', 'warning'); return false;}
+		 if ( ciudad=="")  {swal('','La Ciudad no es válida', 'warning'); return false;}
+		 if ( cp=="")  {swal('','El Codigo postal no es válido', 'warning'); return false;}
+		 if ( noCuenta=="") {swal('','La Cuenta debe ser capturada.', 'warning'); return false;}
+		 if ( clabeb=="") {swal('','La Cuenta debe ser capturada.', 'warning'); return false;}
+		 if (clabeb.length!=18){swal('','La CLABE debe contener 18 digitos.','warning');return false;}
 	 }
 	 else
 	 {
-		 if ( razonSocial=="")  {jAlert('La Razón Social no es válida', 'Advertencia'); return false;}
+		 if ( razonSocial=="")  {swal('La Razón Social no es válida', 'warning'); return false;}
 	 }
 	
-	
+	 
 	var vigencia='1';
 	
 	if (!$('#vigencia').attr('checked'))	

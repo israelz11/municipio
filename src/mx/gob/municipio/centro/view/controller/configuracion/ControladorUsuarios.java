@@ -53,7 +53,7 @@ public class ControladorUsuarios  extends ControladorBase {
 		 Long idPersona2=gatewayUsuarios.actualizarPersonaPrincipal(idPersona,nombre,apaterno,amaterno,curp,rfc,profesion);
 		 
 		 //if (idArea!=null)
-		gatewayUsuarios.actualizarTrabajadorPrincipal((idPersona!=null) ? idPersona:0L ,idPersona2, idUnidad);
+		gatewayUsuarios.actualizarTRABAJADORPrincipal((idPersona!=null) ? idPersona:0L ,idPersona2, idUnidad);
 		 if (login!=null && !login.equals("") )
 			 gatewayUsuarios.actualizarUsuarioPrincipal((idPersona!=null) ? idPersona:0L, idPersona2, login, password , estatus);
 

@@ -1,14 +1,18 @@
 var modulo = "Pedidos";
 $(document).ready(function() {
-  $('.tiptip a.button, .tiptip button').tipTip();
+  //$('.tiptip a.button, .tiptip button').tipTip();
   var imagen="../../imagenes/cal.gif";	
-  var formatFecha="dd/mm/yy";	
-  $("#fechaInicial").datepicker({showOn: 'button', buttonImage:imagen , buttonImageOnly: true,dateFormat: formatFecha});  
-  $("#fechaFinal").datepicker({showOn: 'button', buttonImage: imagen, buttonImageOnly: true,dateFormat: formatFecha});  
+  //var formatFecha="dd/mm/yy";	
+  //$("#fechaInicial").datepicker({showOn: 'button', buttonImage:imagen , buttonImageOnly: true,dateFormat: formatFecha});  
+  //$("#fechaFinal").datepicker({showOn: 'button', buttonImage: imagen, buttonImageOnly: true,dateFormat: formatFecha});  
   getBeneficiarios('txtprestadorservicio','CVE_BENEFI','');  
    $('#cmdpdf').click(function (event){mostrarOpcionPDF();});  
    
-   $('#ui-datepicker-div').hide(); 
+   //$('#ui-datepicker-div').hide(); 
+   
+   $('#cmdcancelarm2').on('click', function(){
+	   cancelarPedidoMultiples();
+	});
 });
 
 function reembolsos(cve_ped, modulo){
@@ -258,7 +262,7 @@ function cancelarPedido(idPedido){
 	checkClaves.push(idPedido);
 		jConfirm('¿Confirma que desea cancelar el Pedido?','Cancelar Pedidos', function(r){
 			if(r){
-					ShowDelay('Cancelando Pedido','');
+					//ShowDelay('Cancelando Pedido','');
 					 controladorPedidos.cancelarPedido(idPedido, {
 						callback:function(items) { 		
 						  CloseDelay('Pedido cancelado con éxito', 3000, function(){
@@ -280,7 +284,48 @@ function cancelarPedido(idPedido){
 function cancelarPedidoMultiples(){
 	 var checkClaves = [];
      $('input[name=chkpedidos]:checked').each(function() { checkClaves.push($(this).val());});	
-	 if (checkClaves.length>0){
+	    
+     if (checkClaves.length>0){
+    	 swal({
+	  	  	  title: 'Esta seguro?',
+	  	  	  text: "¿Confirma que desea aparturar la(s) orden(es) de pago(s) seleccionada(s)?",
+	  	  	  type: 'warning',
+	  	  	  showCancelButton: true,
+	  	  	  confirmButtonColor: '#3085d6',
+	  	  	  cancelButtonColor: '#d33',
+	  	  	  confirmButtonText: 'Si, apeturar!'
+	  	}).then(function (r) {
+	  	  			//swal.showLoading();
+	  			controladorPedidos.cancelarPedido(checkClaves, {
+		  			callback:function(items) {	
+		  				CloseDelay('Pedidos cancelados con éxito', 3000, function(){
+					  		getPedidos();
+					  });
+		  				
+		  			} 						   				
+		  			,
+		  				errorHandler:function(errorString, exception) { 
+		  					swal('Oops...',errorString,'error');	
+		  				}
+		  			},async=false ); 
+		  	  swal({
+				  title: 'Confirmacion',
+				  text: 'Aperturando la(s) orden(s) de pago(s) ' + checkClaves,
+				  timer: 3000,
+				  onOpen: function () {
+				    swal.showLoading()
+				  }
+				}).then(
+				  function () {},
+				  // handling the promise rejection
+				  function (dismiss) {
+				    if (dismiss === 'timer') {
+				      console.log('I was closed by the timer')
+				    }
+				  }
+				)
+	  	})
+    	 /*	 
 		jConfirm('¿Confirma que desea cancelar el Pedido?','Cancelar Pedidos', function(r){
 			if(r){
 					ShowDelay('Cancelando Pedido','');
@@ -298,10 +343,11 @@ function cancelarPedidoMultiples(){
 					 }
 				    });
 			}
-	   },async=false );	 
+	   },async=false );	
+	   */  
 	}
 	else
-		jAlert('Es necesario que seleccione por lo menos un pedidos del listado', 'Advertencia');
-	 
+		swal('Ops...','Es necesario que seleccione por lo menos un pedidos del listado', 'Advertencia');
+	
 
 }

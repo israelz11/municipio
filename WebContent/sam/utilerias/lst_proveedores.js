@@ -8,10 +8,13 @@ var guardado = false;
 $(document).ready(function() {  
 	//implementando manejadores de eventos
  	$('#btnBuscar').click(function (event){buscarBeneficiarios()});
- 	$('#cmdnuevo').click(function (event){nuevoEditarBeneficiario(0)});
+ 	$('#cmdnuevob').click(function (event){nuevoEditarBeneficiario(0)});
+ 	$('#cmdnuevor').click(function (event){nuevoEditarRepresentante(0)});
  	//getBeneficiarios('txtprestadorservicio','CVE_BENEFI','');
-
+ 	
+ 	
 });
+
 
 
 function compruebaVariable(){
@@ -31,9 +34,43 @@ function getReporteBenefi(id){
 	jAlert('Operacion no disponible por el momento','Advertencia');
 }
 
+//swal2-confirm swal2-styled
 function nuevoEditarBeneficiario(idBeneficiario){
 	var titulo = (idBeneficiario==0) ? "Nuevo beneficiario": "Editar beneficiario";
-	jWindow('<iframe width="800" height="400" name="BENEFI" id="BENEFI" frameborder="0" src="../../sam/ordenesdepago/beneficiario.action?id='+idBeneficiario+'"></iframe>', titulo, '','',0, function(){compruebaVariable();});
+	
+	swal({
+		  title: '',
+		  text: '',
+		  html:
+			  '<iframe width="800" height="470" name="BENEFI" id="BENEFI" frameborder="0" src="../../sam/ordenesdepago/beneficiario.action?id='+idBeneficiario+'"></iframe>',
+		  width: 800,
+		  padding: 10,
+		  animation: false,
+		  confirmButtonText: 'Cerrar'
+		  
+		})
+	
+	//jWindow('<iframe width="800" height="400" name="BENEFI" id="BENEFI" frameborder="0" src="../../sam/ordenesdepago/beneficiario.action?id='+idBeneficiario+'"></iframe>', titulo, '','',0, function(){compruebaVariable();});
+	
+}
+
+//swal2-confirm swal2-styled
+function nuevoEditarRepresentante(idBeneficiario){
+	var titulo = (idBeneficiario==0) ? "Nuevo representante": "Editar representante";
+	
+	swal({
+		  title: '',
+		  text: '',
+		  html:
+			  '<iframe width="800" height="470" name="BENEFI" id="BENEFI" frameborder="0" src="../../sam/ordenesdepago/beneficiario.action?id='+idBeneficiario+'"></iframe>',
+		  width: 800,
+		  padding: 10,
+		  animation: false,
+		  confirmButtonText: 'Cerrar'
+		  
+		})
+	
+	//jWindow('<iframe width="800" height="400" name="BENEFI" id="BENEFI" frameborder="0" src="../../sam/ordenesdepago/beneficiario.action?id='+idBeneficiario+'"></iframe>', titulo, '','',0, function(){compruebaVariable();});
 	
 }
 
@@ -43,9 +80,48 @@ function nuevoBeneficiario(){
 	});
 }
 
+/*Para dar de baja al beneficiario, anexaremos la fecha de la baja*/
 function deshabilitarBeneficiario(id_beneficiario){
 	
-	
+	swal({
+		  title: 'Estas seguro?',
+		  text: "El cambio no podra revertirse!",
+		  type: 'warning',
+		  showCancelButton: true,
+		  confirmButtonText: 'Si, Cancelar!',
+		  cancelButtonText: 'No, Abortar!',
+		  confirmButtonClass: 'btn btn-success',
+		  cancelButtonClass: 'btn btn-danger',
+		  buttonsStyling: true
+		}).then(function (r) {
+		  if(r){
+			  ShowDelay('Deshabilitando beneficiario','');
+			  ControladorListadoBeneficiariosRemoto.deshabilitarBeneficiario(id_beneficiario,{
+						  callback:function(items){
+								 CloseDelay('Beneficiario deshabilitado con exito', function(){
+											buscarBeneficiarios();
+									 });
+									
+					} 					   				
+					,
+					errorHandler:function(errorString, exception) { 
+						jError('Fallo la operacion:<br>Error::'+errorString+'-message::'+exception.message+'-JavaClass::'+exception.javaClassName+'.<br><strong>Consulte a su administrador</strong>', 'Error al guardar Pedido');   
+						return false;
+					}
+				});	
+		}
+		}, function (dismiss) {
+		  // dismiss can be 'cancel', 'overlay',
+		  // 'close', and 'timer'
+		  if (dismiss === 'cancel') {
+		    swal(
+		      'Abortado',
+		      'Beneficiario sin modificación :)',
+		      'error'
+		    )
+		  }
+		})
+	/*
 	swal({
 		  title: "Estas seguro?",
 		  text: "You will not be able to recover this imaginary file!",
@@ -67,9 +143,9 @@ function deshabilitarBeneficiario(id_beneficiario){
 		    //callback:function(items)
 		    
 		  } else {
-			    swal("Cancelled", "Your imaginary file is safe :)", "error");
+			    swal("Cancelado", "No se modifico el estatus :)", "error");
 		  }
-		});
+		});*/
 }
 
 

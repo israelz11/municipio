@@ -17,7 +17,7 @@ function Buscar()
 function GeneraExcel()
 {
 	clavunidad=$('#cbUnidad').selectpicker('val');
-	clavgasto=$('#cbotipogasto').selectpicker('val'); 
+	clavgasto=$('#cbUnidad').selectpicker('val'); 
 	clavproyecto=$('#txtproyecto').val();
 	clavpartida=$('#txtpartida').val();
 	
@@ -25,9 +25,7 @@ function GeneraExcel()
 	//$('#CveOrdenOP').val($('#cve_op').val());
 	
 	$('#xidunidad').val(clavunidad);
-	//alert("demo de la unidad " + clavunidad);
 	$('#xidgasto').val(clavgasto);
-	//alert("El tipo de gasto es" + clavgasto);
 	$('#xproyecto').val(clavproyecto);
 	$('#xpartida').val(clavpartida);
 	

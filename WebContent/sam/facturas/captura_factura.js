@@ -674,18 +674,37 @@ function muestraTiposDocumento(){
 	var idDependencia = $('#cbodependencia').val();
 	if($('#cbotipodocumento').val()==1)//O.S. y O.T.
 	{
-		if(idDependencia==0||idDependencia=="") {jAlert('Es necesario seleccionar la Unidad Administrativa para listar las Ordenes de Servicio y Trabajo'); return false;}
-			jWindow('<iframe width="650" height="400" name="consultaPedido" id="consultaPedido" frameborder="0" src="../consultas/muestra_OT_OS_facturas.action?idDependencia='+idDependencia+'"></iframe>','Listado de O.S. y O.T.', '','Cerrar ',1);
+		if(idDependencia==0||idDependencia=="") {swal('Es necesario seleccionar la Unidad Administrativa para listar las Ordenes de Servicio y Trabajo'); return false;}
+			//jWindow('<iframe width="650" height="400" name="consultaPedido" id="consultaPedido" frameborder="0" src="../consultas/muestra_OT_OS_facturas.action?idDependencia='+idDependencia+'"></iframe>','Listado de O.S. y O.T.', '','Cerrar ',1);
+		swal({
+			  title: 'Listado de O.S. y O.T.',
+			  text: 'Seleccione O.S. u O.T. que desea devengar',
+			  html:
+				  '<iframe width="650" height="400" name="consultaPedido" id="consultaPedido" frameborder="0" src="../consultas/muestra_OT_OS_facturas.action?idDependencia='+idDependencia+'"></iframe>',
+			  width: 800,
+			  padding: 10,
+			  animation: false
+			})
 	}
 	if($('#cbotipodocumento').val()==2)//PEDIDO
 	{
-		if(idDependencia==0||idDependencia=="") {jAlert('Es necesario seleccionar la Unidad Administrativa para listar los Pedidos'); return false;}
-			jWindow('<iframe width="650" height="400" name="consultaPedido" id="consultaPedido" frameborder="0" src="../consultas/muestra_pedidos_facturas.action?idDependencia='+idDependencia+'"></iframe>','Listado de Pedidos con Entradas de Almacen', '','Cerrar ',1);
+		if(idDependencia==0||idDependencia=="") {swal('Es necesario seleccionar la Unidad Administrativa para listar los Pedidos'); return false;}
+			//jWindow('<iframe width="650" height="400" name="consultaPedido" id="consultaPedido" frameborder="0" src="../consultas/muestra_pedidos_facturas.action?idDependencia='+idDependencia+'"></iframe>','Listado de Pedidos con Entradas de Almacen', '','Cerrar ',1);
+			swal({
+				  title: 'Listado de Pedidos con Entradas de Almacen',
+				  text: 'Seleccione el PEDIDO que desea devengar',
+				  html:
+					  '<iframe width="650" height="400" name="consultaPedido" id="consultaPedido" frameborder="0" src="../consultas/muestra_pedidos_facturas.action?idDependencia='+idDependencia+'"></iframe>',
+				  width: 800,
+				  padding: 10,
+				  animation: false
+				})
+			
 	}
 	
 	if($('#cbotipodocumento').val()==3)//VALE
 	{
-		if(idDependencia==0||idDependencia=="") {jAlert('Es necesario seleccionar la Unidad Administrativa para listar los Pedidos'); return false;}
+		if(idDependencia==0||idDependencia=="") {swal('Es necesario seleccionar la Unidad Administrativa para listar los Pedidos'); return false;}
 		
 		var clv_benefi;
 		var tipo_gto;
@@ -697,13 +716,23 @@ function muestraTiposDocumento(){
 		if(typeof(idDependencia)=='undefined') idDependencia =0;
 		
 		if($('#CVE_DOC').attr('value')=='') $('#CVE_DOC').attr('value', 0);
-		jWindow('<iframe width="750" height="350" name="ventanaVales" id="ventanaVales" frameborder="0" src="../../sam/consultas/muestra_vales.action?idVale='+$('#CVE_DOC').attr('value')+'&idDependencia='+idDependencia+'&tipo_gto='+tipo_gto+'&clv_benefi='+clv_benefi+'&tipo_doc='+tipo_doc+'"></iframe>','Listado de Vales disponibles', '','Cerrar',1);
+		//jWindow('<iframe width="750" height="350" name="ventanaVales" id="ventanaVales" frameborder="0" src="../../sam/consultas/muestra_vales.action?idVale='+$('#CVE_DOC').attr('value')+'&idDependencia='+idDependencia+'&tipo_gto='+tipo_gto+'&clv_benefi='+clv_benefi+'&tipo_doc='+tipo_doc+'"></iframe>','Listado de Vales disponibles', '','Cerrar',1);
+		swal({
+			  title: 'Listado de Vales disponibles',
+			  text: 'Seleccione el VALE que desea devengar',
+			  html:
+				  '<iframe width="750" height="350" name="ventanaVales" id="ventanaVales" frameborder="0" src="../../sam/consultas/muestra_vales.action?idVale='+$('#CVE_DOC').attr('value')+'&idDependencia='+idDependencia+'&tipo_gto='+tipo_gto+'&clv_benefi='+clv_benefi+'&tipo_doc='+tipo_doc+'"></iframe>',
+			  width: 800,
+			  padding: 10,
+			  animation: false
+			})
+		
 
 	}
 	
 	if($('#cbotipodocumento').val()==4)//CONTRATO
 	{
-		if(idDependencia==0||idDependencia=="") {jAlert('Es necesario seleccionar la Unidad Administrativa para listar los contratos'); return false;}
+		if(idDependencia==0||idDependencia=="") {swal('Es necesario seleccionar la Unidad Administrativa para listar los contratos'); return false;}
 		
 		var num_docto = $('#txtdocumento').attr('value');
 		

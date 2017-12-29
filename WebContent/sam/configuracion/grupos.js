@@ -6,58 +6,87 @@ Fecha      : 26/10/2009
 
 /**
 *Al iniciar la pagina carga los eventos a los controles del formulario
+*onClick="
 */
 
 
+$(document).ready(function() {
+	
+	$('#btnGrabar').on('click', function(){
+		guardar();
+	});
+	
+	$('#btnGrabar').on('click', function(){
+		limpiar();
+	});
+	
+	$('#tipo').on('change', function(){
+		pintarTablaDetalles();
+		// alert( this.value );
+	});
+});
+
 function limpiar(){
-	 		 $('#descripcion').attr('value','');
-			 $('#estatus').attr('checked',true);			 
-			 $('#clave').attr('value','');
+	
+	 $('#descripcion').val('');
+	 $('#estatus').prop('checked',true);			 
+	 $('#clave').val('');
 }
 
 function guardar(){	
-    var error="";
+	
+	var error="";
 	var titulo ='Advertencia - Informacion no válida';
-	if ( $('#descripcion').attr('value')=="")  error += 'Descripción</br>';	
-	if ( $('#tipo').attr('value')=="")  error += 'Tipo</br>';	
+	if ( $('#descripcion').val()=="")  error += 'Descripción</br>';	
+	if ( $('#tipo').val()=="")  error += 'Tipo</br>';	
 	if ( error=="") {	
 	var estatus='ACTIVO';
-	if (!$('#estatus').attr('checked'))	
+	if (!$('#estatus').prop('checked'))	
 	   estatus='INACTIVO';	
 	ShowDelay('Guardando grupo','');
-    controladorGruposRemoto.guardarGrupo($('#clave').attr('value'),$('#descripcion').attr('value'),estatus,$('#tipo').attr('value'),{
+    controladorGruposRemoto.guardarGrupo($('#clave').val(),$('#descripcion').val(),estatus,$('#tipo').val(),{
 			 callback:function(items) {				 
 	  			 CloseDelay("Grupo guardado con éxito", 2000, function(){pintarTablaDetalles();});
  		     }	
 								,errorHandler:function(errorString, exception) { 
-								   jError("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");    
+								   swal("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");    
 								}
-			});		}else jAlert(error,titulo);	
+			});		}else swal(error,titulo);	
+			
 }
 
+
+
  function pintarTablaDetalles() {
-	 quitRow("detallesTabla");
+	quitRow("detallesTabla");
 	var estatus='ACTIVO';
 	if (!$('#estatus2').attr('checked'))	
 	   estatus='INACTIVO';	
-	   ShowDelay('Cargando grupos','');
-	controladorGruposRemoto.getGruposEstatus(estatus,$('#tipo').attr('value'), {
+	   ShowDelay('Cargando grupos ' + $('#tipo').val(),'');
+		
+				
+	controladorGruposRemoto.getGruposEstatus(estatus,$('#tipo').val(), {
         callback:function(items) { 		
             jQuery.each(items,function(i) {
 				
  		     	pintaTabla( "detallesTabla", i+1 ,this.ID_GRUPO_CONFIG,this.GRUPO_CONFIG,this.ESTATUS,this.TIPO);
+ 		     	
+ 		     	
         }); 	
-			_closeDelay();
-			limpiar();
+            swal.closeModal();
+			
+			//limpiar();
+            //swal.hideLoading(); 
+            //swal.disableLoading ()
         } 					   				
         ,
         errorHandler:function(errorString, exception) { 
-           jError("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");      
+           swal("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");      
         }
     }); 
 
  }
-
+ 
   function pintaTabla( table, consecutivo,id,descripcion,estatus,tipo){
  	var tabla = document.getElementById( table ).tBodies[0];
  	var row =   document.createElement( "TR" );
@@ -70,8 +99,8 @@ function guardar(){
     row.appendChild( Td("",centro,"",htmlEdit) );	
 	tabla.appendChild( row );
  }
- 
- 
+
+
  function editar(id,descripcion,estatus,tipo) {
 		 $('#descripcion').attr('value',descripcion);
 		 if (estatus=='ACTIVO')
@@ -81,7 +110,8 @@ function guardar(){
 		 $('#clave').attr('value',id);
 		 $('#tipo').attr('value',tipo);
  }
- 
+
+
   function eliminar(){
 	  var checkRetenciones = [];
      $('input[name=claves]:checked').each(function() {checkRetenciones.push($(this).val());	 });	 
@@ -105,3 +135,4 @@ function guardar(){
 	 } else 
 	    jInformation("Es necesario que seleccione un elemento de la lista");
 	 }
+ 

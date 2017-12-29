@@ -184,7 +184,7 @@ public Map getOrden(Long idOrden) {
 					*/
 					//"(CASE (R.CLV_PARTID) WHEN NULL THEN CT.CLV_PARTID ELSE R.CLV_PARTID END) AS CCLV_PARTID, " +
 					"(SELECT DEPENDENCIA FROM CAT_DEPENDENCIAS WHERE CAT_DEPENDENCIAS.ID = A.ID_DEPENDENCIA) AS UNIDAD_ELABORA,"+
-					"(SELECT CAT_DEPENDENCIAS.CLV_UNIADM FROM USUARIOS_EX INNER JOIN TRABAJADOR ON (TRABAJADOR.CVE_PERS = USUARIOS_EX.CVE_PERS) INNER JOIN CAT_DEPENDENCIAS ON (CAT_DEPENDENCIAS.ID=TRABAJADOR.ID_DEPENDENCIA) WHERE USUARIOS_EX.CVE_PERS = A.CVE_PERS) AS ELABORA, " +
+					"(SELECT CAT_DEPENDENCIAS.CLV_UNIADM FROM SAM_USUARIOS_EX INNER JOIN SAM_TRABAJADOR ON (SAM_TRABAJADOR.CVE_PERS = SAM_USUARIOS_EX.CVE_PERS) INNER JOIN CAT_DEPENDENCIAS ON (CAT_DEPENDENCIAS.ID=SAM_TRABAJADOR.ID_DEPENDENCIA) WHERE SAM_USUARIOS_EX.CVE_PERS = A.CVE_PERS) AS ELABORA, " +
 					"C.CLV_FUENTE, C.CLV_RECURSO, (SELECT ISNULL(SUM(IMPORTE),0) AS IMPORTE_V FROM COMP_VALES WHERE COMP_VALES.CVE_OP = A.CVE_OP) AS DESCUENTO_VALES," + 
                " A.ID_RECURSO, A.REEMBOLSOF, A.CONCURSO, ISNULL(A.IMPORTE,0) AS IMPORTE, A.RETENCION, A.IMP_NETO, A.FE_PAGO, A.NOTA, A.STATUS, A.cve_req, A.ID_POLIZA_CH,  " +
 			   " A.IVA, A.IMPORTE_IVA, A.PERIODO, B.NCOMERCIA, C.RECURSO, A.ID_GRUPO, " +
@@ -1018,6 +1018,7 @@ public boolean ejercerOrdenPago(final Long cve_op, final boolean bfecha, final D
 
 
 public void guardaBitacora(Long cve_orden, int ejercicio, int cve_pers, Map orden){
+	
 	try{
 		String folio=rellenarCeros(cve_orden.toString(),6);
 		//guarda en la bitacora
@@ -1053,7 +1054,7 @@ public boolean cambiarFechaOrdenPago(Long cve_op, String fechaNueva, int ejercic
 			String s = "";
 			
 			int v = 0;
-			List <Map> lst = this.getJdbcTemplate().queryForList("SELECT PERSONAS.CVE_PERS, '('+USUARIOS_EX.LOGIN+')  ' + PERSONAS.NOMBRE + ' '+PERSONAS.APE_PAT+' '+PERSONAS.APE_MAT AS NOMBRE_COMPLETO,  CAT_DEPENDENCIAS.DEPENDENCIA  FROM PERSONAS INNER JOIN TRABAJADOR ON (TRABAJADOR.CVE_PERS = PERSONAS.CVE_PERS) INNER JOIN CAT_DEPENDENCIAS ON (CAT_DEPENDENCIAS.ID = TRABAJADOR.ID_DEPENDENCIA) INNER JOIN USUARIOS_EX ON (USUARIOS_EX.CVE_PERS = PERSONAS.CVE_PERS) WHERE USUARIOS_EX.ACTIVO ='S' ORDER BY CAT_DEPENDENCIAS.DEPENDENCIA, PERSONAS.NOMBRE ASC");
+			List <Map> lst = this.getJdbcTemplate().queryForList("SELECT SAM_PERSONAS.CVE_PERS, '('+SAM_USUARIOS_EX.LOGIN+')  ' + SAM_PERSONAS.NOMBRE + ' '+SAM_PERSONAS.APE_PAT+' '+SAM_PERSONAS.APE_MAT AS NOMBRE_COMPLETO,  CAT_DEPENDENCIAS.DEPENDENCIA  FROM SAM_PERSONAS INNER JOIN SAM_TRABAJADOR ON (SAM_TRABAJADOR.CVE_PERS = SAM_PERSONAS.CVE_PERS) INNER JOIN CAT_DEPENDENCIAS ON (CAT_DEPENDENCIAS.ID = SAM_TRABAJADOR.ID_DEPENDENCIA) INNER JOIN SAM_USUARIOS_EX ON (SAM_USUARIOS_EX.CVE_PERS = SAM_PERSONAS.CVE_PERS) WHERE SAM_USUARIOS_EX.ACTIVO ='S' ORDER BY CAT_DEPENDENCIAS.DEPENDENCIA, SAM_PERSONAS.NOMBRE ASC");
 			s+="<option value='0'>[Seleccione]</option>";
 			for(Map row: lst){
 				if(!unidad_ant.equals(row.get("DEPENDENCIA").toString())){
@@ -1076,7 +1077,7 @@ public boolean cambiarFechaOrdenPago(Long cve_op, String fechaNueva, int ejercic
 	public void moverOrdenes(Long cve_op, int cve_pers_dest, int ejercicio, int cve_pers){
 		Date fecha = new Date();
 		String folio=rellenarCeros(cve_op.toString(),6);
-		String cve_unidad = (String)this.getJdbcTemplate().queryForObject("SELECT TRABAJADOR.ID_DEPENDENCIA FROM USUARIOS_EX INNER JOIN TRABAJADOR ON (TRABAJADOR.CVE_PERS = USUARIOS_EX.CVE_PERS) WHERE USUARIOS_EX.CVE_PERS = ?", new Object[]{cve_pers_dest}, String.class);
+		String cve_unidad = (String)this.getJdbcTemplate().queryForObject("SELECT SAM_TRABAJADOR.ID_DEPENDENCIA FROM SAM_USUARIOS_EX INNER JOIN SAM_TRABAJADOR ON (SAM_TRABAJADOR.CVE_PERS = SAM_USUARIOS_EX.CVE_PERS) WHERE SAM_USUARIOS_EX.CVE_PERS = ?", new Object[]{cve_pers_dest}, String.class);
 		this.getJdbcTemplate().update("UPDATE SAM_ORD_PAGO SET CVE_PERS = ?, ID_DEPENDENCIA = ? WHERE CVE_OP = ?", new Object[]{cve_pers_dest, cve_unidad, cve_op});
 		gatewayBitacora.guardarBitacora(gatewayBitacora.OP_MUEVE_A_USUARIO, ejercicio, cve_pers, cve_op, folio, "OP", fecha, null, null, "Movido de cve_pers_fuente = "+cve_pers+" a cve_pers_destino = "+cve_pers_dest, Double.parseDouble("0".toString()));
 	}
@@ -1104,7 +1105,7 @@ public boolean cambiarFechaOrdenPago(Long cve_op, String fechaNueva, int ejercic
 	}
 	
 	public List<Map> cargarRelaciones(String tipo){
-		List <Map> lst =this.getJdbcTemplate().queryForList("SELECT R.ID_RELACION, (R.FOLIO+' | '+U.LOGIN) AS DESCRIPCION, NUMERO, FOLIO, CONVERT(VARCHAR(10), FECHA, 103) AS FECHA, R.TIPO_RELACION, R.CVE_PERS, ID_GRUPO  FROM SAM_OP_RELACION R INNER JOIN USUARIOS_EX U ON (U.CVE_PERS = R.CVE_PERS) WHERE R.ACTIVO ='S' AND R.TIPO_RELACION =? ORDER BY R.NUMERO DESC", new Object[]{tipo});  
+		List <Map> lst =this.getJdbcTemplate().queryForList("SELECT R.ID_RELACION, (R.FOLIO+' | '+U.LOGIN) AS DESCRIPCION, NUMERO, FOLIO, CONVERT(VARCHAR(10), FECHA, 103) AS FECHA, R.TIPO_RELACION, R.CVE_PERS, ID_GRUPO  FROM SAM_OP_RELACION R INNER JOIN SAM_USUARIOS_EX U ON (U.CVE_PERS = R.CVE_PERS) WHERE R.ACTIVO ='S' AND R.TIPO_RELACION =? ORDER BY R.NUMERO DESC", new Object[]{tipo});  
 		return lst;
 	}
 	

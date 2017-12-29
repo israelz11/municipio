@@ -6,28 +6,46 @@
 <title>Configuración de Firmas</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
-<!--<link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css">-->
-<link rel="stylesheet" href="../../include/css/bootstrap.css" type="text/css">
+
+
+<link rel="stylesheet" href="../../include/css/bootstrap-3.3.7.css" type="text/css">
 <link rel="stylesheet" href="../../include/css/bootstrap2.css" type="text/css">
+<link rel="stylesheet" href="../../include/css/bootstrap-select.css" type="text/css">
+
+<link rel="stylesheet" href="../../include/css/sweetalert2.css" type="text/css">
+
+<script type="text/javascript" src="../../include/js/jquery-2.1.3.min.js"></script>	
+<script type="text/javascript" src="../../include/js/bootstrap-3.3.7.js"></script>
+<script type="text/javascript" src="../../include/js/bootstrap-select.js"></script>
+<script type="text/javascript" src="../../include/js/sweetalert2.js"></script>
+
+<!--  
+<link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css">
 <link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css">
 <link type="text/css" href="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.css" rel="stylesheet" />	
 <script type="text/javascript" src="../../include/js/jquery-1.3.2.min.js"></script>
 <script type="text/javascript" src="../../include/js/jquery-impromptu.2.3.js"></script>
 <script type="text/javascript" src="../../include/js/componentes/componentes.js"></script>
-<script type="text/javascript" src="../../dwr/interface/controladorFirmasGruposRemoto.js"> </script>
 <script type="text/javascript" src="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.min.js"></script>
-<script type="text/javascript" src="../../dwr/engine.js"> </script>  
-<script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>
-<script type="text/javascript" src="configuracion_firmas_grupos.js"></script>
-<script type="text/javascript" src="../../include/js/toolSam.js"></script>
+
 <script type="text/javascript" src="../../include/js/presupuesto/presupuesto.js"></script>
 <script type="text/javascript" src="../../include/js/otros/productos.js"></script>
 <link rel="stylesheet" href="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.css" type="text/css" />
 <link rel="stylesheet" href="../../include/js/autocomplete/jquery.autocomplete.css" type="text/css" />
+<link rel="stylesheet" href="../../include/js/jquery.tabs/jquery.tabs.css" type="text/css" media="print, projection, screen">
+<script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>
+-->
+
+<script type="text/javascript" src="../../dwr/interface/controladorFirmasGruposRemoto.js"> </script>
+
+<script type="text/javascript" src="../../dwr/engine.js"> </script>  
+
+<script type="text/javascript" src="configuracion_firmas_grupos.js?x=<%=System.currentTimeMillis()%>"></script>
+<script type="text/javascript" src="../../include/js/toolSam.js?x=<%=System.currentTimeMillis()%>"></script>
 <!--<script type="text/javascript" src="../../include/js/jquery.tabs/jquery-1.1.3.1.pack.js"></script>
 <script type="text/javascript" src="../../include/js/jquery.tabs/jquery.history_remote.pack.js"></script>
 <script type="text/javascript" src="../../include/js/jquery.tabs/jquery.tabs.pack.js"></script>-->
-<link rel="stylesheet" href="../../include/js/jquery.tabs/jquery.tabs.css" type="text/css" media="print, projection, screen">
+
 <!-- Additional IE/Win specific style sheet (Conditional Comments) -->
 <!--[if lte IE 7]>
 <link rel="stylesheet" href="../../include/js/jquery.tabs/jquery.tabs-ie.css" type="text/css" media="projection, screen">
@@ -44,7 +62,7 @@
     	<div class="form-group" id="combos">
 	    	<label for="inputName" class="control-label col-xs-2">Grupo:</label>
 	        <div class="col-xs-5">
-    	   		 <select name="grupo" size="1" id="grupo" class="form-control" onChange="pintarTablaDetalles()" border="0" style="width:400px;">
+    	   		 <select name="grupo" size="1" id="grupo" class="form-control" border="0" style="width:400px;">
         	        <option value="">[Seleccione]</option>
            	        <c:forEach items="${grupos}" var="item" varStatus="status">
                 	<option value="<c:out value='${item.ID_GRUPO_CONFIG}'/>" >
@@ -78,8 +96,8 @@
         	 <label for="inputName" class="control-label col-xs-2">Cargo:</label>
 	         <div class="col-xs-5">
     	         <input type="text" name="cargo" id="cargo" value="" class="form-control" placeholder="Cargo del representante" style="width:400px;"><br>
-        	     <input type="button"  class="btn btn-success btn-sm"  name="btnGrabar" value="Guardar"  onClick="guardar()" style="width:100px"/>
-    	    	 <input type="button"  class="btn btn-info btn-sm"  name="btnlimpiar" value="Nuevo"  onClick="limpiar()" style="width:100px"/>
+        	     <input type="button"  id="btnGrabar" class="btn btn-success"  name="btnGrabar" value="Guardar" style="width:100px"/>
+    	    	 <input type="button" id="btnlimpiar" class="btn btn-info btn-sm"  name="btnlimpiar" value="Nuevo" style="width:100px"/>
 	         </div>
 		</div>	
        
@@ -88,7 +106,7 @@
   	<table class="table table-hover table table-condensed" cellpadding="0" cellspacing="0" id="detallesTabla" >
     	<thead>
 	      <tr>
-    	    <th width="3%" height="20" class="col-sm-1"><img src="../../imagenes/cross.png" width="16" height="16" onClick="eliminar()" style='cursor: pointer;'></th>
+    	    <th width="3%" height="20" class="col-sm-1"><img src="../../imagenes/cross.png" id="btnEliminar" width="16" height="16" style='cursor: pointer;'></th>
 	        <th width="24%" class="col-sm-4" style="text-align: left;">Tipo de firmas</th>
     	    <th width="40%" class="col-sm-3" style="text-align: left;">Representante</th>
         	<th width="28%" class="col-sm-3" style="text-align: left;" >Cargo</th>

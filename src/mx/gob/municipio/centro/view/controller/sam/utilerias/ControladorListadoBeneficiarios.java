@@ -12,10 +12,12 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 
 import mx.gob.municipio.centro.model.gateways.sam.GatewayBeneficiario;
+import mx.gob.municipio.centro.model.gateways.sam.GatewayUnidadAdm;
 import mx.gob.municipio.centro.view.bases.ControladorBase;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -28,6 +30,8 @@ public class ControladorListadoBeneficiarios extends ControladorBase {
 	
 	@Autowired
 	public GatewayBeneficiario gatewayBeneficiario;
+	
+
 	
 	public ControladorListadoBeneficiarios() {}
 	

@@ -1,5 +1,6 @@
 package mx.gob.municipio.centro.model.gateways.sam;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -133,7 +134,7 @@ public class GatewayBeneficiario extends BaseGateway {
 	}
 	
 	public void deshabilitarBeneficiario(Long id){
-		this.getJdbcTemplate().update("UPDATE CAT_BENEFI SET STATUS = ? WHERE ID_BENEFICIARIO = ?", new Object[]{0,id});
+		this.getJdbcTemplate().update("UPDATE CAT_BENEFI SET STATUS = ?,FECHA_baja=? WHERE ID_BENEFICIARIO = ?", new Object[]{0,new Date() ,id});
 	}
 	
 	public void habilitarBeneficiario(Long id){

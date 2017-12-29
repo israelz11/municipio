@@ -35,7 +35,7 @@ function aperturarEntradas(){
 	 if (checkClaves.length>0){
 		jConfirm('¿Confirma que desea aperturar la(s) entrada(s) seleccionada(s)?','Confirmar', function(r){
 			if(r){
-					ShowDelay('Aperturando Entrada(s)','');
+					//ShowDelay('Aperturando Entrada(s)','');
 					controladorListadoEntradasDocumentosRemoto.aperturarEntrada(checkClaves, {
 						callback:function(items) { 		
 						 	CloseDelay('Entrada(s) aperturada(s) con éxito');

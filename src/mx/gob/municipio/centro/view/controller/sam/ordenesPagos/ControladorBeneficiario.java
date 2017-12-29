@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import mx.gob.municipio.centro.model.gateways.sam.GatewayBancos;
 import mx.gob.municipio.centro.model.gateways.sam.GatewayBeneficiario;
+import mx.gob.municipio.centro.model.gateways.sam.GatewayUnidadAdm;
 import mx.gob.municipio.centro.view.bases.ControladorBase;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,9 @@ public class ControladorBeneficiario extends ControladorBase  {
 	@Autowired GatewayBeneficiario gatewayBeneficiario;
 	
 	@Autowired GatewayBancos gatewayBancos;
+	
+	@Autowired
+	private GatewayUnidadAdm gatewayUnidadAdm;
 	
 	public ControladorBeneficiario() {}
 	 
@@ -79,4 +83,10 @@ public class ControladorBeneficiario extends ControladorBase  {
 	public List<Map> getListaBancos(){
 		return gatewayBancos.getBancosTodos();
 	}
+	
+
+	 @ModelAttribute("unidadesAdmiva")
+	    public List<Map> getUnidadesAdmivas(){
+	    	return gatewayUnidadAdm.getUnidadAdmTodos();	
+	    }
 }

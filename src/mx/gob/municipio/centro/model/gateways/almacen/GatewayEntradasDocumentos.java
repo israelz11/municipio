@@ -4,6 +4,7 @@
  **/
 package mx.gob.municipio.centro.model.gateways.almacen;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -290,7 +291,7 @@ public class GatewayEntradasDocumentos extends BaseGatewayAlmacen {
             	Date fecha = new Date();
             	for (Map row:result)
             	{
-            		vector_ped_movtos.add(Long.parseLong(row.get("ID_PED_MOVTO").toString()));
+            		vector_ped_movtos.add(Long.parseLong(row.get("ID_PED_MOVTO").toString()));//Llena vector con los id_ped_movto de la entrada
             		
             		//comprobar la existencia de la resta en pedidos
             		if(!comprobarLote(Long.parseLong(row.get("ID_DETALLE_ENTRADA").toString()), Double.parseDouble(row.get("CANTIDAD").toString()))){
@@ -343,7 +344,7 @@ public class GatewayEntradasDocumentos extends BaseGatewayAlmacen {
             	
             	//marcar los elemementos del documento activos lo que significa q se han cargado al almacen
     			getJdbcTemplate().update("UPDATE DETALLES_ENTRADAS SET STATUS = ? WHERE ID_ENTRADA = ?", new Object[]{1, id_entrada});
-    			//Marcar la fecha de cierre del documento
+    			//Agrega la fecha de cierre en la entrada y actualiza estatus de la entrada..
     			getJdbcTemplate().update("UPDATE ENTRADAS SET FECHA_CIERRE = ?, STATUS = ? WHERE ID_ENTRADA = ?", new Object[]{fecha, 1,id_entrada});
     			//aqui cachamos los detalles del sam_ped_movtos
     			
@@ -351,6 +352,7 @@ public class GatewayEntradasDocumentos extends BaseGatewayAlmacen {
     			for(int i=0; i<vector_ped_movtos.size(); i++){
     			   				
     					finiquitar_pedido(Long.parseLong(vector_ped_movtos.get(i).toString()));
+    					
 				}
     			
     			gatewayBitacoraAlmacen.guardarBitacoraAlmacen(gatewayBitacoraAlmacen.Cierra_Entrada,Id_Entrada,Integer.parseInt(documento.get("ID_PERSONA").toString()),Integer.parseInt(documento.get("ID_ALMACEN").toString()),Integer.parseInt(documento.get("ID_DEPENDENCIA").toString()),Long.parseLong(documento.get("ID_PEDIDO").toString()),"ENTRADA",1,1, new Date(), null, 0.0);
@@ -401,6 +403,29 @@ public class GatewayEntradasDocumentos extends BaseGatewayAlmacen {
 		}
 	}
 	
+		
+	private void finiquitar_pedido(long id_ped_movto){
+		
+		List<Map> MPedido = this.getJdbcTemplate().queryForList("SELECT CANTIDAD- " + 
+																	" ISNULL(( " +
+																	"SELECT SUM(DE.CANTIDAD) FROM ENTRADAS AS E " +
+																	"INNER JOIN DETALLES_ENTRADAS AS DE ON (DE.ID_ENTRADA = E.ID_ENTRADA) " +
+																	"WHERE E.STATUS = 1 AND E.ID_PEDIDO = P.CVE_PED AND PM.ID_PED_MOVTO=DE.ID_PED_MOVTO " +
+																	") ,0.00)POR_RECIBIR " +
+																	"FROM SAM_PED_MOVTOS PM " +
+																	"INNER JOIN SAM_PEDIDOS_EX P ON P.CVE_PED=PM.CVE_PED " +
+																	"WHERE PM.id_ped_movto =?", new Object[]{id_ped_movto});
+		
+		for(Map detalleped: MPedido){
+			Double finiquita = Double.parseDouble(detalleped.get("POR_RECIBIR").toString());
+			
+			if (finiquita==0)
+				this.getJdbcTemplate().update("UPDATE SAM_PED_MOVTOS SET STATUS =5 WHERE ID_PED_MOVTO = ?", new Object[]{id_ped_movto});
+		}
+		
+		
+		
+	}
 	private boolean enPedido(long id_ped_movto,double por_entregar){
 		try {
 			this.getJdbcTemplate().queryForLong(
@@ -413,17 +438,6 @@ public class GatewayEntradasDocumentos extends BaseGatewayAlmacen {
 			// TODO: handle exception
 		}
 		return false;
-	}
-	
-	private boolean finiquitar_pedido(long id_ped_movto){
-		try {
-			
-			this.getJdbcTemplate().update("UPDATE SAM_PED_MOVTOS SET STATUS =5 WHERE ID_PED_MOVTO = ?", new Object[]{id_ped_movto});
-			return true;
-		} catch (DataAccessException e) {
-			return false;
-		}
-		
 	}
 	
 	public void cancelarEntradaDocumento(final Long id_entrada, final int cve_pers){

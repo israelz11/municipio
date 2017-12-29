@@ -3,24 +3,31 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ page import="java.util.Date"%> 
 <!DOCTYPE html">
 <html>
 <head>
 
-<link rel="stylesheet" href="../../include/css/sweet-alert.css" type="text/css"/>
-<link rel="stylesheet" href="../../include/css/bootstrap-3.3.4.css" type="text/css"/>
+<script type="text/javascript" src="../../include/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../../include/js/bootstrap-3.3.7.js"></script>
+<script type="text/javascript" src="../../include/js/sweetalert2.js"></script>
+
+<link rel="stylesheet" href="../../include/css/sweetalert2.css" type="text/css">
+<link rel="stylesheet" href="../../include/css/bootstrap-3.3.7.css" type="text/css"/>
 <link rel="stylesheet" href="../../include/css/bootstrap2.css" type="text/css"/>
-<!-- <link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css"/>  -->
-<link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css"/>
-<script type="text/javascript" src="../../include/js/jquery-1.3.2.min.js"></script>
+<!-- <link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css"/>  
+<link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css"/>-->
+<!-- <script type="text/javascript" src="../../include/js/jquery-1.3.2.min.js"></script> 
+<script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>
+-->
+
+
 <script type="text/javascript" src="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.min.js"></script>
 <script type="text/javascript" src="../../include/js/toolSam.js"></script>
-<script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>
+
 <script type="text/javascript" src="../../dwr/engine.js"></script>
 <script type="text/javascript" src="../../dwr/interface/ControladorListadoBeneficiariosRemoto.js"> </script>
-<script type="text/javascript" src="lst_proveedores.js"></script>
-<script type="text/javascript" src="../../include/js/bootstrap-3.3.4.js"></script>
-<script type="text/javascript" src="../../include/js/sweet-alert.min.js"></script>
+<script type="text/javascript" src="lst_proveedores.js?x=<%=System.currentTimeMillis()%>"></script>
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
@@ -49,7 +56,7 @@
                                        -->
               	</div>
               	<div class="col-md-3 col-md-offset-2">
-              		<input  name="btnBuscar" type="button" class="btn btn-buscar" id="btnBuscar"   value="Buscar" style="width:150px" />
+              		<input  name="btnBuscar" type="button" class="btn btn-buscar" id="btnBuscar"   value="Buscar" style="width:180px" />
               	</div>
 			</div>
 			<div class="form-group">
@@ -58,7 +65,7 @@
               		<input type="text" id="txtrfc" name="txtrfc" class="form-control input-sm" value="<c:out value='${txtrfc}'/>"/>
               	</div>
               	<div class="col-md-3 col-md-offset-4">
-              		<input  name="cmdnuevo" type="button" class="btn btn-info" id="cmdnuevo"   value="Nuevo..." style="width:150px" />
+              		<input  name="cmdnuevob" type="button" class="btn btn-info" id="cmdnuevob"   value="Nuevo beneficiario" style="width:180px" />
               	</div>
 			</div>
 			<div class="form-group">
@@ -74,13 +81,16 @@
       					
     				</select>
               	</div>
+              	<div class="col-md-3 col-md-offset-4">
+              		<input  name="cmdnuevor" type="button" class="btn btn-info" id="cmdnuevor"   value="Nuevo representante" style="width:180px" />
+              	</div>
 			</div>
 			<div class="form-group">
 				<label for="txtrfc" class="control-label col-md-2">Vigencia:</label>
               	<div class="col-md-3">
               		<label class="checkbox-inline"><input type="checkbox" name="vigencia"  id="vigencia" value=""<c:if test="${fn:contains(vigencia,'1')}">checked</c:if>/>Activos</label>
               	</div>
-              	
+              	<input name="fecha_bajab" type="hidden" class="input" id="fecha_bajab" value=<%=new java.util.Date()%> style="width:111px" maxlength="10"/>
 			</div>
 		</div>
 	

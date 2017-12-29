@@ -75,48 +75,44 @@ a:active {
 	      		</sec:authorize>
 	       		<sec:authorize ifAllGranted="ROLE_Sam_PRIVILEGIOS_VER_TODAS_LAS_UNIDADES">
 	       			<select name="cbUnidad" class="selectpicker form-control input-sm m-b" data-live-search="true" id="cbUnidad">
-	       			<option value="0" <c:if test='${item.ID==0}'> selected </c:if>>[Todas las Unidades Administrativas]</option>
 	            		<c:forEach items="${unidadesAdmiva}" var="item" varStatus="status">                  
-	              			<option value='<c:out value="${item.ID}"/>' 
-	              			<c:if test='${item.ID==idUnidad}'> selected </c:if> >
-	             			<c:out value='${item.DEPENDENCIA}'/></option>
+	              			<option value="<c:out value="${item.ID}"/>" 
+	              			<c:if test="${item.ID==idUnidad}"> selected </c:if> >
+	             			<c:out value="${item.DEPENDENCIA}"/></option>
 	           			</c:forEach>
 	          		</select>
 	        	</sec:authorize>
        		</div>
-       		<div class="col-sm-4 col-md-offset-2">
+       		<div class="col-sm-4">
        			<input type="button" name="cmdBuscar" id="cmdBuscar" value="Buscar" class="btn btn-primary">
        		</div>
 		</div>
 		<div class="form-group"><!-- Tipo de gasto -->
 	      <label class="control-label col-sm-1" for="cbotipogasto">Tipo de gasto:</label>
 	      <div class="col-sm-4">          
-	        <select name="cbotipogasto" id="cbotipogasto" data-live-search="true" class="selectpicker form-control input-sm m-b">
-	      		<option value="0" selected> [Todos los tipos de gastos]</option>
+	        <select name="cbotipogasto" id="cbotipogasto " data-live-search="true" class="selectpicker form-control input-sm m-b">
+	      		<option value="0"> [Todos los tipos de gastos]
 	        		<c:forEach items="${tipodeGasto}" var="item" varStatus="status">
-	        			<option value='<c:out value="${item.ID}"/>'
-							<c:if test='${item.ID==idtipogasto}'> selected </c:if>>
-			  				<c:out value='${item.RECURSO}'/>
-	        			</option>
+	        		<option value='<c:out value="${item.ID}"/>'
+					<c:if test='${item.ID==idtipogasto}'> selected </c:if>>
+	  				<c:out value='${item.RECURSO}'/>
+	        	</option>
 	      			</c:forEach>
 	    	</select>
 	      </div>
-	      <div class="col-sm-4 col-md-offset-2">
-       			<input type="button" name="cmdexportar" id="cmdexportar" value="Exporar a excel" data-toggle="tooltip" title="Exportar a excel" class="btn btn-sucess">
-       	  </div>
 	    </div>
 	    <div class="form-group"><!-- Capitulo -->
-	      <label class="control-label col-sm-1" for="cbocapitulo">Capitulo:</label>
+	      <label class="control-label col-sm-1" for="cbotipogasto">Capitulo:</label>
 	      <div class="col-sm-4">          
-	        <select name="cbocapitulo" id="cbocapitulo" class="selectpicker form-control input-sm m-b" data-live-search="true">
-	      		<option value="0" selected> [Todos los capitulos]</option>
+	        <select name="cbocapitulo" id="cbocapitulo " class="selectpicker form-control input-sm m-b" data-live-search="true">
+	      		<option value="0"> [Todos los capitulos]
 	        		<c:forEach items="${capitulos}" var="item" varStatus="status">
-		        		<option value='<c:out value="${CLV_CAPITU.ID}"/>'
-							<c:if test='${item.ID==idcapitulo}'> selected </c:if>>
-			  				<c:out value='${item.CLV_CAPITU}'/>
-					          -
-					        <c:out value='${item.CAPITULO}'/>
-		        		</option>
+	        		<option value='<c:out value="${CLV_CAPITU.ID}"/>'
+					<c:if test='${item.ID==cbocapitulo}'> selected </c:if>>
+	  				<c:out value='${item.CLV_CAPITU}'/>
+			          -
+			        <c:out value='${item.CAPITULO}'/>
+	        	</option>
 	      			</c:forEach>
 	    	</select>
 	      </div>
@@ -135,18 +131,15 @@ a:active {
     <table width="95%" class="table table-hover table-sm" align="center" id="listaMomentos" cellpadding="0" cellspacing="0">
     	<thead class="thead-inverse">
 		  <tr>
-		  	<th width="5%">Id</th>
-		    <th width="20%">Recurso</th>
 		    <th width="5%">Id</th>
 		    <th width="20%">Proyecto</th>
 		    <th width="5%">Clave</th>
-		    <th width="8%">Partida</th>
-		    <th width="8%">Inicial</th>
-		    <th width="8%">Presupuesto</th>
-		    <th width="8%">Comprometido</th>
-		    <th width="8%">Devengado</th>
-		    <th width="8%">Ejercido</th>
-		    <th width="8%">Precompromiso</th>
+		    <th width="15%">Partida</th>
+		    <th width="10%">Inicial</th>
+		    <th width="10%">Presupuesto</th>
+		    <th width="10%">Comprometido</th>
+		    <th width="10%">Devengado</th>
+		    <th width="10%">Ejercido</th>
 		    
 		  </tr>
 		</thead>
@@ -155,8 +148,6 @@ a:active {
 				<c:forEach items="${listadomovimientos}" var="item" varStatus="status"> 
 					
 					<tr>		
-						<td align="center" style="border-right:none"><c:out value='${item.ID_RECURSO}'/></td>
-					 	<td align="center" style="border-right:none"><c:out value='${item.RECURSO}'/></td>	
 						<td align="center" style="border-right:none"><c:out value='${item.ID_PROYECTO}'/></td>
 					 	<td align="center" style="border-right:none"><c:out value='${item.DECRIPCION}'/></td>		
 					 	<td align="center" style="border-right:none"><c:out value='${item.CLV_PARTID}'/></td>
@@ -166,14 +157,13 @@ a:active {
 					 	<td align="center" style="border-right:none"><c:out value='${item.COMPROMETIDO}'/></td>
 					 	<td align="center" style="border-right:none"><c:out value='${item.DEVENGADO}'/></td>
 					 	<td align="center" style="border-right:none"><c:out value='${item.EJERCIDO}'/></td>
-					 	<td align="center" style="border-right:none"><c:out value='${item.PRECOMPROMISO}'/></td>
 				 	</tr>
 				</c:forEach>		
 		</tbody>   
 <tbody>  
     </table>
 	<div class="form-group">
-		 
+		 <input type="button" name="cmdexportar" id="cmdexportar" value="Exporar a excel" data-toggle="tooltip" title="Exportar a excel" class="btn btn-sucess">
 	</div>
 </form>
 <form name="frmExcel" id="frmExcel" action="lst_reporteexcel.action" method="post">

@@ -90,6 +90,7 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans
 	
 	<security:intercept-url pattern="/sam/ordenesdepago/lista_ordenPagoDesejercer.*" access="ROLE_Sam_Ordenes_de_Pago_Listado_de_Ordenes_de_Pago_para_Desejercer"  />
 	<security:intercept-url pattern="/sam/ordenesdepago/beneficiario.*" access="ROLE_Sam_Administración_Padrón_de_Proveedores"  />
+	<security:intercept-url pattern="/sam/ordenesdepago/representante.*" access="ROLE_Sam_Administración_Padrón_de_Proveedores"  />
 	
 	<security:intercept-url pattern="/sam/contratos/cap_contratos.*" access="ROLE_Sam_Contratos_Captura_de_Contratos"  />
 	<security:intercept-url pattern="/sam/contratos/lista_contratos.*" access="ROLE_Sam_Contratos_Listado_de_Contratos"  />

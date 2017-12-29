@@ -1,10 +1,7 @@
 package mx.gob.municipio.centro.view.controller.sam.reportes;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,23 +11,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
-import mx.gob.municipio.centro.model.gateways.sam.GatewayExcelReporte;
 import mx.gob.municipio.centro.model.gateways.sam.GatewayPlanArbit;
 import mx.gob.municipio.centro.model.gateways.sam.GatewayReportePresupestoDisp;
 import mx.gob.municipio.centro.model.gateways.sam.GatewayUnidadAdm;
 import mx.gob.municipio.centro.view.bases.ControladorBase;
 
-
-
 @Controller
-@RequestMapping("/sam/reportes/lst_reporteexcel.action")
-public class ControladorExcelReporte extends ControladorBase {
-	
-	private static Logger log = Logger.getLogger(ControladorExcelReporte.class.getName());
-	public final static  int VER_TODAS_LAS_UNIDADES = 25;
+@RequestMapping("/sam/reportes/lst_reportepresupestodis.action")
+public class ControladorReportePresupuestoDisp extends ControladorBase{
+
+public final static  int VER_TODAS_LAS_UNIDADES = 25;
 
 	@Autowired
 	GatewayUnidadAdm gatewayUnidadAdm;
@@ -41,33 +32,31 @@ public class ControladorExcelReporte extends ControladorBase {
 	@Autowired
 	private GatewayPlanArbit gatewayPlanArbit;
 	
-	public ControladorExcelReporte(){		
+	public ControladorReportePresupuestoDisp (){
+		
 	}
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(method = {RequestMethod.GET, RequestMethod.POST})  
-	public ModelAndView requestGetControlador(Map modelo, HttpServletRequest request, HttpServletResponse response) {
-
+	public String requestGetControlador(Map modelo, HttpServletRequest request, HttpServletResponse response) {
+		
 		boolean privilegio = this.getPrivilegioEn(this.getSesion().getIdUsuario(), VER_TODAS_LAS_UNIDADES);
 		
-		String idUnidad=request.getParameter("xidunidad")==null ?this.getSesion().getClaveUnidad() : request.getParameter("xidunidad");
-		Integer tipogasto = request.getParameter("xidgasto")== null ? Integer.parseInt(request.getParameter("xidgasto")): 0;
-		Integer clv_capitulo = request.getParameter("cbocapitulo")== null ? Integer.parseInt(request.getParameter("cbocapitulo")): 0;
-		Integer idproyecto = request.getParameter("txtproyecto")!= null ? Integer.parseInt(request.getParameter("txtproyecto")): 0;
-		String idpartida= request.getParameter("txtpartida")== null ? request.getParameter("txtpartida"): "0";
-		
+		String idUnidad=request.getParameter("cbUnidad")==null ?this.getSesion().getClaveUnidad() : request.getParameter("cbUnidad");
+		Integer tipogasto = request.getParameter("cbotipogasto") != null ? Integer.parseInt(request.getParameter("cbotipogasto")): 0;
+		Integer idproyecto = request.getParameter("txtproyecto")!= null ? Integer.parseInt(!request.getParameter("txtproyecto").toString().equals("") ? request.getParameter("txtproyecto").toString(): "0"): 0;
+		String idpartida = request.getParameter("txtpartida")!= null ? request.getParameter("txtpartida"): "";
 		
 		modelo.put("idUnidad",idUnidad);
 		modelo.put("nombreUnidad",this.getSesion().getUnidad());
 		modelo.put("idtipogasto",tipogasto);
 		modelo.put("idproyecto",idproyecto);
 		modelo.put("idpartida",idpartida);
-		modelo.put("idcapitulo", clv_capitulo);
+		//txtpartida
+		modelo.put("listadomovimientos",this.gatewayReportePresupestoDisp.getreparametros(modelo));
 		
-		//Map data = new HashMap<String, String>();
-		modelo.put("listadomovimientos", this.gatewayReportePresupestoDisp.getreparametros(modelo));
-	
-		return new ModelAndView(new GatewayExcelReporte(),"modelo", modelo);
+		return "sam/reportes/lst_reportepresupestodis.jsp";
+
 	}
 	
 	@ModelAttribute("unidadesAdmiva")

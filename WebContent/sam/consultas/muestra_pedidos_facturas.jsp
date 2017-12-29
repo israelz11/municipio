@@ -12,6 +12,7 @@
 <script type="text/javascript" src="../../include/js/jquery-1.3.2.min.js"></script>
 <script type="text/javascript" src="../../include/js/toolSam.js"></script>
 <style type="text/css">
+<!--ControladorMuestraPedidosContratos-->
 <!--
 body {
 	margin-left: 0px;
@@ -34,7 +35,7 @@ a:active {
 -->
 </style>
 <script language="javascript">
-<!--
+
 function regresaEntrada(num_ped, cve_ped, folio, idEntrada, clv_benefi, iva, subtotal, importeEntrada)
 {
 	window.parent.regresaEntrada(num_ped, cve_ped, folio, idEntrada, clv_benefi, iva, subtotal, importeEntrada);
@@ -44,7 +45,7 @@ function cargarPedidoFactura(cve_ped, num_ped, clv_benefi)
 {
 	document.location = "muestra_pedidos_facturas.action?CVE_PED="+cve_ped+"&NUM_PED="+num_ped+"&CLV_BENEFI="+clv_benefi+"&idDependencia="+<c:out value='${idDependencia}'/>;
 }
--->
+
 </script>
 
 </head>

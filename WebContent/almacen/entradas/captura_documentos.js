@@ -307,7 +307,7 @@ function muestraEntradas(){
 	jWindow('<iframe width="650" height="400" name="consultaPedido" id="consultaPedido" frameborder="0" src="../consultas/muestra_entradas.action?idDependencia='+idDependencia+'"></iframe>','Listado de Entradas', '','Cerrar ',1);
 }
 
-/*funcion para mostrar el listado de pedidos de la direccion*/
+/*funcion para mostrar el listado de pedidos de la direccion en la captura de una entrada */
 function muestraPedidos(){
 	var idDependencia = $('#cbodependencia').val();
 	var tipo = $('#cbotipodocumento').val();
@@ -319,8 +319,8 @@ function muestraPedidos(){
 		  html:
 			  '<iframe width="650" height="400" name="consultaPedido" id="consultaPedido" frameborder="0" src="../consultas/muestra_pedidos.action?idDependencia='+idDependencia+'"></iframe>',
 		  width: 800,
-		  padding: 10,
-		  animation: false
+		  padding: 10
+		  
 		})
 	
 }

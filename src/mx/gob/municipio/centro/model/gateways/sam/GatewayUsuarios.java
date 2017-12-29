@@ -32,24 +32,24 @@ public class GatewayUsuarios extends BaseGateway {
 		
 	}
 	
-	public List<Map> getUsuariosActivoTodos(){		
+	public List<Map>getUsuariosActivoTodos(){		
 	  return this.getJdbcTemplate().queryForList("SELECT     b.CVE_PERS, a.APE_PAT, a.APE_MAT, a.NOMBRE ,'('+b.LOGIN + ') ' + a.NOMBRE+' '+a.APE_PAT +' '+a.APE_MAT  NOMBRE_COMPLETO "+
-	  		" FROM PERSONAS  a INNER JOIN  USUARIOS_EX b ON a.CVE_PERS = b.CVE_PERS where b.ACTIVO='S' ORDER BY NOMBRE_COMPLETO ");		
+	  		" FROM SAM_PERSONAS  a INNER JOIN  SAM_USUARIOS_EX b ON a.CVE_PERS = b.CVE_PERS where b.ACTIVO='S' ORDER BY NOMBRE_COMPLETO ");		
 	}
 	
-	public List<Map> getUsuariosUnidad(String idUnidad){		
+	public List<Map>getUsuariosUnidad(String idUnidad){		
 		  return this.getJdbcTemplate().queryForList("SELECT     b.CVE_PERS , '('+b.LOGIN + ') ' + a.NOMBRE+' '+a.APE_PAT +' '+a.APE_MAT  NOMBRE_COMPLETO "+
-		  		" FROM PERSONAS  a INNER JOIN  USUARIOS_EX b ON a.CVE_PERS = b.CVE_PERS INNER JOIN  TRABAJADOR c ON  a.CVE_PERS = c.CVE_PERS  where c.ID_DEPENDENCIA=? AND b.ACTIVO='S' ORDER BY NOMBRE_COMPLETO ", new Object []{idUnidad});		
+		  		" FROM SAM_PERSONAS  a INNER JOIN  SAM_USUARIOS_EX b ON a.CVE_PERS = b.CVE_PERS INNER JOIN  SAM_TRABAJADOR c ON  a.CVE_PERS = c.CVE_PERS  where c.ID_DEPENDENCIA=? AND b.ACTIVO='S' ORDER BY NOMBRE_COMPLETO ", new Object []{idUnidad});		
 		}
 	public Map getUsuarioLogin(String usuario){
-		  return this.getJdbcTemplate().queryForMap("SELECT     dbo.TRABAJADOR.ID_DEPENDENCIA, dbo.CAT_DEPENDENCIAS.DEPENDENCIA, dbo.CAT_DEPENDENCIAS.CLV_UNIADM, dbo.USUARIOS_EX.CVE_PERS, " +
-													"           dbo.USUARIOS_EX.LOGIN, dbo.USUARIOS_EX.PASSWD, dbo.USUARIOS_EX.ACTIVO, dbo.USUARIOS_EX.EXCLUSIVO,  dbo.PERSONAS.TRATAMIENTO+ ' '+dbo.PERSONAS.NOMBRE+' '+dbo.PERSONAS.APE_PAT +' ' +dbo.PERSONAS.APE_MAT  as NOMBRE_COMPLETO, "+  
-													"           dbo.PERSONAS.TRATAMIENTO , dbo.PERSONAS.NOMBRE, dbo.PERSONAS.APE_PAT , dbo.PERSONAS.APE_MAT  "+
-													"FROM       dbo.PERSONAS "+
-													"			INNER JOIN dbo.USUARIOS_EX ON (dbo.PERSONAS.CVE_PERS = dbo.USUARIOS_EX.CVE_PERS) "+ 
-													"			INNER JOIN dbo.TRABAJADOR ON (dbo.PERSONAS.CVE_PERS = dbo.TRABAJADOR.CVE_PERS) "+
-													"			INNER JOIN dbo.CAT_DEPENDENCIAS ON (dbo.CAT_DEPENDENCIAS.ID = dbo.TRABAJADOR.ID_DEPENDENCIA) "+
-													"WHERE  USUARIOS_EX.LOGIN=? " , new Object []{usuario});						 
+		  return this.getJdbcTemplate().queryForMap("SELECT     dbo.SAM_TRABAJADOR.ID_DEPENDENCIA, dbo.CAT_DEPENDENCIAS.DEPENDENCIA, dbo.CAT_DEPENDENCIAS.CLV_UNIADM, dbo.SAM_USUARIOS_EX.CVE_PERS, " +
+													"           dbo.SAM_USUARIOS_EX.LOGIN, dbo.SAM_USUARIOS_EX.PASSWD, dbo.SAM_USUARIOS_EX.ACTIVO, dbo.SAM_USUARIOS_EX.EXCLUSIVO,  dbo.SAM_PERSONAS.TRATAMIENTO+ ' '+dbo.SAM_PERSONAS.NOMBRE+' '+dbo.SAM_PERSONAS.APE_PAT +' ' +dbo.SAM_PERSONAS.APE_MAT  as NOMBRE_COMPLETO, "+  
+													"           dbo.SAM_PERSONAS.TRATAMIENTO , dbo.SAM_PERSONAS.NOMBRE, dbo.SAM_PERSONAS.APE_PAT , dbo.SAM_PERSONAS.APE_MAT  "+
+													"FROM       dbo.SAM_PERSONAS "+
+													"			INNER JOIN dbo.SAM_USUARIOS_EX ON (dbo.SAM_PERSONAS.CVE_PERS = dbo.SAM_USUARIOS_EX.CVE_PERS) "+ 
+													"			INNER JOIN dbo.SAM_TRABAJADOR ON (dbo.SAM_PERSONAS.CVE_PERS = dbo.SAM_TRABAJADOR.CVE_PERS) "+
+													"			INNER JOIN dbo.CAT_DEPENDENCIAS ON (dbo.CAT_DEPENDENCIAS.ID = dbo.SAM_TRABAJADOR.ID_DEPENDENCIA) "+
+													"WHERE  SAM_USUARIOS_EX.LOGIN=? " , new Object []{usuario});						 
 		}
 	
 	public boolean cambiarPassword(String passwordAnterior ,String  passwordNuevo, int cve_pers ){
@@ -59,16 +59,17 @@ public class GatewayUsuarios extends BaseGateway {
 		String pasEncriptadoAnterior = a.encodePassword(passwordAnterior, null );
 		String pasEncriptadoNuevo = a.encodePassword(passwordNuevo, null );
 		
-		if (getJdbcTemplate().queryForInt("select count(*) from usuarios_ex where PASSWD=? AND CVE_PERS =?",new Object[]{pasEncriptadoAnterior, cve_pers})==1)
+		if (getJdbcTemplate().queryForInt("select count(*) from SAM_USUARIOS_EX where PASSWD=? AND CVE_PERS =?",new Object[]{pasEncriptadoAnterior, cve_pers})==1)
 		{
-			getJdbcTemplate().update("Update USUARIOS_EX Set PASSWD=?, PWD=? where CVE_PERS=?",new Object[]{pasEncriptadoNuevo, passwordNuevo, cve_pers});
+			getJdbcTemplate().update("Update SAM_USUARIOS_EX Set PASSWD=?, PWD=? where CVE_PERS=?",new Object[]{pasEncriptadoNuevo, passwordNuevo, cve_pers});
 			log.debug("Password cambiado satisfactoriamente");
 			return true;
 		}
 		return false;
 	}
 		
-	public List<Map> getPersonasPorEjemplo(String nombre, String aPaterno, String aMaterno ){
+	public List<Map>getPersonasPorEjemplo(String nombre, String aPaterno, String aMaterno ){
+		
 		Map parametros = new HashMap();
 		parametros.put("nombre","%"+nombre+"%");
 		parametros.put("aPaterno","%"+aPaterno+"%");
@@ -88,11 +89,12 @@ public class GatewayUsuarios extends BaseGateway {
 		
 		  return this.getNamedJdbcTemplate().queryForList("SELECT   P.CVE_PERS, P.TRATAMIENTO, P.NOMBRE, P.APE_MAT, P.APE_PAT, "+
 																	"P.RFC, P.CURP, T.ID_DEPENDENCIA, U.LOGIN, U.PASSWD, U.ACTIVO, C.DEPENDENCIA "+
-															"FROM PERSONAS AS P "+
-																	"INNER JOIN TRABAJADOR AS T ON (T.CVE_PERS = P.CVE_PERS) "+
+															"FROM SAM_PERSONAS AS P "+
+																	"INNER JOIN SAM_TRABAJADOR AS T ON (T.CVE_PERS = P.CVE_PERS) "+
 																	"LEFT JOIN CAT_DEPENDENCIAS AS C ON (C.ID = T.ID_DEPENDENCIA) "+
-																	"INNER JOIN USUARIOS_EX AS U ON (U.CVE_PERS = P.CVE_PERS)"+sql,parametros);		
+																	"INNER JOIN SAM_USUARIOS_EX AS U ON (U.CVE_PERS = P.CVE_PERS)"+sql,parametros);		
 		}
+	
 	
 	public  Long actualizarPersonaPrincipal(Long idPersona,String nombre,String apaterno,String amaterno,String curp,String rfc,String profesion){
 		  if (idPersona == null) 		  
@@ -105,7 +107,7 @@ public class GatewayUsuarios extends BaseGateway {
 	public Long insertarPersona(final String nombre,final String apaterno,final String amaterno,final String curp,final String rfc,final String profesion ) {
     	KeyHolder keyHolder = new GeneratedKeyHolder();
     	Long key_orden=null;
-    	final String INSERT_SQL ="INSERT INTO PERSONAS (NOMBRE,APE_PAT,APE_MAT,CURP,RFC,TRATAMIENTO)  VALUES (?,?,?,?,?,?)";
+    	final String INSERT_SQL ="INSERT INTO SAM_PERSONAS (NOMBRE,APE_PAT,APE_MAT,CURP,RFC,TRATAMIENTO)  VALUES (?,?,?,?,?,?)";
         try{ 
             this.getJdbcTemplate().update(
                              new PreparedStatementCreator() {
@@ -133,35 +135,35 @@ public class GatewayUsuarios extends BaseGateway {
 	
 
 		public void actualizarPersona(Long idPersona,String nombre,String apaterno,String amaterno,String curp,String rfc,String profesion ){	
-			this.getJdbcTemplate().update("update  PERSONAS set NOMBRE=?,APE_PAT=?,APE_MAT=?,CURP=?,RFC=?,TRATAMIENTO=?  where CVE_PERS=? "
+			this.getJdbcTemplate().update("update  SAM_PERSONAS set NOMBRE=?,APE_PAT=?,APE_MAT=?,CURP=?,RFC=?,TRATAMIENTO=?  where CVE_PERS=? "
 					, new Object[]{nombre,apaterno,amaterno,curp,rfc,profesion,idPersona});
 		}	
 		
-		public  void actualizarTrabajadorPrincipal(Long idTrabajador ,Long idPersona, int idUnidad){
-			  if (idTrabajador == 0) 		  
-				  insertaTrabajador(idPersona, idUnidad);	  	  
+		public  void actualizarTRABAJADORPrincipal(Long idSAM_TRABAJADOR ,Long idPersona, int idUnidad){
+			  if (idSAM_TRABAJADOR == 0) 		  
+				  insertaTRABAJADOR(idPersona, idUnidad);	  	  
 			  else
-				  actualizarTrabajador(idPersona, idUnidad);
+				  actualizarTRABAJADOR(idPersona, idUnidad);
 			}
 		
     
-		public void insertaTrabajador( Long idPersona, int idUnidad ){
-			//int  area = this.getJdbcTemplate().queryForInt("SELECT TOP 1 ID_DEPENDENCIA FROM TRABAJADOR WHERE CVE_PERS = ?", new Object[]{idPersona});
-			this.getJdbcTemplate().update("insert into TRABAJADOR (CVE_PERS,ID_DEPENDENCIA,ACTIVO ) " +
+		public void insertaTRABAJADOR( Long idPersona, int idUnidad ){
+			//int  area = this.getJdbcTemplate().queryForInt("SELECT TOP 1 ID_DEPENDENCIA FROM SAM_TRABAJADOR WHERE CVE_PERS = ?", new Object[]{idPersona});
+			this.getJdbcTemplate().update("insert into SAM_TRABAJADOR (CVE_PERS,ID_DEPENDENCIA,ACTIVO ) " +
 					"VALUES (?,?,'S')"
 					, new Object[]{idPersona, idUnidad});
 		}
 
-		public void actualizarTrabajador(Long idPersona, int  idUnidad ){	
+		public void actualizarTRABAJADOR(Long idPersona, int  idUnidad ){	
 			//int  area = this.getJdbcTemplate().queryForInt("SELECT TOP 1 CVE_UNIDAD FROM UNIDAD_ADM WHERE ORG_ID = ?", new Object[]{idUnidad});
-			this.getJdbcTemplate().update("update  TRABAJADOR set ID_DEPENDENCIA=?, ACTIVO='S'  where CVE_PERS=? "
+			this.getJdbcTemplate().update("update  SAM_TRABAJADOR set ID_DEPENDENCIA=?, ACTIVO='S'  where CVE_PERS=? "
 					, new Object[]{idUnidad,idPersona});
 		}
 		
 		public List getTrabajadoresUnidad(String unidad) {
-			return this.getJdbcTemplate().queryForList("SELECT  b.CVE_PERS , '('+b.LOGIN + ') ' + a.NOMBRE+' '+a.APE_PAT +' '+a.APE_MAT  NOMBRE_COMPLETO, d.DEPENDENCIA, d.ID AS ID_DEPENDENCIA   FROM PERSONAS  a "+ 
-																"INNER JOIN  USUARIOS_EX b ON (b.CVE_PERS = a.CVE_PERS) "+
-																"INNER JOIN  TRABAJADOR c ON  (c.CVE_PERS = a.CVE_PERS) "+
+			return this.getJdbcTemplate().queryForList("SELECT  b.CVE_PERS , ' ( '+b.LOGIN + ' )  ' +  a.NOMBRE+' '+a.APE_PAT +' '+a.APE_MAT  NOMBRE_COMPLETO, d.DEPENDENCIA, d.ID AS ID_DEPENDENCIA   FROM SAM_PERSONAS  a "+ 
+																"INNER JOIN  SAM_USUARIOS_EX b ON (b.CVE_PERS = a.CVE_PERS) "+
+																"INNER JOIN  SAM_TRABAJADOR c ON  (c.CVE_PERS = a.CVE_PERS) "+
 																"INNER JOIN CAT_DEPENDENCIAS AS d ON (d.ID = c.ID_DEPENDENCIA) "+  
 															"WHERE c.ID_DEPENDENCIA=? "+
 															"ORDER BY NOMBRE_COMPLETO ",new Object []{unidad});			
@@ -178,7 +180,7 @@ public class GatewayUsuarios extends BaseGateway {
 		public void insertaUsuario( Long idPersona, String login,  String password , String estatus ){			
 			Md5PasswordEncoder a = new Md5PasswordEncoder();
 			String pasEncriptado = a.encodePassword(password, null );			
-			this.getJdbcTemplate().update("insert into USUARIOS_EX (CVE_PERS,LOGIN,PASSWD, PWD, ACTIVO) " +
+			this.getJdbcTemplate().update("insert into SAM_USUARIOS_EX (CVE_PERS,LOGIN,PASSWD, PWD, ACTIVO) " +
 					"VALUES (?,?,?,?,?)"					
 					, new Object[]{idPersona,login, pasEncriptado, password, estatus});
 			
@@ -189,11 +191,11 @@ public class GatewayUsuarios extends BaseGateway {
 			if (password!=null && !password.equals("")){
 				Md5PasswordEncoder a = new Md5PasswordEncoder();
 				String pasEncriptado = a.encodePassword(password, null );
-				this.getJdbcTemplate().update("update  USUARIOS_EX set LOGIN=?,ACTIVO=? , PASSWD=?, PWD=?  where CVE_PERS=? "
+				this.getJdbcTemplate().update("update  SAM_USUARIOS_EX set LOGIN=?,ACTIVO=? , PASSWD=?, PWD=?  where CVE_PERS=? "
 						, new Object[]{login, estatus,pasEncriptado,password,idPersona});
 				}				
 			else
-				this.getJdbcTemplate().update("update  USUARIOS_EX set LOGIN=?,ACTIVO=?  where CVE_PERS=? "
+				this.getJdbcTemplate().update("update  SAM_USUARIOS_EX set LOGIN=?,ACTIVO=?  where CVE_PERS=? "
 						, new Object[]{login, estatus,idPersona});
 		}
 		

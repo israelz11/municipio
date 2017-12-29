@@ -52,7 +52,7 @@ function cambiarFechaRelacion(){
 	var id_relacion = $('#cborelacion').val();
 	var IdDependencia = $('#cbodependenciaM').val();
 	
-	ShowDelay('Cambiando fecha a la relacion');
+	//ShowDelay('Cambiando fecha a la relacion');
 	if(fecha=='') {jAlert('La fecha de la relacion no es valida','Advertencia'); return false;}
 	controladorListadoOrdenPagoEjercidoRemoto.cambiarFechaRelacion(fecha, id_relacion, IdDependencia,{
 						callback:function(items) {
@@ -60,7 +60,7 @@ function cambiarFechaRelacion(){
 								jError(items,'Error');
 							else
 								{
-									CloseDelay('Fecha cambiada con exito',2000);
+									//CloseDelay('Fecha cambiada con exito',2000);
 									if($('#cbotiporelacion').val()==1)
 										cargarRelacionEnvio(id_relacion);
 									else if($('#cbotiporelacion').val()==2)
@@ -97,7 +97,7 @@ function crearRelacionOP(){
 	var idDependencia = $('#cbodependencia2').val();
 	if(idDependencia==null) idDependencia = 0;
 
-	ShowDelay('Creando una nueva relacion');
+	//ShowDelay('Creando una nueva relacion');
 	controladorListadoOrdenPagoEjercidoRemoto.nuevaRelacion(fecha, $('#cbotiporelacion').val(), idDependencia, {
 						callback:function(items) {
 							limpiar();
@@ -119,7 +119,7 @@ function crearRelacionOP(){
 								setTimeout('cargarRelacionVales('+items+')',1300);
 								*/
 
-							CloseDelay('Relacion creada con exito ',2000);
+							//CloseDelay('Relacion creada con exito ',2000);
 					 } 					   				
 					 ,
 					 errorHandler:function(errorString, exception) { 
@@ -163,7 +163,7 @@ function cargaDetalles(){
 		return false;
 	}
 	var id = parseInt($('#lstdetalles').val());
-	ShowDelay('Cargando detalle');
+	//ShowDelay('Cargando detalle');
 	controladorListadoOrdenPagoEjercidoRemoto.cargarDetalle(id, {
 						callback:function(items) { 	
 							$('#hddetalle').attr('value', items.ID_DETALLE);
@@ -172,7 +172,7 @@ function cargaDetalles(){
 							$('#chkdevuelto').attr('checked', (items.DEVOLUCION=='S') ? true: false);
 							$('#cmdmodificarop').attr('value', 'Cancelar');
 							$('#cmdeliminar').attr('disabled', true);
-							_closeDelay();
+							//_closeDelay();
 					 } 					   				
 					 ,
 					 errorHandler:function(errorString, exception) { 
@@ -237,7 +237,7 @@ function eliminarOpRelacion(){
 		if($(this).attr('selected')) op.push($(this).val());
 	});
 	if(op.length>0){
-		jConfirm('¿Confirma que desea eliminar '+titulo+' de la relación actual?','Confirmar', function(r){
+		jConfirm('ï¿½Confirma que desea eliminar '+titulo+' de la relaciï¿½n actual?','Confirmar', function(r){
 					if(r){
 						ShowDelay('Eliminando detalles');
 						controladorListadoOrdenPagoEjercidoRemoto.eliminarOpRelacion(op,{
@@ -272,11 +272,11 @@ function agregarOpManual(){
 	if($('#cbotiporelacion').val()<2)
 		texto="";
 	//agregar ops automaticamnte
-	ShowDelay('Agregando '+titulo);
+	//ShowDelay('Agregando '+titulo);
 	controladorListadoOrdenPagoEjercidoRemoto.agregarOpRelacion(checks, id_relacion, texto,{
 					callback:function(items) { 	
 						if(items=="") 
-							CloseDelay(titulo+' agregadas con éxito', 2000, cargarRelacion());
+							CloseDelay(titulo+' agregadas con ï¿½xito', 2000, cargarRelacion());
 						else 
 							jError(items, 'Error');
 				 } 					   				
@@ -295,11 +295,11 @@ function guardarCambiosOP(){
 	var texto = $('#txtarea').attr('value');
 	var devolucion = ($('#chkdevuelto').is(':checked') ? 'S':'N');
 	var idDependencia = $('#cbodependencia').val();
-	ShowDelay('Guardando cambios');
+	//ShowDelay('Guardando cambios');
 	controladorListadoOrdenPagoEjercidoRemoto.guardarOpDetalle(id, texto, devolucion, idDependencia, {
 						callback:function(items) { 	
 							if(items==""){ 
-								CloseDelay(titulo+' guardada con éxito', 2000, cargarRelacion());
+								CloseDelay(titulo+' guardada con ï¿½xito', 2000, cargarRelacion());
 								$('#hddetalle').attr('value',0);
 								$('#txtnumop').attr('value', '');
 								$('#txtarea').attr('value', '');
@@ -340,14 +340,14 @@ function agregarOpRelacion(){
 	
 	if (checks.length>0){
 		//agregar ops automaticamnte
-		ShowDelay('Agregando '+titulo);
+		//ShowDelay('Agregando '+titulo);
 		controladorListadoOrdenPagoEjercidoRemoto.agregarOpRelacion(checks, id_relacion, texto,{
 						callback:function(items) { 	
 							if(items=="") {
 								if($('#cbotiporelacion').val()==3||$('#cbotiporelacion').val()==4)
-									CloseDelay('Vale agregado con éxito', 2000, cargarRelacion());
+									CloseDelay('Vale agregado con ï¿½xito', 2000, cargarRelacion());
 								else
-									CloseDelay(titulo+' agregados con éxito', 2000, cargarRelacion());
+									CloseDelay(titulo+' agregados con ï¿½xito', 2000, cargarRelacion());
 								//$("input[id=chkOP]:checked").attr('checked', false);
 							}
 							else 
@@ -369,13 +369,13 @@ function agregarOpRelacion(){
 function abrirCerrarRelacion(){
 	var id_relacion = $('#cborelacion').val();
 	var status = ($('#hdcerrada').attr('value')=='S') ? 'N': 'S';
-	var pregunta = ($('#hdcerrada').attr('value')=='S') ? '¿Confirma que desea abrir la relacion actual para su edicion?': '¿Confirma que desea cerrar la relacion actual e impedir nuevos cambios?';
+	var pregunta = ($('#hdcerrada').attr('value')=='S') ? 'ï¿½Confirma que desea abrir la relacion actual para su edicion?': 'ï¿½Confirma que desea cerrar la relacion actual e impedir nuevos cambios?';
 	jConfirm(pregunta,'Confirmar', function(r){
 		if(r){
-			ShowDelay('Abriendo la relación actual');
+			//ShowDelay('Abriendo la relaciï¿½n actual');
 			controladorListadoOrdenPagoEjercidoRemoto.abrirRelacion(id_relacion, status,{
 						callback:function(items) { 	
-							if(items) CloseDelay('Relación abierta con éxito', 2000, cargarRelacion());
+							if(items) CloseDelay('Relaciï¿½n abierta con ï¿½xito', 2000, cargarRelacion());
 					 } 					   				
 					 ,
 					 errorHandler:function(errorString, exception) { 
@@ -412,7 +412,7 @@ function cargarRelacionValesDevolucion(id){
 	if(id==0){
 		inicializar();
 		//cargar relacion de envio
-		ShowDelay('Cargando relacion de devolución vales');
+		//ShowDelay('Cargando relacion de devoluciï¿½n vales');
 		controladorListadoOrdenPagoEjercidoRemoto.cargarRelaciones('VALES_DEVOLUCION', {
 						callback:function(items) { 	
 							$('#cborelacion').attr('disabled', false);
@@ -496,7 +496,7 @@ function cargarRelacion(){
 	
 	if(id_relacion==0) return false;
 	
-	ShowDelay('Cargando informcion de la relacion');
+	//ShowDelay('Cargando informcion de la relacion');
 	 controladorListadoOrdenPagoEjercidoRemoto.cargarRelacionesDocumentos(id_relacion, {
 						callback:function(items) { 
 						jQuery.each(items,function(i) {
@@ -565,7 +565,7 @@ function cargarRelacionVales(id){
 		dwr.util.removeAllOptions('cborelacion');
 		dwr.util.addOptions('cborelacion',{ 0:'[Seleccione un listado]'});
 		//cargar relacion de envio
-		ShowDelay('Cargando relacion de vales');
+		//ShowDelay('Cargando relacion de vales');
 		controladorListadoOrdenPagoEjercidoRemoto.cargarRelaciones('VALES', {
 						callback:function(items) { 	
 						
@@ -585,7 +585,7 @@ function cargarRelacionVales(id){
 		limpiar();
 		dwr.util.removeAllOptions('cborelacion');
 		dwr.util.addOptions('cborelacion',{ 0:'[Seleccione un listado]'});
-		ShowDelay('Cargando relacion de vales');
+		//ShowDelay('Cargando relacion de vales');
 		controladorListadoOrdenPagoEjercidoRemoto.cargarRelaciones('VALES', {
 						callback:function(items) { 	
 						
@@ -723,7 +723,7 @@ function ejercerOP()
 	//recuperar las claves a ejercer
      $('input[id=chkOP]:checked').each(function() { checkClaves.push($(this).val());});	
 	 if (checkClaves.length>0){
-		 jConfirm('¿Confirma que desea ejercer la(s) ordenes de pago seleccionada(s)?','Ejercer Orden(es) de Pago', function(r){
+		 jConfirm('ï¿½Confirma que desea ejercer la(s) ordenes de pago seleccionada(s)?','Ejercer Orden(es) de Pago', function(r){
 			if(r){
 					ShowDelay('Ejerciendo Orden(es) de Pago','');
 					controladorListadoOrdenPagoEjercidoRemoto.ejercerOrdenPago(checkClaves, bfecha, fecha_ejerce, {
@@ -739,7 +739,7 @@ function ejercerOP()
 	   });
 	 }
 	 else 
-	    jAlert('Es necesario que seleccione por lo menos una Orden de Pago para realizar esta acción', 'Advertencia');
+	    jAlert('Es necesario que seleccione por lo menos una Orden de Pago para realizar esta acciï¿½n', 'Advertencia');
 }
 
 //funcion para cambiar la fecha de la orden de pago
@@ -772,8 +772,8 @@ function cambiarFechaOP(){
 	 
 	var fechatemp = $('#txtfechanueva').attr('value');
 	if(checkClaves.length<1) {jAlert('Seleccione por lo menos una Orden de Pago del listado','Advertencia'); return false;}
-	if($('#txtfechanueva').attr('value')==''){jAlert('La fecha escrita no es válida', 'Advertencia', function(){cambiarFecha(fecha)}); return false;}
-	jConfirm('¿Confirma que desea cambiar la fecha y periodo de las Ordenes de Pago?','Cambiar fecha y periodo', function(r){
+	if($('#txtfechanueva').attr('value')==''){jAlert('La fecha escrita no es vï¿½lida', 'Advertencia', function(){cambiarFecha(fecha)}); return false;}
+	jConfirm('ï¿½Confirma que desea cambiar la fecha y periodo de las Ordenes de Pago?','Cambiar fecha y periodo', function(r){
 			if(r){
 					ShowDelay('Cambiando fecha de Ordenes de Pago','');
 					controladorListadoOrdenPagoEjercidoRemoto.cambiarFechaOrdenPago(checkClaves, fechatemp, {
@@ -781,7 +781,7 @@ function cambiarFechaOP(){
 							if(items)
 						 		CloseDelay('Fecha cambiada con exito a: '+fechatemp, 2000, function (){cve_op =0;setTimeout('buscarOpMes()',1000);});
 							else 
-								jError('No se pudo cambiar la fecha de las Ordenes de Pago, puede que la fecha especificada no sea una fecha válida, verifique nuevamente','Error');  
+								jError('No se pudo cambiar la fecha de las Ordenes de Pago, puede que la fecha especificada no sea una fecha vï¿½lida, verifique nuevamente','Error');  
 					 } 					   				
 					 ,
 					 errorHandler:function(errorString, exception) { 

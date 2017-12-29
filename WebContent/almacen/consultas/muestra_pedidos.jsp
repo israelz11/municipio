@@ -11,11 +11,11 @@
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
 <link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css">
 <script language="javascript">
-<!--
+
 function regresaPedido(num, ID_PEDIDO, id_proyecto, programa, clv_partid, clv_benefi, ncomercia, nota) {
 	window.parent.__regresaPedido(num, ID_PEDIDO, id_proyecto, programa, clv_partid, clv_benefi, ncomercia, nota);
 }
--->
+
 </script>
 <style type="text/css">
 <!--

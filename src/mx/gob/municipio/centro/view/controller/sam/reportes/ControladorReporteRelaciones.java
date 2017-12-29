@@ -60,11 +60,11 @@ public class ControladorReporteRelaciones extends ControladorBase {
 					"	WHEN '12' THEN CONVERT(varchar(2),DAY(R.FECHA)) + ' de Diciembre de '+CONVERT(varchar(4),YEAR(R.FECHA))  "+
 					"END AS FECHA_TEXT, "+
 					"(SELECT CD.DEPENDENCIA FROM CAT_DEPENDENCIAS AS CD WHERE CD.ID = R.ID_DEPENDENCIA_DEV) AS DEPENDENCIA_DEV," +
-					"PERSONAS.ALIAS, "+
+					"SAM_PERSONAS.ALIAS, "+
 					"R.TIPO_RELACION, " +
 					"ISNULL((SELECT SUM(IMPORTE) AS IMP FROM SAM_ORD_PAGO WHERE CVE_OP IN (SELECT CVE_OP FROM SAM_OP_RELACION_DETALLES WHERE ID_RELACION = R.ID_RELACION)),0) AS ACUMULADO  " +
 				"FROM SAM_OP_RELACION R "+
-				"	 INNER JOIN PERSONAS ON (PERSONAS.CVE_PERS = R.CVE_PERS) WHERE R.ID_RELACION = ? ";
+				"	 INNER JOIN SAM_PERSONAS ON (SAM_PERSONAS.CVE_PERS = R.CVE_PERS) WHERE R.ID_RELACION = ? ";
 		String[] Meses = {"Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
 		modelo = this.getJdbcTemplate().queryForMap(sql, new Object[]{idRelacion});
 		if(modelo.get("TIPO_RELACION").equals("VALES_DEVOLUCION"))
